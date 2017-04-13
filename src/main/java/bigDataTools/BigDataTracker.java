@@ -336,12 +336,8 @@ public class BigDataTracker implements PlugIn {
             int i = 0, j = 0, k = 0;
             JFileChooser fc;
 
-
-            // update current imp object
-            imp = IJ.getImage();
-            VirtualStackOfStacks vss = Utils.getVirtualStackOfStacks(imp);
-            if(vss==null) return;
-
+            if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             if (e.getActionCommand().equals(buttonActions[i++])) {
 
@@ -607,8 +603,8 @@ public class BigDataTracker implements PlugIn {
 
     private void initialize() {
 
-        VirtualStackOfStacks vss = Utils.getVirtualStackOfStacks(imp);
-        if(vss==null) return;
+        if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
         FileInfoSer[][][] infos = vss.getFileInfosSer();
         if(infos[0][0][0].compression==6) {

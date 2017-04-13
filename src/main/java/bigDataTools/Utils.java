@@ -52,6 +52,7 @@ public class Utils {
     public static String TRACKMATEDOGSUBPIXEL = "TrackMate_DoG_SubPixel";
     public static String TRACKMATEDOG = "TrackMate_DoG";
     public static String IMAGESUITE3D = "3D ImageSuite";
+    public static String LOAD_CHANNELS_FROM_FOLDERS = "sub-folders";
 
     public static void threadlog(final String log) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -103,6 +104,88 @@ public class Utils {
             it.remove(); // avoids a ConcurrentModificationException
         }
     }
+
+
+    public static boolean imagePlusHasVirtualStackOfStacks(ImagePlus imp) {
+
+        if( ! (imp.getStack() instanceof VirtualStackOfStacks) ) {
+            IJ.showMessage("Wrong image type. " +
+                    "This method is only implemented for images opened via " +
+                    "the Data Streaming Tools plugin.");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
+
+    public static boolean checkMemoryRequirements(ImagePlus imp)
+    {
+        long numPixels = (long)imp.getWidth()*imp.getHeight()*imp.getNSlices()*imp.getNChannels()*imp.getNFrames();
+        boolean ok = checkMemoryRequirements(numPixels, imp.getBitDepth(), 1);
+        return(ok);
+    }
+
+
+    public static boolean checkMemoryRequirements(ImagePlus imp, int nThreads)
+    {
+        long numPixels = (long)imp.getWidth()*imp.getHeight()*imp.getNSlices();
+        boolean ok = checkMemoryRequirements(numPixels, imp.getBitDepth(), nThreads);
+        return(ok);
+    }
+
+    public static boolean checkMemoryRequirements(long numPixels, int bitDepth, int nThreads)
+    {
+        //
+        // check that the data cube is not too large for the java indexing
+        //
+        long maxSize = (1L<<31) - 1;
+        if( numPixels > maxSize )
+        {
+
+            log("Warning: "+"The size of one requested data cube is "+numPixels +" (larger than 2^31)\n");
+            //IJ.showMessage("The size of one requested data cube is "+numPixels +" (larger than 2^31)\n" +
+            //        "and can thus not be loaded as one java array into RAM.\n" +
+            //        "Please crop a smaller region.");
+            //return(false);
+        }
+
+        //
+        // check that the data cube(s) fits into the RAM
+        //
+        double GIGA = 1000000000.0;
+        long freeMemory = IJ.maxMemory() - IJ.currentMemory();
+        double maxMemoryGB = IJ.maxMemory()/GIGA;
+        double freeMemoryGB = freeMemory/GIGA;
+        double requestedMemoryGB = numPixels*bitDepth/8*nThreads/GIGA;
+
+        if( requestedMemoryGB > freeMemoryGB )
+        {
+            IJ.showMessage("The size of the requested data cube(s) is "+ requestedMemoryGB + " GB.\n" +
+                    "The free memory is only "+freeMemoryGB+" GB.\n" +
+                    "Please consider cropping a smaller region \n" +
+                    "and/or reducing the number of I/O threads \n" +
+                    "(you are currently using " + nThreads + ").");
+            return(false);
+        }
+        else
+        {
+            if( requestedMemoryGB > 0.1 ) {
+                Utils.threadlog("Memory [GB]: Max=" + maxMemoryGB + "; Free=" + freeMemoryGB + "; Requested=" +
+                        requestedMemoryGB);
+            }
+
+        }
+
+
+
+        return(true);
+
+    }
+
 
 
 }

@@ -44,6 +44,7 @@ import javafx.geometry.Point3D;
 import static ij.IJ.log;
 
 // todo: replace all == with "equals"
+// TODO: extend VirtualStack rather than ImageStack ?
 
 /**
  This class represents an array of disk-resident image stacks.
@@ -419,7 +420,7 @@ public class VirtualStackOfStacks extends ImageStack {
         int numStacks = 1;
         int bitDepth = this.getBitDepth();
 
-        if( ! DataStreamingTools.checkMemoryRequirements(numPixels, bitDepth, numStacks) )
+        if( ! Utils.checkMemoryRequirements(numPixels, bitDepth, numStacks) )
         {
             return(null);
         }
