@@ -9,11 +9,8 @@
 * GNU General Public License for more details.
 */
 
-
 package bigDataTools;
 
-import ch.systemsx.cisd.base.mdarray.MDByteArray;
-import ch.systemsx.cisd.base.mdarray.MDFloatArray;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.*;
 import ij.IJ;
@@ -21,9 +18,7 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.BitBuffer;
 import ij.io.Opener;
-import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
-import ncsa.hdf.hdf5lib.exceptions.HDF5Exception;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,161 +36,12 @@ class OpenerExtension extends Opener {
 
     Logger logger = new IJLazySwingLogger();
 
-    // Compression modes
-    public static final int COMPRESSION_UNKNOWN = 0;
-    public static final int COMPRESSION_NONE = 1;
-    public static final int LZW = 2;
-    public static final int LZW_WITH_DIFFERENCING = 3;
-    public static final int JPEG = 4;
-    public static final int PACK_BITS = 5;
-    public static final int ZIP = 6;
-    private static final int CLEAR_CODE = 256;
-    private static final int EOI_CODE = 257;
-
-    /** 8-bit unsigned integer (0-255). */
-    public static final int GRAY8 = 0;
-
-    /** 16-bit signed integer (-32768-32767). Imported signed images
-     are converted to unsigned by adding 32768. */
-    public static final int GRAY16_SIGNED = 1;
-
-    /** 16-bit unsigned integer (0-65535). */
-    public static final int GRAY16_UNSIGNED = 2;
-
-    /** 32-bit signed integer. Imported 32-bit integer images are
-     converted to floating-point. */
-    public static final int GRAY32_INT = 3;
-
-    /** 32-bit floating-point. */
-    public static final int GRAY32_FLOAT = 4;
-
-    /** 8-bit unsigned integer with color lookup jTableSpots. */
-    public static final int COLOR8 = 5;
-
-    /** 24-bit interleaved RGB. Import/export only. */
-    public static final int RGB = 6;
-
-    /** 24-bit planer RGB. Import only. */
-    public static final int RGB_PLANAR = 7;
-
-    /** 1-bit black and white. Import only. */
-    public static final int BITMAP = 8;
-
-    /** 32-bit interleaved ARGB. Import only. */
-    public static final int ARGB = 9;
-
-    /** 24-bit interleaved BGR. Import only. */
-    public static final int BGR = 10;
-
-    /** 32-bit unsigned integer. Imported 32-bit integer images are
-     converted to floating-point. */
-    public static final int GRAY32_UNSIGNED = 11;
-
-    /** 48-bit interleaved RGB. */
-    public static final int RGB48 = 12;
-
-    /** 12-bit unsigned integer (0-4095). Import only. */
-    public static final int GRAY12_UNSIGNED = 13;
-
-    /** 24-bit unsigned integer. Import only. */
-    public static final int GRAY24_UNSIGNED = 14;
-
-    /** 32-bit interleaved BARG (MCID). Import only. */
-    public static final int BARG  = 15;
-
-    /** 64-bit floating-point. Import only.*/
-    public static final int GRAY64_FLOAT  = 16;
-
-    /** 48-bit planar RGB. Import only. */
-    public static final int RGB48_PLANAR = 17;
-
-    /** 32-bit interleaved ABGR. Import only. */
-    public static final int ABGR = 18;
-
-    /** 32-bit interleaved CMYK. Import only. */
-    public static final int CMYK = 19;
-
-    // uncompress
-    byte[][] symbolTable = new byte[4096][1];
-
     public OpenerExtension()
     {
     }
 
-    private byte[] readTiffOnePlaneCroppedRows(FileInfoSer fi0, FileInfoSer fi, RandomAccessFile in, int ys, int ye)
-    {
-        boolean hasStrips = false;
-        int readLength;
-        long readStart;
-        byte[] buffer;
-
-        if (fi.stripOffsets != null && fi.stripOffsets.length > 1)
-        {
-            hasStrips = true;
-        }
-
-        if (hasStrips) {
-            // convert rows to strips
-            int rps = fi0.rowsPerStrip;
-            int ss = (int) (1.0*ys/rps);
-            int se = (int) (1.0*ye/rps);
-            readStart = (long)fi.stripOffsets[ss] & 0xffffffffL; // interpret the int as unsigned
-
-            readLength = 0;
-            if(se >= fi.stripLengths.length)
-            {
-                  logger.warning("Strip is out of bounds");
-            }
-            for (int s = ss; s <= se; s++) {
-                readLength += fi.stripLengths[s];
-            }
-        }
-        else
-        {  // none or one strip
-            if(fi0.compression == ZIP) {
-                // read all data
-                readStart = fi.longOffset;
-                readLength = fi.stripLengths[0];
-            } else {
-                // read subset
-                // convert rows to bytes
-                readStart = fi.longOffset + ys * fi0.width * fi0.bytesPerPixel;
-                readLength = ((ye-ys)+1) * fi0.width * fi0.bytesPerPixel;
-            }
-        }
-
-        buffer = new byte[readLength];
-
-        try
-        {
-            if ( readStart + readLength - 1 <= in.length() )
-            {
-                    in.seek(readStart); // TODO: is this really slow??
-                    in.readFully(buffer);
-            }
-            else
-            {
-                logger.warning("The requested data exceeds the file length; no data was read.");
-                logger.warning("file type: Tiff");
-                logger.warning("hasStrips: " + hasStrips);
-                logger.warning("file length [bytes]: " + in.length());
-                logger.warning("attempt to read until [bytes]: "+ (readStart + readLength - 1) );
-                logger.warning("ys: " + ys);
-                logger.warning("ye: " + ye);
-                logger.warning("fileInfo.compression: " + fi0.compression);
-                logger.warning("fileInfo.height: " + fi0.height);
-            }
-        }
-        catch (Exception e)
-        {
-            logger.warning(e.toString());
-        }
-
-        return buffer;
-
-    }
-
-    public ImagePlus openCroppedStack(String directory, FileInfoSer[] info, int dz, Point3D po, Point3D ps)
+    public ImagePlus readDataCube(String directory, FileInfoSer[] info,
+                                  int dz, Point3D po, Point3D ps)
     {
 
         // compute ranges to be loaded
@@ -212,23 +58,26 @@ class OpenerExtension extends Opener {
             nz = (int) (1.0 * nz / dz + 0.5);
         }
 
+
         ImagePlus imp = null;
+
         if(info[0].fileTypeString.equals("tif stacks")) {
-            imp = openCroppedTiffStackUsingIFDs(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         } else if(info[0].fileTypeString.equals("leica single tif")) {
-            imp = openCroppedTiffStackUsingIFDs(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         } else if(info[0].fileTypeString.equals("h5")) {
-            imp = openCroppedH5stack(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+            imp = readDataCubeFromHdf5(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         } else {
-             logger.error("unsupported file type: " + info[0].fileTypeString);
+            logger.error("unsupported file type: " + info[0].fileTypeString);
         }
 
         return(imp);
 
     }
 
-    // todo make Points from the ints
-    public ImagePlus openCroppedH5stack( String directory, FileInfoSer[] info, int zs, int ze, int nz, int dz, int xs, int xe, int ys, int ye)
+    public ImagePlus readDataCubeFromHdf5(String directory, FileInfoSer[] info,
+                                          int zs, int ze, int nz, int dz,
+                                          int xs, int xe, int ys, int ye)
     {
         long startTime;
         long readingTime = 0;
@@ -252,7 +101,7 @@ class OpenerExtension extends Opener {
 
 
         if (Utils.verbose) {
-              logger.info("# openCroppedH5stack");
+              logger.info("# readDataCubeFromHdf5");
               logger.info("root directory: " + directory);
               logger.info("fi.directory: " + fi.directory);
               logger.info("fi.filename: " + fi.fileName);
@@ -278,7 +127,7 @@ class OpenerExtension extends Opener {
         startTime = System.currentTimeMillis();
         IHDF5Reader reader = HDF5Factory.openForReading(directory + fi.directory + fi.fileName);
         HDF5DataSetInformation dsInfo = reader.getDataSetInformation(fi.h5DataSet);
-        String dsTypeString = dsInfoToTypeString(dsInfo);
+        String dsTypeString = hdf5InfoToString(dsInfo);
         //info("Data type: " + dsTypeString);
 
         if (dz == 1 && readInOneGo) {
@@ -368,240 +217,95 @@ class OpenerExtension extends Opener {
         return(imp);
     }
 
-    static ImagePlus loadDataSetsToHyperStack( String filename, String[] dsetNames,
-                                               int nFrames, int nChannels )
+    public ImagePlus readDataCubeFromTiff(String directory, FileInfoSer[] info,
+                                          int zs, int ze, int nz, int dz,
+                                          int xs, int xe, int ys, int ye)
     {
-        //
-        // Code copied from Ronneberger
-        //
+        long startTime;
+        long readingTime = 0;
+        long totalTime = 0;
+        long threadInitTime = 0;
+        FileInfoSer fi;
+        File file;
 
-        String dsetName = "";
-        try
-        {
-            IHDF5ReaderConfigurator conf = HDF5Factory.configureForReading(filename);
-            conf.performNumericConversions();
-            IHDF5Reader reader = conf.reader();
-            ImagePlus imp = null;
-            int rank      = 0;
-            int nLevels   = 0;
-            int nRows     = 0;
-            int nCols     = 0;
-            boolean isRGB = false;
-            int nBits     = 0;
-            double maxGray = 1;
-            String typeText = "";
-            for (int frame = 0; frame < nFrames; ++frame) {
-                for (int channel = 0; channel < nChannels; ++channel) {
-                    // load data set
-                    //
-                    dsetName = dsetNames[frame*nChannels+channel];
-                    IJ.showStatus( "Loading " + dsetName);
-                    IJ.showProgress( frame*nChannels+channel+1, nFrames*nChannels);
-                    HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation(dsetName);
-                    float[] element_size_um = {1,1,1};
-                    try {
-                        element_size_um = reader.float32().getArrayAttr(dsetName, "element_size_um");
-                    }
-                    catch (HDF5Exception err) {
-                        IJ.log("Warning: Can't read attribute 'element_size_um' from file '" + filename
-                                + "', dataset '" + dsetName + "':\n"
-                                + err + "\n"
-                                + "Assuming element size of 1 x 1 x 1 um^3");
-                    }
+        if (info == null) return null;
+        FileInfoSer fi0 = info[0];
 
-                    // in first call create hyperstack
-                    //
-                    if (imp == null) {
-                        rank = dsInfo.getRank();
-                        typeText = dsInfoToTypeString(dsInfo);
-                        if (rank == 2) {
-                            nLevels = 1;
-                            nRows = (int)dsInfo.getDimensions()[0];
-                            nCols = (int)dsInfo.getDimensions()[1];
-                        } else if (rank == 3) {
-                            nLevels = (int)dsInfo.getDimensions()[0];
-                            nRows   = (int)dsInfo.getDimensions()[1];
-                            nCols   = (int)dsInfo.getDimensions()[2];
-                            if( typeText.equals( "uint8") && nCols == 3)
-                            {
-                                nLevels = 1;
-                                nRows = (int)dsInfo.getDimensions()[0];
-                                nCols = (int)dsInfo.getDimensions()[1];
-                                isRGB = true;
-                            }
-                        } else if (rank == 4 && typeText.equals( "uint8")) {
-                            nLevels = (int)dsInfo.getDimensions()[0];
-                            nRows   = (int)dsInfo.getDimensions()[1];
-                            nCols   = (int)dsInfo.getDimensions()[2];
-                            isRGB   = true;
-                        } else {
-                            IJ.error( dsetName + ": rank " + rank + " of type " + typeText + " not supported (yet)");
-                            return null;
-                        }
+        int nx = xe - xs + 1;
+        int ny = ye - ys + 1;
 
-                        nBits = assignHDF5TypeToImagePlusBitdepth( typeText, isRGB);
+        if(Utils.verbose) {
+              logger.info("# readDataCubeFromTiff");
+              logger.info("root directory: " + directory);
+              logger.info("info.length: " + info.length);
+              logger.info("fi0.directory: " + fi0.directory);
+              logger.info("fi0.filename: " + fi0.fileName);
+              logger.info("fi0.compression: " + fi0.compression);
+              logger.info("fi0.intelByteOrder: " + fi0.intelByteOrder);
+              logger.info("fi0.bytesPerPixel: " + fi0.bytesPerPixel);
+              logger.info("zs,dz,ze,nz,xs,xe,ys,ye: " + zs + "," + dz + "," + ze + "," + nz + "," + xs + "," + xe + "," + ys + "," + ye);
+        }
 
-                        imp = IJ.createHyperStack( filename + ": " + dsetName,
-                                nCols, nRows, nChannels, nLevels, nFrames, nBits);
-                        imp.getCalibration().pixelDepth  = element_size_um[0];
-                        imp.getCalibration().pixelHeight = element_size_um[1];
-                        imp.getCalibration().pixelWidth  = element_size_um[2];
-                        imp.getCalibration().setUnit("micrometer");
-                        imp.setDisplayRange(0,255);
-                    }
+        totalTime = System.currentTimeMillis();
 
-                    // take care of data sets with more than 2^31 elements
-                    //
-                    long   maxLoadBlockSize = (1L<<31) - 1;
-                    int[]  loadBlockDimensions = new int[dsInfo.getRank()];
-                    long[] loadBlockOffset = new long[dsInfo.getRank()];
-                    int    nLoadBlocks = 1;
-                    long   levelsPerReadOperation = (int)dsInfo.getDimensions()[0];
+        // initialisation and allocation
+        startTime = System.currentTimeMillis();
+        int imByteWidth = fi0.width*fi0.bytesPerPixel;
+        // todo: this is not necessary to allocate new, but could be filled
+        ImageStack stack = ImageStack.create(nx, ny, nz, fi0.bytesPerPixel * 8);
+        byte[][] buffer = new byte[nz][1];
+        ExecutorService es = Executors.newCachedThreadPool();
 
-                    for( int d = 0; d < dsInfo.getRank(); ++d) {
-                        loadBlockDimensions[d] = (int)dsInfo.getDimensions()[d];
-                        loadBlockOffset[d] = 0;
-                    }
+        try {
 
-                    if( dsInfo.getNumberOfElements() >= maxLoadBlockSize) {
-                        long minBlockSize = 1;
-                        for( int d = 1; d < dsInfo.getRank(); ++d) {
-                            minBlockSize *= loadBlockDimensions[d];
-                        }
-                        levelsPerReadOperation = maxLoadBlockSize / minBlockSize;
-                        loadBlockDimensions[0] = (int)levelsPerReadOperation;
-                        nLoadBlocks = (int)((dsInfo.getDimensions()[0] - 1) / levelsPerReadOperation + 1); // integer version for ceil(a/b)
-                        IJ.log("Data set has " + dsInfo.getNumberOfElements() + " elements (more than 2^31). Reading in " + nLoadBlocks + " blocks with maximum of " + levelsPerReadOperation + " levels");
-                    }
+            // read plane wise
+            //
+            for (int iz=0, z=zs; iz<nz; iz++, z+=dz) {
 
-                    // load data and copy slices to hyperstack
-                    //
-                    int sliceSize = nCols * nRows;
-                    for( int block = 0; block < nLoadBlocks; ++block) {
-                        // compute offset and size of next block, that is loaded
-                        //
-                        loadBlockOffset[0] = (long)block * levelsPerReadOperation;
-                        int remainingLevels = (int)(dsInfo.getDimensions()[0] - loadBlockOffset[0]);
-                        if( remainingLevels < loadBlockDimensions[0] ) {
-                            // last block is smaller
-                            loadBlockDimensions[0] = remainingLevels;
-                        }
-                        // compute target start level in image processor
-                        int trgLevel = (int)loadBlockOffset[0];
+                if (z < 0 || z >= info.length) {
+                    logger.error("z = " + z + " is out of range.");
+                    return null;
+                }
 
+                // Read, decompress, rearrange, crop X, and put into stack
+                //
+                es.execute(new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer, z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth));
 
-                        if (typeText.equals( "uint8") && isRGB == false) {
-                            MDByteArray rawdata = reader.uint8().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
-                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
-                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
-                                        channel+1, trgLevel+lev+1, frame+1));
-                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
-                                        (byte[])ip.getPixels(),   0,
-                                        sliceSize);
-                            }
-                            maxGray = 255;
-
-                        }  else if (typeText.equals( "uint8") && isRGB) {  // RGB data
-                            MDByteArray rawdata = reader.uint8().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
-                            byte[] srcArray = rawdata.getAsFlatArray();
-
-
-                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
-                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
-                                        channel+1, trgLevel+lev+1, frame+1));
-                                int[] trgArray = (int[])ip.getPixels();
-                                int srcOffset = lev*sliceSize*3;
-
-                                for( int rc = 0; rc < sliceSize; ++rc)
-                                {
-                                    int red   = srcArray[srcOffset + rc*3] & 0xff;
-                                    int green = srcArray[srcOffset + rc*3 + 1] & 0xff;
-                                    int blue  = srcArray[srcOffset + rc*3 + 2] & 0xff;
-                                    trgArray[rc] = (red<<16) + (green<<8) + blue;
-                                }
-
-                            }
-                            maxGray = 255;
-
-                        } else if (typeText.equals( "uint16")) {
-                            MDShortArray rawdata = reader.uint16().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
-                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
-                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
-                                        channel+1, trgLevel+lev+1, frame+1));
-                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
-                                        (short[])ip.getPixels(),   0,
-                                        sliceSize);
-                            }
-                            short[] data = rawdata.getAsFlatArray();
-                            for (int i = 0; i < data.length; ++i) {
-                                if (data[i] > maxGray) maxGray = data[i];
-                            }
-                        } else if (typeText.equals( "int16")) {
-                            MDShortArray rawdata = reader.int16().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
-                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
-                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
-                                        channel+1, trgLevel+lev+1, frame+1));
-                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
-                                        (short[])ip.getPixels(),   0,
-                                        sliceSize);
-                            }
-                            short[] data = rawdata.getAsFlatArray();
-                            for (int i = 0; i < data.length; ++i) {
-                                if (data[i] > maxGray) maxGray = data[i];
-                            }
-                        } else if (typeText.equals( "float32") || typeText.equals( "float64") ) {
-                            MDFloatArray rawdata = reader.float32().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
-                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
-                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
-                                        channel+1, trgLevel+lev+1, frame+1));
-                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
-                                        (float[])ip.getPixels(),   0,
-                                        sliceSize);
-                            }
-                            float[] data = rawdata.getAsFlatArray();
-                            for (int i = 0; i < data.length; ++i) {
-                                if (data[i] > maxGray) maxGray = data[i];
-                            }
-                        }
-                    }  // end for block
-                }  // end for channel
-            } // end for frame
-            reader.close();
-
-            // aqdjust max gray
-            for( int c = 1; c <= nChannels; ++c)
-            {
-                imp.setC(c);
-                imp.setDisplayRange(0,maxGray);
             }
 
-            imp.setC(1);
-            imp.show();
-            return imp;
+            // wait until all z-planes are read
+            try {
+                es.shutdown();
+                while(!es.awaitTermination(1, TimeUnit.MINUTES));
+            }
+            catch (InterruptedException e) {
+                System.err.println("tasks interrupted");
+            }
+
+        } catch (Exception e) {
+            IJ.handleException(e);
         }
 
-        catch (HDF5Exception err)
-        {
-            IJ.error("Error while opening '" + filename
-                    + "', dataset '" + dsetName + "':\n"
-                    + err);
-        }
-        catch (Exception err)
-        {
-            IJ.error("Error while opening '" + filename
-                    + "', dataset '" + dsetName + "':\n"
-                    + err);
-        }
-        catch (OutOfMemoryError o)
-        {
-            IJ.outOfMemory("Load HDF5");
-        }
-        return null;
 
+        ImagePlus imp = new ImagePlus("One stream", stack);
+        //imp.show();
+
+        totalTime = (System.currentTimeMillis() - totalTime);
+
+        if(Utils.verbose)
+        {
+              int usefulBytesRead = nz*nx*ny*fi0.bytesPerPixel;
+              logger.info("readingTime [ms]: " + readingTime);
+              logger.info("effective reading speed [MB/s]: " + usefulBytesRead / ((readingTime + 0.001) * 1000));
+              logger.info("threadInitTime [ms]: " + threadInitTime);
+              logger.info("totalTime [ms]: " + totalTime);
+            //info("Processing [ms]: " + processTime);
+        }
+
+        return imp;
     }
 
-
-    static String dsInfoToTypeString( HDF5DataSetInformation dsInfo)
+    static String hdf5InfoToString(HDF5DataSetInformation dsInfo)
     {
         //
         // Code copied from Ronneberger
@@ -627,116 +331,9 @@ class OpenerExtension extends Opener {
         return typeText;
     }
 
-    static int assignHDF5TypeToImagePlusBitdepth( String type, boolean isRGB)
-    {
-        //
-        // Code copied from Ronneberger
-        //
-        int nBits = 0;
-        if (type.equals("uint8")) {
-            if( isRGB ) {
-                nBits = 24;
-            } else {
-                nBits = 8;
-            }
-        } else if (type.equals("uint16") || type.equals("int16")) {
-            nBits = 16;
-        } else if (type.equals("float32") || type.equals("float64")) {
-            nBits = 32;
-        } else {
-            IJ.error("Type '" + type + "' Not handled yet!");
-        }
-        return nBits;
-    }
-
-    public ImagePlus openCroppedTiffStackUsingIFDs(String directory, FileInfoSer[] info, int zs, int ze, int nz, int dz, int xs, int xe, int ys, int ye) {
-        long startTime;
-        long readingTime = 0;
-        long totalTime = 0;
-        long threadInitTime = 0;
-        FileInfoSer fi;
-        File file;
-
-        if (info == null) return null;
-        FileInfoSer fi0 = info[0];
-
-        int nx = xe - xs + 1;
-        int ny = ye - ys + 1;
-
-        if(Utils.verbose) {
-              logger.info("# openCroppedTiffStackUsingIFDs");
-              logger.info("root directory: " + directory);
-              logger.info("info.length: " + info.length);
-              logger.info("fi0.directory: " + fi0.directory);
-              logger.info("fi0.filename: " + fi0.fileName);
-              logger.info("fi0.compression: " + fi0.compression);
-              logger.info("fi0.intelByteOrder: " + fi0.intelByteOrder);
-              logger.info("fi0.bytesPerPixel: " + fi0.bytesPerPixel);
-              logger.info("zs,dz,ze,nz,xs,xe,ys,ye: " + zs + "," + dz + "," + ze + "," + nz + "," + xs + "," + xe + "," + ys + "," + ye);
-        }
-
-        totalTime = System.currentTimeMillis();
-
-        // initialisation and allocation
-        startTime = System.currentTimeMillis();
-        int imByteWidth = fi0.width*fi0.bytesPerPixel;
-        // todo: this is not necessary to allocate new, but could be filled
-        ImageStack stack = ImageStack.create(nx, ny, nz, fi0.bytesPerPixel*8);
-        byte[][] buffer = new byte[nz][1];
-        ExecutorService es = Executors.newCachedThreadPool();
-
-        try {
-
-            // read plane wise
-            int z = zs;
-
-            for (int iz=0; iz<nz; iz++, z+=dz) {
-
-                if (z<0 || z>=info.length) {
-                     logger.error("z=" + z + " is out of range. Please reduce your cropping z-radius.");
-                    return null;
-                }
-
-
-                // Read, decompress, rearrange, crop X, and put into stack
-                //
-                es.execute(new process2stack(directory, info, stack, buffer, z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth));
-
-            }
-
-            // wait until all z-planes are read
-            try {
-                es.shutdown();
-                while(!es.awaitTermination(1, TimeUnit.MINUTES));
-            }
-            catch (InterruptedException e) {
-                System.err.println("tasks interrupted");
-            }
-
-        } catch (Exception e) {
-            IJ.handleException(e);
-        }
-
-
-        ImagePlus imp = new ImagePlus("One stream", stack);
-        //imp.show();
-
-        totalTime = (System.currentTimeMillis() - totalTime);
-
-        if(Utils.verbose) {
-            int usefulBytesRead = nz*nx*ny*fi0.bytesPerPixel;
-              logger.info("readingTime [ms]: " + readingTime);
-              logger.info("effective reading speed [MB/s]: " + usefulBytesRead / ((readingTime + 0.001) * 1000));
-              logger.info("threadInitTime [ms]: " + threadInitTime);
-              logger.info("totalTime [ms]: " + totalTime);
-            //info("Processing [ms]: " + processTime);
-        }
-
-        return imp;
-    }
-
     /** Decompresses and sorts data into an ImageStack **/
-    class process2stack implements Runnable {
+    class readCroppedPlaneFromTiffIntoImageStack implements Runnable
+    {
         private Thread t;
         private String threadName;
 
@@ -773,7 +370,11 @@ class OpenerExtension extends Opener {
         int z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth;
 
 
-        process2stack(String directory, FileInfoSer[] info, ImageStack stack, byte[][] buffer, int z, int zs, int ze, int dz, int ys, int ye, int ny, int xs, int xe, int nx, int imByteWidth) {
+        readCroppedPlaneFromTiffIntoImageStack(String directory, FileInfoSer[] info, ImageStack stack, byte[][] buffer,
+                                               int z, int zs, int ze, int dz,
+                                               int ys, int ye, int ny,
+                                               int xs, int xe, int nx,
+                                               int imByteWidth) {
             threadName = ""+z;
             this.directory = directory;
             this.info = info;
@@ -790,7 +391,7 @@ class OpenerExtension extends Opener {
             this.xe = xe;
             this.nx = nx;
             this.imByteWidth = imByteWidth;
-            //info("Creating process2stack of slice: " +  threadName );
+            //info("Creating readCroppedPlaneFromTiffIntoImageStack of slice: " +  threadName );
         }
 
         public void run() {
@@ -815,8 +416,8 @@ class OpenerExtension extends Opener {
                 }
 
                 //startTime = System.currentTimeMillis();
-                long pointer = 0; // todo: This is actually not used at all in the readTiffOnePlaneCroppedRows, or?
-                buffer[(z-zs)/dz] = readTiffOnePlaneCroppedRows(fi0, fi, inputStream, ys, ye);
+                long pointer = 0; // todo: This is actually not used at all in the readCroppedPlaneFromTiff, or?
+                buffer[(z-zs)/dz] = readCroppedPlaneFromTiff(fi0, fi, inputStream, ys, ye);
                 //readingTime += (System.currentTimeMillis() - startTime);
                 inputStream.close();
 
@@ -1122,9 +723,83 @@ class OpenerExtension extends Opener {
             //info("Starting " +  threadName );
             if (t == null) {
                 t = new Thread (this, threadName);
-                t.start ();
+                t.start();
             }
         }
+
+        private byte[] readCroppedPlaneFromTiff(FileInfoSer fi0, FileInfoSer fi, RandomAccessFile in, int ys, int ye)
+        {
+            boolean hasStrips = false;
+            int readLength;
+            long readStart;
+            byte[] buffer;
+
+            if (fi.stripOffsets != null && fi.stripOffsets.length > 1)
+            {
+                hasStrips = true;
+            }
+
+            if (hasStrips) {
+                // convert rows to strips
+                int rps = fi0.rowsPerStrip;
+                int ss = (int) (1.0*ys/rps);
+                int se = (int) (1.0*ye/rps);
+                readStart = (long)fi.stripOffsets[ss] & 0xffffffffL; // interpret the int as unsigned
+
+                readLength = 0;
+                if(se >= fi.stripLengths.length)
+                {
+                    logger.warning("Strip is out of bounds");
+                }
+                for (int s = ss; s <= se; s++) {
+                    readLength += fi.stripLengths[s];
+                }
+            }
+            else
+            {  // none or one strip
+                if(fi0.compression == ZIP) {
+                    // read all data
+                    readStart = fi.longOffset;
+                    readLength = fi.stripLengths[0];
+                } else {
+                    // read subset
+                    // convert rows to bytes
+                    readStart = fi.longOffset + ys * fi0.width * fi0.bytesPerPixel;
+                    readLength = ((ye-ys)+1) * fi0.width * fi0.bytesPerPixel;
+                }
+            }
+
+            buffer = new byte[readLength];
+
+            try
+            {
+                if ( readStart + readLength - 1 <= in.length() )
+                {
+                    in.seek(readStart); // TODO: is this really slow??
+                    in.readFully(buffer);
+                }
+                else
+                {
+                    logger.warning("The requested data exceeds the file length; no data was read.");
+                    logger.warning("file type: Tiff");
+                    logger.warning("hasStrips: " + hasStrips);
+                    logger.warning("file length [bytes]: " + in.length());
+                    logger.warning("attempt to read until [bytes]: "+ (readStart + readLength - 1) );
+                    logger.warning("ys: " + ys);
+                    logger.warning("ye: " + ye);
+                    logger.warning("fileInfo.compression: " + fi0.compression);
+                    logger.warning("fileInfo.height: " + fi0.height);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.warning(e.toString());
+            }
+
+            return buffer;
+
+        }
+
 
 
         /** A growable array of bytes. */
@@ -1188,6 +863,263 @@ class OpenerExtension extends Opener {
 
     }
 
+
 }
 
+/**
+ *
+ *
+ static int assignHDF5TypeToImagePlusBitdepth( String type, boolean isRGB)
+ {
+ //
+ // Code copied from Ronneberger
+ //
+ int nBits = 0;
+ if (type.equals("uint8")) {
+ if( isRGB ) {
+ nBits = 24;
+ } else {
+ nBits = 8;
+ }
+ } else if (type.equals("uint16") || type.equals("int16")) {
+ nBits = 16;
+ } else if (type.equals("float32") || type.equals("float64")) {
+ nBits = 32;
+ } else {
+ IJ.error("Type '" + type + "' Not handled yet!");
+ }
+ return nBits;
+ }
 
+ static ImagePlus loadDataSetsToHyperStack( String filename, String[] dsetNames,
+                                               int nFrames, int nChannels )
+    {
+        //
+        // Code copied from Ronneberger
+        //
+
+        String dsetName = "";
+        try
+        {
+            IHDF5ReaderConfigurator conf = HDF5Factory.configureForReading(filename);
+            conf.performNumericConversions();
+            IHDF5Reader reader = conf.reader();
+            ImagePlus imp = null;
+            int rank      = 0;
+            int nLevels   = 0;
+            int nRows     = 0;
+            int nCols     = 0;
+            boolean isRGB = false;
+            int nBits     = 0;
+            double maxGray = 1;
+            String typeText = "";
+            for (int frame = 0; frame < nFrames; ++frame) {
+                for (int channel = 0; channel < nChannels; ++channel) {
+                    // load data set
+                    //
+                    dsetName = dsetNames[frame*nChannels+channel];
+                    IJ.showStatus( "Loading " + dsetName);
+                    IJ.showProgress( frame*nChannels+channel+1, nFrames*nChannels);
+                    HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation(dsetName);
+                    float[] element_size_um = {1,1,1};
+                    try {
+                        element_size_um = reader.float32().getArrayAttr(dsetName, "element_size_um");
+                    }
+                    catch (HDF5Exception err) {
+                        IJ.log("Warning: Can't read attribute 'element_size_um' from file '" + filename
+                                + "', dataset '" + dsetName + "':\n"
+                                + err + "\n"
+                                + "Assuming element size of 1 x 1 x 1 um^3");
+                    }
+
+                    // in first call create hyperstack
+                    //
+                    if (imp == null) {
+                        rank = dsInfo.getRank();
+                        typeText = hdf5InfoToString(dsInfo);
+                        if (rank == 2) {
+                            nLevels = 1;
+                            nRows = (int)dsInfo.getDimensions()[0];
+                            nCols = (int)dsInfo.getDimensions()[1];
+                        } else if (rank == 3) {
+                            nLevels = (int)dsInfo.getDimensions()[0];
+                            nRows   = (int)dsInfo.getDimensions()[1];
+                            nCols   = (int)dsInfo.getDimensions()[2];
+                            if( typeText.equals( "uint8") && nCols == 3)
+                            {
+                                nLevels = 1;
+                                nRows = (int)dsInfo.getDimensions()[0];
+                                nCols = (int)dsInfo.getDimensions()[1];
+                                isRGB = true;
+                            }
+                        } else if (rank == 4 && typeText.equals( "uint8")) {
+                            nLevels = (int)dsInfo.getDimensions()[0];
+                            nRows   = (int)dsInfo.getDimensions()[1];
+                            nCols   = (int)dsInfo.getDimensions()[2];
+                            isRGB   = true;
+                        } else {
+                            IJ.error( dsetName + ": rank " + rank + " of type " + typeText + " not supported (yet)");
+                            return null;
+                        }
+
+                        nBits = assignHDF5TypeToImagePlusBitdepth( typeText, isRGB);
+
+                        imp = IJ.createHyperStack( filename + ": " + dsetName,
+                                nCols, nRows, nChannels, nLevels, nFrames, nBits);
+                        imp.getCalibration().pixelDepth  = element_size_um[0];
+                        imp.getCalibration().pixelHeight = element_size_um[1];
+                        imp.getCalibration().pixelWidth  = element_size_um[2];
+                        imp.getCalibration().setUnit("micrometer");
+                        imp.setDisplayRange(0,255);
+                    }
+
+                    // take care of data sets with more than 2^31 elements
+                    //
+                    long   maxLoadBlockSize = (1L<<31) - 1;
+                    int[]  loadBlockDimensions = new int[dsInfo.getRank()];
+                    long[] loadBlockOffset = new long[dsInfo.getRank()];
+                    int    nLoadBlocks = 1;
+                    long   levelsPerReadOperation = (int)dsInfo.getDimensions()[0];
+
+                    for( int d = 0; d < dsInfo.getRank(); ++d) {
+                        loadBlockDimensions[d] = (int)dsInfo.getDimensions()[d];
+                        loadBlockOffset[d] = 0;
+                    }
+
+                    if( dsInfo.getNumberOfElements() >= maxLoadBlockSize) {
+                        long minBlockSize = 1;
+                        for( int d = 1; d < dsInfo.getRank(); ++d) {
+                            minBlockSize *= loadBlockDimensions[d];
+                        }
+                        levelsPerReadOperation = maxLoadBlockSize / minBlockSize;
+                        loadBlockDimensions[0] = (int)levelsPerReadOperation;
+                        nLoadBlocks = (int)((dsInfo.getDimensions()[0] - 1) / levelsPerReadOperation + 1); // integer version for ceil(a/b)
+                        IJ.log("Data set has " + dsInfo.getNumberOfElements() + " elements (more than 2^31). Reading in " + nLoadBlocks + " blocks with maximum of " + levelsPerReadOperation + " levels");
+                    }
+
+                    // load data and copy slices to hyperstack
+                    //
+                    int sliceSize = nCols * nRows;
+                    for( int block = 0; block < nLoadBlocks; ++block) {
+                        // compute offset and size of next block, that is loaded
+                        //
+                        loadBlockOffset[0] = (long)block * levelsPerReadOperation;
+                        int remainingLevels = (int)(dsInfo.getDimensions()[0] - loadBlockOffset[0]);
+                        if( remainingLevels < loadBlockDimensions[0] ) {
+                            // last block is smaller
+                            loadBlockDimensions[0] = remainingLevels;
+                        }
+                        // compute target start level in image processor
+                        int trgLevel = (int)loadBlockOffset[0];
+
+
+                        if (typeText.equals( "uint8") && isRGB == false) {
+                            MDByteArray rawdata = reader.uint8().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
+                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
+                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
+                                        channel+1, trgLevel+lev+1, frame+1));
+                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
+                                        (byte[])ip.getPixels(),   0,
+                                        sliceSize);
+                            }
+                            maxGray = 255;
+
+                        }  else if (typeText.equals( "uint8") && isRGB) {  // RGB data
+                            MDByteArray rawdata = reader.uint8().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
+                            byte[] srcArray = rawdata.getAsFlatArray();
+
+
+                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
+                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
+                                        channel+1, trgLevel+lev+1, frame+1));
+                                int[] trgArray = (int[])ip.getPixels();
+                                int srcOffset = lev*sliceSize*3;
+
+                                for( int rc = 0; rc < sliceSize; ++rc)
+                                {
+                                    int red   = srcArray[srcOffset + rc*3] & 0xff;
+                                    int green = srcArray[srcOffset + rc*3 + 1] & 0xff;
+                                    int blue  = srcArray[srcOffset + rc*3 + 2] & 0xff;
+                                    trgArray[rc] = (red<<16) + (green<<8) + blue;
+                                }
+
+                            }
+                            maxGray = 255;
+
+                        } else if (typeText.equals( "uint16")) {
+                            MDShortArray rawdata = reader.uint16().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
+                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
+                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
+                                        channel+1, trgLevel+lev+1, frame+1));
+                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
+                                        (short[])ip.getPixels(),   0,
+                                        sliceSize);
+                            }
+                            short[] data = rawdata.getAsFlatArray();
+                            for (int i = 0; i < data.length; ++i) {
+                                if (data[i] > maxGray) maxGray = data[i];
+                            }
+                        } else if (typeText.equals( "int16")) {
+                            MDShortArray rawdata = reader.int16().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
+                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
+                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
+                                        channel+1, trgLevel+lev+1, frame+1));
+                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
+                                        (short[])ip.getPixels(),   0,
+                                        sliceSize);
+                            }
+                            short[] data = rawdata.getAsFlatArray();
+                            for (int i = 0; i < data.length; ++i) {
+                                if (data[i] > maxGray) maxGray = data[i];
+                            }
+                        } else if (typeText.equals( "float32") || typeText.equals( "float64") ) {
+                            MDFloatArray rawdata = reader.float32().readMDArrayBlockWithOffset(dsetName, loadBlockDimensions, loadBlockOffset);
+                            for( int lev = 0; lev < loadBlockDimensions[0]; ++lev) {
+                                ImageProcessor ip = imp.getStack().getProcessor( imp.getStackIndex(
+                                        channel+1, trgLevel+lev+1, frame+1));
+                                System.arraycopy( rawdata.getAsFlatArray(), lev*sliceSize,
+                                        (float[])ip.getPixels(),   0,
+                                        sliceSize);
+                            }
+                            float[] data = rawdata.getAsFlatArray();
+                            for (int i = 0; i < data.length; ++i) {
+                                if (data[i] > maxGray) maxGray = data[i];
+                            }
+                        }
+                    }  // end for block
+                }  // end for channel
+            } // end for frame
+            reader.close();
+
+            // aqdjust max gray
+            for( int c = 1; c <= nChannels; ++c)
+            {
+                imp.setC(c);
+                imp.setDisplayRange(0,maxGray);
+            }
+
+            imp.setC(1);
+            imp.show();
+            return imp;
+        }
+
+        catch (HDF5Exception err)
+        {
+            IJ.error("Error while opening '" + filename
+                    + "', dataset '" + dsetName + "':\n"
+                    + err);
+        }
+        catch (Exception err)
+        {
+            IJ.error("Error while opening '" + filename
+                    + "', dataset '" + dsetName + "':\n"
+                    + err);
+        }
+        catch (OutOfMemoryError o)
+        {
+            IJ.outOfMemory("Load HDF5");
+        }
+        return null;
+
+    }
+*/

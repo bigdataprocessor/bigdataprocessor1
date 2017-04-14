@@ -560,7 +560,7 @@ public class DataStreamingTools {
 
             // init the VSS
             VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, infos);
-            ImagePlus imp = getImagePlusFromVSS(stack);
+            ImagePlus imp = createImagePlusFromVSS(stack);
             return(imp);
 
         } else {
@@ -835,12 +835,12 @@ public class DataStreamingTools {
 
         VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
         VirtualStackOfStacks stack = new VirtualStackOfStacks(parentStack.getDirectory(), croppedInfos);
-        return(getImagePlusFromVSS(stack));
+        return(createImagePlusFromVSS(stack));
 
     }
 
     // TODO: is this method needed?
-    private static ImagePlus getImagePlusFromVSS(VirtualStackOfStacks stack) {
+    private static ImagePlus createImagePlusFromVSS(VirtualStackOfStacks stack) {
         int nC=stack.nC;
         int nZ=stack.nZ;
         int nT=stack.nT;
@@ -859,7 +859,7 @@ public class DataStreamingTools {
 		imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
 
         if(Utils.verbose) {
-            logger.info("# DataStreamingTools.getImagePlusFromVSS");
+            logger.info("# DataStreamingTools.createImagePlusFromVSS");
             logger.info("nC: " + nC);
             logger.info("nZ: " + nZ);
             logger.info("nT: " + nT);
@@ -961,7 +961,7 @@ public class DataStreamingTools {
                 if (t == 0) {
 
                     if (vss != null && vss.getSize() > 0) {
-                        imp = getImagePlusFromVSS(vss);
+                        imp = createImagePlusFromVSS(vss);
                     } else {
                         IJ.showMessage("Something went wrong loading the first image stack!");
                         return;

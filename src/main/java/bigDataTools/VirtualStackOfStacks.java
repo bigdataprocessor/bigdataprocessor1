@@ -312,7 +312,7 @@ public class VirtualStackOfStacks extends ImageStack {
             ps = new Point3D(fi.width,fi.height,1);
         }
 
-        // imp = new OpenerExtension().openCroppedStack(directory, infos[c][t], dz, po, ps);
+        // imp = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po, ps);
         imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0);
 
         return imp.getProcessor();
@@ -431,7 +431,7 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            impLoaded = new OpenerExtension().openCroppedStack(directory, infos[c][t], dz, po2, ps2);
+            impLoaded = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po2, ps2);
 
             if (impLoaded == null)
             {
