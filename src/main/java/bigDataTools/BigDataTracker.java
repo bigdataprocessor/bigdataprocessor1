@@ -31,30 +31,16 @@
 
 package bigDataTools;
 
-import ij.IJ;
 import ij.ImagePlus;
-import ij.ImageStack;
 import ij.gui.NonBlockingGenericDialog;
 import ij.gui.Overlay;
-import ij.gui.PointRoi;
 import ij.gui.Roi;
-import ij.plugin.PlugIn;
-import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
-import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
-import mpicbg.imglib.algorithm.fft.PhaseCorrelationPeak;
-import mpicbg.imglib.image.ImagePlusAdapter;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,7 +49,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 // todo: expose the number of iterations for the center of mass to the gui
 // todo: correlation tracking: it did not show an error when no object was selected
 
-// todo: add unique track id to tracktable, track, and imageName of cropped track
+// todo: add unique track trackID to tracktable, track, and imageName of cropped track
 
 // todo: multi-point selection tool
 // todo: track-jTableSpots: load button
@@ -71,256 +57,158 @@ import java.util.concurrent.atomic.AtomicInteger;
     // todo: make frames around buttons that belong together
 
 
-public class BigDataTracker implements PlugIn {
-
-    ImagePlus imp;
-    private static NonBlockingGenericDialog gd;
-    private final static Point3D pOnes = new Point3D(1,1,1);
-    // gui variables
-
-    ArrayList<Track> tracks = new ArrayList<Track>();
-    ArrayList<Roi> rTrackStarts = new ArrayList<Roi>();
-    String gui_trackingMethod = "center of mass";
-    String gui_centeringMethod = "center of mass";
-    TrackTable trackTable;
-    long trackStatsStartTime;
-    long trackStatsReportDelay = 200;
-    long trackStatsLastReport = System.currentTimeMillis();
-    int totalTimePointsToBeTracked = 0;
-    AtomicInteger totalTimePointsTracked = new AtomicInteger(0);
-    AtomicInteger totalTimeSpentTracking = new AtomicInteger(0);
-    long trackStatsLastTrackStarted;
-    int trackStatsTotalPointsTrackedAtLastStart;
-
-    ExecutorService es = Executors.newCachedThreadPool();
+public class BigDataTracker {
 
     Logger logger = new IJLazySwingLogger();
+
+    private ImagePlus imp;
+    private ArrayList<Track> tracks = new ArrayList<Track>();
+    private TrackTable trackTable;
+    private ExecutorService es = Executors.newCachedThreadPool();
+
+    public boolean interruptTrackingThreads = false;
 
     public BigDataTracker(ImagePlus imp) {
         this.imp = imp;
         this.trackTable = new TrackTable();
     }
 
-    class TrackTable  {
-        JTable table;
-
-        public TrackTable() {
-            String[] columnNames = {"ID_T",
-                    "X",
-                    "Y",
-                    "Z",
-                    "T",
-                    "ID"
-                    //,
-                    //"t_TotalSum",
-                    //"t_ReadThis",
-                    //"t_ProcessThis"
-            };
-
-            DefaultTableModel model = new DefaultTableModel(columnNames,0);
-            table = new JTable(model);
-            table.setPreferredScrollableViewportSize(new Dimension(500, 200));
-            table.setFillsViewportHeight(true);
-            table.setAutoCreateRowSorter(true);
-        }
-
-        public void addRow(final Object[] row) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.addRow(row);
-                }
-            });
-        }
-
-        public void clear() {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.setRowCount(0);
-                }
-            });
-        }
-
-        public JTable getTable() {
-            return table;
-        }
-
+    public TrackTable getTrackTable() {
+        return trackTable;
     }
 
-    public JTable getTrackTable() {
-        return trackTable.getTable();
+    public ArrayList<Track> getTracks() {
+        return tracks;
     }
 
-    public void saveTrackTable(File file) {
-        try{
-            TableModel model = trackTable.getTable().getModel();
-            FileWriter excel = new FileWriter(file);
-
-            for(int i = 0; i < model.getColumnCount(); i++){
-                excel.write(model.getColumnName(i) + "\t");
-            }
-            excel.write("\n");
-
-            for(int i=0; i< model.getRowCount(); i++) {
-                for(int j=0; j < model.getColumnCount(); j++) {
-                    excel.write(model.getValueAt(i,j).toString()+"\t");
-                }
-                excel.write("\n");
-            }
-            excel.close();
-
-        } catch(IOException e) { logger.error(e.toString()); }
+    public ImagePlus getImp() {
+        return imp;
     }
 
-    public ImagePlus[] getViewsOnTrackedObjects() {
+    public void clearAllTracks()
+    {
+        this.getTrackTable().clear();
+        this.getTracks().clear();
+        this.getImp().setOverlay(new Overlay());
+    }
 
-        ImagePlus[] imps = new ImagePlus[tracks.size()];
+    public ArrayList<ImagePlus> getViewsOnTrackedObjects(String croppingFactor) {
 
-        for(int i=0; i< tracks.size(); i++) {
+        ArrayList<ImagePlus> imps = new ArrayList<>();
 
-            Track track = tracks.get(i);
+        for( Track track : tracks) {
 
-            if (track.completed) {
+            Point3D pCropSize;
 
+            //
+            // convert track center coordinates to bounding box offsets
+            //
+            ArrayList<Point3D> trackOffsets = new ArrayList<>();
+            Map<Integer, Point3D> locations = track.getLocations();
 
-                //
-                // convert track center coordinates to bounding box offsets
-                //
-                Point3D[] trackOffsets = new Point3D[track.getLength()];
+            if( croppingFactor.equals("all") ) {
 
-                if( gui_croppingFactor.equals("all") ) {
-
-                    // the object was used to "drift correct" the whole image
-                    // thus, show the whole image
-                    ImagePlus imp = track.getImp();
-                    Point3D pImageSize = new Point3D(imp.getWidth(), imp.getHeight(), imp.getNSlices());
-                    Point3D pImageCenter = pImageSize.multiply(0.5);
-                    Point3D offsetToImageCenter = track.getXYZ(0).subtract(pImageCenter);
-                    for( int iPosition = 0; iPosition < track.getLength(); iPosition++ )
-                    {
-                        Point3D correctedImageCenter = track.getXYZ(iPosition).subtract(offsetToImageCenter);
-                        trackOffsets[iPosition] = computeOffset(correctedImageCenter, pImageSize);
-                    }
-                    imps[i] = DataStreamingTools.getCroppedVSS(track.getImp(), trackOffsets, pImageSize, track
-                            .getTmin(), track.getTmax());
-
-                }
-                else
+                // the object was used to "drift correct" the whole image
+                // thus, show the whole image
+                Point3D pImageSize = new Point3D(imp.getWidth(), imp.getHeight(), imp.getNSlices());
+                Point3D pImageCenter = pImageSize.multiply(0.5);
+                Point3D offsetToImageCenter = locations.get(track.getTmin()).subtract(pImageCenter);
+                for( Point3D position : locations.values() )
                 {
-                    //  crop around the object
+                    Point3D correctedImageCenter = position.subtract(offsetToImageCenter);
+                    trackOffsets.add(Utils.computeOffsetFromCenterSize(correctedImageCenter,
+                            pImageSize));
+                }
 
-                    double croppingFactor;
+                pCropSize = pImageSize;
 
-                    try
-                    {
-                        croppingFactor = Double.parseDouble(gui_croppingFactor);
-                    }
-                    catch(NumberFormatException nfe)
-                    {
-                        logger.error("Please either enter 'all' or a number as the Cropping Factor");
-                        return;
-                    }
+            }
+            else
+            {
+                //  crop around the object
 
-                    Point3D pObjectSize = track.getObjectSize().multiply(croppingFactor);
+                double croppingFactorValue;
 
-                    for (int iPosition = 0; iPosition < track.getLength(); iPosition++)
-                    {
-                        trackOffsets[iPosition] = computeOffset(track.getXYZ(iPosition), pObjectSize);
-                    }
-                    imps[i] = DataStreamingTools.getCroppedVSS(track.getImp(), trackOffsets, pObjectSize, track
-                            .getTmin(), track.getTmax());
+                try
+                {
+                    croppingFactorValue = Double.parseDouble(croppingFactor);
+                }
+                catch(NumberFormatException nfe)
+                {
+                    logger.error("Please either enter 'all' or a number as the Cropping Factor");
+                    return null;
+                }
 
+                pCropSize = track.getObjectSize().multiply(croppingFactorValue);
+
+                for( Point3D position : locations.values() )
+                {
+                    trackOffsets.add(Utils.computeOffsetFromCenterSize(position, pCropSize));
                 }
 
             }
+
+            ImagePlus impObjectTrack = DataStreamingTools.getCroppedVSS(imp,
+                    trackOffsets.toArray(new Point3D[trackOffsets.size()]),
+                    pCropSize, track.getTmin(), track.getTmax());
+            impObjectTrack.setTitle("Track_"+track.getID());
+
+            imps.add(impObjectTrack);
+
         }
 
         return imps;
 
     }
 
-    public void addTrackToOverlay(final Track track, final int i) {
-        // using invokeLater to avoid that two different tracking threads change the imp overlay
-        // concurrently; which could lead to disruption of the imp overlay
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                int rx = (int) track.getObjectSize().getX()/2;
-                int ry = (int) track.getObjectSize().getY()/2;
-                int rz = (int) track.getObjectSize().getZ()/2;
+    public synchronized void addLocationToOverlay(final Track track, int t) {
 
-                Roi roi;
-                Overlay o = imp.getOverlay();
-                if(o==null) {
-                    o = new Overlay();
-                    imp.setOverlay(o);
-                }
+        int rx = (int) track.getObjectSize().getX()/2;
+        int ry = (int) track.getObjectSize().getY()/2;
+        int rz = (int) track.getObjectSize().getZ()/2;
 
-                int x = (int) track.getX(i);
-                int y = (int) track.getY(i);
-                int z = (int) track.getZ(i);
-                int c = (int) track.getC(i);
-                int t = (int) track.getT(i);
+        Roi roi;
+        Overlay o = imp.getOverlay();
+        if(o==null) {
+            o = new Overlay();
+            imp.setOverlay(o);
+        }
 
-                int rrx, rry;
-                for(int iz=0; iz<imp.getNSlices(); iz++) {
-                    rrx = Math.max(rx/(Math.abs(iz-z)+1),1);
-                    rry = Math.max(ry/(Math.abs(iz-z)+1),1);
-                    roi = new Roi(x - rrx, y - rry, 2 * rrx + 1, 2 * rry + 1);
-                    roi.setPosition(c+1, iz+1, t+1);
-                    o.add(roi);
-                }
-            }
-        });
+        int x = (int) track.getPosition(t).getX();
+        int y = (int) track.getPosition(t).getY();
+        int z = (int) track.getPosition(t).getZ();
+        int c = (int) track.getC();
+
+        int rrx, rry;
+        for(int iz=0; iz<imp.getNSlices(); iz++) {
+            rrx = Math.max(rx/(Math.abs(iz-z)+1),1);
+            rry = Math.max(ry/(Math.abs(iz-z)+1),1);
+            roi = new Roi(x - rrx, y - rry, 2 * rrx + 1, 2 * rry + 1);
+            roi.setPosition(c+1, iz+1, t+1);
+            o.add(roi);
+        }
     }
 
-    private int addTrackStart(Roi roi) {
-        Point3D pTrackCenter = null;
+    public synchronized Track addNewTrack(TrackingSettings trackingSettings) {
 
-        int t;
-
-        if(roi.getTypeAsString().equals("Point")) {
-            pTrackCenter = new Point3D(roi.getPolygon().xpoints[0],
-                    roi.getPolygon().ypoints[0],
-                    imp.getZ()-1);
-        } else {
-            logger.error("Please use the point selection tool to mark an object.");
-            return(-1);
-        }
-
-        int ntTracking = gui_ntTracking;
-        t = imp.getT()-1;
-        if( t+gui_ntTracking > imp.getNFrames() )
-        {
-            ntTracking = imp.getNFrames() - t;
-            logger.warning("Due to the requested track length, the track would have been longer than the movie; " +
-                    "the length of the track was thus adjusted.");
-        }
-
-        totalTimePointsToBeTracked += ntTracking;
-        int newTrackID = tracks.size();
-
-        tracks.add(new Track(ntTracking));
-        Track track = tracks.get(newTrackID);
-        track.setID(newTrackID);
-        track.setImp(imp);
-        track.addLocation(pTrackCenter, t, imp.getC() - 1);
-        track.setObjectSize(gui_pTrackingSize);
-
-        return(newTrackID);
+        int trackID = tracks.size(); // TODO: something else here as ID?
+        tracks.add(new Track(trackingSettings, trackID));
+        return(tracks.get(tracks.size()-1));
 
     }
 
-    public ObjectTracker trackObject(Roi roi, Point3D pSubSample, int gui_tSubSample, int iterations,
-                            double trackingFactor, int background)
+    public void trackObject(TrackingSettings trackingSettings)
     {
-        int iTrack = addTrackStart(roi);
-        ObjectTracker objectTracker = new ObjectTracker(imp, roi, pSubSample, gui_tSubSample, iterations, trackingFactor, background, tracks.get(iTrack));
-
+        interruptTrackingThreads = false;
+        ObjectTracker objectTracker = new ObjectTracker(this, trackingSettings, logger);
         es.execute(objectTracker);
 
-        return objectTracker;
+    }
 
+    public void cancelTracking()
+    {
+        logger.info("Stopping all tracking...");
+        interruptTrackingThreads = true;
     }
 
 }
@@ -330,10 +218,10 @@ public class BigDataTracker implements PlugIn {
     public int addTrackStartWholeDataSet(ImagePlus imp) {
         int t;
 
-        int ntTracking = gui_ntTracking;
+        int ntTracking = nt;
         t = imp.getT()-1;
 
-        if(t+gui_ntTracking > imp.getNFrames()) {
+        if(t+nt > imp.getNFrames()) {
             logger.error("Your track would be longer than the movie!\n" +
                     "Please\n- reduce the 'Track length', or\n- move the time slider to an earlier time point.");
             return(-1);
@@ -341,7 +229,7 @@ public class BigDataTracker implements PlugIn {
 
         totalTimePointsToBeTracked += ntTracking;
         int newTrackID = tracks.size();
-        //info("added new track start; id = "+newTrackID+"; starting [frame] = "+t+"; length [frames] = "+ntTracking);
+        //info("added new track start; trackID = "+newTrackID+"; starting [frame] = "+t+"; length [frames] = "+ntTracking);
         tracks.add(new Track(ntTracking));
         tracks.get(newTrackID).addLocation(new Point3D(0, 0, imp.getZ()-1), t, imp.getC()-1);
 

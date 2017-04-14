@@ -1,8 +1,6 @@
 package bigDataTools;
 
 import ij.ImagePlus;
-import ij.gui.Overlay;
-import ij.gui.PointRoi;
 import ij.gui.Roi;
 import javafx.geometry.Point3D;
 
@@ -15,23 +13,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BigDataTrackerGUI implements ActionListener, FocusListener
 {
     JFrame frame;
 
-    int gui_ntTracking;
-    int gui_bg;
-    int gui_iterations = 6;
-    Point3D gui_pTrackingSize;
-    double gui_trackingFactor = 2.5;
-    Point3D gui_pSubSample = new Point3D(1,1,1);
-    int gui_tSubSample = 1;
-    private String gui_croppingFactor = "1.0";
-    private int gui_background = 0;
-
+    int nt = 10;
+    int iterationsCenterOfMass = 6;
+    Point3D objectSize = new Point3D(50,50,10);;
+    double trackingFactor = 2.5;
+    Point3D subSamplingXYZ = new Point3D(1,1,1);
+    int subSamplingT = 1;
+    private String resizeFactor = "1.0";
+    private int background = 0;
+    String trackingMethod = "center of mass";
     BigDataTracker bigDataTracker;
     TrackTablePanel trackTablePanel;
 
@@ -52,21 +47,23 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             "Set x&y from ROI",
             "Set z",
             "Track selected object",
-            "Show jTableSpots",
-            "Save jTableSpots",
+            "Stop tracking",
+            "Show table",
+            "Save table",
             "Clear all tracks",
             "View as new stream",
             "Report issue"
     };
 
 
+    // TODO: call this later and make educated guesses from the ImagePlus
     String[] defaults = {
-            String.valueOf((int) gui_pTrackingSize.getX()) + "," + (int) gui_pTrackingSize.getY() + "," +String.valueOf((int) gui_pTrackingSize.getZ()),
-            String.valueOf(gui_trackingFactor),
-            String.valueOf((int) gui_pSubSample.getX() + "," + (int) gui_pSubSample.getY() + "," + (int) gui_pSubSample.getZ() + "," + gui_tSubSample),
-            String.valueOf(imp.getNFrames()),
-            String.valueOf(gui_background),
-            String.valueOf(gui_croppingFactor)
+            String.valueOf((int) objectSize.getX()) + "," + (int) objectSize.getY() + "," +String.valueOf((int) objectSize.getZ()),
+            String.valueOf(trackingFactor),
+            String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
+            String.valueOf(nt),
+            String.valueOf(background),
+            String.valueOf(resizeFactor)
     };
 
     String[] comboNames = {
@@ -82,17 +79,14 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
     int previouslySelectedZ = -1;
 
-    public void BigDataTrackerGUI(ImagePlus imp)
+    public BigDataTrackerGUI(ImagePlus imp)
     {
         if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
-
-        gui_pTrackingSize = new Point3D(55,55,40);
-        gui_ntTracking = imp.getNFrames();
-        gui_bg = (int) imp.getProcessor().getMin();
-
+        nt = imp.getNFrames();
+        background = (int) imp.getProcessor().getMin();
         this.imp = imp;
         this.bigDataTracker = new BigDataTracker(imp);
-        trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable());
+        trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(), imp);
     }
 
     public void showDialog()
@@ -200,6 +194,11 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
         panels.get(iPanel).add(buttons[i++]);
         c.add(panels.get(iPanel++));
+        // ObjectTracker cancel button
+        panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
+        panels.get(iPanel).add(buttons[i++]);
+        c.add(panels.get(iPanel++));
+
         //
         // RESULTS TABLE
         //
@@ -283,9 +282,9 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 return;
             }
 
-            gui_pTrackingSize = new Point3D((int)r.getFloatWidth(), (int)r.getFloatHeight(), gui_pTrackingSize.getZ() );
-            changeTextField(0, "" + (int) gui_pTrackingSize.getX() + "," + (int) gui_pTrackingSize.getY() + "," +
-                    (int) gui_pTrackingSize.getZ());
+            objectSize = new Point3D((int)r.getFloatWidth(), (int)r.getFloatHeight(), objectSize.getZ() );
+            changeTextField(0, "" + (int) objectSize.getX() + "," + (int) objectSize.getY() + "," +
+                    (int) objectSize.getZ());
 
         } else if (e.getActionCommand().equals(buttonActions[i++])) {
             //
@@ -297,15 +296,14 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 // first time do nothing
             } else {
                 int nz = Math.abs(z - previouslySelectedZ);
-                gui_pTrackingSize = new Point3D(gui_pTrackingSize.getX(), gui_pTrackingSize.getY(), nz);
-                changeTextField(0, "" + (int) gui_pTrackingSize.getX() + "," + (int) gui_pTrackingSize.getY() + "," +
-                        (int) gui_pTrackingSize.getZ());
+                objectSize = new Point3D(objectSize.getX(), objectSize.getY(), nz);
+                changeTextField(0, "" + (int) objectSize.getX() + "," + (int) objectSize.getY() + "," +
+                        (int) objectSize.getZ());
             }
             previouslySelectedZ = z;
 
         } else if (e.getActionCommand().equals(buttonActions[i++])) {
 
-            //
             // Track selected object
             //
 
@@ -316,24 +314,40 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 return;
             }
 
-            //
-            // automatically adjust the number of iterations for the center of mass
-            //
+            if( (imp.getT()-1) + nt > imp.getNFrames() )
+            {
+                nt = imp.getNFrames() - (imp.getT()-1);
 
-            gui_iterations = (int) Math.ceil(Math.pow(gui_trackingFactor, 2)); // this purely gut-feeling
+                logger.warning("Due to the requested track length, the track would have been longer than the movie; " +
+                        "the length of the track was thus adjusted.");
+            }
 
-            //trackStatsLastTrackStarted = System.currentTimeMillis();
-            //trackStatsTotalPointsTrackedAtLastStart = totalTimePointsTracked.get();
-            //Runnable objectTracker = new bigDataTracker.ObjectTracker();
+            TrackingSettings trackingSettings = new TrackingSettings();
+            trackingSettings.trackingMethod = trackingMethod;
+            trackingSettings.iterationsCenterOfMass = (int) Math.ceil(Math.pow(trackingFactor, 2));
+            trackingSettings.nt = nt;
+            trackingSettings.channel = imp.getC() - 1;
+            trackingSettings.trackStartROI = roi;
+            trackingSettings.objectSize = objectSize;
+            trackingSettings.subSamplingXYZ = subSamplingXYZ;
+            trackingSettings.subSamplingT = subSamplingT;
+            trackingSettings.trackingFactor = trackingFactor;
+            trackingSettings.background = background;
 
-
-            ObjectTracker objectTracker = bigDataTracker.trackObject(roi, gui_pSubSample,
-                                                        gui_tSubSample, gui_iterations,
-                                                        gui_trackingFactor, gui_background);
-
-            // TODO: monitor progress
+            bigDataTracker.trackObject(trackingSettings);
 
         }
+        else if ( e.getActionCommand().equals(buttonActions[i++]) )
+        {
+
+            //
+            // Cancel Tracking
+            //
+
+            bigDataTracker.cancelTracking();
+
+        }
+
         else if ( e.getActionCommand().equals(buttonActions[i++]) )
         {
 
@@ -351,7 +365,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // Save Table
             //
 
-            TableModel model = trackTable.getTable().getModel();
+            TableModel model = bigDataTracker.getTrackTable().getTable().getModel();
             if(model == null) {
                 logger.error("There are no tracks yet.");
                 return;
@@ -359,26 +373,14 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             fc = new JFileChooser(vss.getDirectory());
             if (fc.showSaveDialog(this.frame) == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                saveTrackTable(file);
+                bigDataTracker.getTrackTable().saveTrackTable(file);
             }
 
         }
         else if ( e.getActionCommand().equals(buttonActions[i++]) )
         {
 
-            //
-            // Clear Table and all tracks
-            //
-
-            trackTable.clear();
-            tracks = new ArrayList<Track>();
-            rTrackStarts = new ArrayList<Roi>();
-
-            // remove overlay
-            imp.setOverlay(new Overlay());
-
-            totalTimePointsTracked.set(0);
-            totalTimePointsToBeTracked = 0;
+            bigDataTracker.clearAllTracks();
 
 
         } else if (e.getActionCommand().equals(buttonActions[i++])) {
@@ -413,7 +415,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             //
             JTextField source = (JTextField) e.getSource();
             String[] sA = source.getText().split(",");
-            gui_pTrackingSize = new Point3D(new Integer(sA[0]), new Integer(sA[1]), new Integer(sA[2]));
+            objectSize = new Point3D(new Integer(sA[0]), new Integer(sA[1]), new Integer(sA[2]));
         }
         else if (e.getActionCommand().equals(texts[k++]))
         {
@@ -421,7 +423,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // ObjectTracker factor
             //
             JTextField source = (JTextField) e.getSource();
-            gui_trackingFactor = new Double(source.getText());
+            trackingFactor = new Double(source.getText());
         }
         else if (e.getActionCommand().equals(texts[k++]))
         {
@@ -430,8 +432,8 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             //
             JTextField source = (JTextField) e.getSource();
             String[] sA = source.getText().split(",");
-            gui_pSubSample = new Point3D(new Integer(sA[0]), new Integer(sA[1]), new Integer(sA[2]));
-            gui_tSubSample = new Integer(sA[3]);
+            subSamplingXYZ = new Point3D(new Integer(sA[0]), new Integer(sA[1]), new Integer(sA[2]));
+            subSamplingT = new Integer(sA[3]);
         }
         else if ( e.getActionCommand().equals(texts[k++]) )
         {
@@ -439,7 +441,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // Track length
             //
             JTextField source = (JTextField) e.getSource();
-            gui_ntTracking = new Integer(source.getText());
+            nt = new Integer(source.getText());
         }
         else if ( e.getActionCommand().equals(texts[k++]) )
         {
@@ -447,7 +449,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // Image background value
             //
             JTextField source = (JTextField) e.getSource();
-            gui_background = new Integer(source.getText());
+            background = new Integer(source.getText());
         }
         else if (e.getActionCommand().equals(texts[k++]))
         {
@@ -455,7 +457,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // Cropping factor
             //
             JTextField source = (JTextField) e.getSource();
-            gui_croppingFactor = source.getText();
+            resizeFactor = source.getText();
         }
         else if (e.getActionCommand().equals(comboNames[j++]))
         {
@@ -463,7 +465,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // ObjectTracker method
             //
             JComboBox cb = (JComboBox)e.getSource();
-            gui_trackingMethod = (String)cb.getSelectedItem();
+            trackingMethod = (String)cb.getSelectedItem();
         }
     }
 
@@ -494,103 +496,6 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         return(toolTipTexts.toArray(new String[0]));
     }
 
-    class TrackTablePanel extends JPanel implements MouseListener, KeyListener {
-        private boolean DEBUG = false;
-        JTable table;
-        JFrame frame;
-        JScrollPane scrollPane;
-
-        public TrackTablePanel(JTable table) {
-            super(new GridLayout(1, 0));
-
-            this.table = table;
-            table.setPreferredScrollableViewportSize(new Dimension(500, 200));
-            table.setFillsViewportHeight(true);
-            table.setAutoCreateRowSorter(true);
-            table.setRowSelectionAllowed(true);
-            table.addMouseListener(this);
-            table.addKeyListener(this);
-
-            //Create the scroll pane and add the jTableSpots to it.
-            scrollPane = new JScrollPane(table);
-
-            //Add the scroll pane to this panel.
-            add(scrollPane);
-        }
-
-        public void showTable() {
-            //Create and set up the window.
-            frame = new JFrame("tracks");
-            //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            //Create and set up the content pane.
-            this.setOpaque(true); //content panes must be opaque
-            frame.setContentPane(this);
-
-            //Display the window.
-            frame.pack();
-            frame.setLocation(trackingGUI.getFrame().getX() + trackingGUI.getFrame().getWidth(), trackingGUI.getFrame().getY());
-            frame.setVisible(true);
-        }
-
-        public void highlightSelectedTrack() {
-            int rs = table.getSelectedRow();
-            int r = table.convertRowIndexToModel(rs);
-            float x = new Float(table.getModel().getValueAt(r, 1).toString());
-            float y = new Float(table.getModel().getValueAt(r, 2).toString());
-            float z = new Float(table.getModel().getValueAt(r, 3).toString());
-            int t = new Integer(table.getModel().getValueAt(r, 4).toString());
-            int id = new Integer(table.getModel().getValueAt(r, 5).toString());
-            ImagePlus imp = tracks.get(id).getImp();
-            imp.setPosition(0,(int)z+1,t+1);
-            Roi pr = new PointRoi(x,y);
-            pr.setPosition(0,(int)z+1,t+1);
-            imp.setRoi(pr);
-            //info(" rs="+rs+" r ="+r+" x="+x+" y="+y+" z="+z+" t="+t);
-            //info("t="+jTableSpots.getModel().getValueAt(r, 5));
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            highlightSelectedTrack();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            highlightSelectedTrack();
-        }
-    }
-
     public void showTrackTable()
     {
         trackTablePanel.showTable();
@@ -598,18 +503,19 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
     public void showTrackedObjects() {
 
-        ImagePlus[] imps = bigDataTracker.getViewsOnTrackedObjects();
+        ArrayList<ImagePlus> imps = bigDataTracker.getViewsOnTrackedObjects(resizeFactor);
 
-        if( imps[i] == null )
+
+        if( imps == null )
         {
             logger.info("The cropping failed!");
         }
         else
         {
-            imps[i].setTitle(imp.getTitle()+"Track_" + track.getID());
-            imps[i].show();
-            imps[i].setPosition(0, (int) (imps[i].getNSlices() / 2 + 0.5), 0);
-            imps[i].resetDisplayRange();
+            for (ImagePlus imp : imps)
+            {
+                Utils.show(imp);
+            }
         }
     }
 

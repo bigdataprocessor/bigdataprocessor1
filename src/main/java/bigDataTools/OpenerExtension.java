@@ -1092,9 +1092,9 @@ class OpenerExtension extends Opener {
             reader.close();
 
             // aqdjust max gray
-            for( int c = 1; c <= nChannels; ++c)
+            for( int channel = 1; channel <= nChannels; ++channel)
             {
-                imp.setC(c);
+                imp.setC(channel);
                 imp.setDisplayRange(0,maxGray);
             }
 

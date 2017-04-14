@@ -30,109 +30,82 @@
 
 package bigDataTools;
 
-import ij.IJ;
-import ij.ImagePlus;
+import ij.gui.Roi;
 import javafx.geometry.Point3D;
+
+import java.util.*;
 
 /**
  * Created by tischi on 03/12/16.
  */
 public class Track {
-    int[] t;
-    int[] c; // todo: why c? change from array to index
-    Point3D[] p;
-    Point3D objectSize;
-    int i;
-    int n;
-    boolean completed = false;
-    int id;
-    private ImagePlus imp;
+
+    TrackingSettings trackingSettings;
+    Map<Integer, Point3D> locations = new LinkedHashMap<>();
+    Point3D trackStart;
+    int trackID;
     Logger logger = new IJLazySwingLogger();
 
-    Track(int n) {
-        this.t = new int[n];
-        this.c = new int[n];
-        this.p = new Point3D[n];
-        this.n = n;
-        this.i = 0;
-    }
+    Track(TrackingSettings trackingSettings, int id) {
 
-    public void addLocation(Point3D p, int t, int c) {
-        if(i>n-1) {
-             logger.error("Error: track got longer than initialised.");
+        this.trackingSettings = trackingSettings;
+
+        Roi roi = trackingSettings.trackStartROI;
+        if(roi.getTypeAsString().equals("Point")) {
+            trackStart = new Point3D(
+                    roi.getPolygon().xpoints[0],
+                    roi.getPolygon().ypoints[0],
+                    roi.getZPosition()-1);
+        } else {
+            logger.error("Please use the point selection tool to mark an object.");
             return;
         }
-        this.p[i] = p;
-        this.t[i] = t;
-        this.c[i] = c;
-        i++;
+
+        trackID =  id;
+
     }
 
-    public void setObjectSize(Point3D p) {
-        this.objectSize = p;
-    }
-
-    public void setID(int id) {
-        this.id = id;
+    public void addLocation(int t, Point3D p)
+    {
+        locations.put(t, p);
     }
 
     public int getID() {
-        return(this.id);
+        return(trackID);
     }
 
     public Point3D getObjectSize() {
-        return(this.objectSize);
+        return(trackingSettings.objectSize);
     }
 
     public void reset() {
-        this.i = 0;
+        locations.clear();
     }
 
-    public Point3D[] getPoints3D() {
-        return(p);
+    public Map<Integer, Point3D> getLocations() {
+        return locations;
     }
 
-    public Point3D getXYZ(int i) {
-        return(p[i]);
+    public Point3D getPosition(int t) {
+        return(locations.get(t));
     }
 
-    public double getX(int i) {
-        return(p[i].getX());
-    }
-
-    public double getY(int i) {
-        return(p[i].getY());
-    }
-
-    public double getZ(int i) {
-        return(p[i].getZ());
-    }
-
-    public int getT(int i) {
-        return(t[i]);
-    }
-
-    public int getC(int i) {
-        return(c[i]);
+    public int getC() {
+        return(trackingSettings.channel);
     }
 
     public int getTmin() {
-        return(t[0]);
+
+        return(Collections.min(locations.keySet()));
     }
 
-    public int getTmax() {
-        return(t[n-1]); // todo replace with i?!
+    public int getTmax()
+    {
+        return(Collections.max(locations.keySet()));
     }
 
     public int getLength() {
-        return(n);
+        return(locations.size());
     }
 
-    public void setImp(ImagePlus imp) {
-        this.imp = imp;
-    }
-
-    public ImagePlus getImp() {
-        return imp;
-    }
 }

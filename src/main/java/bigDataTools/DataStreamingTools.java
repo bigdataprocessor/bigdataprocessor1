@@ -351,14 +351,14 @@ public class DataStreamingTools {
 
                 hasCTPattern = true;
 
-                if(! (channelTimePattern.contains("<c>") &&  channelTimePattern.contains("<t>")) ) {
+                if(! (channelTimePattern.contains("<channel>") &&  channelTimePattern.contains("<t>")) ) {
                     IJ.showMessage("The pattern for multi-channel loading must" +
-                            "contain  <c> and <t> to match channels and time in the filenames.");
+                            "contain  <channel> and <t> to match channels and time in the filenames.");
                     return (null);
                 }
 
                 // replace shortcuts by actual regexp
-                channelTimePattern = channelTimePattern.replace("<c>","(?<C>.*)");
+                channelTimePattern = channelTimePattern.replace("<channel>","(?<C>.*)");
                 channelTimePattern = channelTimePattern.replace("<t>","(?<T>.*)");
 
                 channelFolders = new String[]{""};
@@ -457,7 +457,7 @@ public class DataStreamingTools {
             if(hasCTPattern) {
 
                 // no sub-folders
-                // c and t determined by pattern matching
+                // channel and t determined by pattern matching
 
                 Pattern patternCT = Pattern.compile(channelTimePattern);
 
@@ -505,7 +505,7 @@ public class DataStreamingTools {
         imp = new ImagePlus("stream", stack);
 
         //
-        // obtain file information for each c, t, z
+        // obtain file information for each channel, t, z
         //
         try {
 
@@ -822,10 +822,10 @@ public class DataStreamingTools {
                         croppedInfos[c][t - tMin][z].setCropOffset(po[t-tMin]);
                     }
                     croppedInfos[c][t-tMin][z].setCropSize(ps);
-                    //info("c "+c);
+                    //info("channel "+channel);
                     //info("t "+t);
                     //info("z "+z);
-                    //info("offset "+croppedInfos[c][t-tMin][z].pCropOffset.toString());
+                    //info("offset "+croppedInfos[channel][t-tMin][z].pCropOffset.toString());
 
                 }
 
@@ -1064,8 +1064,8 @@ public class DataStreamingTools {
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
 
-        BigDataTracker register = new BigDataTracker(IJ.getImage());
-        register.run("");
+        BigDataTrackerPlugIn bigDataTrackerPlugIn = new BigDataTrackerPlugIn();
+        bigDataTrackerPlugIn.run("");
 
 
         /*

@@ -51,7 +51,7 @@ public class VirtualStackOfStacks extends ImageStack {
     int nSlices;
     int nX, nY, nZ, nC, nT;
     int bitDepth = 0;
-    FileInfoSer[][][] infos;  // c, t, z
+    FileInfoSer[][][] infos;  // channel, t, z
     String fileType = "tiff"; // h5
     String directory = "";
     String[] channelFolders;
@@ -122,7 +122,7 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("x: " + nX);
               logger.info("y: " + nY);
               logger.info("z: " + nZ);
-              logger.info("c: " + nC);
+              logger.info("channel: " + nC);
               logger.info("t: " + nT);
     }
 
@@ -276,10 +276,10 @@ public class VirtualStackOfStacks extends ImageStack {
     /** Returns an ImageProcessor for the specified slice,
      were 1<=n<=nslices. Returns null if the stack is empty.
     N is computed by IJ assuming the czt ordering, with
-    n = ( c + z*nC + t*nZ*nC ) + 1
+    n = ( channel + z*nC + t*nZ*nC ) + 1
     */
     public ImageProcessor getProcessor(int n) {
-        // recompute c,z,t
+        // recompute channel,z,t
         n -= 1;
         int c = (n % nC);
         int z = ((n-c)%(nZ*nC))/nC;
@@ -290,7 +290,7 @@ public class VirtualStackOfStacks extends ImageStack {
         if(Utils.verbose) {
               logger.info("# VirtualStackOfStacks.getProcessor");
               logger.info("requested slice [one-based]: " + (n + 1));
-              logger.info("c [one-based]: " + (c + 1));
+              logger.info("channel [one-based]: " + (c + 1));
               logger.info("z [one-based]: " + (z + 1));
               logger.info("t [one-based]: " + (t + 1));
               logger.info("opening file: " + directory + infos[c][t][z].directory + infos[c][t][z].fileName);
@@ -312,7 +312,7 @@ public class VirtualStackOfStacks extends ImageStack {
             ps = new Point3D(fi.width,fi.height,1);
         }
 
-        // imp = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po, ps);
+        // imp = new OpenerExtension().readDataCube(directory, infos[channel][t], dz, po, ps);
         imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0);
 
         return imp.getProcessor();
@@ -362,7 +362,7 @@ public class VirtualStackOfStacks extends ImageStack {
         if (Utils.verbose) {
               logger.info("# VirtualStackOfStacks.getDataCube");
               logger.info("t: " + t);
-              logger.info("c: " + c);
+              logger.info("channel: " + c);
         }
 
         FileInfoSer fi = infos[c][t][0];
@@ -618,12 +618,12 @@ public class VirtualStackOfStacks extends ImageStack {
 
 /*
 // todo: put the conversion from centerRadii to offsetSize into this function
-    public ImagePlus getCubeByTimeCenterAndRadii(int t, int c, Point3D psub, Point3D pc, Point3D pr) {
+    public ImagePlus getCubeByTimeCenterAndRadii(int t, int channel, Point3D psub, Point3D pc, Point3D pr) {
 
         if(Utils.verbose) {
             logger.info("# VirtualStackOfStacks.getCroppedFrameCenterRadii");
             logger.info("t: "+t);
-            logger.info("c: "+c);
+            logger.info("channel: "+channel);
             }
 
         FileInfoSer fi = infos[0][0][0];
@@ -633,12 +633,12 @@ public class VirtualStackOfStacks extends ImageStack {
             pc = pc.add(fi.getCropOffset());
         }
 
-        if(infos[c][t] == null) {
+        if(infos[channel][t] == null) {
             // file info not yet loaded => get it!
-            setStackFromFile(t, c);
+            setStackFromFile(t, channel);
         }
 
-        ImagePlus imp = new OpenerExtension().openCroppedStackCenterRadii(directory, infos[c][t], (int) psub.getZ(), pc, pr);
+        ImagePlus imp = new OpenerExtension().openCroppedStackCenterRadii(directory, infos[channel][t], (int) psub.getZ(), pc, pr);
 
         if (imp==null) {
             logger.info("Error: loading failed!");

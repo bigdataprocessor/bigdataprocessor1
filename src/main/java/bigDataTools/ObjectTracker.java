@@ -1,5 +1,6 @@
 package bigDataTools;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
@@ -13,28 +14,21 @@ import java.util.ArrayList;
 
 class ObjectTracker implements Runnable
 {
-    int iTrack, dt, iterations, background;
-    Point3D pSubSample;
-    double trackingFactor;
-    ImagePlus imp;
-    Track track;
+    BigDataTracker bigDataTracker;
+    Logger logger;
+    TrackingSettings trackingSettings;
 
-    public ObjectTracker(ImagePlus imp,
-                         Point3D pSubSample, int gui_tSubSample, int iterations,
-                         double trackingFactor, int background,
-                         Track track)
+    public ObjectTracker(BigDataTracker bigDataTracker,
+                         TrackingSettings trackingSettings,
+                         Logger logger)
     {
-
-        this.dt = gui_tSubSample;
-        this.pSubSample = pSubSample;
-        this.iterations = iterations;
-        this.trackingFactor = trackingFactor;
-        this.background = background;
-        this.imp = imp;
-        this.track = track;
+        this.bigDataTracker = bigDataTracker;
+        this.trackingSettings = trackingSettings;
+        this.logger = logger;
     }
 
     public void run() {
+
         long startTime, stopTime, elapsedReadingTime, elapsedProcessingTime;
         ImagePlus imp0, imp1;
         Point3D p0offset;
@@ -44,12 +38,20 @@ class ObjectTracker implements Runnable
         Point3D pSize;
         //boolean subtractMean = true;
 
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+        // obtain all the info about the track
+        Track track = bigDataTracker.addNewTrack(trackingSettings);
+        int tStart = trackingSettings.trackStartROI.getTPosition();
+        int channel = trackingSettings.channel;
+        int nt = trackingSettings.nt;
+        int dt = trackingSettings.subSamplingT;
+        Point3D pStart = new Point3D(
+                trackingSettings.trackStartROI.getXBase(),
+                trackingSettings.trackStartROI.getYBase(),
+                trackingSettings.trackStartROI.getImage().getZ() - 1);
 
-        int tStart = track.getTmin();
-        int channel = track.getC(0);
-        int nt = track.getLength();
-        track.reset();
+        ImagePlus imp = bigDataTracker.getImp();
+        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+        TrackTable trackTable = bigDataTracker.getTrackTable();
 
         //
         // track first time-point by center of mass
@@ -57,64 +59,63 @@ class ObjectTracker implements Runnable
 
         // get selected track coordinates
         // load more data that the user selected
-        pSize = track.getObjectSize().multiply(trackingFactor);
-        p0offset = BigDataTrackerUtils.computeOffset(track.getXYZ(0), pSize);
+        pSize = track.getObjectSize().multiply(trackingSettings.trackingFactor);
+        p0offset = Utils.computeOffsetFromCenterSize(pStart, pSize);
 
         // read data
         //
-        imp0 = vss.getDataCube(tStart, channel, p0offset, pSize, pSubSample, background);
+        startTime = System.currentTimeMillis();
+        imp0 = vss.getDataCube(tStart, channel, p0offset, pSize,
+                trackingSettings.subSamplingXYZ, trackingSettings.background);
+        elapsedReadingTime = System.currentTimeMillis() - startTime;
 
         // iteratively compute the shift of the center of mass relative to the center of the image stack
         // using only half the image size for iteration
         startTime = System.currentTimeMillis();
-        pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(), trackingFactor, iterations);
+        pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(),
+                trackingSettings.trackingFactor,
+                trackingSettings.iterationsCenterOfMass);
         elapsedProcessingTime = System.currentTimeMillis() - startTime;
 
         // correct for sub-sampling
-        pShift = BigDataTrackerUtils.multiplyPoint3dComponents(pShift, pSubSample);
+        pShift = Utils.multiplyPoint3dComponents(pShift,
+                trackingSettings.subSamplingXYZ);
 
         //
         // Add track location for first image
         //
-        Point3D pUpdate = BigDataTrackerUtils.computeCenter(p0offset.add(pShift), pSize);
-        track.addLocation(pUpdate, tStart, channel);
+        Point3D pUpdate = Utils.computeCenterFromOffsetSize(p0offset.add(pShift), pSize);
 
-        // Update global track jTableSpots and imp.overlay
-        // - thread safe, because both internally use SwingUtilities.invokeLater
-        //
-        trackTable.addRow(new Object[]{
-                String.format("%1$04d", iTrack) + "_" + String.format("%1$05d", tStart ),
-                (float) pUpdate.getX(), (float) pUpdate.getY(), (float) pUpdate.getZ(), tStart, iTrack
-        });
 
-        addTrackToOverlay(track, tStart - tStart);
+        // Store results
 
-        totalTimePointsTracked.addAndGet(1);
+        publishResult(track, trackTable, logger, pUpdate, tStart,
+                elapsedReadingTime, elapsedProcessingTime);
 
         //
         // compute shifts for following time-points
         //
 
         boolean finish = false;
-        int itMax = tStart + nt - 1;
-        int itPrevious = tStart;
-        int itNow;
-        int itMaxUpdate;
+        int tMax = tStart + nt - 1;
+        int tPrevious = tStart;
+        int tNow;
+        int tMaxUpdate;
 
         //
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
         //  - p1offset has to be the position where the current image was loaded
 
-        for (int it = tStart + dt; it < tStart + nt + dt; it = it + dt) {
+        for (int t = tStart + dt; t < tStart + nt + dt; t = t + dt) {
 
-            itNow = it;
+            tNow = t;
 
-            if(itNow >= itMax) {
+            if(tNow >= tMax) {
                 // due to the sub-sampling in t the addition of dt
                 // can cause the frame to be outside of
                 // the tracking range => load the last frame
-                itNow = itMax;
+                tNow = tMax;
                 finish = true;
             }
 
@@ -129,12 +130,13 @@ class ObjectTracker implements Runnable
 
             // load image
             startTime = System.currentTimeMillis();
-            imp1 = vss.getDataCube(itNow, channel, p1offset, pSize, pSubSample, background);
+            imp1 = vss.getDataCube(tNow, channel, p1offset, pSize,
+                    trackingSettings.subSamplingXYZ, trackingSettings.background);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
-            if (gui_trackingMethod == "correlation") {
+            if (trackingSettings.trackingMethod.equals("correlation") ) {
 
-                if(Utils.verbose)  logger.info("measuring drift using correlation...");
+                if(Utils.verbose) logger.info("measuring drift using correlation...");
 
                 // compute shift relative to previous time-point
                 startTime = System.currentTimeMillis();
@@ -143,7 +145,7 @@ class ObjectTracker implements Runnable
                 elapsedProcessingTime = stopTime - startTime;
 
                 // correct for sub-sampling
-                pShift = BigDataTrackerUtils.multiplyPoint3dComponents(pShift, pSubSample);
+                pShift = Utils.multiplyPoint3dComponents(pShift, trackingSettings.subSamplingXYZ);
                 //info("Correlation ObjectTracker Shift: "+pShift);
 
 
@@ -153,34 +155,39 @@ class ObjectTracker implements Runnable
 
                 if(Utils.verbose)  logger.info("actual final shift is " + pShift.toString());
 
-            } else if (gui_trackingMethod == "center of mass") {
+            }
+            else if ( trackingSettings.trackingMethod.equals("center of mass") )
+            {
 
                 if(Utils.verbose)  logger.info("measuring drift using center of mass...");
 
                 // compute the different of the center of mass
                 // to the geometric center of imp1
                 startTime = System.currentTimeMillis();
-                //info("timepoint: "+it);
-                pLocalShift = compute16bitShiftUsingIterativeCenterOfMass(imp1.getStack(), trackingFactor,
-                        iterations);
+                //info("timepoint: "+t);
+                pLocalShift = compute16bitShiftUsingIterativeCenterOfMass(imp1.getStack(),
+                        trackingSettings.trackingFactor,
+                        trackingSettings.iterationsCenterOfMass);
                 stopTime = System.currentTimeMillis();
                 elapsedProcessingTime = stopTime - startTime;
 
                 // correct for sub-sampling
-                pLocalShift = multiplyPoint3dComponents(pLocalShift, pSubSample);
+                pLocalShift = Utils.multiplyPoint3dComponents(pLocalShift, trackingSettings.subSamplingXYZ);
                 //info("Center of Mass Local Shift: "+pLocalShift);
 
-                if(Utils.verbose)   logger.info("local shift after correction for sub-sampling is " + pLocalShift
-                        .toString());
+                if(Utils.verbose)
+                {
+                    logger.info("local shift after correction for sub-sampling is " + pLocalShift.toString());
+                }
 
                 // the drift corrected position in the global coordinate system is: p1offset.add(pLocalShift)
-                // in center coordinates this is: computeCenter(p1offset.add(pShift),pSize)
+                // in center coordinates this is: computeCenterFromOffsetSize(p1offset.add(pShift),pSize)
                 // relative to previous tracking position:
-                //info(""+track.getXYZ(itPrevious).toString());
-                //info(""+computeCenter(p1offset.add(pLocalShift),pSize).toString());
+                //info(""+track.getXYZ(tPrevious).toString());
+                //info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
                 //info(""+p1offset.add(pLocalShift).toString());
-                pShift = computeCenter(p1offset.add(pLocalShift),pSize).subtract(track.getXYZ(itPrevious-tStart));
-                //info("Center of Mass ObjectTracker Shift relative to previous position: "+pShift);
+                pShift = Utils.computeCenterFromOffsetSize(
+                        p1offset.add(pLocalShift), pSize).subtract(track.getPosition(tPrevious - tStart));
 
                 if(Utils.verbose)  logger.info("actual shift is "+pShift.toString());
 
@@ -190,71 +197,55 @@ class ObjectTracker implements Runnable
             // compute time-points between this and the previous one (inclusive)
             // using linear interpolation
 
-            itMaxUpdate = itNow;
-            if(finish) itMaxUpdate = itNow; // include last data point
+            tMaxUpdate = tNow;
+            if(finish) tMaxUpdate = tNow; // include last data point
 
-            for (int itUpdate = itPrevious + 1; itUpdate <= itMaxUpdate; itUpdate++) {
+            for (int tUpdate = tPrevious + 1; tUpdate <= tMaxUpdate; tUpdate++) {
 
-                Point3D pPrevious = track.getXYZ(itPrevious-tStart);
-                double interpolation = (double) (itUpdate - itPrevious) / (double) (itNow - itPrevious);
+                Point3D pPrevious = track.getPosition(tPrevious - tStart);
+                double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add(pShift.multiply(interpolation));
 
-                //
-                // Add to track
-                // - thread safe, because only this thread is accessing this particular track
-                //
-                track.addLocation(pUpdate, itUpdate, channel);
-
-
-                // Update global track jTableSpots and imp.overlay
-                // - thread safe, because both internally use SwingUtilities.invokeLater
-                //
-                trackTable.addRow(new Object[]{
-                        String.format("%1$04d", iTrack) + "_" + String.format("%1$05d", itUpdate ),
-                        (float) pUpdate.getX(), (float) pUpdate.getY(), (float) pUpdate.getZ(), itUpdate, iTrack
-                });
-
-                addTrackToOverlay(track, itUpdate - tStart);
+                publishResult(track, trackTable, logger, pUpdate, tUpdate, elapsedReadingTime, elapsedProcessingTime);
 
             }
 
-            itPrevious = itNow;
+            tPrevious = tNow;
             imp0 = imp1;
             p0offset = p1offset; // store the position where this image was loaded
 
-
-            //
-            // show progress
-            //
-            int n = totalTimePointsTracked.addAndGet(dt);
-
-            if( (System.currentTimeMillis() > trackStatsReportDelay+trackStatsLastReport)
-                    || (n==totalTimePointsToBeTracked))
+            if(finish) return;
+            if(bigDataTracker.interruptTrackingThreads)
             {
-                trackStatsLastReport = System.currentTimeMillis();
-
-                long dtt = System.currentTimeMillis()-trackStatsLastTrackStarted;
-                int dn = n - trackStatsTotalPointsTrackedAtLastStart;
-                int nToGo = totalTimePointsToBeTracked - n;
-                float speed = (float)1.0*dn/dtt*1000;
-                float remainingTime = (float)1.0*nToGo/speed;
-
-                logger.info(
-                        "progress = " + n + "/" + totalTimePointsToBeTracked +
-                                "; speed [n/s] = " + String.format("%.2g", speed) +
-                                "; remaining [s] = " + String.format("%.2g", remainingTime) +
-                                "; reading [ms] = " + elapsedReadingTime +
-                                "; processing [ms] = " + elapsedProcessingTime
-                );
+                logger.info("Tracking of track " + track.getID() + " interrupted.");
+                return;
             }
-
-            if(finish) break;
 
         }
 
-        track.completed = true;
 
-        return;
+    }
+
+    private void publishResult(Track track, TrackTable trackTable, Logger logger, Point3D location, int t,
+                               long elapsedReadingTime, long elapsedProcessingTime)
+    {
+
+        IJ.wait(5000);
+
+        track.addLocation(t, location);
+
+        trackTable.addRow(new Object[]{
+                String.format("%1$04d", track.getID()) + "_" + String.format("%1$05d", t),
+                (float) location.getX(), (float) location.getY(), (float) location.getZ(), t, track.getID()
+        });
+
+        bigDataTracker.addLocationToOverlay(track, t);
+
+        logger.info("Track ID: " + track.getID() +
+                "; Time points tracked: " + (t - track.getTmin() + 1) + "/" + track.getLength() +
+                "; reading [ms] = " + elapsedReadingTime +
+                "; processing [ms] = " + elapsedProcessingTime);
+
 
     }
 
@@ -268,7 +259,7 @@ class ObjectTracker implements Runnable
         // at each iteration, the center of mass is only computed for a subset of the data cube
         // this subset iteratively shifts every iteration according to the results of the center of mass computation
         Point3D pStackSize = new Point3D(stack.getWidth(), stack.getHeight(), stack.getSize() );
-        Point3D pStackCenter = computeCenter(new Point3D(0,0,0), pStackSize);
+        Point3D pStackCenter = Utils.computeCenterFromOffsetSize(new Point3D(0,0,0), pStackSize);
         Point3D pCenter = pStackCenter;
         double trackingFraction;
         for(int i=0; i<iterations; i++) {
@@ -305,6 +296,9 @@ class ObjectTracker implements Runnable
 
     private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax) {
 
+
+        final String centeringMethod = "center of mass";
+
         //long startTime = System.currentTimeMillis();
         double sum = 0.0, xsum = 0.0, ysum = 0.0, zsum = 0.0;
         int i, v;
@@ -320,7 +314,7 @@ class ObjectTracker implements Runnable
 
         // compute one-based, otherwise the numbers at x=0,y=0,z=0 are lost for the center of mass
 
-        if (gui_centeringMethod == "center of mass") {
+        if (centeringMethod.equals("center of mass")) {
             for (int z = zmin + 1; z <= zmax + 1; z++) {
                 ImageProcessor ip = stack.getProcessor(z);
                 short[] pixels = (short[]) ip.getPixels();
@@ -339,7 +333,7 @@ class ObjectTracker implements Runnable
             }
         }
 
-        if (gui_centeringMethod == "centroid") {
+        if (centeringMethod.equals("centroid")) {
             for (int z = zmin + 1; z <= zmax + 1; z++) {
                 ImageProcessor ip = stack.getProcessor(z);
                 short[] pixels = (short[]) ip.getPixels();

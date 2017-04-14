@@ -674,8 +674,8 @@ public class FastTiffDecoder {
                         //int pos = in.getFilePointer();
                         //readingStrips = true;
                         in.readFully(buffer);
-                        //for (int c=0; c<count; c++)
-                        //    fi.stripOffsets[c] = getInt();
+                        //for (int channel=0; channel<count; channel++)
+                        //    fi.stripOffsets[channel] = getInt();
                         convertToInt(fi.stripOffsets, buffer);
                         //readingStrips = false;
                         //if(ifdCount == 1) logger.info("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
@@ -714,11 +714,11 @@ public class FastTiffDecoder {
                             in.readFully(buffer);
                             convertToInt(fi.stripLengths, buffer);
                         }
-                        /*for (int c=0; c<count; c++) {
+                        /*for (int channel=0; channel<count; channel++) {
                             if (fieldType==SHORT)
-                                fi.stripLengths[c] = getShort();
+                                fi.stripLengths[channel] = getShort();
                             else
-                                fi.stripLengths[c] = getInt();
+                                fi.stripLengths[channel] = getInt();
                         }*/
 
                         in.seek(saveLoc);
@@ -1043,8 +1043,8 @@ public class FastTiffDecoder {
                         //int pos = in.getFilePointer();
                         //readingStrips = true;
                         in.readFully(buffer);
-                        //for (int c=0; c<count; c++)
-                        //    fi.stripOffsets[c] = getInt();
+                        //for (int channel=0; channel<count; channel++)
+                        //    fi.stripOffsets[channel] = getInt();
                         convertToInt(fi.stripOffsets, buffer);
                         //readingStrips = false;
                         //if(ifdCount == 1) logger.info("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
@@ -1076,11 +1076,11 @@ public class FastTiffDecoder {
                             in.readFully(buffer);
                             convertToInt(fi.stripLengths, buffer);
                         }
-                        /*for (int c=0; c<count; c++) {
+                        /*for (int channel=0; channel<count; channel++) {
                             if (fieldType==SHORT)
-                                fi.stripLengths[c] = getShort();
+                                fi.stripLengths[channel] = getShort();
                             else
-                                fi.stripLengths[c] = getInt();
+                                fi.stripLengths[channel] = getInt();
                         }*/
 
                         in.seek(saveLoc);
