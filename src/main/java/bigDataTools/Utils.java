@@ -53,13 +53,15 @@ public class Utils {
     public static String TRACKMATEDOG = "TrackMate_DoG";
     public static String IMAGESUITE3D = "3D ImageSuite";
     public static String LOAD_CHANNELS_FROM_FOLDERS = "sub-folders";
+    static Logger logger = new IJLazySwingLogger();
 
-    public static void threadlog(final String log) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                log(log);
-            }
-        });
+    public static void show(ImagePlus imp)
+    {
+        imp.show();
+        imp.setPosition(1, imp.getNSlices() / 2, 1);
+        IJ.wait(200);
+        imp.resetDisplayRange();
+        imp.updateAndDraw();
     }
 
     public static VirtualStackOfStacks getVirtualStackOfStacks(ImagePlus imp) {
@@ -68,7 +70,7 @@ public class Utils {
             vss = (VirtualStackOfStacks) imp.getStack();
             return (vss);
         } catch (Exception e) {
-            IJ.showMessage("This is only implemented for images opened with the Data Streaming Tools plugin.");
+             logger.error("This is only implemented for images opened with the Data Streaming Tools plugin.");
             return (null);
         }
     }
@@ -100,18 +102,18 @@ public class Utils {
         Iterator it = mp.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            log(""+pair.getKey() + " = " + pair.getValue());
+              logger.info("" + pair.getKey() + " = " + pair.getValue());
             it.remove(); // avoids a ConcurrentModificationException
         }
     }
 
 
-    public static boolean imagePlusHasVirtualStackOfStacks(ImagePlus imp) {
+    public static boolean hasVirtualStackOfStacks(ImagePlus imp) {
 
         if( ! (imp.getStack() instanceof VirtualStackOfStacks) ) {
-            IJ.showMessage("Wrong image type. " +
-                    "This method is only implemented for images opened via " +
-                    "the Data Streaming Tools plugin.");
+             logger.error("Wrong image type. " +
+                     "This method is only implemented for images opened via " +
+                     "the Data Streaming Tools plugin.");
             return false;
         }
         else
@@ -146,8 +148,8 @@ public class Utils {
         if( numPixels > maxSize )
         {
 
-            log("Warning: "+"The size of one requested data cube is "+numPixels +" (larger than 2^31)\n");
-            //IJ.showMessage("The size of one requested data cube is "+numPixels +" (larger than 2^31)\n" +
+              logger.info("Warning: " + "The size of one requested data cube is " + numPixels + " (larger than 2^31)\n");
+            //logger.error("The size of one requested data cube is "+numPixels +" (larger than 2^31)\n" +
             //        "and can thus not be loaded as one java array into RAM.\n" +
             //        "Please crop a smaller region.");
             //return(false);
@@ -164,17 +166,17 @@ public class Utils {
 
         if( requestedMemoryGB > freeMemoryGB )
         {
-            IJ.showMessage("The size of the requested data cube(s) is "+ requestedMemoryGB + " GB.\n" +
-                    "The free memory is only "+freeMemoryGB+" GB.\n" +
-                    "Please consider cropping a smaller region \n" +
-                    "and/or reducing the number of I/O threads \n" +
-                    "(you are currently using " + nThreads + ").");
+             logger.error("The size of the requested data cube(s) is " + requestedMemoryGB + " GB.\n" +
+                     "The free memory is only " + freeMemoryGB + " GB.\n" +
+                     "Please consider cropping a smaller region \n" +
+                     "and/or reducing the number of I/O threads \n" +
+                     "(you are currently using " + nThreads + ").");
             return(false);
         }
         else
         {
             if( requestedMemoryGB > 0.1 ) {
-                Utils.threadlog("Memory [GB]: Max=" + maxMemoryGB + "; Free=" + freeMemoryGB + "; Requested=" +
+                logger.info("Memory [GB]: Max=" + maxMemoryGB + "; Free=" + freeMemoryGB + "; Requested=" +
                         requestedMemoryGB);
             }
 

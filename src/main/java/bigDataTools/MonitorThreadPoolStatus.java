@@ -11,12 +11,14 @@ import java.util.concurrent.TimeUnit;
  */
 class MonitorThreadPoolStatus {
 
+    private static Logger logger = new IJLazySwingLogger();
+
     public MonitorThreadPoolStatus(){
     }
 
     public static void showProgressAndWaitUntilDone(ExecutorService es, Future[] futures, String message, int updateFrequencyMilliseconds) {
 
-        // Wait until all tasks are done and log status
+        // Wait until all tasks are done and info status
         es.shutdown();
         int done = 0;
         while( done != futures.length )
@@ -26,7 +28,7 @@ class MonitorThreadPoolStatus {
             {
                 if (f.isDone() ) done++;
             }
-            Utils.threadlog(message + done + "/" + futures.length);
+            logger.info(message + done + "/" + futures.length);
 
             try {
                 Thread.sleep(updateFrequencyMilliseconds);

@@ -57,22 +57,18 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Roi;
 import ij.io.FileInfo;
-import ij.plugin.PlugIn;
 import javafx.geometry.Point3D;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ij.IJ.log;
 
 
 //import net.imagej.ImageJ;
@@ -86,98 +82,22 @@ import static ij.IJ.log;
 // todo: check if all files are parsed before allowing to "crop as new stream"
 // todo: rearrange the GUI
 // todo: consistency check the list lengths with different folders
-// todo: remove version numbers from pom
-// TODO: use this:
-// VirtualStackOfStacks vss = VirtualStackOfStacks.getVirtualStackOfStacksFromImagePlus(imp);
-// if ( vss == null ) return null;
+// todo: stop loading thread upon closing of image
+// todo: increase speed of Leica tif parsing, possible?
 
 
-/** Opens a folder of stacks as a virtual stack. */
-public class DataStreamingTools implements PlugIn {
+/**
+ * Opens a folder of stacks as a virtual stack.
+ *
+ * */
+public class DataStreamingTools {
 
-    private int nC, nT, nZ, nX, nY;
-
-    AtomicInteger iProgress = new AtomicInteger(0);
-    int nProgress = 100;
-
-    // todo: stop loading thread upon closing of image
-    // todo: increase speed of Leica tif parsing, possible?
+    private static Logger logger = new IJLazySwingLogger();
 
     public DataStreamingTools() {
     }
 
-    public void run(String arg) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run()
-            {
-                showDialog();
-            }
-        });
-    }
-
-    public void showDialog() {
-        DataStreamingToolsGUI sstGUI = new DataStreamingToolsGUI();
-        sstGUI.showDialog();
-    }
-
-    public boolean checkIfHdf5DataSetExists(IHDF5Reader reader, String hdf5DataSet) {
-        String dataSets = "";
-        boolean dataSetExists = false;
-
-        if( reader.object().isDataSet(hdf5DataSet) )
-        {
-            return true;
-        }
-
-        for (String dataSet : reader.getGroupMembers("/")) {
-            /*
-            if (dataSet.equals(hdf5DataSet)) {
-                dataSetExists = true;
-            }
-            */
-            dataSets += "- " + dataSet + "\n";
-        }
-
-        if (!dataSetExists) {
-            IJ.showMessage("The selected Hdf5 data set does not exist; " +
-                    "please change to one of the following:\n\n" +
-                    dataSets);
-        }
-
-        return dataSetExists;
-    }
-
-    public ImagePlus openFromInfoFile(String directory, String fileName){
-
-        File f = new File(directory+fileName);
-
-        if(f.exists() && !f.isDirectory()) {
-
-            log("Loading: "+directory+fileName);
-            FileInfoSer[][][] infos = readFileInfosSer(directory+fileName);
-
-            nC = infos.length;
-            nT = infos[0].length;
-            nZ = infos[0][0].length;
-
-            if(Utils.verbose) {
-                log("nC: " + infos.length);
-                log("nT: " + infos[0].length);
-                log("nz: " + infos[0][0].length);
-            }
-
-            // init the VSS
-            VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, infos);
-            ImagePlus imp = makeImagePlus(stack);
-            return(imp);
-
-        } else {
-            return (null);
-        }
-    }
-
-    // todo: get rid of all the global variables
-
+    // TODO: split up in simpler methods
     public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int nIOthreads) {
         String[][] fileLists; // files in sub-folders
         String[][][] ctzFileList;
@@ -188,6 +108,7 @@ public class DataStreamingTools implements PlugIn {
         FileInfo fi0;
         String[] channelFolders = null;
         List<String> channels = null, timepoints = null;
+        int nC=0, nT=0, nZ=0, nX=0, nY=0;
 
         if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS)) {
 
@@ -195,20 +116,20 @@ public class DataStreamingTools implements PlugIn {
             // Check for sub-folders
             //
 
-            log("checking for sub-folders...");
+            logger.info("checking for sub-folders...");
             channelFolders = getFoldersInFolder(directory);
             if (channelFolders != null) {
                 fileLists = new String[channelFolders.length][];
                 for (int i = 0; i < channelFolders.length; i++) {
                     fileLists[i] = getFilesInFolder(directory + channelFolders[i], filterPattern);
                     if (fileLists[i] == null) {
-                        log("no files found in folder: " + directory + channelFolders[i]);
+                        logger.info("no files found in folder: " + directory + channelFolders[i]);
                         return (null);
                     }
                 }
-                log("found sub-folders => interpreting as channel folders.");
+                logger.info("found sub-folders => interpreting as channel folders.");
             } else {
-                log("no sub-folders found.");
+                logger.info("no sub-folders found.");
                 IJ.showMessage("No sub-folders found; please specify a different options for loading " +
                         "the channels");
                 return(null);
@@ -220,7 +141,7 @@ public class DataStreamingTools implements PlugIn {
             // Get files in main directory
             //
 
-            log("checking for files in folder: " + directory);
+            logger.info("checking for files in folder: " + directory);
             fileLists = new String[1][];
             fileLists[0] = getFilesInFolder(directory, filterPattern);
 
@@ -234,7 +155,7 @@ public class DataStreamingTools implements PlugIn {
                 for (String fileName : fileLists[0]) {
                     if (patternLeica.matcher(fileName).matches()) {
                         fileType = "leica single tif";
-                        log("detected fileType: " + fileType);
+                        logger.info("detected fileType: " + fileType);
                         break;
                     }
                 }
@@ -340,10 +261,10 @@ public class DataStreamingTools implements PlugIn {
                 nC = Math.max(1, channelsHS.get(iFileID).size());
                 nZ = slicesHS.get(iFileID).size(); // must be the same for all fileIDs
 
-                log("FileID: " + fileIDs[iFileID]);
-                log("  Channels: " + nC);
-                log("  TimePoints: " + timepointsHS.get(iFileID).size());
-                log("  Slices: " + nZ);
+                logger.info("FileID: " + fileIDs[iFileID]);
+                logger.info("  Channels: " + nC);
+                logger.info("  TimePoints: " + timepointsHS.get(iFileID).size());
+                logger.info("  Slices: " + nZ);
 
                 nT += timepointsHS.get(iFileID).size();
                 tOffsets[iFileID + 1] = nT;
@@ -509,7 +430,7 @@ public class DataStreamingTools implements PlugIn {
 
                 IHDF5Reader reader = HDF5Factory.openForReading(directory + channelFolders[c] + "/" + fileLists[0][0]);
 
-                if (!checkIfHdf5DataSetExists(reader, hdf5DataSet)) return null;
+                if (!hdf5DataSetExists(reader, hdf5DataSet)) return null;
 
                 HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/" + hdf5DataSet);
 
@@ -524,7 +445,7 @@ public class DataStreamingTools implements PlugIn {
 
             }
 
-            log("File type: "+fileType);
+            logger.info("File type: " + fileType);
 
 
             //
@@ -618,88 +539,61 @@ public class DataStreamingTools implements PlugIn {
 
     }
 
+    public ImagePlus openFromInfoFile(String directory, String fileName){
 
+        File f = new File(directory+fileName);
 
-    public static String getLastDir(String fileOrDirPath) {
-        boolean endsWithSlash = fileOrDirPath.endsWith(File.separator);
-        String[] split = fileOrDirPath.split(File.separator);
-        if(endsWithSlash) return split[split.length-1];
-        else return split[split.length];
-    }
+        if(f.exists() && !f.isDirectory()) {
 
-    class SetFilesInVirtualStack implements Runnable {
-        ImagePlus imp;
-        AtomicInteger iProgress;
-        private int nProgress;
+            logger.info("Loading: " + directory + fileName);
+            FileInfoSer[][][] infos = readFileInfosSer(directory+fileName);
 
-        SetFilesInVirtualStack(ImagePlus imp, AtomicInteger iProgress, int nProgress) {
-            this.imp = imp;
-            this.iProgress = iProgress;
-            this.nProgress = nProgress;
+            int nC = infos.length;
+            int nT = infos[0].length;
+            int nZ = infos[0][0].length;
 
-        }
-
-        public void run() {
-
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-
-            while(true) {
-
-                int t = iProgress.getAndAdd(1);
-
-                if ((t+1) > nProgress) return;
-
-                for (int c = 0; c < vss.nC; c++) {
-
-                    vss.setStackFromFile(t, c);
-
-                }
-
-                // show image window once time-point 0 is loaded
-                if (t == 0) {
-
-                    if (vss != null && vss.getSize() > 0) {
-                        imp = makeImagePlus(vss);
-                    } else {
-                        IJ.showMessage("Something went wrong loading the first image stack!");
-                        return;
-                    }
-
-                    imp.show();
-                    imp.setPosition(1, nZ / 2, 1);
-                    imp.updateAndDraw();
-                    IJ.wait(100); imp.resetDisplayRange();
-
-                    // todo: get the selected directory as image name
-                    imp.setTitle("stream");
-
-                    //
-                    // log compression
-                    //
-                    FileInfoSer[][][] infos = vss.getFileInfosSer();
-
-                    if(infos[0][0][0].compression == 0)
-                        log("Compression = Unknown");
-                    else if(infos[0][0][0].compression == 1)
-                        log("Compression = None");
-                    else if(infos[0][0][0].compression == 2)
-                        log("Compression = LZW");
-                    else if(infos[0][0][0].compression == 6)
-                        log("Compression = ZIP");
-                    else
-                        log("Compression = "+infos[0][0][0].compression);
-
-                }
-
-
-            } // t-loop
-
-
-
+            if(Utils.verbose) {
+                logger.info("nC: " + infos.length);
+                logger.info("nT: " + infos[0].length);
+                logger.info("nz: " + infos[0][0].length);
             }
 
+            // init the VSS
+            VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, infos);
+            ImagePlus imp = getImagePlusFromVSS(stack);
+            return(imp);
+
+        } else {
+            return (null);
+        }
+    }
+
+    private boolean hdf5DataSetExists(IHDF5Reader reader, String hdf5DataSet) {
+        String dataSets = "";
+        boolean dataSetExists = false;
+
+        if( reader.object().isDataSet(hdf5DataSet) )
+        {
+            return true;
         }
 
+        for (String dataSet : reader.getGroupMembers("/")) {
+            /*
+            if (dataSet.equals(hdf5DataSet)) {
+                dataSetExists = true;
+            }
+            */
+            dataSets += "- " + dataSet + "\n";
+        }
+
+        if (!dataSetExists) {
+            IJ.showMessage("The selected Hdf5 data set does not exist; " +
+                    "please change to one of the following:\n\n" +
+                    dataSets);
+        }
+
+        return dataSetExists;
+    }
 
     String[] sortAndFilterFileList(String[] rawlist, String filterPattern)
     {
@@ -768,7 +662,8 @@ public class DataStreamingTools implements PlugIn {
         }
     }
 
-    String[] getFilesInFolder(String directory, String filterPattern) {
+    String[] getFilesInFolder(String directory, String filterPattern)
+    {
         // todo: can getting the file-list be faster?
         String[] list = new File(directory).list();
         if (list == null || list.length == 0)
@@ -778,8 +673,9 @@ public class DataStreamingTools implements PlugIn {
         else return (list);
     }
 
-    String[] getFoldersInFolder(String directory) {
-        //log("# getFoldersInFolder: " + directory);
+    String[] getFoldersInFolder(String directory)
+    {
+        //info("# getFoldersInFolder: " + directory);
         String[] list = new File(directory).list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -793,8 +689,6 @@ public class DataStreamingTools implements PlugIn {
 
     }
 
-
-
     public boolean writeFileInfosSer(FileInfoSer[][][] infos, String path) {
 
         try{
@@ -804,12 +698,11 @@ public class DataStreamingTools implements PlugIn {
             oos.flush();
             oos.close();
             fout.close();
-            log("Wrote: " + path);
-            iProgress.set(nProgress);
+            logger.info("Wrote: " + path);
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
-            log("Could not write: " + path);
+            logger.error("Writing failed: " + path);
             return false;
         }
 
@@ -830,137 +723,15 @@ public class DataStreamingTools implements PlugIn {
 
     }
 
-    //public static Point3D curatePositionOffsetSize(ImagePlus imp, Point3D po, Point3D ps) {
-    //    boolean[] shifted = new boolean[1];
-    //    return(curatePositionOffsetSize(imp, po, ps, shifted));
-    //}
-
-    public static Point3D curatePositionOffsetSize(ImagePlus imp, Point3D po, Point3D ps, boolean[] shifted) {
-        shifted[0] = false;
-
-        // round the values
-        int x = (int) (po.getX()+0.5);
-        int y = (int) (po.getY()+0.5);
-        int z = (int) (po.getZ()+0.5);
-        int xs = (int) (ps.getX()+0.5);
-        int ys = (int) (ps.getY()+0.5);
-        int zs = (int) (ps.getZ()+0.5);
-
-        // make sure that the ROI stays within the image bounds
-        if (x < 0) {x = 0; shifted[0] = true;}
-        if (y < 0) {y = 0; shifted[0] = true;}
-        if (z < 0) {z = 0; shifted[0] = true;}
-
-        if (x+xs > imp.getWidth()-1) {x = imp.getWidth()-xs-1; shifted[0] = true;}
-        if (y+ys > imp.getHeight()-1) {y = imp.getHeight()-ys-1; shifted[0] = true;}
-        if (z+zs > imp.getNSlices()-1) {z = imp.getNSlices()-zs-1; shifted[0] = true;}
-
-        // check if it is ok now, otherwise the chosen radius simply is too large
-        if (x < 0)  {
-            IJ.showMessage("object size in x is too large; please reduce!");
-            throw new IllegalArgumentException("out of range");
-        }
-        if (y < 0){
-            IJ.showMessage("object size in y is too large; please reduce!");
-            throw new IllegalArgumentException("out of range");
-        }
-        if (z < 0) {
-            IJ.showMessage("object size in z is too large; please reduce!");
-            throw new IllegalArgumentException("out of range");
-        }
-        //if(shifted[0]) {
-        //    log("++ region was shifted to stay within image bounds.");
-        //}
-        return(new Point3D(x,y,z));
-    }
-
-    // creates a new view on the data
-    public static ImagePlus makeCroppedVirtualStack(ImagePlus imp, Point3D[] po, Point3D ps, int tMin, int tMax) {
-
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-        FileInfoSer[][][] infos = vss.getFileInfosSer();
-
-        int nC = infos.length;
-        int nT = tMax-tMin+1;
-        int nZ = infos[0][0].length;
-
-        FileInfoSer[][][] croppedInfos = new FileInfoSer[nC][nT][nZ];
-
-        if(Utils.verbose){
-            log("# DataStreamingTools.openCroppedFromInfos");
-            log("tMin: "+tMin);
-            log("tMax: "+tMax);
-        }
-
-        for(int c=0; c<nC; c++) {
-
-            for(int t=tMin; t<=tMax; t++) {
-
-                for(int z=0; z<nZ; z++) {
-
-                    croppedInfos[c][t-tMin][z] = new FileInfoSer(infos[c][t][z]);
-                    if(croppedInfos[c][t-tMin][z].isCropped) {
-                        croppedInfos[c][t-tMin][z].setCropOffset(po[t].add(croppedInfos[c][t - tMin][z].getCropOffset()));
-                    } else {
-                        croppedInfos[c][t - tMin][z].isCropped = true;
-                        croppedInfos[c][t - tMin][z].setCropOffset(po[t-tMin]);
-                    }
-                    croppedInfos[c][t-tMin][z].setCropSize(ps);
-                    //log("c "+c);
-                    //log("t "+t);
-                    //log("z "+z);
-                    //log("offset "+croppedInfos[c][t-tMin][z].pCropOffset.toString());
-
-                }
-
-            }
-
-        }
-
-        VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
-        VirtualStackOfStacks stack = new VirtualStackOfStacks(parentStack.getDirectory(), croppedInfos);
-        return(makeImagePlus(stack));
-
-    }
-
-    private static ImagePlus makeImagePlus(VirtualStackOfStacks stack) {
-        int nC=stack.nC;
-        int nZ=stack.nZ;
-        int nT=stack.nT;
-        double min = Double.MAX_VALUE;
-        double max = -Double.MAX_VALUE;
-
-        FileInfoSer[][][] infos = stack.getFileInfosSer();
-        FileInfoSer fi = infos[0][0][0];
-
-        ImagePlus imp = new ImagePlus("", stack);
-
-        // todo: what does this do?
-        if (imp.getType()==ImagePlus.GRAY16 || imp.getType()==ImagePlus.GRAY32)
-			imp.getProcessor().setMinAndMax(min, max);
-
-		imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
-
-        if(Utils.verbose) {
-            log("# DataStreamingTools.makeImagePlus");
-            log("nC: "+nC);
-            log("nZ: "+nZ);
-            log("nT: " + nT);
-        }
-
-        imp.setDimensions(nC, nZ, nT);
-        imp.setOpenAsHyperStack(true);
-        return(imp);
-	}
-
-    public static ImagePlus crop(ImagePlus imp, int zMin, int zMax)
+    public static ImagePlus getCroppedVSS(ImagePlus imp, Roi roi, int zMin, int zMax)
     {
 
+        if ( !Utils.hasVirtualStackOfStacks(imp) ) return null;
         VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
         FileInfoSer[][][] infos = vss.getFileInfosSer();
         if(infos[0][0][0].compression==6) {
-            log("Zip-compressed tiff files do not support chuncked loading " +
+            logger.info("Zip-compressed tiff files do not support chuncked loading " +
                     "=> the cropped stream will not be streamed faster");
         }
         if(zMin<1) {
@@ -984,34 +755,120 @@ public class DataStreamingTools implements PlugIn {
             return null;
         }
 
+        Point3D[] po = new Point3D[vss.nT];
+        Point3D ps = null;
 
-        Roi roi = imp.getRoi();
-        if (roi != null && roi.isArea()) {
-
-            int tMin = 0;
-            int tMax = vss.nT - 1;
-
-            Point3D[] po = new Point3D[vss.nT];
-            for (int t = 0; t < vss.nT; t++) {
-                po[t] = new Point3D(roi.getBounds().getX(), roi.getBounds().getY(), zMin-1);
+        if (roi != null && roi.isArea())
+        {
+            for (int t = 0; t < vss.nT; t++)
+            {
+                po[t] = new Point3D(roi.getBounds().getX(), roi.getBounds().getY(), zMin - 1);
             }
-            Point3D ps = new Point3D(roi.getBounds().getWidth(), roi.getBounds().getHeight(), zMax-zMin+1);
+            ps = new Point3D(roi.getBounds().getWidth(), roi.getBounds().getHeight(), zMax - zMin + 1);
+        }
+        else
+        {
+            logger.warning("No area ROI provided => no cropping in XY.");
 
-            ImagePlus impCropped = makeCroppedVirtualStack(imp, po, ps, tMin, tMax);
-            impCropped.setTitle(imp.getTitle()+"-crop");
-            return impCropped;
-
-
-
-
-        } else {
-
-            IJ.showMessage("Please put a rectangular selection on the image.");
-            return null;
+            for (int t = 0; t < vss.nT; t++)
+            {
+                po[t] = new Point3D(0, 0, zMin - 1);
+            }
+            ps = new Point3D(imp.getWidth(), imp.getHeight(), zMax - zMin + 1);
 
         }
+
+        // TODO: make this an option as well
+        int tMin = 0;
+        int tMax = vss.nT - 1;
+
+        // Crop
+        //
+        ImagePlus impCropped = getCroppedVSS(imp, po, ps, tMin, tMax);
+        impCropped.setTitle(imp.getTitle()+"-crop");
+        return impCropped;
+
     }
 
+    public static ImagePlus getCroppedVSS(ImagePlus imp, Point3D[] po, Point3D ps, int tMin, int tMax)
+    {
+
+        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+        FileInfoSer[][][] infos = vss.getFileInfosSer();
+
+        int nC = infos.length;
+        int nT = tMax-tMin+1;
+        int nZ = infos[0][0].length;
+
+        FileInfoSer[][][] croppedInfos = new FileInfoSer[nC][nT][nZ];
+
+        if(Utils.verbose){
+            logger.info("# DataStreamingTools.openCroppedFromInfos");
+            logger.info("tMin: " + tMin);
+            logger.info("tMax: " + tMax);
+        }
+
+        for(int c=0; c<nC; c++) {
+
+            for(int t=tMin; t<=tMax; t++) {
+
+                for(int z=0; z<nZ; z++) {
+
+                    croppedInfos[c][t-tMin][z] = new FileInfoSer(infos[c][t][z]);
+                    if(croppedInfos[c][t-tMin][z].isCropped) {
+                        croppedInfos[c][t-tMin][z].setCropOffset(po[t].add(croppedInfos[c][t - tMin][z].getCropOffset()));
+                    } else {
+                        croppedInfos[c][t - tMin][z].isCropped = true;
+                        croppedInfos[c][t - tMin][z].setCropOffset(po[t-tMin]);
+                    }
+                    croppedInfos[c][t-tMin][z].setCropSize(ps);
+                    //info("c "+c);
+                    //info("t "+t);
+                    //info("z "+z);
+                    //info("offset "+croppedInfos[c][t-tMin][z].pCropOffset.toString());
+
+                }
+
+            }
+
+        }
+
+        VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
+        VirtualStackOfStacks stack = new VirtualStackOfStacks(parentStack.getDirectory(), croppedInfos);
+        return(getImagePlusFromVSS(stack));
+
+    }
+
+    // TODO: is this method needed?
+    private static ImagePlus getImagePlusFromVSS(VirtualStackOfStacks stack) {
+        int nC=stack.nC;
+        int nZ=stack.nZ;
+        int nT=stack.nT;
+        double min = Double.MAX_VALUE;
+        double max = -Double.MAX_VALUE;
+
+        FileInfoSer[][][] infos = stack.getFileInfosSer();
+        FileInfoSer fi = infos[0][0][0];
+
+        ImagePlus imp = new ImagePlus("", stack);
+
+        // todo: what does this do?
+        if (imp.getType()==ImagePlus.GRAY16 || imp.getType()==ImagePlus.GRAY32)
+			imp.getProcessor().setMinAndMax(min, max);
+
+		imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
+
+        if(Utils.verbose) {
+            logger.info("# DataStreamingTools.getImagePlusFromVSS");
+            logger.info("nC: " + nC);
+            logger.info("nZ: " + nZ);
+            logger.info("nT: " + nT);
+        }
+
+        imp.setDimensions(nC, nZ, nT);
+        imp.setOpenAsHyperStack(true);
+        return(imp);
+	}
 
     /**
      *
@@ -1019,7 +876,7 @@ public class DataStreamingTools implements PlugIn {
      * @param nIOthreads
      * @return
      */
-    public ImagePlus loadVssFullyIntoRAM(ImagePlus imp, int nIOthreads) {
+    public static ImagePlus loadVSSFullyIntoRAM(ImagePlus imp, int nIOthreads) {
 
         // Initialize RAM image
         //
@@ -1035,7 +892,7 @@ public class DataStreamingTools implements PlugIn {
         Future[] futures = new Future[imp.getNFrames()];
         for ( int i = 0; i < imp.getNFrames(); i++ )
         {
-            futures[i] = es.submit(new LoadFrameFromVssIntoRAM(imp, i, impRAM));
+            futures[i] = es.submit(new LoadSingleFrameFromVSSIntoRAM(imp, i, impRAM));
         }
 
         MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
@@ -1053,53 +910,93 @@ public class DataStreamingTools implements PlugIn {
 
     }
 
+    public static void saveVSSAsStacks(ImagePlus imp, Point3D binning, String filePath, String fileType,
+        String compression, int rowsPerStrip, int threads) {
 
+        ExecutorService es = Executors.newFixedThreadPool(threads);
+        Future[] futures = new Future[imp.getNFrames()];
+        for ( int i = 0; i < imp.getNFrames(); i++ )
+        {
+            futures[i] = es.submit(new SaveVSSFrame(imp, i, binning,
+                    filePath, fileType, compression, rowsPerStrip));
+        }
 
-    /*
-    public < T extends RealType< T > & NativeType< T > >
-            void openUsingSCIFIO(String path)
-            throws ImgIOException
-    {
-        // Mouse over: intensity?
+        MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                es, futures,
+                "Saved to disk: ",
+                500);
 
-        //
-        // Test SCIFIO and BIGDATAVIEWER
-        //
-
-        ImgOpener imgOpener = new ImgOpener();
-
-        // Open as ArrayImg
-        java.util.List<SCIFIOImgPlus<?>> imgs = imgOpener.openImgs( path );
-        Img<T> img = (Img<T>) imgs.get(0);
-        BdvSource bdv = BdvFunctions.show(img, "RAM");
-        bdv.setDisplayRange(0,1000);
-
-        // Open as CellImg
-        SCIFIOConfig config = new SCIFIOConfig();
-        config.imgOpenerSetImgModes( SCIFIOConfig.ImgMode.CELL );
-        java.util.List<SCIFIOImgPlus<?>> cellImgs = imgOpener.openImgs( path, config );
-        Img<T> cellImg = (Img<T>) cellImgs.get(0);
-        BdvSource bdv2 = BdvFunctions.show(cellImg, "STREAM");
-        bdv2.setDisplayRange(0,1000);
-
-        /*
-        First of all it is awesome that all of that works!
-        As to be expected the visualisation of the of the cellImg is much slower.
-        To be honest I was a bit surprised as to how slow it is given that it is only 2.8 MB and
-        was stored on SSD on my MacBook Air.
-        I was wondering about a really simple caching strategy for the BDV, in pseudo code:
-
-        t = timePointToBeDisplayed
-        taskRender(cellImg(t)).start()
-        if(cellImg(t) fits in RAM):
-          arrayImgThisTimePoint = cellImg(t).loadAsArrayImg()
-          taskRender(cellImg(t)).end()
-          taskRender(arrayImgThisTimePoint).start()
-
-        Would that make any sense?
     }
-       */
 
+
+    class SetFilesInVirtualStack implements Runnable {
+        ImagePlus imp;
+        AtomicInteger iProgress;
+        private int nProgress;
+
+        SetFilesInVirtualStack(ImagePlus imp, AtomicInteger iProgress, int nProgress) {
+            this.imp = imp;
+            this.iProgress = iProgress;
+            this.nProgress = nProgress;
+
+        }
+
+        public void run() {
+
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+
+            while(true) {
+
+                int t = iProgress.getAndAdd(1);
+
+                if ((t+1) > nProgress) return;
+
+                for (int c = 0; c < vss.nC; c++) {
+
+                    vss.setStackFromFile(t, c);
+
+                }
+
+                // show image window once time-point 0 is loaded
+                if (t == 0) {
+
+                    if (vss != null && vss.getSize() > 0) {
+                        imp = getImagePlusFromVSS(vss);
+                    } else {
+                        IJ.showMessage("Something went wrong loading the first image stack!");
+                        return;
+                    }
+
+                    Utils.show(imp);
+                    imp.setTitle("stream"); // TODO: get the selected directory as image name
+
+
+                    //
+                    // info compression
+                    //
+                    FileInfoSer[][][] infos = vss.getFileInfosSer();
+
+                    if(infos[0][0][0].compression == 0)
+                        logger.info("Compression = Unknown");
+                    else if(infos[0][0][0].compression == 1)
+                        logger.info("Compression = None");
+                    else if(infos[0][0][0].compression == 2)
+                        logger.info("Compression = LZW");
+                    else if(infos[0][0][0].compression == 6)
+                        logger.info("Compression = ZIP");
+                    else
+                        logger.info("Compression = " + infos[0][0][0].compression);
+
+                }
+
+
+            } // t-loop
+
+
+
+        }
+
+    }
 
 	// main method for debugging
     // throws ImgIOException
@@ -1246,4 +1143,50 @@ public class DataStreamingTools implements PlugIn {
     }
 
 }
+
+
+    /*
+    public < T extends RealType< T > & NativeType< T > >
+            void openUsingSCIFIO(String path)
+            throws ImgIOException
+    {
+        // Mouse over: intensity?
+
+        //
+        // Test SCIFIO and BIGDATAVIEWER
+        //
+
+        ImgOpener imgOpener = new ImgOpener();
+
+        // Open as ArrayImg
+        java.util.List<SCIFIOImgPlus<?>> imgs = imgOpener.openImgs( path );
+        Img<T> img = (Img<T>) imgs.get(0);
+        BdvSource bdv = BdvFunctions.show(img, "RAM");
+        bdv.setDisplayRange(0,1000);
+
+        // Open as CellImg
+        SCIFIOConfig config = new SCIFIOConfig();
+        config.imgOpenerSetImgModes( SCIFIOConfig.ImgMode.CELL );
+        java.util.List<SCIFIOImgPlus<?>> cellImgs = imgOpener.openImgs( path, config );
+        Img<T> cellImg = (Img<T>) cellImgs.get(0);
+        BdvSource bdv2 = BdvFunctions.show(cellImg, "STREAM");
+        bdv2.setDisplayRange(0,1000);
+
+        /*
+        First of all it is awesome that all of that works!
+        As to be expected the visualisation of the of the cellImg is much slower.
+        To be honest I was a bit surprised as to how slow it is given that it is only 2.8 MB and
+        was stored on SSD on my MacBook Air.
+        I was wondering about a really simple caching strategy for the BDV, in pseudo code:
+
+        t = timePointToBeDisplayed
+        taskRender(cellImg(t)).start()
+        if(cellImg(t) fits in RAM):
+          arrayImgThisTimePoint = cellImg(t).loadAsArrayImg()
+          taskRender(cellImg(t)).end()
+          taskRender(arrayImgThisTimePoint).start()
+
+        Would that make any sense?
+    }
+       */
 

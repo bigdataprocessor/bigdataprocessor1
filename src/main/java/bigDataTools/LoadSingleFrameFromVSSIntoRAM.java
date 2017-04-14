@@ -7,11 +7,12 @@ import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
 
-class LoadFrameFromVssIntoRAM implements Runnable
+class LoadSingleFrameFromVSSIntoRAM implements Runnable
 {
     ImagePlus imp;
     int t;
     ImagePlus impRAM;
+    Logger logger = new IJLazySwingLogger();
 
     /**
      *
@@ -20,7 +21,7 @@ class LoadFrameFromVssIntoRAM implements Runnable
      * @param impRAM
      */
 
-    LoadFrameFromVssIntoRAM(ImagePlus imp, int t, ImagePlus impRAM)
+    LoadSingleFrameFromVSSIntoRAM(ImagePlus imp, int t, ImagePlus impRAM)
     {
         this.imp = imp;
         this.t = t;
@@ -34,7 +35,7 @@ class LoadFrameFromVssIntoRAM implements Runnable
         for (int c = 0; c < imp.getNChannels(); c++) {
 
             // Load time-point and channel
-            Utils.threadlog("Loading time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+            logger.info("Loading time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
             ImagePlus impChannelTime = vss.getFullFrame(t, c, new Point3D(1, 1, 1));
 
             // Copy time-point and channel at the right place into impRAM

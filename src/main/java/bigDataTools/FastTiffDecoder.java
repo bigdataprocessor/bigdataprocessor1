@@ -49,6 +49,8 @@ import static ij.IJ.log;
 
 public class FastTiffDecoder {
 
+    Logger logger = new IJLazySwingLogger();
+
     private boolean readingStrips;
     // tags
     public static final int NEW_SUBFILE_TYPE = 254;
@@ -404,7 +406,7 @@ public class FastTiffDecoder {
         String name = getName(tag);
         String cs = (count==1)?"":", count=" + count;
         dInfo += "    " + tag + ", \"" + name + "\", value=" + lvalue + cs + "\n";
-        //ij.IJ.log(tag + ", \"" + name + "\", value=" + value + cs + "\n");
+        //ij.IJ.info(tag + ", \"" + name + "\", value=" + value + cs + "\n");
     }
 
     String getName(int tag) {
@@ -557,7 +559,7 @@ public class FastTiffDecoder {
                         chars[j] = (char)(((buffer[k++]&255)<<8) + buffer[k++]&255);
                 }
                 fi.sliceLabels[index++] = new String(chars);
-                //ij.IJ.log(i+"  "+fi.sliceLabels[i-1]+"  "+len);
+                //ij.IJ.info(i+"  "+fi.sliceLabels[i-1]+"  "+len);
             } else
                 fi.sliceLabels[index++] = null;
         }
@@ -676,16 +678,16 @@ public class FastTiffDecoder {
                         //    fi.stripOffsets[c] = getInt();
                         convertToInt(fi.stripOffsets, buffer);
                         //readingStrips = false;
-                        //if(ifdCount == 1) log("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
-                        //log(""+(in.getFilePointer()-pos));
-                        //log(""+(count*4));
+                        //if(ifdCount == 1) logger.info("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
+                        //info(""+(in.getFilePointer()-pos));
+                        //info(""+(count*4));
                         in.seek(saveLoc);
                     }
 
                     fi.offset = count>0?fi.stripOffsets[0]:value;
                     if (count>1 && (((long)fi.stripOffsets[count-1])&0xffffffffL)<(((long)fi.stripOffsets[0])&0xffffffffL))
                         fi.offset = fi.stripOffsets[count-1];
-                    //log("fi.offset "+fi.offset);
+                    //info("fi.offset "+fi.offset);
                     stripTime += (System.nanoTime() - startTimeStrips);
 
                     break;
@@ -896,7 +898,7 @@ public class FastTiffDecoder {
         fi.directory = directory;
         if (url!=null)
             fi.url = url;
-        //log("fraction spend with strips = " + (double)stripTime/(double)totalTime);
+        //info("fraction spend with strips = " + (double)stripTime/(double)totalTime);
         stripInfos[4] = in.getFilePointer() - ifdLoc;
         return fi;
     }
@@ -1045,9 +1047,9 @@ public class FastTiffDecoder {
                         //    fi.stripOffsets[c] = getInt();
                         convertToInt(fi.stripOffsets, buffer);
                         //readingStrips = false;
-                        //if(ifdCount == 1) log("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
-                        //log(""+(in.getFilePointer()-pos));
-                        //log(""+(count*4));
+                        //if(ifdCount == 1) logger.info("Strip offset 10:" + fi.stripOffsets[10]); //76728  //76427
+                        //info(""+(in.getFilePointer()-pos));
+                        //info(""+(count*4));
                         in.seek(saveLoc);
                     }
                     fi.offset = count>0?fi.stripOffsets[0]:value;
@@ -1264,7 +1266,7 @@ public class FastTiffDecoder {
 
     public FileInfo[] getTiffInfo() throws IOException {
         if(Utils.verbose) {
-            log("# getTiffInfo");
+              logger.info("# getTiffInfo");
         }
 
         startTimeTotal = System.currentTimeMillis();
@@ -1291,24 +1293,24 @@ public class FastTiffDecoder {
             if(list.size() < 3) {  // somehow the first ones are sometimes different...
                 fi = fullyReadIFD(stripInfos);
                 /*
-                log("list.size() "+list.size());
-                log("strip count " + stripInfos[0]);
-                log("stripOffsetsRelativeLoc " + stripInfos[1]);
-                log("stripLengthsRelativeLoc " + stripInfos[2]);
-                log("stripLengthFieldType " + stripInfos[3]);
-                log("ifdSize " + stripInfos[4]);
+                logger.info("list.size() "+list.size());
+                logger.info("strip count " + stripInfos[0]);
+                logger.info("stripOffsetsRelativeLoc " + stripInfos[1]);
+                logger.info("stripLengthsRelativeLoc " + stripInfos[2]);
+                logger.info("stripLengthFieldType " + stripInfos[3]);
+                logger.info("ifdSize " + stripInfos[4]);
                 */
             } else {
                fi = onlyReadStripsFromIFD(stripInfos);
             }
             fi.longOffset = (long)fi.offset & 4294967295L;
             if(Utils.verbose) {
-                log("IFD " + list.size() + " at " + ifdOffset);
-                log("fi.nImages: " + fi.nImages);
-                log("fi.offset: " + fi.offset);
-                log("fi.longOffset: " + fi.longOffset);
-                log("fi.stripLengths.length: " + fi.stripLengths.length);
-                log("fi.stripOffsets.length: " + fi.stripOffsets.length);
+                  logger.info("IFD " + list.size() + " at " + ifdOffset);
+                  logger.info("fi.nImages: " + fi.nImages);
+                  logger.info("fi.offset: " + fi.offset);
+                  logger.info("fi.longOffset: " + fi.longOffset);
+                  logger.info("fi.stripLengths.length: " + fi.stripLengths.length);
+                  logger.info("fi.stripOffsets.length: " + fi.stripOffsets.length);
             }
             if (fi!=null) {
                 list.add(fi);

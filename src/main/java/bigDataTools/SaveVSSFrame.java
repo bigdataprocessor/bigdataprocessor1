@@ -28,54 +28,56 @@ import static ij.IJ.log;
  * Created by tischi on 11/04/17.
  */
 
-class SaveToStacks implements Runnable {
+class SaveVSSFrame implements Runnable {
     ImagePlus imp;
     String fileType, path;
     String compression;
     int rowsPerStrip;
+    int t;
+    Point3D binning;
 
-    AtomicInteger iProgress;
-    final int nProgress;
+    Logger logger = new IJLazySwingLogger();
 
-    SaveToStacks(ImagePlus imp, String path, String fileType, String compression, int rowsPerStrip,
-                 AtomicInteger iProgress, int nProgress)
+    SaveVSSFrame(ImagePlus imp, int t, Point3D binning, String path, String fileType, String compression, int
+            rowsPerStrip)
     {
         this.imp = imp;
+        this.t = t;
+        this.binning = binning;
         this.fileType = fileType;
         this.path = path;
         this.compression = compression;
         this.rowsPerStrip = rowsPerStrip;
-        this.iProgress = iProgress;
-        this.nProgress = nProgress;
     }
 
     public void run()
     {
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-        ImagePlus impChannelTime = null;
 
-        while(true) {
+        for (int c = 0; c < imp.getNChannels(); c++) {
 
-            int t = iProgress.getAndAdd(1);
-            if ((t + 1) > nProgress) return;
+            // Load
+            //
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            ImagePlus impChannelTime = vss.getFullFrame(t, c);
 
-            for (int c = 0; c < imp.getNChannels(); c++) {
+            // Bin
+            //
 
-                //Utils.threadlog("Loading timepoint " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
-                impChannelTime = vss.getFullFrame(t, c, new Point3D(1, 1, 1));
-                Utils.threadlog("Loaded timepoint " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+            // TODO
 
-                if (fileType.equals("TIFF"))
-                {
-                    saveAsTiffStacks(impChannelTime, c, t, compression, path);
-                }
-                else if (fileType.equals("HDF5"))
-                {
-                    int compressionLevel = 0;
-                    saveAsHDF5(impChannelTime, c, t, compressionLevel, path);
-                }
-
+            // Save
+            //
+            if (fileType.equals("TIFF"))
+            {
+                saveAsTiffStack(impChannelTime, c, t, compression, path);
             }
+            else if (fileType.equals("HDF5"))
+            {
+                int compressionLevel = 0;
+                saveAsHDF5(impChannelTime, c, t, compressionLevel, path);
+            }
+
+            logger.info("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
 
         }
 
@@ -93,7 +95,7 @@ class SaveToStacks implements Runnable {
 
         if (! (imp.getType() == ImagePlus.GRAY16) )
         {
-            IJ.showMessage("Sorry, only 16bit images are currently supported.");
+             logger.error("Sorry, only 16bit images are currently supported.");
             return;
         }
 
@@ -173,7 +175,7 @@ class SaveToStacks implements Runnable {
                 }
                 // compute start level in image processor
                 int srcLevel = (int)saveBlockOffset[0];
-                //IJ.log( "source level = " +srcLevel);
+                //IJ.info( "source level = " +srcLevel);
                 // write Stack according to data type
                 //
                 int imgColorType = imp.getType();
@@ -234,7 +236,7 @@ class SaveToStacks implements Runnable {
 
     }
 
-    public void saveAsTiffStacks( ImagePlus imp, int c, int t, String compression, String path )
+    public void saveAsTiffStack( ImagePlus imp, int c, int t, String compression, String path )
     {
 
         if( compression.equals("LZW") ) // Use BioFormats
@@ -285,8 +287,7 @@ class SaveToStacks implements Runnable {
                 writer.close();
 
             } catch (Exception e) {
-                log("exception");
-                IJ.showMessage(e.toString());
+                logger.error(e.toString());
             }
         }
         else  // no compression: use ImageJ's FileSaver, as it is faster than BioFormats
@@ -295,7 +296,7 @@ class SaveToStacks implements Runnable {
             String sC = String.format("%1$02d", c);
             String sT = String.format("%1$05d", t);
             String pathCT = path + "--C" + sC + "--T" + sT + ".tif";
-            Utils.threadlog("Saving " + pathCT);
+            logger.info("Saving " + pathCT);
             fileSaver.saveAsTiffStack(pathCT);
         }
     }

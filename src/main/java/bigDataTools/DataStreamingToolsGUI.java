@@ -2,6 +2,7 @@ package bigDataTools;
 
 import ij.IJ;
 import ij.ImagePlus;
+import javafx.geometry.Point3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ij.IJ.log;
 import static java.awt.Desktop.getDesktop;
 import static java.awt.Desktop.isDesktopSupported;
 
@@ -67,6 +67,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     final String REPORTissue = "Report an issue";
     JButton reportIssue =  new JButton(REPORTissue);
 
+    Logger logger = new IJLazySwingLogger();
+
 
     JFileChooser fc;
 
@@ -82,7 +84,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         String[] toolTipTexts = getToolTipFile("DataStreamingHelp.html");
         ToolTipManager.sharedInstance().setDismissDelay(10000000);
-
 
         // Checkboxes
         cbLog.setSelected(false);
@@ -310,7 +311,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 Pair<? extends RealType,? extends RealType> minMax = ij.op().stats().minMax( image );
                 bdv.setDisplayRange(minMax.getA().getRealDouble(), minMax.getB().getRealDouble());
                 */
-            IJ.showMessage("Currently not implemented.");
+            logger.error("Currently not implemented.");
 
         }
         else if (e.getActionCommand().equals(STREAMfromInfoFile))
@@ -331,7 +332,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         {
 
             ImagePlus imp = IJ.getImage();
-            if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             fc = new JFileChooser(vss.getDirectory());
@@ -343,7 +344,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 //
                 int numberOfUnparsedFiles = vss.numberOfUnparsedFiles();
                 if(numberOfUnparsedFiles > 0) {
-                    IJ.showMessage("There are still "+numberOfUnparsedFiles+
+                    logger.error("There are still " + numberOfUnparsedFiles +
                             " files in the folder that have not been parsed yet.\n" +
                             "Please try again later (check ImageJ's status bar).");
                     return;
@@ -353,108 +354,29 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 //
                 Thread t1 = new Thread(new Runnable() {
                     public void run() {
-                        log("Saving: " + file.getAbsolutePath());
+                        logger.info("Saving: " + file.getAbsolutePath());
                         dataStreamingTools.writeFileInfosSer(vss.getFileInfosSer(), file.getAbsolutePath());
                     }
                 }); t1.start();
 
 
             }
-            else
-            {
-                log("Save command cancelled by user.");
-            }
 
         }
         else if ( e.getActionCommand().equals(SAVEasTiff)
                 || e.getActionCommand().equals(SAVEasH5) )
         {
-            //
-            // Save to stacks
-            //
-
-            // Get handle on the currently active image
-            //
-            ImagePlus imp = IJ.getImage();
-            if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-
-            // Check that all image files have been parsed
-            //
-            int numberOfUnparsedFiles = vss.numberOfUnparsedFiles();
-            if( numberOfUnparsedFiles > 0 )
-            {
-                IJ.showMessage("There are still "+numberOfUnparsedFiles+
-                        " files in the folder that have not been parsed yet.\n" +
-                        "Please try again later (check ImageJ's status bar).");
-                return;
-            }
-
-            // Check that there is enough memory to load all time-points into RAM
-            //
-            if( ! Utils.checkMemoryRequirements(imp, Math.min(nIOthreads, imp.getNFrames())) )
-            {
-                return;
-            }
-
-            //
-            // Load and save the data
-            //
-            fc = new JFileChooser(vss.getDirectory());
-            int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                final File file = fc.getSelectedFile();
-
-                // Initiate progress report
-                //
-                /*
-                nProgress = imp.getNFrames();
-                iProgress.set(0);
-                Thread thread = new Thread(new MonitorThreadPoolStatus(iProgress, nProgress, "Saved file"));
-                thread.start();
-                */
-
-                String compression = "";
-                if(cbLZW.isSelected())
-                    compression="LZW";
-
-                String fileType = "";
-                if(e.getActionCommand().equals(SAVEasH5))
-                    fileType = "HDF5";
-                else if(e.getActionCommand().equals(SAVEasTiff))
-                    fileType = "TIFF";
-
-                // Multi-threaded saving (increases speed if SSDs are available)
-                ExecutorService es = Executors.newCachedThreadPool();
-                int nThreads = Math.min(nIOthreads, nProgress);
-                for(int iThread=0; iThread<nThreads; iThread++)
-                {
-                    es.execute(new SaveToStacks(imp, file.getAbsolutePath(), fileType,
-                            compression, rowsPerStrip,
-                            iProgress, nProgress));
-                }
-
-
-            } else {
-                log("Save command cancelled by user.");
-                return;
-            }
-
-            //} else if (e.getActionCommand().equals(Actions[i++])) {
-            // "Save as h5 stacks"
-            //    IJ.showMessage("Not yet implemented.");
-
+            actionSaveAsStacks(e);
         }
         else if (e.getActionCommand().equals(LOAD_FULLY_INTO_RAM))
         {
 
             if( ! Utils.checkMemoryRequirements(IJ.getImage()) ) return;
-            if( ! Utils.imagePlusHasVirtualStackOfStacks(IJ.getImage())) return;
+            if( ! Utils.hasVirtualStackOfStacks(IJ.getImage())) return;
 
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
-                    ImagePlus impRAM = dataStreamingTools.loadVssFullyIntoRAM(IJ.getImage(), nIOthreads);
+                    ImagePlus impRAM = dataStreamingTools.loadVSSFullyIntoRAM(IJ.getImage(), nIOthreads);
                     if (impRAM != null)
                     {
                         impRAM.show();
@@ -470,7 +392,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             //
 
             ImagePlus imp = IJ.getImage();
-            if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             //
@@ -479,7 +401,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             int numberOfUnparsedFiles = vss.numberOfUnparsedFiles();
             if(numberOfUnparsedFiles > 0) {
-                IJ.showMessage("There are still "+numberOfUnparsedFiles+
+                logger.error("There are still " + numberOfUnparsedFiles +
                         " files in the folder that have not been parsed yet.\n" +
                         "Please try again later (check ImageJ's status bar).");
                 return;
@@ -491,10 +413,17 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             String[] sA = tfCropZMinMax.getText().split(",");
             if(sA.length!=2) {
-                IJ.showMessage("Something went wrong parsing the zMin, zMax croppping values.\n" +
+                logger.error("Something went wrong parsing the zMin, zMax croppping values.\n" +
                         "Please check that there are two comma separated values.");
                 return;
             }
+
+            //
+            // Get t cropping range
+            //
+
+            // TODO: implement
+
 
             int zMin = new Integer(sA[0]), zMax;
             if(sA[1].equals(("all"))) {
@@ -502,13 +431,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             } else {
                 zMax = new Integer(sA[1]);
             }
-            ImagePlus imp2 = dataStreamingTools.crop(imp, zMin, zMax);
+
+
+            ImagePlus imp2 = dataStreamingTools.getCroppedVSS(imp, imp.getRoi(), zMin, zMax);
+
             if (imp2 != null)
             {
-                imp2.show();
-                imp2.setPosition(1, imp.getCurrentSlice(), 1);
-                imp2.updateAndDraw();
-                imp2.resetDisplayRange();
+                Utils.show(imp2);
             }
 
 
@@ -524,12 +453,12 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     final URI uri = new URI(url);
                     getDesktop().browse(uri);
                 } catch (URISyntaxException uriEx) {
-                    IJ.showMessage(uriEx.toString());
+                    logger.error(uriEx.toString());
                 } catch (IOException ioEx) {
-                    IJ.showMessage(ioEx.toString());
+                    logger.error(ioEx.toString());
                 }
             } else {
-                IJ.showMessage("Could not open browser, please report issue here: \n" +
+                logger.error("Could not open browser, please report issue here: \n" +
                         "https://github.com/tischi/imagej-open-stacks-as-virtualstack/issues");
 
             }
@@ -569,7 +498,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         //} catch (IOException e) {
 
-        //    log("Did not find tool tip file 2.");
+        //    logger.info("Did not find tool tip file 2.");
         //    e.printStackTrace();
 
         //}
@@ -577,5 +506,52 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         return(toolTipTexts.toArray(new String[0]));
     }
 
+    private void actionSaveAsStacks( ActionEvent e ) {
+
+        final int ioThreads = new Integer(tfIOThreads.getText());
+        final int rowsPerStrip = new Integer(tfRowsPerStrip.getText());
+        Point3D binning = new Point3D(1,1,1); // TODO: make GUI element
+
+        ImagePlus imp = IJ.getImage();
+        if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
+        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+
+        // Check that all headers have been parsed
+        //
+        if( vss.numberOfUnparsedFiles() > 0 )
+        {
+            logger.error("There are still " + vss.numberOfUnparsedFiles() +
+                    " files in the folder that have not been parsed yet.\n" +
+                    "Please try again later.");
+            return;
+        }
+
+        // Check that there is enough memory to hold the data in RAM while saving
+        //
+        if( ! Utils.checkMemoryRequirements(imp, Math.min(ioThreads, imp.getNFrames())) ) return;
+
+        fc = new JFileChooser(vss.getDirectory());
+        int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+            final File file = fc.getSelectedFile();
+
+            String compression = "";
+            if(cbLZW.isSelected())
+                compression="LZW";
+
+            String fileType = "";
+            if(e.getActionCommand().equals(SAVEasH5))
+                fileType = "HDF5";
+            else if(e.getActionCommand().equals(SAVEasTiff))
+                fileType = "TIFF";
+
+            DataStreamingTools.saveVSSAsStacks(imp, binning, file.getAbsolutePath(), fileType,
+                    compression, rowsPerStrip, ioThreads);
+
+        }
+
+
+    }
 
 }

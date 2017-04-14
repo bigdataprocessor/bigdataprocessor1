@@ -59,9 +59,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ij.IJ.log;
-
-
 
 // todo: expose the number of iterations for the center of mass to the gui
 // todo: correlation tracking: it did not show an error when no object was selected
@@ -102,6 +99,8 @@ public class BigDataTracker implements PlugIn {
     TrackingGUI trackingGUI;
     private String gui_croppingFactor = "1.0";
     private int gui_background = 0;
+
+    Logger logger = new IJLazySwingLogger();
 
     // todo: put actual tracking into different class
 
@@ -336,7 +335,7 @@ public class BigDataTracker implements PlugIn {
             int i = 0, j = 0, k = 0;
             JFileChooser fc;
 
-            if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             if (e.getActionCommand().equals(buttonActions[i++])) {
@@ -348,7 +347,7 @@ public class BigDataTracker implements PlugIn {
                 Roi r = imp.getRoi();
 
                 if(r==null || !r.getTypeAsString().equals("Rectangle")) {
-                    IJ.showMessage("Please put a rectangular selection on the image");
+                    logger.error("Please put a rectangular selection on the image");
                     return;
                 }
 
@@ -379,7 +378,8 @@ public class BigDataTracker implements PlugIn {
 
                 Roi r = imp.getRoi();
                 if (r == null || ! (r.getTypeAsString().equals("Point") || r.getTypeAsString().equals("Rectangle")) ) {
-                    IJ.showMessage("Please use ImageJ's 'Point' or 'Rectangular' selection tool on image: '" + imp.getTitle()+"'");
+                    logger.error("Please use ImageJ's 'Point' or 'Rectangular' selection tool on image: '"
+                            + imp.getTitle() + "'");
                     return;
                 }
 
@@ -427,7 +427,7 @@ public class BigDataTracker implements PlugIn {
 
                 TableModel model = trackTable.getTable().getModel();
                 if(model == null) {
-                    IJ.showMessage("There are no tracks yet.");
+                    logger.error("There are no tracks yet.");
                     return;
                 }
                 fc = new JFileChooser(vss.getDirectory());
@@ -475,9 +475,9 @@ public class BigDataTracker implements PlugIn {
                         final URI uri = new URI("https://github.com/tischi/imagej-open-stacks-as-virtualstack/issues");
                         Desktop.getDesktop().browse(uri);
                     } catch (URISyntaxException uriEx) {
-                        IJ.showMessage(uriEx.toString());
+                        logger.error(uriEx.toString());
                     } catch (IOException ioEx) {
-                        IJ.showMessage(ioEx.toString());
+                        logger.error(ioEx.toString());
                     }
                 } else { /* TODO: error handling */ }
 
@@ -576,13 +576,12 @@ public class BigDataTracker implements PlugIn {
 
     public boolean logIfTrackingFinished() {
 
-        while(totalTimePointsTracked.get()<totalTimePointsToBeTracked) {
+        while(totalTimePointsTracked.get()<totalTimePointsToBeTracked)
+        {
             IJ.wait(500);
-            //log(""+totalTimePointsTracked.get()+" "+totalTimePointsToBeTracked);
+            //info(""+totalTimePointsTracked.get()+" "+totalTimePointsToBeTracked);
         }
-        Utils.threadlog(
-                "Tracking completed!"
-        );
+        logger.info("Tracking completed!");
         return true;
     }
 
@@ -603,13 +602,13 @@ public class BigDataTracker implements PlugIn {
 
     private void initialize() {
 
-        if ( !Utils.imagePlusHasVirtualStackOfStacks(imp) ) return;
+        if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
         VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
         FileInfoSer[][][] infos = vss.getFileInfosSer();
         if(infos[0][0][0].compression==6) {
-            log("This is a ZIP compressed data set." +
-                    "The tracking might thus not be super fast.");
+              logger.info("This is a ZIP compressed data set." +
+                      "The tracking might thus not be super fast.");
         }
 
         gui_pTrackingSize = new Point3D(55,55,40);
@@ -718,8 +717,8 @@ public class BigDataTracker implements PlugIn {
             Roi pr = new PointRoi(x,y);
             pr.setPosition(0,(int)z+1,t+1);
             imp.setRoi(pr);
-            //log(" rs="+rs+" r ="+r+" x="+x+" y="+y+" z="+z+" t="+t);
-            //log("t="+jTableSpots.getModel().getValueAt(r, 5));
+            //info(" rs="+rs+" r ="+r+" x="+x+" y="+y+" z="+z+" t="+t);
+            //info("t="+jTableSpots.getModel().getValueAt(r, 5));
         }
 
         @Override
@@ -765,7 +764,7 @@ public class BigDataTracker implements PlugIn {
 
     public void showTrackTable(){
         if(trackTable==null) {
-            IJ.showMessage("There are no tracks to show yet.");
+            logger.error("There are no tracks to show yet.");
             return;
         }
         TrackTablePanel ttp = new TrackTablePanel();
@@ -790,7 +789,7 @@ public class BigDataTracker implements PlugIn {
             }
             excel.close();
 
-        } catch(IOException e) { IJ.showMessage(e.toString()); }
+        } catch(IOException e) { logger.error(e.toString()); }
     }
 
     public int addTrackStart(ImagePlus imp) {
@@ -804,7 +803,7 @@ public class BigDataTracker implements PlugIn {
                              r.getPolygon().ypoints[0],
                              imp.getZ()-1);
         } else {
-            IJ.showMessage("Please use the point selection tool to mark an object.");
+            logger.error("Please use the point selection tool to mark an object.");
             return(-1);
         }
 
@@ -813,8 +812,8 @@ public class BigDataTracker implements PlugIn {
         if( t+gui_ntTracking > imp.getNFrames() )
         {
             ntTracking = imp.getNFrames() - t;
-            Utils.threadlog("Due to the track length that you requested, the track would have been longer than the movie;" +
-                    "The length of the track was adjusted to avoid this and will thus be shorter.");
+            logger.warning("Due to the requested track length, the track would have been longer than the movie; " +
+                    "the length of the track was thus adjusted.");
         }
 
         totalTimePointsToBeTracked += ntTracking;
@@ -860,7 +859,8 @@ public class BigDataTracker implements PlugIn {
                         Point3D correctedImageCenter = track.getXYZ(iPosition).subtract(offsetToImageCenter);
                         trackOffsets[iPosition] = computeOffset(correctedImageCenter, pImageSize);
                     }
-                    impA[i] = DataStreamingTools.makeCroppedVirtualStack(track.getImp(), trackOffsets, pImageSize, track.getTmin(), track.getTmax());
+                    impA[i] = DataStreamingTools.getCroppedVSS(track.getImp(), trackOffsets, pImageSize, track
+                            .getTmin(), track.getTmax());
 
                 }
                 else
@@ -875,7 +875,7 @@ public class BigDataTracker implements PlugIn {
                     }
                     catch(NumberFormatException nfe)
                     {
-                        IJ.showMessage("Please either enter 'all' or a number as the Cropping Factor");
+                        logger.error("Please either enter 'all' or a number as the Cropping Factor");
                         return;
                     }
 
@@ -885,13 +885,14 @@ public class BigDataTracker implements PlugIn {
                     {
                         trackOffsets[iPosition] = computeOffset(track.getXYZ(iPosition), pObjectSize);
                     }
-                    impA[i] = DataStreamingTools.makeCroppedVirtualStack(track.getImp(), trackOffsets, pObjectSize, track.getTmin(), track.getTmax());
+                    impA[i] = DataStreamingTools.getCroppedVSS(track.getImp(), trackOffsets, pObjectSize, track
+                            .getTmin(), track.getTmax());
 
                 }
 
                 if( impA[i] == null )
                 {
-                    log("The cropping failed!");
+                      logger.info("The cropping failed!");
                 }
                 else
                 {
@@ -982,11 +983,9 @@ public class BigDataTracker implements PlugIn {
             pSize = track.getObjectSize().multiply(trackingFactor);
             p0offset = computeOffset(track.getXYZ(0), pSize);
 
-            //
             // read data
             //
-
-            imp0 = vss.getCubeByTimeOffsetAndSize(tStart, channel, p0offset, pSize, pSubSample, background);
+            imp0 = vss.getDataCube(tStart, channel, p0offset, pSize, pSubSample, background);
 
             // iteratively compute the shift of the center of mass relative to the center of the image stack
             // using only half the image size for iteration
@@ -1045,20 +1044,20 @@ public class BigDataTracker implements PlugIn {
                 // load next image at the same position where the previous image has been loaded (p0offset)
                 // plus the computed shift (pShift), basically a linear motion model
                 // but curate this position according to the image bounds
-                //log("Position where previous image was loaded: " + p0offset);
-                //log("Position where previous image was loaded plus shift: " + p0offset.add(pShift));
+                //info("Position where previous image was loaded: " + p0offset);
+                //info("Position where previous image was loaded plus shift: " + p0offset.add(pShift));
                 //p1offset = DataStreamingTools.curatePositionOffsetSize(imp, p0offset.add(pShift), pSize);
                 p1offset = p0offset.add(pShift);
-                //log("Curatep0offset.add(pShift)d position where this image is loaded: " + p1offset);
+                //info("Curatep0offset.add(pShift)d position where this image is loaded: " + p1offset);
 
                 // load image
                 startTime = System.currentTimeMillis();
-                imp1 = vss.getCubeByTimeOffsetAndSize(itNow, channel, p1offset, pSize, pSubSample, background);
+                imp1 = vss.getDataCube(itNow, channel, p1offset, pSize, pSubSample, background);
                 elapsedReadingTime = System.currentTimeMillis() - startTime;
 
                 if (gui_trackingMethod == "correlation") {
 
-                    if(Utils.verbose) log("measuring drift using correlation...");
+                    if(Utils.verbose)  logger.info("measuring drift using correlation...");
 
                     // compute shift relative to previous time-point
                     startTime = System.currentTimeMillis();
@@ -1068,43 +1067,44 @@ public class BigDataTracker implements PlugIn {
 
                     // correct for sub-sampling
                     pShift = multiplyPoint3dComponents(pShift, pSubSample);
-                    //log("Correlation Tracking Shift: "+pShift);
+                    //info("Correlation Tracking Shift: "+pShift);
 
 
                     // take into account the different loading positions of this and the previous image
                     pShift = pShift.add(p1offset.subtract(p0offset));
-                    //log("Correlation Tracking Shift including image shift: "+pShift);
+                    //info("Correlation Tracking Shift including image shift: "+pShift);
 
-                    if(Utils.verbose) log("actual final shift is "+pShift.toString());
+                    if(Utils.verbose)   logger.info("actual final shift is " + pShift.toString());
 
                 } else if (gui_trackingMethod == "center of mass") {
 
-                    if(Utils.verbose) log("measuring drift using center of mass...");
+                    if(Utils.verbose)  logger.info("measuring drift using center of mass...");
 
                     // compute the different of the center of mass
                     // to the geometric center of imp1
                     startTime = System.currentTimeMillis();
-                    //log("timepoint: "+it);
+                    //info("timepoint: "+it);
                     pLocalShift = computeIterativeCenterOfMassShift16bit(imp1.getStack(), trackingFactor, iterations);
                     stopTime = System.currentTimeMillis();
                     elapsedProcessingTime = stopTime - startTime;
 
                     // correct for sub-sampling
                     pLocalShift = multiplyPoint3dComponents(pLocalShift, pSubSample);
-                    //log("Center of Mass Local Shift: "+pLocalShift);
+                    //info("Center of Mass Local Shift: "+pLocalShift);
 
-                    if(Utils.verbose) log("local shift after correction for sub-sampling is "+pLocalShift.toString());
+                    if(Utils.verbose)   logger.info("local shift after correction for sub-sampling is " + pLocalShift
+                            .toString());
 
                     // the drift corrected position in the global coordinate system is: p1offset.add(pLocalShift)
                     // in center coordinates this is: computeCenter(p1offset.add(pShift),pSize)
                     // relative to previous tracking position:
-                    //log(""+track.getXYZ(itPrevious).toString());
-                    //log(""+computeCenter(p1offset.add(pLocalShift),pSize).toString());
-                    //log(""+p1offset.add(pLocalShift).toString());
+                    //info(""+track.getXYZ(itPrevious).toString());
+                    //info(""+computeCenter(p1offset.add(pLocalShift),pSize).toString());
+                    //info(""+p1offset.add(pLocalShift).toString());
                     pShift = computeCenter(p1offset.add(pLocalShift),pSize).subtract(track.getXYZ(itPrevious-tStart));
-                    //log("Center of Mass Tracking Shift relative to previous position: "+pShift);
+                    //info("Center of Mass Tracking Shift relative to previous position: "+pShift);
 
-                    if(Utils.verbose) log("actual shift is "+pShift.toString());
+                    if(Utils.verbose)  logger.info("actual shift is "+pShift.toString());
 
                 }
 
@@ -1161,7 +1161,7 @@ public class BigDataTracker implements PlugIn {
                     float speed = (float)1.0*dn/dtt*1000;
                     float remainingTime = (float)1.0*nToGo/speed;
 
-                    Utils.threadlog(
+                    logger.info(
                             "progress = " + n + "/" + totalTimePointsToBeTracked +
                                     "; speed [n/s] = " + String.format("%.2g", speed) +
                                     "; remaining [s] = " + String.format("%.2g", remainingTime) +
@@ -1220,7 +1220,7 @@ public class BigDataTracker implements PlugIn {
             pMin = pCenter.subtract(pStackSize.multiply(trackingFraction / 2)); // div 2 because it is radius
             pMax = pCenter.add(pStackSize.multiply(trackingFraction / 2));
             pCenter = computeCenter16bit(stack, pMin, pMax);
-            //log("i "+i+" trackingFraction "+trackingFraction+" pCenter "+pCenter.toString());
+            //info("i "+i+" trackingFraction "+trackingFraction+" pCenter "+pCenter.toString());
         }
         return(pCenter.subtract(pStackCenter));
     }
@@ -1286,15 +1286,15 @@ public class BigDataTracker implements PlugIn {
         double yCenter = (ysum / sum) - 1;
         double zCenter = (zsum / sum) - 1;
 
-        //long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime; log("center of mass in [ms]: " + elapsedTime);
+        //long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime;  logger.info("center of mass in [ms]: " + elapsedTime);
 
         return(new Point3D(xCenter,yCenter,zCenter));
     }
 
     public Point3D computeShift16bitUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0) {
-        if(Utils.verbose) log("PhaseCorrelation phc = new PhaseCorrelation(...)");
+        if(Utils.verbose)   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
         PhaseCorrelation phc = new PhaseCorrelation(ImagePlusAdapter.wrap(imp1), ImagePlusAdapter.wrap(imp0), 5, true);
-        if(Utils.verbose) log("phc.process()... ");
+        if(Utils.verbose)   logger.info("phc.process()... ");
         phc.process();
         // get the first peak that is not a clean 1.0,
         // because 1.0 cross-correlation typically is an artifact of too much shift into black areas of both images
@@ -1305,7 +1305,7 @@ public class BigDataTracker implements PlugIn {
             ccPeak = pcp.get(iPeak).getCrossCorrelationPeak();
             if (ccPeak < 0.999) break;
         }
-        //log(""+ccPeak);
+        //info(""+ccPeak);
         int[] shift = pcp.get(iPeak).getPosition();
         return(new Point3D(shift[0],shift[1],shift[2]));
     }
@@ -1368,7 +1368,8 @@ public class BigDataTracker implements PlugIn {
             }
         }
 
-        long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime; log("center of mass in [ms]: " + elapsedTime);
+        long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime;
+        logger.info("center of mass in [ms]: " + elapsedTime);
 
         return(new Point3D(xmax,ymax,zmax));
     }
@@ -1384,14 +1385,14 @@ public class BigDataTracker implements PlugIn {
         t = imp.getT()-1;
 
         if(t+gui_ntTracking > imp.getNFrames()) {
-            IJ.showMessage("Your track would be longer than the movie!\n" +
+            logger.error("Your track would be longer than the movie!\n" +
                     "Please\n- reduce the 'Track length', or\n- move the time slider to an earlier time point.");
             return(-1);
         }
 
         totalTimePointsToBeTracked += ntTracking;
         int newTrackID = tracks.size();
-        //log("added new track start; id = "+newTrackID+"; starting [frame] = "+t+"; length [frames] = "+ntTracking);
+        //info("added new track start; id = "+newTrackID+"; starting [frame] = "+t+"; length [frames] = "+ntTracking);
         tracks.add(new Track(ntTracking));
         tracks.get(newTrackID).addLocation(new Point3D(0, 0, imp.getZ()-1), t, imp.getC()-1);
 

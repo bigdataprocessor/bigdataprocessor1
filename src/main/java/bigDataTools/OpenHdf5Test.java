@@ -48,6 +48,8 @@ import static ij.IJ.log;
 
 public class OpenHdf5Test {
 
+    Logger logger = new IJLazySwingLogger();
+
     public OpenHdf5Test() {
 
     }
@@ -59,11 +61,11 @@ public class OpenHdf5Test {
         browse(reader, reader.object().getGroupMemberInformation("/", true), "");
 
         HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/"+dataSet);
-        log("" + dsInfo.getRank());
+          logger.info("" + dsInfo.getRank());
         int nZ = (int)dsInfo.getDimensions()[0];
         int nY = (int)dsInfo.getDimensions()[1];
         int nX = (int)dsInfo.getDimensions()[2];
-        log("nx,ny,nz :"+nX+","+nY+","+nZ+",");
+          logger.info("nx,ny,nz :" + nX + "," + nY + "," + nZ + ",");
 
         final MDShortArray block = reader.uint16().readMDArrayBlockWithOffset(dataSet, new int[] {1, 150, 150}, new long[] {(int)nZ/2,70,70} );
         final short[] asFlatArray = block.getAsFlatArray();

@@ -41,8 +41,6 @@ import ij.io.FileInfo;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
-import static ij.IJ.log;
-
 // todo: replace all == with "equals"
 // TODO: extend VirtualStack rather than ImageStack ?
 
@@ -59,6 +57,8 @@ public class VirtualStackOfStacks extends ImageStack {
     String[] channelFolders;
     String[][][] fileList;
     String h5DataSet;
+
+    Logger logger = new IJLazySwingLogger();
 
     /** Creates a new, empty virtual stack of required size */
     public VirtualStackOfStacks(String directory, String[] channelFolders, String[][][] fileList, int nC, int nT, int nX, int nY, int nZ, int bitDepth, String fileType, String h5DataSet) {
@@ -117,13 +117,13 @@ public class VirtualStackOfStacks extends ImageStack {
     }
 
     public void logStatus() {
-            log("# VirtualStackOfStacks");
-            log("fileType: "+fileType);
-            log("x: "+nX);
-            log("y: "+nY);
-            log("z: "+nZ);
-            log("c: "+nC);
-            log("t: "+nT);
+              logger.info("# VirtualStackOfStacks");
+              logger.info("fileType: " + fileType);
+              logger.info("x: " + nX);
+              logger.info("y: " + nY);
+              logger.info("z: " + nZ);
+              logger.info("c: " + nC);
+              logger.info("t: " + nT);
     }
 
     public FileInfoSer[][][] getFileInfosSer() {
@@ -212,7 +212,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         } catch(Exception e) {
 
-            IJ.showMessage("Error: "+e.toString());
+             logger.error("Error: " + e.toString());
 
         }
 
@@ -288,12 +288,12 @@ public class VirtualStackOfStacks extends ImageStack {
         ImagePlus imp;
 
         if(Utils.verbose) {
-            log("# VirtualStackOfStacks.getProcessor");
-            log("requested slice [one-based]: "+(n+1));
-            log("c [one-based]: "+ (c+1));
-            log("z [one-based]: "+ (z+1));
-            log("t [one-based]: "+ (t+1));
-            log("opening file: "+directory+infos[c][t][z].directory+infos[c][t][z].fileName);
+              logger.info("# VirtualStackOfStacks.getProcessor");
+              logger.info("requested slice [one-based]: " + (n + 1));
+              logger.info("c [one-based]: " + (c + 1));
+              logger.info("z [one-based]: " + (z + 1));
+              logger.info("t [one-based]: " + (t + 1));
+              logger.info("opening file: " + directory + infos[c][t][z].directory + infos[c][t][z].fileName);
         }
 
         Point3D po, ps;
@@ -306,14 +306,14 @@ public class VirtualStackOfStacks extends ImageStack {
         po = new Point3D(0,0,z);
 
         if(fi.isCropped) {
-            // offset for cropping is added in  getCubeByTimeOffsetAndSize
+            // offset for cropping is added in  getDataCube
             ps = new Point3D(fi.pCropSize[0],fi.pCropSize[1],1);
         } else {
             ps = new Point3D(fi.width,fi.height,1);
         }
 
-        // imp = new OpenerExtension().openCroppedStackOffsetSize(directory, infos[c][t], dz, po, ps);
-        imp = getCubeByTimeOffsetAndSize(t, c, po, ps, new Point3D(1,1,1), 0);
+        // imp = new OpenerExtension().openCroppedStack(directory, infos[c][t], dz, po, ps);
+        imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0);
 
         return imp.getProcessor();
 
@@ -336,31 +336,33 @@ public class VirtualStackOfStacks extends ImageStack {
     }
 
     public ImagePlus getFullFrame(int t, int c, Point3D pSubSample) {
-        Point3D po, ps;
 
+        Point3D po, ps;
         po = new Point3D(0, 0, 0);
         if(infos[0][0][0].isCropped) {
+            // offset is added by getDataCube
             ps = infos[0][0][0].getCropSize();
         } else {
             ps = new Point3D(nX, nY, nZ);
         }
 
-        ImagePlus imp = getCubeByTimeOffsetAndSize(t, c, po, ps, pSubSample, 0);
+        ImagePlus imp = getDataCube(t, c, po, ps, pSubSample, 0);
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1) {
             return(resizeWidthAndHeight(imp,(int)pSubSample.getX(),(int)pSubSample.getY()));
         } else {
             return(imp);
         }
+
     }
 
-    public ImagePlus getCubeByTimeOffsetAndSize(int t, int c, Point3D po, Point3D ps, Point3D pSubSample, int background) {
+    public ImagePlus getDataCube(int t, int c, Point3D po, Point3D ps, Point3D pSubSample, int background) {
 
         ImagePlus impLoaded = null;
 
         if (Utils.verbose) {
-            log("# VirtualStackOfStacks.getCroppedFrameOffsetSize");
-            log("t: " + t);
-            log("c: " + c);
+              logger.info("# VirtualStackOfStacks.getDataCube");
+              logger.info("t: " + t);
+              logger.info("c: " + c);
         }
 
         FileInfoSer fi = infos[c][t][0];
@@ -383,7 +385,6 @@ public class VirtualStackOfStacks extends ImageStack {
         int sx = (int) (ps.getX() + 0.5);
         int sy = (int) (ps.getY() + 0.5);
         int sz = (int) (ps.getZ() + 0.5);
-
 
         // adjust ranges for loading to stay within the image bounds
 
@@ -408,9 +409,9 @@ public class VirtualStackOfStacks extends ImageStack {
         int nY = fi.height;
         int nZ = infos[c][t].length;
 
-        sx2 = (ox2+sx2-1 > nX-1) ? nX-ox2 : sx2;
-        sy2 = (oy2+sy2-1 > nY-1) ? nY-oy2 : sy2;
-        sz2 = (oz2+sz2-1 > nZ-1) ? nZ-oz2 : sz2;
+        sx2 = (ox2+sx2 > nX) ? nX-ox2 : sx2;
+        sy2 = (oy2+sy2 > nY) ? nY-oy2 : sy2;
+        sz2 = (oz2+sz2 > nZ) ? nZ-oz2 : sz2;
 
         //
         // check memory requirements
@@ -420,10 +421,7 @@ public class VirtualStackOfStacks extends ImageStack {
         int numStacks = 1;
         int bitDepth = this.getBitDepth();
 
-        if( ! Utils.checkMemoryRequirements(numPixels, bitDepth, numStacks) )
-        {
-            return(null);
-        }
+        if( ! Utils.checkMemoryRequirements(numPixels, bitDepth, numStacks) ) return(null);
 
         //
         // load the requested data into RAM
@@ -433,11 +431,11 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            impLoaded = new OpenerExtension().openCroppedStackOffsetSize(directory, infos[c][t], dz, po2, ps2);
+            impLoaded = new OpenerExtension().openCroppedStack(directory, infos[c][t], dz, po2, ps2);
 
             if (impLoaded == null)
             {
-                log("Error: loading failed!");
+                logger.info("Error: loading failed!");
                 return null;
             }
 
@@ -467,7 +465,7 @@ public class VirtualStackOfStacks extends ImageStack {
                 // - subtract mean intensity (if the cropping region around the object is not much larger
                 // than the object itself this will highlight the bright regions in the object)
                 // int mean = computeMean16bit(impLoaded.getStack());
-                // log("subtracting mean: " + mean);
+                // logger.info("subtracting mean: " + mean);
                 // - compute some lower percentile of the region
                 IJ.run(impLoaded, "Subtract...", "value=" + background + " stack");
             }
@@ -482,7 +480,7 @@ public class VirtualStackOfStacks extends ImageStack {
                 ip2.insert(ip, finalStackOffsetX, finalStackOffsetY);
                 if( z + finalStackOffsetZ > finalStack.size() )
                 {
-                    IJ.showMessage("Error due to z-subsampling");
+                     logger.error("Error due to z-subsampling");
                 }
                 finalStack.setProcessor(ip2, z + finalStackOffsetZ);
             }
@@ -567,6 +565,10 @@ public class VirtualStackOfStacks extends ImageStack {
         return nY;
     }
 
+    public int getDepth() {
+        return nZ;
+    }
+
     /** Returns the file name of the Nth image. */
     public String getSliceLabel(int n) {
         //int nFile;
@@ -619,9 +621,9 @@ public class VirtualStackOfStacks extends ImageStack {
     public ImagePlus getCubeByTimeCenterAndRadii(int t, int c, Point3D psub, Point3D pc, Point3D pr) {
 
         if(Utils.verbose) {
-            log("# VirtualStackOfStacks.getCroppedFrameCenterRadii");
-            log("t: "+t);
-            log("c: "+c);
+            logger.info("# VirtualStackOfStacks.getCroppedFrameCenterRadii");
+            logger.info("t: "+t);
+            logger.info("c: "+c);
             }
 
         FileInfoSer fi = infos[0][0][0];
@@ -639,7 +641,7 @@ public class VirtualStackOfStacks extends ImageStack {
         ImagePlus imp = new OpenerExtension().openCroppedStackCenterRadii(directory, infos[c][t], (int) psub.getZ(), pc, pr);
 
         if (imp==null) {
-            log("Error: loading failed!");
+            logger.info("Error: loading failed!");
             return null;
         } else {
             return imp;

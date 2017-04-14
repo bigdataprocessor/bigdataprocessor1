@@ -47,6 +47,7 @@ public class Track {
     boolean completed = false;
     int id;
     private ImagePlus imp;
+    Logger logger = new IJLazySwingLogger();
 
     Track(int n) {
         this.t = new int[n];
@@ -58,7 +59,7 @@ public class Track {
 
     public void addLocation(Point3D p, int t, int c) {
         if(i>n-1) {
-            IJ.showMessage("Error: track got longer than initialised.");
+             logger.error("Error: track got longer than initialised.");
             return;
         }
         this.p[i] = p;
