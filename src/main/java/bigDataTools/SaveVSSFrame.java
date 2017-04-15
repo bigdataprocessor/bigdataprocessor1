@@ -66,6 +66,8 @@ class SaveVSSFrame implements Runnable {
             for ( String binning : binnings )
             {
 
+                String newPath = path;
+
                 int[] binningA = Utils.delimitedStringToIntegerArray(binning,",");
 
                 // Bin
@@ -74,29 +76,31 @@ class SaveVSSFrame implements Runnable {
                 {
                     Binner binner = new Binner();
                     impChannelTime = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
+                    newPath = path + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
                 }
 
-                String path2 = path + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
 
                 if ( saveVolume )
                 {
                     // Save
                     //
-                    if (fileType.equals("TIFF"))
+                    if ( fileType.equals(Utils.TIFF) )
                     {
-                        saveAsTiffStack(impChannelTime, c, t, compression, path2);
+                        saveAsTiffStack(impChannelTime, c, t, compression, newPath);
                     }
-                    else if (fileType.equals("HDF5"))
+                    else if ( fileType.equals(Utils.HDF5) )
                     {
                         int compressionLevel = 0;
-                        saveAsHDF5(impChannelTime, c, t, compressionLevel, path2);
+                        saveAsHDF5(impChannelTime, c, t, compressionLevel, newPath);
                     }
-                    //logger.info("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+
+                    logger.debug("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+
                 }
 
                 if ( saveProjection )
                 {
-                    saveAsProjection(impChannelTime, c, t, path);
+                    saveAsTiffXYZMaxProjection(impChannelTime, c, t, newPath);
                 }
 
             }
@@ -107,9 +111,17 @@ class SaveVSSFrame implements Runnable {
 
     }
 
-    public void saveAsProjection(ImagePlus imp, int c, int t, String path)
+    public void saveAsTiffXYZMaxProjection(ImagePlus imp, int c, int t, String path)
     {
-        // TODO: implement
+        ProjectionXYZ projectionXYZ = new ProjectionXYZ(imp);
+        projectionXYZ.setDoscale(false);
+        ImagePlus impProjection = projectionXYZ.getXYZProject();
+
+        FileSaver fileSaver = new FileSaver(impProjection);
+        String sC = String.format("%1$02d", c);
+        String sT = String.format("%1$05d", t);
+        String pathCT = path + "--xyz-max-projection" + "--C" + sC + "--T" + sT + ".tif";
+        fileSaver.saveAsTiff(pathCT);
     }
 
     public void saveAsHDF5( ImagePlus imp, int c, int t, int compressionLevel, String path )

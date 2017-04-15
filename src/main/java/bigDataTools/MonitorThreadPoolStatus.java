@@ -25,7 +25,7 @@ class MonitorThreadPoolStatus {
             {
                 if (f.isDone() ) done++;
             }
-            logger.info(message + done + "/" + futures.size());
+            logger.progress(message + done + "/" + futures.size());
 
             try {
                 Thread.sleep(updateFrequencyMilliseconds);

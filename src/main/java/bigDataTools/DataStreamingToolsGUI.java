@@ -22,7 +22,6 @@ import static java.awt.Desktop.isDesktopSupported;
 
 public class DataStreamingToolsGUI extends JFrame implements ActionListener, FocusListener, ItemListener {
 
-
     JCheckBox cbLog = new JCheckBox("Verbose logging");
     JCheckBox cbLZW = new JCheckBox("LZW compression");
     JCheckBox cbSaveVolume = new JCheckBox("Save volume data");
@@ -33,14 +32,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfIOThreads = new JTextField("10", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
 
-    final String TIFF = "TIFF";
-    final String HDF5 = "HDF5";
-    final String INFO_FILE = "Info file";
-
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox channelTimePatternComboBox = new JComboBox(new String[] {"None",Utils.LOAD_CHANNELS_FROM_FOLDERS,".*_C<channel>_T<t>.tif"});
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
-    JComboBox comboFileTypeForSaving = new JComboBox(new String[] {TIFF,HDF5,INFO_FILE});
+    JComboBox comboFileTypeForSaving = new JComboBox(new String[] {Utils.TIFF,Utils.HDF5,Utils.INFO_FILE});
 
     final String BDV = "Big Data Viewer";
     JButton viewInBigDataViewer =  new JButton(BDV);
@@ -54,7 +49,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     final String STREAMfromInfoFile = "Stream from info file";
     JButton streamFromInfoFile =  new JButton(STREAMfromInfoFile);
 
-    final String LOAD_FULLY_INTO_RAM = "Load fully into RAM";
+    final String LOAD_FULLY_INTO_RAM = "Load current stream fully into RAM";
     JButton duplicateToRAM =  new JButton(LOAD_FULLY_INTO_RAM);
 
     final String CROPasNewStream = "Crop as new stream";
@@ -110,7 +105,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        panels.get(j).add(new JLabel("Multi-channel loading:"));
+        panels.get(j).add(new JLabel("Load multiple channels:"));
         channelTimePatternComboBox.setEditable(true);
         panels.get(j).add(channelTimePatternComboBox);
         mainPanels.get(k).add(panels.get(j++));
@@ -136,6 +131,17 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         streamFromInfoFile.setActionCommand(STREAMfromInfoFile);
         streamFromInfoFile.addActionListener(this);
         panels.get(j).add(streamFromInfoFile);
+        mainPanels.get(k).add(panels.get(j++));
+
+        mainPanels.get(k).add(new JSeparator(SwingConstants.HORIZONTAL));
+        panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
+        panels.get(j).add(new JLabel("LOAD FULLY"));
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        duplicateToRAM.setActionCommand(LOAD_FULLY_INTO_RAM);
+        duplicateToRAM.addActionListener(this);
+        panels.get(j).add(duplicateToRAM);
         mainPanels.get(k).add(panels.get(j++));
 
         jtp.add("Streaming", mainPanels.get(k++));
@@ -171,7 +177,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        panels.get(j).add(new JLabel("Binning x1,y1,z1;x2,y2,z2;... [pixels]"));
+        panels.get(j).add(new JLabel("Binnings [pixels]: x1,y1,z1; x2,y2,z2; ... "));
         panels.get(j).add(tfBinning);
         mainPanels.get(k).add(panels.get(j++));
 
@@ -190,13 +196,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         save.setActionCommand(SAVE);
         save.addActionListener(this);
         panels.get(j).add(save);
-        mainPanels.get(k).add(panels.get(j++));
-
-
-        panels.add(new JPanel());
-        duplicateToRAM.setActionCommand(LOAD_FULLY_INTO_RAM);
-        duplicateToRAM.addActionListener(this);
-        panels.get(j).add(duplicateToRAM);
         mainPanels.get(k).add(panels.get(j++));
 
         jtp.add("Saving", mainPanels.get(k++));
@@ -222,6 +221,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         panels.add(new JPanel());
         panels.get(j).add(new JLabel("I/O threads"));
         panels.get(j).add(tfIOThreads);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
         panels.get(j).add(cbLog);
         mainPanels.get(k).add(panels.get(j++));
 
@@ -258,11 +260,15 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     public void itemStateChanged( ItemEvent e )
     {
         Object source = e.getItemSelectable();
-        if (source == cbLog) {
-            if (e.getStateChange() == ItemEvent.DESELECTED) {
-                Utils.verbose = false;
-            } else {
-                Utils.verbose = true;
+        if (source == cbLog)
+        {
+            if ( e.getStateChange() == ItemEvent.DESELECTED )
+            {
+                logger.setShowDebug(false);
+            }
+            else
+            {
+                logger.setShowDebug(true);
             }
         }
     }
@@ -355,7 +361,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
                 String fileType = (String)comboFileTypeForSaving.getSelectedItem();
 
-                if ( fileType.equals(INFO_FILE) )
+                if ( fileType.equals(Utils.INFO_FILE) )
                 {
 
                     // Save the info file
@@ -369,8 +375,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     }); t1.start();
 
                 }
-                else if ( fileType.equals(TIFF)
-                        || fileType.equals(HDF5) )
+                else if ( fileType.equals(Utils.TIFF)
+                        || fileType.equals(Utils.HDF5) )
                 {
 
                     final int ioThreads = new Integer(tfIOThreads.getText());

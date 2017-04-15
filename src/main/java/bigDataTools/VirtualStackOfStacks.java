@@ -78,7 +78,7 @@ public class VirtualStackOfStacks extends ImageStack {
         this.infos = new FileInfoSer[nC][nT][];
         this.h5DataSet = h5DataSet;
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
             logStatus();
         }
 
@@ -110,7 +110,7 @@ public class VirtualStackOfStacks extends ImageStack {
         if(infos[0][0][0].fileName.endsWith(".tif"))
             this.fileType = "tif";
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
             logStatus();
         }
 
@@ -287,7 +287,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         ImagePlus imp;
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
               logger.info("# VirtualStackOfStacks.getProcessor");
               logger.info("requested slice [one-based]: " + (n + 1));
               logger.info("channel [one-based]: " + (c + 1));
@@ -359,7 +359,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         ImagePlus impLoaded = null;
 
-        if (Utils.verbose) {
+        if ( logger.isShowDebug() ) {
               logger.info("# VirtualStackOfStacks.getDataCube");
               logger.info("t: " + t);
               logger.info("channel: " + c);
@@ -620,7 +620,7 @@ public class VirtualStackOfStacks extends ImageStack {
 // todo: put the conversion from centerRadii to offsetSize into this function
     public ImagePlus getCubeByTimeCenterAndRadii(int t, int channel, Point3D psub, Point3D pc, Point3D pr) {
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
             logger.info("# VirtualStackOfStacks.getCroppedFrameCenterRadii");
             logger.info("t: "+t);
             logger.info("channel: "+channel);

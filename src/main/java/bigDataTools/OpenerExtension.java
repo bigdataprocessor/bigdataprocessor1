@@ -100,7 +100,7 @@ class OpenerExtension extends Opener {
         int imShortSize = nx * ny;
 
 
-        if (Utils.verbose) {
+        if ( logger.isShowDebug() ) {
               logger.info("# readDataCubeFromHdf5");
               logger.info("root directory: " + directory);
               logger.info("fi.directory: " + fi.directory);
@@ -202,7 +202,7 @@ class OpenerExtension extends Opener {
         readingTime += (System.currentTimeMillis() - startTime);
         totalTime = (System.currentTimeMillis() - totalTime);
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
               logger.info("readingTime [ms]: " + readingTime);
               logger.info("pixels read: " + asFlatArray.length);
               logger.info("effective reading speed [MB/s]: " + (double) nz * nx * ny * fi.bytesPerPixel / (
@@ -234,7 +234,7 @@ class OpenerExtension extends Opener {
         int nx = xe - xs + 1;
         int ny = ye - ys + 1;
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
               logger.info("# readDataCubeFromTiff");
               logger.info("root directory: " + directory);
               logger.info("info.length: " + info.length);
@@ -292,7 +292,7 @@ class OpenerExtension extends Opener {
 
         totalTime = (System.currentTimeMillis() - totalTime);
 
-        if(Utils.verbose)
+        if( logger.isShowDebug() )
         {
               int usefulBytesRead = nz*nx*ny*fi0.bytesPerPixel;
               logger.info("readingTime [ms]: " + readingTime);
@@ -533,7 +533,7 @@ class OpenerExtension extends Opener {
 
                 }
 
-                if(Utils.verbose) {
+                if( logger.isShowDebug() ) {
                       logger.info("z: " + z);
                       logger.info("zs: " + zs);
                       logger.info("dz: " + dz);

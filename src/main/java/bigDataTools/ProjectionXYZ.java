@@ -40,6 +40,8 @@ public class ProjectionXYZ {
     private double zscale;
     private double zf = 1;			//zfactor
 
+    private Logger logger = new IJLazySwingLogger();
+
     public ProjectionXYZ(ImagePlus imp){
         this.imp = imp;
         getZfactor();
@@ -52,10 +54,10 @@ public class ProjectionXYZ {
         this.yscale = calib.pixelHeight;
         this.zscale = calib.pixelDepth;
         if (this.xscale != this.yscale){
-            IJ.log("x and y scale is not same: use only x for calculating z factor.");
+            logger.debug("x and y scale is not same: use only x for calculating z factor.");
         }
         this.zf = this.zscale / this.xscale;
-        IJ.log("Z factor set to " + Double.toString(this.zf));
+        logger.debug("Z factor set to " + Double.toString(this.zf));
     }
 
     public ImagePlus getXYZProject(){
@@ -63,7 +65,7 @@ public class ProjectionXYZ {
         // Get image info and setups
         //ImagePlus img = WindowManager.getCurrentImage();
         if (imp.getImageStackSize() < 2){
-            IJ.log("The image is not a stack: aborted XYZ projection");
+            logger.warning("The image is not a stack: aborted XYZ projection");
             return null;
         }
         ImageStack stk = imp.getStack();
@@ -71,7 +73,7 @@ public class ProjectionXYZ {
         int x = stk.getWidth();
         int y = stk.getHeight();
         int z = stk.getSize();
-        IJ.log("Z-size:" + Integer.toString(z));
+        logger.debug("Z-size:" + Integer.toString(z));
         // Create xy Processor with room for xz and yz
         ImageProcessor outxz = stk.getProcessor(1).createProcessor(x,z);
         ImageProcessor outyz = stk.getProcessor(1).createProcessor(z,y);
@@ -95,18 +97,18 @@ public class ProjectionXYZ {
             }
         }
         if (doscale){
-            IJ.log("Z factor used:" + Double.toString(this.zf));
+            logger.debug("Z factor used:" + Double.toString(this.zf));
             double newzsize = ((double) outxz.getHeight()) * this.zf;
-            IJ.log("...original size:" + Integer.toString(outxz.getHeight()));
-            IJ.log("...new size:" + Double.toString(newzsize));
+            logger.debug("...original size:" + Integer.toString(outxz.getHeight()));
+            logger.debug("...new size:" + Double.toString(newzsize));
             outxz.setInterpolationMethod(ImageProcessor.BILINEAR);
             outxz = outxz.resize(outxz.getWidth(), (int) Math.round(newzsize));
 
             outyz.setInterpolationMethod(ImageProcessor.BILINEAR);
-            IJ.log("YZ width Before Scaling: " + Integer.toString(outyz.getWidth()));
+            logger.debug("YZ width Before Scaling: " + Integer.toString(outyz.getWidth()));
             outyz = outyz.resize((int) Math.round(newzsize), outyz.getHeight());
-            IJ.log("scaled XZ and YZ");
-            IJ.log("YZ width After Scaling: " + Integer.toString(outyz.getWidth()));
+            logger.debug("scaled XZ and YZ");
+            logger.debug("YZ width After Scaling: " + Integer.toString(outyz.getWidth()));
         }
         ImageProcessor output = stk.getProcessor(1).
                 createProcessor(x + outyz.getWidth() + FRAME_WIDTH, y + outxz.getHeight() +FRAME_WIDTH);

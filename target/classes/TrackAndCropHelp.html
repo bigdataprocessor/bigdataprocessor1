@@ -23,9 +23,10 @@
 <h3>Tracking sub-sampling</h3>
 <p width=400>
     You can specify binning (linear interpolation) in x and y, as well as sub-sampling in z and t.
-    Especially when working with Tiff stacks sub-sampling in z will help as only every zth plane will be loaded from disc to RAM.
-    Center of mass computation is so fast that binning in x and y makes no sense.
-    For correlation-based tracking however x and y binning helps both in terms of speed and also for noise reduction.
+    Especially when streaming from tiff stacks sub-sampling in z significantly speeds up the process,
+    because only every dz plane will be loaded. <br>
+    For center-of-mass based tracking x/y binning makes no sense. <br>
+    For correlation-based tracking however x/y binning is recommended as it increases the speed and reduces the noise.
 </p>
 </html>
 ###

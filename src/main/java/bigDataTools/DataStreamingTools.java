@@ -517,10 +517,17 @@ public class DataStreamingTools {
                 futures.add(es.submit(new ParseFilesIntoVirtualStack(imp, t)));
             }
 
-            MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                    futures,
-                    "Parsed files: ",
-                    500);
+
+            // Monitor the progress
+            //
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                            futures,
+                            "Parsed files: ",
+                            2000);
+                }
+            }); thread.start();
 
         }
         catch(Exception e)
@@ -545,7 +552,7 @@ public class DataStreamingTools {
             int nT = infos[0].length;
             int nZ = infos[0][0].length;
 
-            if(Utils.verbose) {
+            if( logger.isShowDebug() ) {
                 logger.info("nC: " + infos.length);
                 logger.info("nT: " + infos[0].length);
                 logger.info("nz: " + infos[0][0].length);
@@ -795,7 +802,7 @@ public class DataStreamingTools {
 
         FileInfoSer[][][] croppedInfos = new FileInfoSer[nC][nT][nZ];
 
-        if(Utils.verbose){
+        if( logger.isShowDebug() ){
             logger.info("# DataStreamingTools.openCroppedFromInfos");
             logger.info("tMin: " + tMin);
             logger.info("tMax: " + tMax);
@@ -851,7 +858,7 @@ public class DataStreamingTools {
 
 		imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
 
-        if(Utils.verbose) {
+        if( logger.isShowDebug() ) {
             logger.info("# DataStreamingTools.createImagePlusFromVSS");
             logger.info("nC: " + nC);
             logger.info("nZ: " + nZ);
@@ -888,10 +895,16 @@ public class DataStreamingTools {
             futures.add(es.submit(new LoadSingleFrameFromVSSIntoRAM(imp, t, impRAM)));
         }
 
-        MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                futures,
-                "Loaded into RAM: ",
-                500);
+
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                        futures,
+                        "Loaded into RAM: ",
+                        2000);
+            }
+        }); thread.start();
+
 
         String info = (String)imp.getProperty("Info");
         if (info!=null)
@@ -907,6 +920,8 @@ public class DataStreamingTools {
                                        String filePath, String fileType,
                                        String compression, int rowsPerStrip, int threads) {
 
+        // Do the jobs
+        //
         ExecutorService es = Executors.newFixedThreadPool(threads);
         List<Future> futures = new ArrayList<>();
         for ( int i = 0; i < imp.getNFrames(); i++ )
@@ -915,10 +930,17 @@ public class DataStreamingTools {
                                                     filePath, fileType, compression, rowsPerStrip)));
         }
 
-        MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                futures,
-                "Saved to disk: ",
-                2000);
+        // Monitor the progress
+        //
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                        futures,
+                        "Saved to disk: ",
+                        2000);
+            }
+        }); thread.start();
+
 
     }
 
@@ -1033,7 +1055,7 @@ public class DataStreamingTools {
 
         //OpenHdf5Test oh5 = new OpenHdf5Test();
         //oh5.openOneFileAsImp("/Users/tischi/Desktop/example-data/luxendo/ch0/fused_t00000_c0.h5");
-        //Utils.verbose = true;
+        // logger.isShowDebug()  = true;
 
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {

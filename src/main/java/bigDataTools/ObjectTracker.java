@@ -136,7 +136,7 @@ class ObjectTracker implements Runnable
 
             if (trackingSettings.trackingMethod.equals("correlation") ) {
 
-                if(Utils.verbose) logger.info("measuring drift using correlation...");
+                logger.debug("measuring drift using correlation...");
 
                 // compute shift relative to previous time-point
                 startTime = System.currentTimeMillis();
@@ -153,13 +153,13 @@ class ObjectTracker implements Runnable
                 pShift = pShift.add(p1offset.subtract(p0offset));
                 //info("Correlation ObjectTracker Shift including image shift: "+pShift);
 
-                if(Utils.verbose)  logger.info("actual final shift is " + pShift.toString());
+                if( logger.isShowDebug() )  logger.info("actual final shift is " + pShift.toString());
 
             }
             else if ( trackingSettings.trackingMethod.equals("center of mass") )
             {
 
-                if(Utils.verbose)  logger.info("measuring drift using center of mass...");
+                if( logger.isShowDebug() )  logger.info("measuring drift using center of mass...");
 
                 // compute the different of the center of mass
                 // to the geometric center of imp1
@@ -175,7 +175,7 @@ class ObjectTracker implements Runnable
                 pLocalShift = Utils.multiplyPoint3dComponents(pLocalShift, trackingSettings.subSamplingXYZ);
                 //info("Center of Mass Local Shift: "+pLocalShift);
 
-                if(Utils.verbose)
+                if( logger.isShowDebug() )
                 {
                     logger.info("local shift after correction for sub-sampling is " + pLocalShift.toString());
                 }
@@ -189,7 +189,7 @@ class ObjectTracker implements Runnable
                 pShift = Utils.computeCenterFromOffsetSize(
                         p1offset.add(pLocalShift), pSize).subtract(track.getPosition(tPrevious - tStart));
 
-                if(Utils.verbose)  logger.info("actual shift is "+pShift.toString());
+                if( logger.isShowDebug() )  logger.info("actual shift is "+pShift.toString());
 
             }
 
@@ -276,9 +276,9 @@ class ObjectTracker implements Runnable
     }
 
     private Point3D compute16bitShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0) {
-        if(Utils.verbose)   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
+        if( logger.isShowDebug() )   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
         PhaseCorrelation phc = new PhaseCorrelation(ImagePlusAdapter.wrap(imp1), ImagePlusAdapter.wrap(imp0), 5, true);
-        if(Utils.verbose)   logger.info("phc.process()... ");
+        if( logger.isShowDebug() )   logger.info("phc.process()... ");
         phc.process();
         // get the first peak that is not a clean 1.0,
         // because 1.0 cross-correlation typically is an artifact of too much shift into black areas of both images

@@ -49,11 +49,10 @@ import static ij.IJ.log;
 public class Utils {
 
     public static boolean verbose = false;
-    public static String version = "2016-Nov-21a";
-    public static String TRACKMATEDOGSUBPIXEL = "TrackMate_DoG_SubPixel";
-    public static String TRACKMATEDOG = "TrackMate_DoG";
-    public static String IMAGESUITE3D = "3D ImageSuite";
-    public static String LOAD_CHANNELS_FROM_FOLDERS = "sub-folders";
+    public static String LOAD_CHANNELS_FROM_FOLDERS = "from sub-folders";
+    public static String TIFF = "TIFF";
+    public static String HDF5 = "HDF5";
+    public static String INFO_FILE = "Info file";
     static Logger logger = new IJLazySwingLogger();
 
 
