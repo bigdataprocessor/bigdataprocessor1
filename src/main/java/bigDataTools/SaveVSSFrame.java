@@ -8,7 +8,6 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.FileSaver;
-import javafx.geometry.Point3D;
 import loci.common.services.ServiceFactory;
 import loci.formats.ImageWriter;
 import loci.formats.meta.IMetadata;
@@ -20,9 +19,7 @@ import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static ij.IJ.log;
+import ij.plugin.Binner;
 
 /**
  * Created by tischi on 11/04/17.
@@ -34,20 +31,24 @@ class SaveVSSFrame implements Runnable {
     String compression;
     int rowsPerStrip;
     int t;
-    Point3D binning;
+    String bin;
+    boolean saveVolume, saveProjection;
+
 
     Logger logger = new IJLazySwingLogger();
 
-    SaveVSSFrame(ImagePlus imp, int t, Point3D binning, String path, String fileType, String compression, int
+    SaveVSSFrame(ImagePlus imp, int t, String bin, boolean saveVolume, boolean saveProjection, String path, String fileType, String compression, int
             rowsPerStrip)
     {
         this.imp = imp;
         this.t = t;
-        this.binning = binning;
+        this.bin = bin;
         this.fileType = fileType;
         this.path = path;
         this.compression = compression;
         this.rowsPerStrip = rowsPerStrip;
+        this.saveProjection = saveProjection;
+        this.saveVolume = saveVolume;
     }
 
     public void run()
@@ -60,27 +61,55 @@ class SaveVSSFrame implements Runnable {
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
             ImagePlus impChannelTime = vss.getFullFrame(t, c);
 
-            // Bin
-            //
+            String[] binnings = bin.split(";");
 
-            // TODO
-
-            // Save
-            //
-            if (fileType.equals("TIFF"))
+            for ( String binning : binnings )
             {
-                saveAsTiffStack(impChannelTime, c, t, compression, path);
-            }
-            else if (fileType.equals("HDF5"))
-            {
-                int compressionLevel = 0;
-                saveAsHDF5(impChannelTime, c, t, compressionLevel, path);
+
+                int[] binningA = Utils.delimitedStringToIntegerArray(binning,",");
+
+                // Bin
+                //
+                if (binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1)
+                {
+                    Binner binner = new Binner();
+                    impChannelTime = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
+                }
+
+                String path2 = path + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
+
+                if ( saveVolume )
+                {
+                    // Save
+                    //
+                    if (fileType.equals("TIFF"))
+                    {
+                        saveAsTiffStack(impChannelTime, c, t, compression, path2);
+                    }
+                    else if (fileType.equals("HDF5"))
+                    {
+                        int compressionLevel = 0;
+                        saveAsHDF5(impChannelTime, c, t, compressionLevel, path2);
+                    }
+                    //logger.info("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+                }
+
+                if ( saveProjection )
+                {
+                    saveAsProjection(impChannelTime, c, t, path);
+                }
+
             }
 
-            logger.info("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+
 
         }
 
+    }
+
+    public void saveAsProjection(ImagePlus imp, int c, int t, String path)
+    {
+        // TODO: implement
     }
 
     public void saveAsHDF5( ImagePlus imp, int c, int t, int compressionLevel, String path )
@@ -95,7 +124,7 @@ class SaveVSSFrame implements Runnable {
 
         if (! (imp.getType() == ImagePlus.GRAY16) )
         {
-             logger.error("Sorry, only 16bit images are currently supported.");
+            logger.error("Sorry, only 16bit images are currently supported.");
             return;
         }
 
@@ -296,7 +325,7 @@ class SaveVSSFrame implements Runnable {
             String sC = String.format("%1$02d", c);
             String sT = String.format("%1$05d", t);
             String pathCT = path + "--C" + sC + "--T" + sT + ".tif";
-            logger.info("Saving " + pathCT);
+            //logger.info("Saving " + pathCT);
             fileSaver.saveAsTiffStack(pathCT);
         }
     }

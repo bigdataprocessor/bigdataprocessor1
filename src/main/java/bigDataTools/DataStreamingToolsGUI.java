@@ -2,7 +2,6 @@ package bigDataTools;
 
 import ij.IJ;
 import ij.ImagePlus;
-import javafx.geometry.Point3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.awt.Desktop.getDesktop;
@@ -25,38 +22,37 @@ import static java.awt.Desktop.isDesktopSupported;
 
 public class DataStreamingToolsGUI extends JFrame implements ActionListener, FocusListener, ItemListener {
 
-    AtomicInteger iProgress = new AtomicInteger(0);
-    int nProgress = 100;
-
 
     JCheckBox cbLog = new JCheckBox("Verbose logging");
     JCheckBox cbLZW = new JCheckBox("LZW compression");
+    JCheckBox cbSaveVolume = new JCheckBox("Save volume data");
+    JCheckBox cbSaveProjection = new JCheckBox("Save xyz max-projection");
 
+    JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
     JTextField tfIOThreads = new JTextField("10", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
 
+    final String TIFF = "TIFF";
+    final String HDF5 = "HDF5";
+    final String INFO_FILE = "Info file";
+
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox channelTimePatternComboBox = new JComboBox(new String[] {"None",Utils.LOAD_CHANNELS_FROM_FOLDERS,".*_C<channel>_T<t>.tif"});
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
+    JComboBox comboFileTypeForSaving = new JComboBox(new String[] {TIFF,HDF5,INFO_FILE});
 
     final String BDV = "Big Data Viewer";
     JButton viewInBigDataViewer =  new JButton(BDV);
 
-    final String SAVEasH5 = "Save as HDF5 stacks";
-    JButton saveAsH5 =  new JButton(SAVEasH5);
-
-    final String SAVEasTiff = "Save as tiff stacks";
-    JButton saveAsTIFF =  new JButton(SAVEasTiff);
+    final String SAVE = "Save";
+    JButton save =  new JButton(SAVE);
 
     final String STREAMfromFolder = "Stream from folder";
     JButton streamFromFolder =  new JButton(STREAMfromFolder);
 
     final String STREAMfromInfoFile = "Stream from info file";
     JButton streamFromInfoFile =  new JButton(STREAMfromInfoFile);
-
-    final String SAVEasInfoFile = "Save as info file";
-    JButton saveAsInfoFile =  new JButton(SAVEasInfoFile);
 
     final String LOAD_FULLY_INTO_RAM = "Load fully into RAM";
     JButton duplicateToRAM =  new JButton(LOAD_FULLY_INTO_RAM);
@@ -89,6 +85,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         cbLog.setSelected(false);
         cbLog.addItemListener(this);
         cbLZW.setSelected(false);
+        cbSaveVolume.setSelected(true);
+        cbSaveProjection.setSelected(false);
 
         int i = 0, j = 0, k = 0;
 
@@ -164,19 +162,22 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         // Saving
         //
 
-        mainPanels.add( new JPanel() );
+        mainPanels.add(new JPanel());
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
         panels.add(new JPanel());
-        saveAsInfoFile.setActionCommand(SAVEasInfoFile);
-        saveAsInfoFile.addActionListener(this);
-        panels.get(j).add(saveAsInfoFile);
+        panels.get(j).add(new JLabel("File type:"));
+        panels.get(j).add(comboFileTypeForSaving);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        saveAsTIFF.setActionCommand(SAVEasTiff);
-        saveAsTIFF.addActionListener(this);
-        panels.get(j).add(saveAsTIFF);
+        panels.get(j).add(new JLabel("Binning x1,y1,z1;x2,y2,z2;... [pixels]"));
+        panels.get(j).add(tfBinning);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        panels.get(j).add(cbSaveVolume);
+        panels.get(j).add(cbSaveProjection);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
@@ -186,10 +187,11 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        saveAsH5.setActionCommand(SAVEasH5);
-        saveAsH5.addActionListener(this);
-        panels.get(j).add(saveAsH5);
+        save.setActionCommand(SAVE);
+        save.addActionListener(this);
+        panels.get(j).add(save);
         mainPanels.get(k).add(panels.get(j++));
+
 
         panels.add(new JPanel());
         duplicateToRAM.setActionCommand(LOAD_FULLY_INTO_RAM);
@@ -328,45 +330,67 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             imp.updateAndDraw();
             imp.resetDisplayRange();
         }
-        else if (e.getActionCommand().equals(SAVEasInfoFile))
+        else if (e.getActionCommand().equals(SAVE))
         {
 
             ImagePlus imp = IJ.getImage();
             if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
+            // Check that all image files have been parsed
+            //
+            if (vss.numberOfUnparsedFiles() > 0)
+            {
+                logger.error("There are still " + vss.numberOfUnparsedFiles() +
+                        " files in the folder that have not been parsed yet.\n" +
+                        "Please try again later (check ImageJ's status bar).");
+                return;
+            }
+
             fc = new JFileChooser(vss.getDirectory());
             int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
                 final File file = fc.getSelectedFile();
 
-                // Check that all image files have been parsed
-                //
-                int numberOfUnparsedFiles = vss.numberOfUnparsedFiles();
-                if(numberOfUnparsedFiles > 0) {
-                    logger.error("There are still " + numberOfUnparsedFiles +
-                            " files in the folder that have not been parsed yet.\n" +
-                            "Please try again later (check ImageJ's status bar).");
-                    return;
+                String fileType = (String)comboFileTypeForSaving.getSelectedItem();
+
+                if ( fileType.equals(INFO_FILE) )
+                {
+
+                    // Save the info file
+                    //
+                    Thread t1 = new Thread(new Runnable() {
+                        public void run()
+                        {
+                            logger.info("Saving: " + file.getAbsolutePath());
+                            dataStreamingTools.writeFileInfosSer(vss.getFileInfosSer(), file.getAbsolutePath());
+                        }
+                    }); t1.start();
+
                 }
+                else if ( fileType.equals(TIFF)
+                        || fileType.equals(HDF5) )
+                {
 
-                // Save the info file
-                //
-                Thread t1 = new Thread(new Runnable() {
-                    public void run() {
-                        logger.info("Saving: " + file.getAbsolutePath());
-                        dataStreamingTools.writeFileInfosSer(vss.getFileInfosSer(), file.getAbsolutePath());
-                    }
-                }); t1.start();
+                    final int ioThreads = new Integer(tfIOThreads.getText());
 
+                    // Check that there is enough memory to hold the data in RAM while saving
+                    //
+                    if( ! Utils.checkMemoryRequirements(imp, Math.min(ioThreads, imp.getNFrames())) ) return;
+
+                    String compression = "";
+                    if(cbLZW.isSelected())
+                        compression="LZW";
+
+                    DataStreamingTools.saveVSSAsStacks(imp, tfBinning.getText(), cbSaveVolume.isSelected(), cbSaveProjection.isSelected(),
+                            file.getAbsolutePath(), fileType,
+                            compression, rowsPerStrip, ioThreads);
+
+                }
 
             }
 
-        }
-        else if ( e.getActionCommand().equals(SAVEasTiff)
-                || e.getActionCommand().equals(SAVEasH5) )
-        {
-            actionSaveAsStacks(e);
         }
         else if (e.getActionCommand().equals(LOAD_FULLY_INTO_RAM))
         {
@@ -506,52 +530,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         return(toolTipTexts.toArray(new String[0]));
     }
 
-    private void actionSaveAsStacks( ActionEvent e ) {
 
-        final int ioThreads = new Integer(tfIOThreads.getText());
-        final int rowsPerStrip = new Integer(tfRowsPerStrip.getText());
-        Point3D binning = new Point3D(1,1,1); // TODO: make GUI element
-
-        ImagePlus imp = IJ.getImage();
-        if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-
-        // Check that all headers have been parsed
-        //
-        if( vss.numberOfUnparsedFiles() > 0 )
-        {
-            logger.error("There are still " + vss.numberOfUnparsedFiles() +
-                    " files in the folder that have not been parsed yet.\n" +
-                    "Please try again later.");
-            return;
-        }
-
-        // Check that there is enough memory to hold the data in RAM while saving
-        //
-        if( ! Utils.checkMemoryRequirements(imp, Math.min(ioThreads, imp.getNFrames())) ) return;
-
-        fc = new JFileChooser(vss.getDirectory());
-        int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-            final File file = fc.getSelectedFile();
-
-            String compression = "";
-            if(cbLZW.isSelected())
-                compression="LZW";
-
-            String fileType = "";
-            if(e.getActionCommand().equals(SAVEasH5))
-                fileType = "HDF5";
-            else if(e.getActionCommand().equals(SAVEasTiff))
-                fileType = "TIFF";
-
-            DataStreamingTools.saveVSSAsStacks(imp, binning, file.getAbsolutePath(), fileType,
-                    compression, rowsPerStrip, ioThreads);
-
-        }
-
-
-    }
 
 }

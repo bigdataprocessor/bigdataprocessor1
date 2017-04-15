@@ -519,7 +519,7 @@ public class DataStreamingTools {
 
             MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                     futures,
-                    "Loaded into RAM: ",
+                    "Parsed files: ",
                     500);
 
         }
@@ -903,21 +903,22 @@ public class DataStreamingTools {
 
     }
 
-    public static void saveVSSAsStacks(ImagePlus imp, Point3D binning, String filePath, String fileType,
-        String compression, int rowsPerStrip, int threads) {
+    public static void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
+                                       String filePath, String fileType,
+                                       String compression, int rowsPerStrip, int threads) {
 
         ExecutorService es = Executors.newFixedThreadPool(threads);
         List<Future> futures = new ArrayList<>();
         for ( int i = 0; i < imp.getNFrames(); i++ )
         {
-            futures.add(es.submit(new SaveVSSFrame(imp, i, binning,
-                    filePath, fileType, compression, rowsPerStrip)));
+            futures.add(es.submit(new SaveVSSFrame(imp, i, bin, saveVolume, saveProjection,
+                                                    filePath, fileType, compression, rowsPerStrip)));
         }
 
         MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                 futures,
                 "Saved to disk: ",
-                500);
+                2000);
 
     }
 
