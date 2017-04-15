@@ -2,6 +2,7 @@ package bigDataTools;
 
 import ij.IJ;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -13,22 +14,18 @@ class MonitorThreadPoolStatus {
 
     private static Logger logger = new IJLazySwingLogger();
 
-    public MonitorThreadPoolStatus(){
-    }
-
-    public static void showProgressAndWaitUntilDone(ExecutorService es, Future[] futures, String message, int updateFrequencyMilliseconds) {
-
-        // Wait until all tasks are done and info status
-        es.shutdown();
+    public static void showProgressAndWaitUntilDone(List<Future> futures,
+                                                    String message,
+                                                    int updateFrequencyMilliseconds) {
         int done = 0;
-        while( done != futures.length )
+        while( done != futures.size() )
         {
             done = 0;
             for ( Future f : futures )
             {
                 if (f.isDone() ) done++;
             }
-            logger.info(message + done + "/" + futures.length);
+            logger.info(message + done + "/" + futures.size());
 
             try {
                 Thread.sleep(updateFrequencyMilliseconds);

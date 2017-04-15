@@ -36,11 +36,11 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
     String[] texts = {
             "Object size: x,y,z [pixels]",
-            "Window size [factor]",
-            "xy-binning & zt-sub-sampling: dx, dy, dz, dt [pixels, frames]",
+            "Tracking window size [factor]",
+            "dx, dy, dz, dt [pixels, frames]",
             "Length [frames]",
             "Background value [gray values]",
-            "Resize the tracked region by [factor]"
+            "Resize objects by [factor]"
     };
 
     String[] buttonActions = {

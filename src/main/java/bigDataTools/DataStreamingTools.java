@@ -65,7 +65,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,7 +97,7 @@ public class DataStreamingTools {
     }
 
     // TODO: split up in simpler methods
-    public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int nIOthreads) {
+    public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int numIOThreads) {
         String[][] fileLists; // files in sub-folders
         String[][][] ctzFileList;
         int t = 0, z = 0, c = 0;
@@ -507,32 +506,26 @@ public class DataStreamingTools {
         //
         // obtain file information for each channel, t, z
         //
-        try {
-
-            // Initialize
-            //
-            int nProgress = nT;
-            AtomicInteger iProgress = new AtomicInteger(0);
-            int nThreads = Math.min(nProgress, nIOthreads);
-
-            // Monitor progress
-            //
-            /*
-            Thread thread = new Thread(new MonitorThreadPoolStatus(iProgress, nProgress, "Analyzed file"));
-            thread.start();
-            */
-
+        try
+        {
             // Spawn the threads
             //
-            ExecutorService es = Executors.newCachedThreadPool();
-            for( int iThread=0; iThread < nThreads; iThread++ )
+            ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
+            List<Future> futures = new ArrayList<>();
+            for ( t = 0; t < nT; t++ )
             {
-                es.execute(new SetFilesInVirtualStack(imp, iProgress, nProgress));
+                futures.add(es.submit(new ParseFilesIntoVirtualStack(imp, t)));
             }
 
+            MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                    futures,
+                    "Loaded into RAM: ",
+                    500);
 
-        } catch(Exception e) {
-            IJ.showMessage("Error: "+e.toString());
+        }
+        catch(Exception e)
+        {
+            logger.error(e.toString());
         }
 
         return(imp);
@@ -889,14 +882,14 @@ public class DataStreamingTools {
         // Multi-threaded loading into RAM (increases speed if SSDs are available)
         //
         ExecutorService es = Executors.newFixedThreadPool(nIOthreads);
-        Future[] futures = new Future[imp.getNFrames()];
-        for ( int i = 0; i < imp.getNFrames(); i++ )
+        List<Future> futures = new ArrayList<>();
+        for ( int t = 0; t < imp.getNFrames(); t++ )
         {
-            futures[i] = es.submit(new LoadSingleFrameFromVSSIntoRAM(imp, i, impRAM));
+            futures.add(es.submit(new LoadSingleFrameFromVSSIntoRAM(imp, t, impRAM)));
         }
 
         MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                es, futures,
+                futures,
                 "Loaded into RAM: ",
                 500);
 
@@ -914,85 +907,75 @@ public class DataStreamingTools {
         String compression, int rowsPerStrip, int threads) {
 
         ExecutorService es = Executors.newFixedThreadPool(threads);
-        Future[] futures = new Future[imp.getNFrames()];
+        List<Future> futures = new ArrayList<>();
         for ( int i = 0; i < imp.getNFrames(); i++ )
         {
-            futures[i] = es.submit(new SaveVSSFrame(imp, i, binning,
-                    filePath, fileType, compression, rowsPerStrip));
+            futures.add(es.submit(new SaveVSSFrame(imp, i, binning,
+                    filePath, fileType, compression, rowsPerStrip)));
         }
 
         MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                es, futures,
+                futures,
                 "Saved to disk: ",
                 500);
 
     }
 
 
-    class SetFilesInVirtualStack implements Runnable {
+    class ParseFilesIntoVirtualStack implements Runnable {
         ImagePlus imp;
-        AtomicInteger iProgress;
-        private int nProgress;
+        private int t;
 
-        SetFilesInVirtualStack(ImagePlus imp, AtomicInteger iProgress, int nProgress) {
+        ParseFilesIntoVirtualStack( ImagePlus imp, int t )
+        {
             this.imp = imp;
-            this.iProgress = iProgress;
-            this.nProgress = nProgress;
-
+            this.t = t;
         }
 
         public void run() {
 
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            while(true) {
+            for ( int c = 0; c < vss.nC; c++ )
+            {
+                vss.setStackFromFile(t, c);
+            }
 
-                int t = iProgress.getAndAdd(1);
+            if ( t == 0 )
+            {
+                showImageAndInfo(vss);
+            }
 
-                if ((t+1) > nProgress) return;
+        }
 
-                for (int c = 0; c < vss.nC; c++) {
+        public void showImageAndInfo(VirtualStackOfStacks vss)
+        {
+            // show image
+            //
+            if (vss != null && vss.getSize() > 0) {
+                imp = createImagePlusFromVSS(vss);
+            } else {
+                logger.error("Something went wrong loading the first image stack!");
+                return;
+            }
 
-                    vss.setStackFromFile(t, c);
+            Utils.show(imp);
+            imp.setTitle("stream"); // TODO: get the selected directory as image name
 
-                }
+            // show compression info
+            //
+            FileInfoSer[][][] infos = vss.getFileInfosSer();
 
-                // show image window once time-point 0 is loaded
-                if (t == 0) {
-
-                    if (vss != null && vss.getSize() > 0) {
-                        imp = createImagePlusFromVSS(vss);
-                    } else {
-                        IJ.showMessage("Something went wrong loading the first image stack!");
-                        return;
-                    }
-
-                    Utils.show(imp);
-                    imp.setTitle("stream"); // TODO: get the selected directory as image name
-
-
-                    //
-                    // info compression
-                    //
-                    FileInfoSer[][][] infos = vss.getFileInfosSer();
-
-                    if(infos[0][0][0].compression == 0)
-                        logger.info("Compression = Unknown");
-                    else if(infos[0][0][0].compression == 1)
-                        logger.info("Compression = None");
-                    else if(infos[0][0][0].compression == 2)
-                        logger.info("Compression = LZW");
-                    else if(infos[0][0][0].compression == 6)
-                        logger.info("Compression = ZIP");
-                    else
-                        logger.info("Compression = " + infos[0][0][0].compression);
-
-                }
-
-
-            } // t-loop
-
-
+            if(infos[0][0][0].compression == 0)
+                logger.info("Compression = Unknown");
+            else if(infos[0][0][0].compression == 1)
+                logger.info("Compression = None");
+            else if(infos[0][0][0].compression == 2)
+                logger.info("Compression = LZW");
+            else if(infos[0][0][0].compression == 6)
+                logger.info("Compression = ZIP");
+            else
+                logger.info("Compression = " + infos[0][0][0].compression);
 
         }
 

@@ -106,7 +106,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        panels.get(j).add(new JLabel("Only load files matching:"));
+        panels.get(j).add(new JLabel("Load files matching:"));
         panels.get(j).add(filterPatternComboBox);
         filterPatternComboBox.setEditable(true);
         mainPanels.get(k).add(panels.get(j++));
