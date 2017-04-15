@@ -230,8 +230,6 @@ class ObjectTracker implements Runnable
                                long elapsedReadingTime, long elapsedProcessingTime)
     {
 
-        IJ.wait(5000);
-
         track.addLocation(t, location);
 
         trackTable.addRow(new Object[]{
@@ -241,6 +239,7 @@ class ObjectTracker implements Runnable
 
         bigDataTracker.addLocationToOverlay(track, t);
 
+        // TODO: make this somehow a logger.progress
         logger.info("Track ID: " + track.getID() +
                 "; Time points tracked: " + (t - track.getTmin() + 1) + "/" + track.getLength() +
                 "; reading [ms] = " + elapsedReadingTime +

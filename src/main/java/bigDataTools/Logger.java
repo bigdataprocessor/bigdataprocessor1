@@ -30,8 +30,7 @@ public interface Logger {
      *
      * @param message
      */
-    void progress(String message);
-
+    void progress(String message, String progress);
 
     /**
      * shows important messages that should not be overlooked by the user
