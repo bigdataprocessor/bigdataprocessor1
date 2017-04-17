@@ -23,7 +23,8 @@ package bigDataTools;
  *
  */
 
-import ij.IJ;
+import bigDataTools.logging.IJLazySwingLogger;
+import bigDataTools.logging.Logger;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;

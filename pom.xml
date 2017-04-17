@@ -35,7 +35,7 @@
         </developers>
 
 	<properties>
-		<main-class>bigDataTools.DataStreamingTools</main-class>
+		<main-class>bigDataTools.dataStreamingTools.DataStreamingTools</main-class>
         </properties>
 
     <repositories>
