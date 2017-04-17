@@ -113,35 +113,7 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots$1.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots$2.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/BigDataTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/BigDataTrackerGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/BigDataTrackerPlugIn.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerPlugIn.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/DataStreamingToolsGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/DataStreamingToolsPlugIn.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsPlugIn.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/FastTiffDecoder.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/FileInfoSer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/IJLazySwingLogger.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/LoadSingleFrameFromVSSIntoRAM.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Logger.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/MonitorThreadPoolStatus.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/MonitorThreadPoolStatus.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/ObjectTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/OpenHdf5Test.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/OpenHdf5Test.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/OpenerExtension.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/SaveVSSFrame.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Track.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/Track.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/TrackTable.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackTable.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/TrackTablePanel.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackTablePanel.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/TrackingSettings.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/ProjectionXYZ.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/ProjectionXYZ.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/ProjectionXYZ.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/ProjectionXYZ.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/plugins.config" afterPath="$PROJECT_DIR$/src/main/resources/plugins.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/plugins.config" afterPath="$PROJECT_DIR$/target/classes/plugins.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -277,10 +249,11 @@
       <file leaf-file-name="MonitorThreadPoolStatus.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/MonitorThreadPoolStatus.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6448598">
-              <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.3345725">
+              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#showProgressAndWaitUntilDone#0;class#MonitorThreadPoolStatus#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -932,13 +905,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2752881" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2752881" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37931034" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1856,10 +1829,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/MonitorThreadPoolStatus.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6448598">
-          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.3345725">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#showProgressAndWaitUntilDone#0;class#MonitorThreadPoolStatus#0" expanded="true" />
           </folding>
         </state>
       </provider>
