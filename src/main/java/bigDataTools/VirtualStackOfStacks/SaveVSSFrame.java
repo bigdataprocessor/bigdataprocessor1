@@ -72,6 +72,7 @@ public class SaveVSSFrame implements Runnable {
             {
 
                 String newPath = path;
+                ImagePlus impBinned = impChannelTime;
 
                 int[] binningA = Utils.delimitedStringToIntegerArray(binning,",");
 
@@ -80,7 +81,7 @@ public class SaveVSSFrame implements Runnable {
                 if (binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1)
                 {
                     Binner binner = new Binner();
-                    impChannelTime = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
+                    impBinned = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
                     newPath = path + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
                 }
 
@@ -91,12 +92,12 @@ public class SaveVSSFrame implements Runnable {
                     //
                     if ( fileType.equals(Utils.FileType.TIFF) )
                     {
-                        saveAsTiffStack(impChannelTime, c, t, compression, newPath);
+                        saveAsTiffStack( impBinned, c, t, compression, newPath );
                     }
                     else if ( fileType.equals(Utils.FileType.HDF5) )
                     {
                         int compressionLevel = 0;
-                        saveAsHDF5(impChannelTime, c, t, compressionLevel, newPath);
+                        saveAsHDF5(impBinned, c, t, compressionLevel, newPath);
                     }
 
                     logger.debug("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
@@ -105,7 +106,7 @@ public class SaveVSSFrame implements Runnable {
 
                 if ( saveProjection )
                 {
-                    saveAsTiffXYZMaxProjection(impChannelTime, c, t, newPath);
+                    saveAsTiffXYZMaxProjection(impBinned, c, t, newPath);
                 }
 
             }
