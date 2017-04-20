@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/BigDataTools__jar.xml" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/Parameter.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParameterCollection.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParameterType.class" afterPath="" />
@@ -115,9 +114,7 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots$2.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/plugins.config" afterPath="$PROJECT_DIR$/src/main/resources/plugins.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/plugins.config" afterPath="$PROJECT_DIR$/target/classes/plugins.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -140,65 +137,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="934" column="34" selection-start-line="934" selection-start-column="34" selection-end-line="934" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.44726562">
+              <caret line="583" column="0" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
               <folding>
-                <element signature="e#0#41757#0" expanded="false" />
-                <element signature="imports" expanded="false" />
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#4229#4231#0" expanded="false" />
-                <element signature="e#5281#5283#0" expanded="false" />
-                <element signature="e#5584#5586#0" expanded="false" />
-                <element signature="e#6305#6307#0" expanded="false" />
-                <element signature="e#6424#6426#0" expanded="false" />
-                <element signature="e#7117#7159#0" expanded="false" />
-                <element signature="e#7940#7942#0" expanded="false" />
-                <element signature="e#10411#10413#0" expanded="false" />
-                <element signature="e#10624#10626#0" expanded="false" />
-                <element signature="e#12476#12478#0" expanded="false" />
-                <element signature="e#14481#14483#0" expanded="false" />
-                <element signature="e#14791#14793#0" expanded="false" />
-                <element signature="e#16344#16346#0" expanded="false" />
-                <element signature="e#16504#16521#0" expanded="false" />
-                <element signature="e#18060#18062#0" expanded="false" />
-                <element signature="e#18376#18378#0" expanded="false" />
-                <element signature="e#18482#18502#0" expanded="false" />
-                <element signature="e#18810#18833#0" expanded="false" />
-                <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="class#23717:23906" expanded="false" />
-                <element signature="e#23819#23820#0" expanded="false" />
-                <element signature="e#23895#23896#0" expanded="false" />
-                <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#27077#27084#0" expanded="false" />
-                <element signature="e#28545#28572#0" expanded="false" />
+                <element signature="e#4295#4297#0" expanded="false" />
+                <element signature="e#5436#5438#0" expanded="false" />
+                <element signature="e#5751#5753#0" expanded="false" />
+                <element signature="e#6520#6522#0" expanded="false" />
+                <element signature="e#6647#6649#0" expanded="false" />
+                <element signature="e#7352#7394#0" expanded="false" />
+                <element signature="e#8203#8205#0" expanded="false" />
+                <element signature="e#10898#10900#0" expanded="false" />
+                <element signature="e#11116#11118#0" expanded="false" />
+                <element signature="e#15293#15295#0" expanded="false" />
+                <element signature="e#17447#17449#0" expanded="false" />
+                <element signature="e#17620#17637#0" expanded="false" />
+                <element signature="e#19414#19416#0" expanded="false" />
+                <element signature="e#19673#19675#0" expanded="false" />
+                <element signature="e#19779#19799#0" expanded="false" />
+                <element signature="e#20105#20128#0" expanded="false" />
+                <element signature="class#20187:20475" expanded="false" />
+                <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
+                <element signature="class#25198:25399" expanded="false" />
+                <element signature="e#28656#28663#0" expanded="false" />
+                <element signature="e#30260#30287#0" expanded="false" />
                 <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#30227#30250#0" expanded="false" />
-                <element signature="e#30592#30666#0" expanded="false" />
-                <element signature="class#30994:31241" expanded="false" />
-                <element signature="method#run#0;class#30994:31241" expanded="false" />
-                <element signature="e#31790#31804#0" expanded="false" />
-                <element signature="e#32210#32233#0" expanded="false" />
-                <element signature="class#32284:32529" expanded="false" />
-                <element signature="method#run#0;class#32284:32529" expanded="false" />
-                <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#33225#33238#0" expanded="false" />
-                <element signature="e#33630#33654#0" expanded="false" />
-                <element signature="method#main#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#34796#34859#0" expanded="false" />
-                <element signature="e#35297#35362#0" expanded="false" />
-                <element signature="e#35832#35922#0" expanded="false" />
-                <element signature="class#36776:36980" expanded="false" />
-                <element signature="method#run#0;class#36776:36980" expanded="false" />
+                <element signature="e#31980#32003#0" expanded="false" />
+                <element signature="e#32345#32419#0" expanded="false" />
+                <element signature="class#32745:33004" expanded="false" />
+                <element signature="e#33569#33583#0" expanded="false" />
+                <element signature="e#33955#33978#0" expanded="false" />
+                <element signature="class#34029:34286" expanded="false" />
+                <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
+                <element signature="e#34992#35005#0" expanded="false" />
+                <element signature="e#35433#35457#0" expanded="false" />
+                <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
+                <element signature="e#36668#36731#0" expanded="false" />
+                <element signature="e#37169#37234#0" expanded="false" />
+                <element signature="e#37704#37794#0" expanded="false" />
+                <element signature="class#38647:38863" expanded="false" />
+                <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
+                <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -254,10 +237,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugins.config" pinned="false" current-in-tab="true">
+      <file leaf-file-name="plugins.config" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/plugins.config">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39252338">
+            <state vertical-scroll-proportion="0.0">
               <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
@@ -367,12 +350,12 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/MonitorThreadPoolStatus.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/LoadSingleFrameFromVSSIntoRAM.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/LoadFrameFromVSSIntoRAM.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/SaveVSSFrame.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/MonitorThreadPoolStatus.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
         <option value="$PROJECT_DIR$/src/main/resources/plugins.config" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
       </list>
     </option>
   </component>
@@ -397,8 +380,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="106" />
-    <option name="y" value="23" />
+    <option name="x" value="94" />
+    <option name="y" value="34" />
     <option name="width" value="1231" />
     <option name="height" value="873" />
   </component>
@@ -487,11 +470,85 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="out" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="artifacts" />
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dataStreamingTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="out" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -693,8 +750,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="106" y="23" width="1231" height="873" extended-state="0" />
-    <editor active="false" />
+    <frame x="94" y="34" width="1231" height="873" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -706,13 +763,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27400768" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27400768" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30277544" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30277544" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -793,7 +850,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>931</line>
+          <line>1054</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
@@ -824,59 +881,45 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="1070" column="10" selection-start-line="1070" selection-start-column="10" selection-end-line="1070" selection-end-column="10" />
           <folding>
-            <element signature="e#0#41757#0" expanded="false" />
-            <element signature="imports" expanded="false" />
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#4229#4231#0" expanded="false" />
-            <element signature="e#5281#5283#0" expanded="false" />
-            <element signature="e#5584#5586#0" expanded="false" />
-            <element signature="e#6305#6307#0" expanded="false" />
-            <element signature="e#6424#6426#0" expanded="false" />
-            <element signature="e#7117#7159#0" expanded="false" />
-            <element signature="e#7940#7942#0" expanded="false" />
-            <element signature="e#10411#10413#0" expanded="false" />
-            <element signature="e#10624#10626#0" expanded="false" />
-            <element signature="e#12476#12478#0" expanded="false" />
-            <element signature="e#14481#14483#0" expanded="false" />
-            <element signature="e#14791#14793#0" expanded="false" />
-            <element signature="e#16344#16346#0" expanded="false" />
-            <element signature="e#16504#16521#0" expanded="false" />
-            <element signature="e#18060#18062#0" expanded="false" />
-            <element signature="e#18376#18378#0" expanded="false" />
-            <element signature="e#18482#18502#0" expanded="false" />
-            <element signature="e#18810#18833#0" expanded="false" />
-            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="class#23717:23906" expanded="false" />
-            <element signature="e#23819#23820#0" expanded="false" />
-            <element signature="e#23895#23896#0" expanded="false" />
-            <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#27077#27084#0" expanded="false" />
-            <element signature="e#28545#28572#0" expanded="false" />
+            <element signature="e#4295#4297#0" expanded="false" />
+            <element signature="e#5436#5438#0" expanded="false" />
+            <element signature="e#5751#5753#0" expanded="false" />
+            <element signature="e#6520#6522#0" expanded="false" />
+            <element signature="e#6647#6649#0" expanded="false" />
+            <element signature="e#7352#7394#0" expanded="false" />
+            <element signature="e#8203#8205#0" expanded="false" />
+            <element signature="e#10898#10900#0" expanded="false" />
+            <element signature="e#11116#11118#0" expanded="false" />
+            <element signature="e#15293#15295#0" expanded="false" />
+            <element signature="e#17447#17449#0" expanded="false" />
+            <element signature="e#17620#17637#0" expanded="false" />
+            <element signature="e#19414#19416#0" expanded="false" />
+            <element signature="e#19673#19675#0" expanded="false" />
+            <element signature="e#19779#19799#0" expanded="false" />
+            <element signature="e#20105#20128#0" expanded="false" />
+            <element signature="class#20187:20475" expanded="false" />
+            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="class#25198:25399" expanded="false" />
+            <element signature="e#28656#28663#0" expanded="false" />
+            <element signature="e#30260#30287#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30227#30250#0" expanded="false" />
-            <element signature="e#30592#30666#0" expanded="false" />
-            <element signature="class#30994:31241" expanded="false" />
-            <element signature="method#run#0;class#30994:31241" expanded="false" />
-            <element signature="e#31790#31804#0" expanded="false" />
-            <element signature="e#32210#32233#0" expanded="false" />
-            <element signature="class#32284:32529" expanded="false" />
-            <element signature="method#run#0;class#32284:32529" expanded="false" />
-            <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33225#33238#0" expanded="false" />
-            <element signature="e#33630#33654#0" expanded="false" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#34796#34859#0" expanded="false" />
-            <element signature="e#35297#35362#0" expanded="false" />
-            <element signature="e#35832#35922#0" expanded="false" />
-            <element signature="class#36776:36980" expanded="false" />
-            <element signature="method#run#0;class#36776:36980" expanded="false" />
+            <element signature="e#31980#32003#0" expanded="false" />
+            <element signature="e#32345#32419#0" expanded="false" />
+            <element signature="class#32745:33004" expanded="false" />
+            <element signature="e#33569#33583#0" expanded="false" />
+            <element signature="e#33955#33978#0" expanded="false" />
+            <element signature="class#34029:34286" expanded="false" />
+            <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#34992#35005#0" expanded="false" />
+            <element signature="e#35433#35457#0" expanded="false" />
+            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#36668#36731#0" expanded="false" />
+            <element signature="e#37169#37234#0" expanded="false" />
+            <element signature="e#37704#37794#0" expanded="false" />
+            <element signature="class#38647:38863" expanded="false" />
+            <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -958,59 +1001,45 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#41757#0" expanded="false" />
-            <element signature="imports" expanded="false" />
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#4229#4231#0" expanded="false" />
-            <element signature="e#5281#5283#0" expanded="false" />
-            <element signature="e#5584#5586#0" expanded="false" />
-            <element signature="e#6305#6307#0" expanded="false" />
-            <element signature="e#6424#6426#0" expanded="false" />
-            <element signature="e#7117#7159#0" expanded="false" />
-            <element signature="e#7940#7942#0" expanded="false" />
-            <element signature="e#10411#10413#0" expanded="false" />
-            <element signature="e#10624#10626#0" expanded="false" />
-            <element signature="e#12476#12478#0" expanded="false" />
-            <element signature="e#14481#14483#0" expanded="false" />
-            <element signature="e#14791#14793#0" expanded="false" />
-            <element signature="e#16344#16346#0" expanded="false" />
-            <element signature="e#16504#16521#0" expanded="false" />
-            <element signature="e#18060#18062#0" expanded="false" />
-            <element signature="e#18376#18378#0" expanded="false" />
-            <element signature="e#18482#18502#0" expanded="false" />
-            <element signature="e#18810#18833#0" expanded="false" />
-            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="class#23717:23906" expanded="false" />
-            <element signature="e#23819#23820#0" expanded="false" />
-            <element signature="e#23895#23896#0" expanded="false" />
-            <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#27077#27084#0" expanded="false" />
-            <element signature="e#28545#28572#0" expanded="false" />
+            <element signature="e#4295#4297#0" expanded="false" />
+            <element signature="e#5436#5438#0" expanded="false" />
+            <element signature="e#5751#5753#0" expanded="false" />
+            <element signature="e#6520#6522#0" expanded="false" />
+            <element signature="e#6647#6649#0" expanded="false" />
+            <element signature="e#7352#7394#0" expanded="false" />
+            <element signature="e#8203#8205#0" expanded="false" />
+            <element signature="e#10898#10900#0" expanded="false" />
+            <element signature="e#11116#11118#0" expanded="false" />
+            <element signature="e#15293#15295#0" expanded="false" />
+            <element signature="e#17447#17449#0" expanded="false" />
+            <element signature="e#17620#17637#0" expanded="false" />
+            <element signature="e#19414#19416#0" expanded="false" />
+            <element signature="e#19673#19675#0" expanded="false" />
+            <element signature="e#19779#19799#0" expanded="false" />
+            <element signature="e#20105#20128#0" expanded="false" />
+            <element signature="class#20187:20475" expanded="false" />
+            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="class#25198:25399" expanded="false" />
+            <element signature="e#28656#28663#0" expanded="false" />
+            <element signature="e#30260#30287#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30227#30250#0" expanded="false" />
-            <element signature="e#30592#30666#0" expanded="false" />
-            <element signature="class#30994:31241" expanded="false" />
-            <element signature="method#run#0;class#30994:31241" expanded="false" />
-            <element signature="e#31790#31804#0" expanded="false" />
-            <element signature="e#32210#32233#0" expanded="false" />
-            <element signature="class#32284:32529" expanded="false" />
-            <element signature="method#run#0;class#32284:32529" expanded="false" />
-            <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33225#33238#0" expanded="false" />
-            <element signature="e#33630#33654#0" expanded="false" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#34796#34859#0" expanded="false" />
-            <element signature="e#35297#35362#0" expanded="false" />
-            <element signature="e#35832#35922#0" expanded="false" />
-            <element signature="class#36776:36980" expanded="false" />
-            <element signature="method#run#0;class#36776:36980" expanded="false" />
+            <element signature="e#31980#32003#0" expanded="false" />
+            <element signature="e#32345#32419#0" expanded="false" />
+            <element signature="class#32745:33004" expanded="false" />
+            <element signature="e#33569#33583#0" expanded="false" />
+            <element signature="e#33955#33978#0" expanded="false" />
+            <element signature="class#34029:34286" expanded="false" />
+            <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#34992#35005#0" expanded="false" />
+            <element signature="e#35433#35457#0" expanded="false" />
+            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#36668#36731#0" expanded="false" />
+            <element signature="e#37169#37234#0" expanded="false" />
+            <element signature="e#37704#37794#0" expanded="false" />
+            <element signature="class#38647:38863" expanded="false" />
+            <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1027,59 +1056,45 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#41757#0" expanded="false" />
-            <element signature="imports" expanded="false" />
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#4229#4231#0" expanded="false" />
-            <element signature="e#5281#5283#0" expanded="false" />
-            <element signature="e#5584#5586#0" expanded="false" />
-            <element signature="e#6305#6307#0" expanded="false" />
-            <element signature="e#6424#6426#0" expanded="false" />
-            <element signature="e#7117#7159#0" expanded="false" />
-            <element signature="e#7940#7942#0" expanded="false" />
-            <element signature="e#10411#10413#0" expanded="false" />
-            <element signature="e#10624#10626#0" expanded="false" />
-            <element signature="e#12476#12478#0" expanded="false" />
-            <element signature="e#14481#14483#0" expanded="false" />
-            <element signature="e#14791#14793#0" expanded="false" />
-            <element signature="e#16344#16346#0" expanded="false" />
-            <element signature="e#16504#16521#0" expanded="false" />
-            <element signature="e#18060#18062#0" expanded="false" />
-            <element signature="e#18376#18378#0" expanded="false" />
-            <element signature="e#18482#18502#0" expanded="false" />
-            <element signature="e#18810#18833#0" expanded="false" />
-            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="class#23717:23906" expanded="false" />
-            <element signature="e#23819#23820#0" expanded="false" />
-            <element signature="e#23895#23896#0" expanded="false" />
-            <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#27077#27084#0" expanded="false" />
-            <element signature="e#28545#28572#0" expanded="false" />
+            <element signature="e#4295#4297#0" expanded="false" />
+            <element signature="e#5436#5438#0" expanded="false" />
+            <element signature="e#5751#5753#0" expanded="false" />
+            <element signature="e#6520#6522#0" expanded="false" />
+            <element signature="e#6647#6649#0" expanded="false" />
+            <element signature="e#7352#7394#0" expanded="false" />
+            <element signature="e#8203#8205#0" expanded="false" />
+            <element signature="e#10898#10900#0" expanded="false" />
+            <element signature="e#11116#11118#0" expanded="false" />
+            <element signature="e#15293#15295#0" expanded="false" />
+            <element signature="e#17447#17449#0" expanded="false" />
+            <element signature="e#17620#17637#0" expanded="false" />
+            <element signature="e#19414#19416#0" expanded="false" />
+            <element signature="e#19673#19675#0" expanded="false" />
+            <element signature="e#19779#19799#0" expanded="false" />
+            <element signature="e#20105#20128#0" expanded="false" />
+            <element signature="class#20187:20475" expanded="false" />
+            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="class#25198:25399" expanded="false" />
+            <element signature="e#28656#28663#0" expanded="false" />
+            <element signature="e#30260#30287#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30227#30250#0" expanded="false" />
-            <element signature="e#30592#30666#0" expanded="false" />
-            <element signature="class#30994:31241" expanded="false" />
-            <element signature="method#run#0;class#30994:31241" expanded="false" />
-            <element signature="e#31790#31804#0" expanded="false" />
-            <element signature="e#32210#32233#0" expanded="false" />
-            <element signature="class#32284:32529" expanded="false" />
-            <element signature="method#run#0;class#32284:32529" expanded="false" />
-            <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33225#33238#0" expanded="false" />
-            <element signature="e#33630#33654#0" expanded="false" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#34796#34859#0" expanded="false" />
-            <element signature="e#35297#35362#0" expanded="false" />
-            <element signature="e#35832#35922#0" expanded="false" />
-            <element signature="class#36776:36980" expanded="false" />
-            <element signature="method#run#0;class#36776:36980" expanded="false" />
+            <element signature="e#31980#32003#0" expanded="false" />
+            <element signature="e#32345#32419#0" expanded="false" />
+            <element signature="class#32745:33004" expanded="false" />
+            <element signature="e#33569#33583#0" expanded="false" />
+            <element signature="e#33955#33978#0" expanded="false" />
+            <element signature="class#34029:34286" expanded="false" />
+            <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#34992#35005#0" expanded="false" />
+            <element signature="e#35433#35457#0" expanded="false" />
+            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#36668#36731#0" expanded="false" />
+            <element signature="e#37169#37234#0" expanded="false" />
+            <element signature="e#37704#37794#0" expanded="false" />
+            <element signature="class#38647:38863" expanded="false" />
+            <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1354,68 +1369,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="934" column="34" selection-start-line="934" selection-start-column="34" selection-end-line="934" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#41757#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#4229#4231#0" expanded="false" />
-            <element signature="e#5281#5283#0" expanded="false" />
-            <element signature="e#5584#5586#0" expanded="false" />
-            <element signature="e#6305#6307#0" expanded="false" />
-            <element signature="e#6424#6426#0" expanded="false" />
-            <element signature="e#7117#7159#0" expanded="false" />
-            <element signature="e#7940#7942#0" expanded="false" />
-            <element signature="e#10411#10413#0" expanded="false" />
-            <element signature="e#10624#10626#0" expanded="false" />
-            <element signature="e#12476#12478#0" expanded="false" />
-            <element signature="e#14481#14483#0" expanded="false" />
-            <element signature="e#14791#14793#0" expanded="false" />
-            <element signature="e#16344#16346#0" expanded="false" />
-            <element signature="e#16504#16521#0" expanded="false" />
-            <element signature="e#18060#18062#0" expanded="false" />
-            <element signature="e#18376#18378#0" expanded="false" />
-            <element signature="e#18482#18502#0" expanded="false" />
-            <element signature="e#18810#18833#0" expanded="false" />
-            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="class#23717:23906" expanded="false" />
-            <element signature="e#23819#23820#0" expanded="false" />
-            <element signature="e#23895#23896#0" expanded="false" />
-            <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#27077#27084#0" expanded="false" />
-            <element signature="e#28545#28572#0" expanded="false" />
-            <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30227#30250#0" expanded="false" />
-            <element signature="e#30592#30666#0" expanded="false" />
-            <element signature="class#30994:31241" expanded="false" />
-            <element signature="method#run#0;class#30994:31241" expanded="false" />
-            <element signature="e#31790#31804#0" expanded="false" />
-            <element signature="e#32210#32233#0" expanded="false" />
-            <element signature="class#32284:32529" expanded="false" />
-            <element signature="method#run#0;class#32284:32529" expanded="false" />
-            <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33225#33238#0" expanded="false" />
-            <element signature="e#33630#33654#0" expanded="false" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#34796#34859#0" expanded="false" />
-            <element signature="e#35297#35362#0" expanded="false" />
-            <element signature="e#35832#35922#0" expanded="false" />
-            <element signature="class#36776:36980" expanded="false" />
-            <element signature="method#run#0;class#36776:36980" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/MonitorThreadPoolStatus.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1451,9 +1404,57 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/plugins.config">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39252338">
+        <state vertical-scroll-proportion="0.0">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44726562">
+          <caret line="583" column="0" selection-start-line="583" selection-start-column="0" selection-end-line="583" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#4295#4297#0" expanded="false" />
+            <element signature="e#5436#5438#0" expanded="false" />
+            <element signature="e#5751#5753#0" expanded="false" />
+            <element signature="e#6520#6522#0" expanded="false" />
+            <element signature="e#6647#6649#0" expanded="false" />
+            <element signature="e#7352#7394#0" expanded="false" />
+            <element signature="e#8203#8205#0" expanded="false" />
+            <element signature="e#10898#10900#0" expanded="false" />
+            <element signature="e#11116#11118#0" expanded="false" />
+            <element signature="e#15293#15295#0" expanded="false" />
+            <element signature="e#17447#17449#0" expanded="false" />
+            <element signature="e#17620#17637#0" expanded="false" />
+            <element signature="e#19414#19416#0" expanded="false" />
+            <element signature="e#19673#19675#0" expanded="false" />
+            <element signature="e#19779#19799#0" expanded="false" />
+            <element signature="e#20105#20128#0" expanded="false" />
+            <element signature="class#20187:20475" expanded="false" />
+            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="class#25198:25399" expanded="false" />
+            <element signature="e#28656#28663#0" expanded="false" />
+            <element signature="e#30260#30287#0" expanded="false" />
+            <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#31980#32003#0" expanded="false" />
+            <element signature="e#32345#32419#0" expanded="false" />
+            <element signature="class#32745:33004" expanded="false" />
+            <element signature="e#33569#33583#0" expanded="false" />
+            <element signature="e#33955#33978#0" expanded="false" />
+            <element signature="class#34029:34286" expanded="false" />
+            <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#34992#35005#0" expanded="false" />
+            <element signature="e#35433#35457#0" expanded="false" />
+            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#36668#36731#0" expanded="false" />
+            <element signature="e#37169#37234#0" expanded="false" />
+            <element signature="e#37704#37794#0" expanded="false" />
+            <element signature="class#38647:38863" expanded="false" />
+            <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

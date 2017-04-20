@@ -89,7 +89,7 @@ import java.util.regex.Pattern;
 // todo: consistency check the list lengths with different folders
 // todo: stop loading thread upon closing of image
 // todo: increase speed of Leica tif parsing, possible?
-
+// todo: make 8 bit work
 
 /**
  * Opens a folder of stacks as a virtual stack.
@@ -99,11 +99,14 @@ public class DataStreamingTools {
 
     private static Logger logger = new IJLazySwingLogger();
 
-    public DataStreamingTools() {
+    public DataStreamingTools()
+    {
     }
 
     // TODO: split up in simpler methods
-    public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int numIOThreads) {
+    public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int numIOThreads)
+
+    {
         String[][] fileLists; // files in sub-folders
         String[][][] ctzFileList;
         int t = 0, z = 0, c = 0;
@@ -113,9 +116,10 @@ public class DataStreamingTools {
         FileInfo fi0;
         String[] channelFolders = null;
         List<String> channels = null, timepoints = null;
-        int nC=0, nT=0, nZ=0, nX=0, nY=0;
+        int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
 
-        if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS)) {
+        if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+        {
 
             //
             // Check for sub-folders
@@ -123,24 +127,31 @@ public class DataStreamingTools {
 
             logger.info("checking for sub-folders...");
             channelFolders = getFoldersInFolder(directory);
-            if (channelFolders != null) {
+            if (channelFolders != null)
+            {
                 fileLists = new String[channelFolders.length][];
-                for (int i = 0; i < channelFolders.length; i++) {
+                for (int i = 0; i < channelFolders.length; i++)
+                {
                     fileLists[i] = getFilesInFolder(directory + channelFolders[i], filterPattern);
-                    if (fileLists[i] == null) {
+                    if (fileLists[i] == null)
+                    {
                         logger.info("no files found in folder: " + directory + channelFolders[i]);
                         return (null);
                     }
                 }
                 logger.info("found sub-folders => interpreting as channel folders.");
-            } else {
+            }
+            else
+            {
                 logger.info("no sub-folders found.");
                 IJ.showMessage("No sub-folders found; please specify a different options for loading " +
                         "the channels");
-                return(null);
+                return (null);
             }
 
-        } else {
+        }
+        else
+        {
 
             //
             // Get files in main directory
@@ -150,15 +161,18 @@ public class DataStreamingTools {
             fileLists = new String[1][];
             fileLists[0] = getFilesInFolder(directory, filterPattern);
 
-            if (fileLists[0] != null) {
+            if (fileLists[0] != null)
+            {
 
                 //
                 // check if it is Leica single tiff SPIM files
                 //
 
                 Pattern patternLeica = Pattern.compile("LightSheet 2.*");
-                for (String fileName : fileLists[0]) {
-                    if (patternLeica.matcher(fileName).matches()) {
+                for (String fileName : fileLists[0])
+                {
+                    if (patternLeica.matcher(fileName).matches())
+                    {
                         fileType = "leica single tif";
                         logger.info("detected fileType: " + fileType);
                         break;
@@ -166,7 +180,8 @@ public class DataStreamingTools {
                 }
             }
 
-            if (fileLists[0] == null || fileLists[0].length == 0) {
+            if (fileLists[0] == null || fileLists[0].length == 0)
+            {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
                 return null;
             }
@@ -177,7 +192,8 @@ public class DataStreamingTools {
         // generate a nC,nT,nZ fileList
         //
 
-        if (fileType.equals("leica single tif")) {
+        if (fileType.equals("leica single tif"))
+        {
 
             //
             // Do special stuff related to leica single files
@@ -190,7 +206,8 @@ public class DataStreamingTools {
             Pattern patternT = Pattern.compile(".*--t(.*)--Z.*");
             Pattern patternID = Pattern.compile(".*?_(\\d+).*"); // is this correct?
 
-            if (fileLists[0].length == 0) {
+            if (fileLists[0].length == 0)
+            {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
                 return null;
             }
@@ -199,9 +216,11 @@ public class DataStreamingTools {
             // those are three numbers after the first _
             // this happens due to restarting the imaging
             Set<String> fileIDset = new HashSet();
-            for (String fileName : fileLists[0]) {
+            for (String fileName : fileLists[0])
+            {
                 matcherID = patternID.matcher(fileName);
-                if (matcherID.matches()) {
+                if (matcherID.matches())
+                {
                     fileIDset.add(matcherID.group(1));
                 }
             }
@@ -218,38 +237,48 @@ public class DataStreamingTools {
             // series being restarted during the imaging
             //
 
-            for (String fileID : fileIDs) {
+            for (String fileID : fileIDs)
+            {
                 channelsHS.add(new HashSet());
                 timepointsHS.add(new HashSet());
                 slicesHS.add(new HashSet());
             }
 
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++) {
+            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+            {
 
                 Pattern patternFileID = Pattern.compile(".*?_" + fileIDs[iFileID] + ".*");
 
-                for (String fileName : fileLists[0]) {
+                for (String fileName : fileLists[0])
+                {
 
-                    if (patternFileID.matcher(fileName).matches()) {
+                    if (patternFileID.matcher(fileName).matches())
+                    {
 
                         matcherC = patternC.matcher(fileName);
-                        if (matcherC.matches()) {
+                        if (matcherC.matches())
+                        {
                             // has multi-channels
                             channelsHS.get(iFileID).add(matcherC.group(1));
                             matcherZ = patternZwithC.matcher(fileName);
-                            if (matcherZ.matches()) {
+                            if (matcherZ.matches())
+                            {
                                 slicesHS.get(iFileID).add(matcherZ.group(1));
                             }
-                        } else {
+                        }
+                        else
+                        {
                             // has only one channel
                             matcherZ = patternZnoC.matcher(fileName);
-                            if (matcherZ.matches()) {
+                            if (matcherZ.matches())
+                            {
                                 slicesHS.get(iFileID).add(matcherZ.group(1));
                             }
                         }
 
                         matcherT = patternT.matcher(fileName);
-                        if (matcherT.matches()) {
+                        if (matcherT.matches())
+                        {
                             timepointsHS.get(iFileID).add(matcherT.group(1));
                         }
                     }
@@ -261,7 +290,8 @@ public class DataStreamingTools {
             int[] tOffsets = new int[fileIDs.length + 1]; // last offset is not used, but added anyway
             tOffsets[0] = 0;
 
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++) {
+            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+            {
 
                 nC = Math.max(1, channelsHS.get(iFileID).size());
                 nZ = slicesHS.get(iFileID).size(); // must be the same for all fileIDs
@@ -281,7 +311,7 @@ public class DataStreamingTools {
             //
 
             channelFolders = new String[nC];
-            for(int ic=0; ic<nC; ic++) channelFolders[ic] = "";
+            for (int ic = 0; ic < nC; ic++) channelFolders[ic] = "";
 
             //
             // sort into the final file list
@@ -289,13 +319,16 @@ public class DataStreamingTools {
 
             ctzFileList = new String[nC][nT][nZ];
 
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++) {
+            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+            {
 
                 Pattern patternFileID = Pattern.compile(".*" + fileIDs[iFileID] + ".*");
 
-                for (String fileName : fileLists[0]) {
+                for (String fileName : fileLists[0])
+                {
 
-                    if (patternFileID.matcher(fileName).matches()) {
+                    if (patternFileID.matcher(fileName).matches())
+                    {
 
                         // figure out which C,Z,T the file is
                         matcherC = patternC.matcher(fileName);
@@ -303,16 +336,21 @@ public class DataStreamingTools {
                         if (nC > 1) matcherZ = patternZwithC.matcher(fileName);
                         else matcherZ = patternZnoC.matcher(fileName);
 
-                        if (matcherZ.matches()) {
+                        if (matcherZ.matches())
+                        {
                             z = Integer.parseInt(matcherZ.group(1).toString());
                         }
-                        if (matcherT.matches()) {
+                        if (matcherT.matches())
+                        {
                             t = Integer.parseInt(matcherT.group(1).toString());
                             t += tOffsets[iFileID];
                         }
-                        if (matcherC.matches()) {
+                        if (matcherC.matches())
+                        {
                             c = Integer.parseInt(matcherC.group(1).toString());
-                        } else {
+                        }
+                        else
+                        {
                             c = 0;
                         }
 
@@ -322,10 +360,12 @@ public class DataStreamingTools {
                 }
             }
 
-            try {
+            try
+            {
                 FastTiffDecoder ftd = new FastTiffDecoder(directory, ctzFileList[0][0][0]);
                 info = ftd.getTiffInfo();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 info = null;
                 IJ.showMessage("Error: " + e.toString());
             }
@@ -334,7 +374,9 @@ public class DataStreamingTools {
             nX = fi0.width;
             nY = fi0.height;
 
-        } else {
+        }
+        else
+        {
 
             //
             // either tif stacks or h5 stacks
@@ -342,29 +384,35 @@ public class DataStreamingTools {
 
             boolean hasCTPattern = false;
 
-            if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS)) {
+            if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+            {
 
                 nC = channelFolders.length;
                 nT = fileLists[0].length;
 
-            } else if (channelTimePattern.equals("None")) {
+            }
+            else if (channelTimePattern.equals("None"))
+            {
 
                 nC = 1;
                 nT = fileLists[0].length;
 
-            } else {
+            }
+            else
+            {
 
                 hasCTPattern = true;
 
-                if(! (channelTimePattern.contains("<channel>") &&  channelTimePattern.contains("<t>")) ) {
+                if (!(channelTimePattern.contains("<channel>") && channelTimePattern.contains("<t>")))
+                {
                     IJ.showMessage("The pattern for multi-channel loading must" +
                             "contain  <channel> and <t> to match channels and time in the filenames.");
                     return (null);
                 }
 
                 // replace shortcuts by actual regexp
-                channelTimePattern = channelTimePattern.replace("<channel>","(?<C>.*)");
-                channelTimePattern = channelTimePattern.replace("<t>","(?<T>.*)");
+                channelTimePattern = channelTimePattern.replace("<channel>", "(?<C>.*)");
+                channelTimePattern = channelTimePattern.replace("<t>", "(?<T>.*)");
 
                 channelFolders = new String[]{""};
 
@@ -373,10 +421,12 @@ public class DataStreamingTools {
 
                 Pattern patternCT = Pattern.compile(channelTimePattern);
 
-                for (String fileName : fileLists[0]) {
+                for (String fileName : fileLists[0])
+                {
 
                     Matcher matcherCT = patternCT.matcher(fileName);
-                    if (matcherCT.matches()) {
+                    if (matcherCT.matches())
+                    {
                         channelsHS.add(matcherCT.group("C"));
                         timepointsHS.add(matcherCT.group("T"));
                     }
@@ -398,38 +448,51 @@ public class DataStreamingTools {
             //
             // Create dummy channel folders, if no real ones exist
             //
-            if (!channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS) ) {
+            if (!channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+            {
                 channelFolders = new String[nC];
-                for(int ic=0; ic<nC; ic++) channelFolders[ic] = "";
+                for (int ic = 0; ic < nC; ic++) channelFolders[ic] = "";
             }
 
             //
             // Get nX,nY,nZ from first file
             //
-            if (fileLists[0][0].endsWith(".tif")) {
+
+
+            if (fileLists[0][0].endsWith(".tif"))
+            {
 
                 fileType = "tif stacks";
 
-                try {
+                try
+                {
                     FastTiffDecoder ftd = new FastTiffDecoder(directory + channelFolders[0], fileLists[0][0]);
                     info = ftd.getTiffInfo();
-                } catch (Exception e) {
+                } catch (Exception e)
+                {
                     info = null;
                     IJ.showMessage("Error: " + e.toString());
                 }
 
                 fi0 = info[0];
-                if (fi0.nImages > 1) {
+                if (fi0.nImages > 1)
+                {
                     nZ = fi0.nImages;
                     fi0.nImages = 1;
-                } else {
+                }
+                else
+                {
                     nZ = info.length;
                 }
                 nX = fi0.width;
                 nY = fi0.height;
+                bitDepth = 16; // todo: determine from files
 
 
-            } else if (fileLists[0][0].endsWith(".h5")) {
+
+            }
+            else if (fileLists[0][0].endsWith(".h5"))
+            {
 
                 fileType = "h5";
 
@@ -443,7 +506,11 @@ public class DataStreamingTools {
                 nY = (int) dsInfo.getDimensions()[1];
                 nX = (int) dsInfo.getDimensions()[2];
 
-            } else {
+                bitDepth = assignHDF5TypeToImagePlusBitdepth(dsInfo);
+
+            }
+            else
+            {
 
                 IJ.showMessage("Unsupported file type: " + fileLists[0][0]);
                 return (null);
@@ -459,40 +526,51 @@ public class DataStreamingTools {
 
             ctzFileList = new String[nC][nT][nZ];
 
-            if(hasCTPattern) {
+            if (hasCTPattern)
+            {
 
                 // no sub-folders
                 // channel and t determined by pattern matching
 
                 Pattern patternCT = Pattern.compile(channelTimePattern);
 
-                for (String fileName : fileLists[0]) {
+                for (String fileName : fileLists[0])
+                {
 
                     Matcher matcherCT = patternCT.matcher(fileName);
-                    if (matcherCT.matches()) {
-                        try {
+                    if (matcherCT.matches())
+                    {
+                        try
+                        {
                             c = channels.indexOf(matcherCT.group("C"));
                             t = timepoints.indexOf(matcherCT.group("T"));
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                             IJ.showMessage("The multi-channel loading did not match the filenames.\n" +
                                     "Please change the pattern.\n\n" +
                                     "The Java error message was:\n" +
                                     e.toString());
-                            return(null);
+                            return (null);
                         }
                     }
 
-                    for (z = 0; z < nZ; z++) {
+                    for (z = 0; z < nZ; z++)
+                    {
                         ctzFileList[c][t][z] = fileName; // all z with same file-name, because it is stacks
                     }
 
                 }
 
-            } else {
+            }
+            else
+            {
 
-                for (c = 0; c < channelFolders.length; c++) {
-                    for (t = 0; t < fileLists[c].length; t++) {
-                        for (z = 0; z < nZ; z++) {
+                for (c = 0; c < channelFolders.length; c++)
+                {
+                    for (t = 0; t < fileLists[c].length; t++)
+                    {
+                        for (z = 0; z < nZ; z++)
+                        {
                             ctzFileList[c][t][z] = fileLists[c][t]; // all z with same file-name, because it is stacks
                         }
                     }
@@ -502,10 +580,12 @@ public class DataStreamingTools {
 
         }
 
+        logger.info("Bit depth: " + bitDepth);
+
+
         //
         // init the virtual stack
         //
-        int bitDepth = 16; // todo: determine from files
         VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, channelFolders, ctzFileList, nC, nT, nX, nY, nZ, bitDepth, fileType, hdf5DataSet);
         imp = new ImagePlus("stream", stack);
 
@@ -518,7 +598,7 @@ public class DataStreamingTools {
             //
             ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
             List<Future> futures = new ArrayList<>();
-            for ( t = 0; t < nT; t++ )
+            for (t = 0; t < nT; t++)
             {
                 futures.add(es.submit(new ParseFilesIntoVirtualStack(imp, t)));
             }
@@ -527,38 +607,42 @@ public class DataStreamingTools {
             // Monitor the progress
             //
             Thread thread = new Thread(new Runnable() {
-                public void run() {
+                public void run()
+                {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
                             "Parsed files: ",
                             2000);
                 }
-            }); thread.start();
+            });
+            thread.start();
 
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             logger.error(e.toString());
         }
 
-        return(imp);
+        return (imp);
 
     }
 
-    public ImagePlus openFromInfoFile(String directory, String fileName){
+    public ImagePlus openFromInfoFile(String directory, String fileName)
+    {
 
-        File f = new File(directory+fileName);
+        File f = new File(directory + fileName);
 
-        if(f.exists() && !f.isDirectory()) {
+        if (f.exists() && !f.isDirectory())
+        {
 
             logger.info("Loading: " + directory + fileName);
-            FileInfoSer[][][] infos = readFileInfosSer(directory+fileName);
+            FileInfoSer[][][] infos = readFileInfosSer(directory + fileName);
 
             int nC = infos.length;
             int nT = infos[0].length;
             int nZ = infos[0][0].length;
 
-            if( logger.isShowDebug() ) {
+            if (logger.isShowDebug())
+            {
                 logger.info("nC: " + infos.length);
                 logger.info("nT: " + infos[0].length);
                 logger.info("nz: " + infos[0][0].length);
@@ -567,23 +651,27 @@ public class DataStreamingTools {
             // init the VSS
             VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, infos);
             ImagePlus imp = createImagePlusFromVSS(stack);
-            return(imp);
+            return (imp);
 
-        } else {
+        }
+        else
+        {
             return (null);
         }
     }
 
-    private boolean hdf5DataSetExists(IHDF5Reader reader, String hdf5DataSet) {
+    private boolean hdf5DataSetExists(IHDF5Reader reader, String hdf5DataSet)
+    {
         String dataSets = "";
         boolean dataSetExists = false;
 
-        if( reader.object().isDataSet(hdf5DataSet) )
+        if (reader.object().isDataSet(hdf5DataSet))
         {
             return true;
         }
 
-        for (String dataSet : reader.getGroupMembers("/")) {
+        for (String dataSet : reader.getGroupMembers("/"))
+        {
             /*
             if (dataSet.equals(hdf5DataSet)) {
                 dataSetExists = true;
@@ -592,7 +680,8 @@ public class DataStreamingTools {
             dataSets += "- " + dataSet + "\n";
         }
 
-        if (!dataSetExists) {
+        if (!dataSetExists)
+        {
             IJ.showMessage("The selected Hdf5 data set does not exist; " +
                     "please change to one of the following:\n\n" +
                     dataSets);
@@ -607,11 +696,12 @@ public class DataStreamingTools {
 
         Pattern patternFilter = Pattern.compile(filterPattern);
 
-        for (int i = 0; i < rawlist.length; i++) {
+        for (int i = 0; i < rawlist.length; i++)
+        {
             String name = rawlist[i];
             if (!patternFilter.matcher(name).matches())
                 rawlist[i] = null;
-            else if (name.endsWith(".tif") || name.endsWith(".h5") )
+            else if (name.endsWith(".tif") || name.endsWith(".h5"))
                 count++;
             else
                 rawlist[i] = null;
@@ -620,10 +710,12 @@ public class DataStreamingTools {
         }
         if (count == 0) return null;
         String[] list = rawlist;
-        if (count < rawlist.length) {
+        if (count < rawlist.length)
+        {
             list = new String[count];
             int index = 0;
-            for (int i = 0; i < rawlist.length; i++) {
+            for (int i = 0; i < rawlist.length; i++)
+            {
                 if (rawlist[i] != null)
                     list[index++] = rawlist[i];
             }
@@ -631,23 +723,28 @@ public class DataStreamingTools {
         int listLength = list.length;
         boolean allSameLength = true;
         int len0 = list[0].length();
-        for (int i = 0; i < listLength; i++) {
-            if (list[i].length() != len0) {
+        for (int i = 0; i < listLength; i++)
+        {
+            if (list[i].length() != len0)
+            {
                 allSameLength = false;
                 break;
             }
         }
-        if (allSameLength) {
+        if (allSameLength)
+        {
             ij.util.StringSorter.sort(list);
             return list;
         }
         int maxDigits = 15;
         String[] list2 = null;
         char ch;
-        for (int i = 0; i < listLength; i++) {
+        for (int i = 0; i < listLength; i++)
+        {
             int len = list[i].length();
             String num = "";
-            for (int j = 0; j < len; j++) {
+            for (int j = 0; j < len; j++)
+            {
                 ch = list[i].charAt(j);
                 if (ch >= 48 && ch <= 57) num += ch;
             }
@@ -657,12 +754,15 @@ public class DataStreamingTools {
             num = num.substring(num.length() - maxDigits);
             list2[i] = num + list[i];
         }
-        if (list2 != null) {
+        if (list2 != null)
+        {
             ij.util.StringSorter.sort(list2);
             for (int i = 0; i < listLength; i++)
                 list2[i] = list2[i].substring(maxDigits);
             return list2;
-        } else {
+        }
+        else
+        {
             ij.util.StringSorter.sort(list);
             return list;
         }
@@ -684,7 +784,8 @@ public class DataStreamingTools {
         //info("# getFoldersInFolder: " + directory);
         String[] list = new File(directory).list(new FilenameFilter() {
             @Override
-            public boolean accept(File current, String name) {
+            public boolean accept(File current, String name)
+            {
                 return new File(current, name).isDirectory();
             }
         });
@@ -695,9 +796,11 @@ public class DataStreamingTools {
 
     }
 
-    public boolean writeFileInfosSer(FileInfoSer[][][] infos, String path) {
+    public boolean writeFileInfosSer(FileInfoSer[][][] infos, String path)
+    {
 
-        try{
+        try
+        {
             FileOutputStream fout = new FileOutputStream(path, true);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
             oos.writeObject(infos);
@@ -706,7 +809,8 @@ public class DataStreamingTools {
             fout.close();
             logger.info("Wrote: " + path);
             return true;
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             ex.printStackTrace();
             logger.error("Writing failed: " + path);
             return false;
@@ -714,15 +818,18 @@ public class DataStreamingTools {
 
     }
 
-    public FileInfoSer[][][] readFileInfosSer(String path) {
-        try {
+    public FileInfoSer[][][] readFileInfosSer(String path)
+    {
+        try
+        {
             FileInputStream fis = new FileInputStream(path);
             ObjectInputStream ois = new ObjectInputStream(fis);
             FileInfoSer infos[][][] = (FileInfoSer[][][]) ois.readObject();
             ois.close();
             fis.close();
-            return(infos);
-        } catch (Exception e) {
+            return (infos);
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return null;
         }
@@ -732,28 +839,32 @@ public class DataStreamingTools {
     public static ImagePlus getCroppedVSS(ImagePlus imp, Roi roi, int zMin, int zMax)
     {
 
-        if ( !Utils.hasVirtualStackOfStacks(imp) ) return null;
+        if (!Utils.hasVirtualStackOfStacks(imp)) return null;
         VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
         FileInfoSer[][][] infos = vss.getFileInfosSer();
-        if(infos[0][0][0].compression==6) {
+        if (infos[0][0][0].compression == 6)
+        {
             logger.info("Zip-compressed tiff files do not support chuncked loading " +
                     "=> the cropped stream will not be streamed faster");
         }
-        if(zMin<1) {
+        if (zMin < 1)
+        {
             IJ.showMessage(
                     "zMin must be >= 1; please change the value."
             );
             return null;
         }
-        if(zMax-zMin+1 > vss.getDepth()) {
+        if (zMax - zMin + 1 > vss.getDepth())
+        {
             IJ.showMessage(
                     "The z-cropping range is larger than the data; please change the values."
             );
             return null;
         }
 
-        if(zMax<=zMin) {
+        if (zMax <= zMin)
+        {
             IJ.showMessage(
                     "zMax of the cropping range needs to be larger than zMin; " +
                             "please change the values."
@@ -791,7 +902,7 @@ public class DataStreamingTools {
         // Crop
         //
         ImagePlus impCropped = getCroppedVSS(imp, po, ps, tMin, tMax);
-        impCropped.setTitle(imp.getTitle()+"-crop");
+        impCropped.setTitle(imp.getTitle() + "-crop");
         return impCropped;
 
     }
@@ -803,31 +914,38 @@ public class DataStreamingTools {
         FileInfoSer[][][] infos = vss.getFileInfosSer();
 
         int nC = infos.length;
-        int nT = tMax-tMin+1;
+        int nT = tMax - tMin + 1;
         int nZ = infos[0][0].length;
 
         FileInfoSer[][][] croppedInfos = new FileInfoSer[nC][nT][nZ];
 
-        if( logger.isShowDebug() ){
+        if (logger.isShowDebug())
+        {
             logger.info("# DataStreamingTools.openCroppedFromInfos");
             logger.info("tMin: " + tMin);
             logger.info("tMax: " + tMax);
         }
 
-        for(int c=0; c<nC; c++) {
+        for (int c = 0; c < nC; c++)
+        {
 
-            for(int t=tMin; t<=tMax; t++) {
+            for (int t = tMin; t <= tMax; t++)
+            {
 
-                for(int z=0; z<nZ; z++) {
+                for (int z = 0; z < nZ; z++)
+                {
 
-                    croppedInfos[c][t-tMin][z] = new FileInfoSer(infos[c][t][z]);
-                    if(croppedInfos[c][t-tMin][z].isCropped) {
-                        croppedInfos[c][t-tMin][z].setCropOffset(po[t].add(croppedInfos[c][t - tMin][z].getCropOffset()));
-                    } else {
-                        croppedInfos[c][t - tMin][z].isCropped = true;
-                        croppedInfos[c][t - tMin][z].setCropOffset(po[t-tMin]);
+                    croppedInfos[c][t - tMin][z] = new FileInfoSer(infos[c][t][z]);
+                    if (croppedInfos[c][t - tMin][z].isCropped)
+                    {
+                        croppedInfos[c][t - tMin][z].setCropOffset(po[t].add(croppedInfos[c][t - tMin][z].getCropOffset()));
                     }
-                    croppedInfos[c][t-tMin][z].setCropSize(ps);
+                    else
+                    {
+                        croppedInfos[c][t - tMin][z].isCropped = true;
+                        croppedInfos[c][t - tMin][z].setCropOffset(po[t - tMin]);
+                    }
+                    croppedInfos[c][t - tMin][z].setCropSize(ps);
                     //info("channel "+channel);
                     //info("t "+t);
                     //info("z "+z);
@@ -841,15 +959,16 @@ public class DataStreamingTools {
 
         VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
         VirtualStackOfStacks stack = new VirtualStackOfStacks(parentStack.getDirectory(), croppedInfos);
-        return(createImagePlusFromVSS(stack));
+        return (createImagePlusFromVSS(stack));
 
     }
 
     // TODO: is this method needed?
-    private static ImagePlus createImagePlusFromVSS(VirtualStackOfStacks stack) {
-        int nC=stack.getChannels();
-        int nZ=stack.getDepth();
-        int nT=stack.getFrames();
+    private static ImagePlus createImagePlusFromVSS(VirtualStackOfStacks stack)
+    {
+        int nC = stack.getChannels();
+        int nZ = stack.getDepth();
+        int nT = stack.getFrames();
         double min = Double.MAX_VALUE;
         double max = -Double.MAX_VALUE;
 
@@ -859,12 +978,13 @@ public class DataStreamingTools {
         ImagePlus imp = new ImagePlus("", stack);
 
         // todo: what does this do?
-        if (imp.getType()==ImagePlus.GRAY16 || imp.getType()==ImagePlus.GRAY32)
-			imp.getProcessor().setMinAndMax(min, max);
+        if (imp.getType() == ImagePlus.GRAY16 || imp.getType() == ImagePlus.GRAY32)
+            imp.getProcessor().setMinAndMax(min, max);
 
-		imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
+        imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
 
-        if( logger.isShowDebug() ) {
+        if (logger.isShowDebug())
+        {
             logger.info("# DataStreamingTools.createImagePlusFromVSS");
             logger.info("nC: " + nC);
             logger.info("nZ: " + nZ);
@@ -873,16 +993,16 @@ public class DataStreamingTools {
 
         imp.setDimensions(nC, nZ, nT);
         imp.setOpenAsHyperStack(true);
-        return(imp);
-	}
+        return (imp);
+    }
 
     /**
-     *
      * @param imp
      * @param nIOthreads
      * @return
      */
-    public static ImagePlus loadVSSFullyIntoRAM(ImagePlus imp, int nIOthreads) {
+    public static ImagePlus loadVSSFullyIntoRAM(ImagePlus imp, int nIOthreads)
+    {
 
         // Initialize RAM image
         //
@@ -896,56 +1016,61 @@ public class DataStreamingTools {
         //
         ExecutorService es = Executors.newFixedThreadPool(nIOthreads);
         List<Future> futures = new ArrayList<>();
-        for ( int t = 0; t < imp.getNFrames(); t++ )
+        for (int t = 0; t < imp.getNFrames(); t++)
         {
             futures.add(es.submit(new LoadFrameFromVSSIntoRAM(imp, t, impRAM)));
         }
 
 
         Thread thread = new Thread(new Runnable() {
-            public void run() {
+            public void run()
+            {
                 MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                         futures,
                         "Loaded into RAM: ",
                         2000);
             }
-        }); thread.start();
+        });
+        thread.start();
 
 
-        String info = (String)imp.getProperty("Info");
-        if (info!=null)
+        String info = (String) imp.getProperty("Info");
+        if (info != null)
             impRAM.setProperty("Info", info);
         if (imp.isHyperStack())
             impRAM.setOpenAsHyperStack(true);
 
-        return(impRAM);
+        return (impRAM);
 
     }
 
     public static void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
                                        String filePath, Utils.FileType fileType,
-                                       String compression, int rowsPerStrip, int threads) {
+                                       String compression, int rowsPerStrip, int threads)
+    {
 
         // Do the jobs
         //
         ExecutorService es = Executors.newFixedThreadPool(threads);
         List<Future> futures = new ArrayList<>();
-        for ( int i = 0; i < imp.getNFrames(); i++ )
+        for (int i = 0; i < imp.getNFrames(); i++)
         {
             futures.add(es.submit(new SaveVSSFrame(imp, i, bin, saveVolume, saveProjection,
-                                                    filePath, fileType, compression, rowsPerStrip)));
+                    filePath, fileType, compression, rowsPerStrip)));
         }
 
         // Monitor the progress
         //
         Thread thread = new Thread(new Runnable() {
-            public void run() {
+            public void run()
+            {
                 MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                         futures,
                         "Saved to disk: ",
                         2000);
             }
-        }); thread.start();
+        });
+        thread.start();
 
 
     }
@@ -955,22 +1080,23 @@ public class DataStreamingTools {
         ImagePlus imp;
         private int t;
 
-        ParseFilesIntoVirtualStack( ImagePlus imp, int t )
+        ParseFilesIntoVirtualStack(ImagePlus imp, int t)
         {
             this.imp = imp;
             this.t = t;
         }
 
-        public void run() {
+        public void run()
+        {
 
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            for ( int c = 0; c < vss.getChannels(); c++ )
+            for (int c = 0; c < vss.getChannels(); c++)
             {
                 vss.setStackFromFile(t, c);
             }
 
-            if ( t == 0 )
+            if (t == 0)
             {
                 showImageAndInfo(vss);
             }
@@ -981,9 +1107,12 @@ public class DataStreamingTools {
         {
             // show image
             //
-            if (vss != null && vss.getSize() > 0) {
+            if (vss != null && vss.getSize() > 0)
+            {
                 imp = createImagePlusFromVSS(vss);
-            } else {
+            }
+            else
+            {
                 logger.error("Something went wrong loading the first image stack!");
                 return;
             }
@@ -995,13 +1124,13 @@ public class DataStreamingTools {
             //
             FileInfoSer[][][] infos = vss.getFileInfosSer();
 
-            if(infos[0][0][0].compression == 0)
+            if (infos[0][0][0].compression == 0)
                 logger.info("Compression = Unknown");
-            else if(infos[0][0][0].compression == 1)
+            else if (infos[0][0][0].compression == 1)
                 logger.info("Compression = None");
-            else if(infos[0][0][0].compression == 2)
+            else if (infos[0][0][0].compression == 2)
                 logger.info("Compression = LZW");
-            else if(infos[0][0][0].compression == 6)
+            else if (infos[0][0][0].compression == 6)
                 logger.info("Compression = ZIP");
             else
                 logger.info("Compression = " + infos[0][0][0].compression);
@@ -1010,17 +1139,19 @@ public class DataStreamingTools {
 
     }
 
-	// main method for debugging
+    // main method for debugging
     // throws ImgIOException
-    public static void main(String[] args)  {
-		// set the plugins.dir property to make the plugin appear in the Plugins menu
-		Class<?> clazz = DataStreamingTools.class;
-		String url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class").toString();
-		String pluginsDir = url.substring("file:".length(), url.length() - clazz.getName().length() - ".class".length());
-		System.setProperty("plugins.dir", pluginsDir);
+    public static void main(String[] args)
+    {
+        // set the plugins.dir property to make the plugin appear in the Plugins menu
+        Class<?> clazz = DataStreamingTools.class;
+        String url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class").toString();
+        String pluginsDir = url.substring("file:".length(), url.length() - clazz.getName().length() - ".class".length
+                ());
+        System.setProperty("plugins.dir", pluginsDir);
 
-		// start ImageJ
-		new ij.ImageJ();
+        // start ImageJ
+        new ij.ImageJ();
 
 
         //IJ.run("Memory & Threads...", "maximum=3000 parallel=4 run");
@@ -1051,7 +1182,6 @@ public class DataStreamingTools {
         // final String directory = "/Users/tischi/Desktop/example-data/Ashna-Leica-Target-LSEA/";
 
 
-
         //final String directory = "/Volumes/My Passport/Res_13/";
         //final String directory = "/Users/tischi/Desktop/example-data/tracking_test/";
         //final String directory = "/Volumes/almfspim/tischi/SPIM-example-data/Nils-MATLAB--tif-stacks--1channel--lzw-compressed/";
@@ -1065,7 +1195,8 @@ public class DataStreamingTools {
 
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
-            public void run() {
+            public void run()
+            {
                 int nIOthreads = 10;
                 dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", nIOthreads);
             }
@@ -1154,8 +1285,59 @@ public class DataStreamingTools {
 
     }
 
-}
 
+    static int assignHDF5TypeToImagePlusBitdepth(HDF5DataSetInformation dsInfo)
+    {
+
+        String type = dsInfoToTypeString( dsInfo );
+
+        int nBits = 0;
+        if (type.equals("uint8"))
+        {
+            nBits = 8;
+
+        }
+        else if (type.equals("uint16") || type.equals("int16"))
+        {
+            nBits = 16;
+        }
+        else if (type.equals("float32") || type.equals("float64"))
+        {
+            nBits = 32;
+        }
+        else
+        {
+            IJ.error("Type '" + type + "' Not handled yet!");
+        }
+        return nBits;
+    }
+
+
+    static String dsInfoToTypeString(HDF5DataSetInformation dsInfo)
+    {
+        HDF5DataTypeInformation dsType = dsInfo.getTypeInformation();
+        String typeText = "";
+
+        if (dsType.isSigned() == false)
+        {
+            typeText += "u";
+        }
+
+        switch (dsType.getDataClass())
+        {
+            case INTEGER:
+                typeText += "int" + 8 * dsType.getElementSize();
+                break;
+            case FLOAT:
+                typeText += "float" + 8 * dsType.getElementSize();
+                break;
+            default:
+                typeText += dsInfo.toString();
+        }
+        return typeText;
+    }
+
+}
 
     /*
     public < T extends RealType< T > & NativeType< T > >
