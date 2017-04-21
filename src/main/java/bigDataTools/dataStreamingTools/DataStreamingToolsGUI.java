@@ -1,5 +1,6 @@
 package bigDataTools.dataStreamingTools;
 
+import bigDataTools.VirtualStackOfStacks.FileInfoSer;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
@@ -32,6 +33,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
     JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
+    JTextField tfCropTMinMax = new JTextField("1,all", 5);
     JTextField tfIOThreads = new JTextField("10", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
 
@@ -161,8 +163,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
         panels.add(new JPanel());
-        panels.get(j).add(new JLabel("zMin, zMax:"));
+        panels.get(j).add(new JLabel("z-min, z-max [slices]:"));
         panels.get(j).add(tfCropZMinMax);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        panels.get(j).add(new JLabel("t-min, t-max [frames]:"));
+        panels.get(j).add(tfCropTMinMax);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
@@ -446,34 +453,25 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 return;
             }
 
+            // get from gui
             //
-            // Get z cropping range
+            int[] zMinMax = getMinMaxFromTextField(imp, tfCropZMinMax, "z");
+            int[] tMinMax = getMinMaxFromTextField(imp, tfCropTMinMax, "t");
+
+            // check
             //
+            if ( ! Utils.checkRange(imp, zMinMax[0], zMinMax[1], "z") ) return;
+            if ( ! Utils.checkRange(imp, tMinMax[0], tMinMax[1], "t") ) return;
 
-            String[] sA = tfCropZMinMax.getText().split(",");
-            if(sA.length!=2) {
-                logger.error("Something went wrong parsing the zMin, zMax croppping values.\n" +
-                        "Please check that there are two comma separated values.");
-                return;
-            }
-
+            // compute
             //
-            // Get t cropping range
+            ImagePlus imp2 = dataStreamingTools.getCroppedVSS(
+                    imp, imp.getRoi(),
+                    zMinMax[0] - 1, zMinMax[1] - 1,
+                    tMinMax[0] - 1, tMinMax[1] - 1);
+
+            // publish
             //
-
-            // TODO: implement
-
-
-            int zMin = new Integer(sA[0]), zMax;
-            if(sA[1].equals(("all"))) {
-                zMax = imp.getNSlices();
-            } else {
-                zMax = new Integer(sA[1]);
-            }
-
-
-            ImagePlus imp2 = dataStreamingTools.getCroppedVSS(imp, imp.getRoi(), zMin, zMax);
-
             if (imp2 != null)
             {
                 Utils.show(imp2);
@@ -545,6 +543,31 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         return(toolTipTexts.toArray(new String[0]));
     }
 
+    private int[] getMinMaxFromTextField(ImagePlus imp, JTextField tf, String dimension)
+    {
+        String[] s = tf.getText().split(",");
+        if(s.length != 2) {
+            logger.error("Something went wrong parsing the min, max values.\n" +
+                    "Please check that there are two comma separated values.");
+            return null;
+        }
 
+        int min = new Integer(s[0]);
+        int max = 0;
+        if ( s[1].equals(("all")) )
+        {
+            if ( dimension.equals("z") )
+                max = imp.getNSlices();
+            else if ( dimension.equals("t") )
+                max = imp.getNFrames();
+
+        }
+        else
+        {
+            max = new Integer(s[1]);
+        }
+
+        return new int[]{min,max};
+    }
 
 }

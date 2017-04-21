@@ -65,6 +65,46 @@ public class Utils {
         }
     }
 
+
+    public static boolean checkRange(ImagePlus imp, int min, int max, String dimension)
+
+    {
+        // setup
+        //
+
+        int Min = 0, Max = 0;
+
+        if ( dimension.equals("z") )
+        {
+            Min = 1;
+            Max = imp.getNSlices();
+        }
+        else if ( dimension.equals("t") )
+        {
+            Min = 1;
+            Max = imp.getNFrames();
+        }
+
+        // check
+        //
+
+        if (min < Min)
+        {
+            logger.error(""+dimension+" minimum must be >= " + Min + "; please change the value.");
+            return false;
+        }
+
+        if (max > Max)
+        {
+            logger.error(""+dimension+" maximum must be <= " + Max + "; please change the value.");
+            return false;
+        }
+
+
+        return true;
+
+    }
+
     public static Point3D computeOffsetFromCenterSize(Point3D pCenter, Point3D pSize) {
         return(pCenter.subtract(pSize.subtract(1, 1, 1).multiply(0.5)));
     }

@@ -325,9 +325,12 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
         } else if (e.getActionCommand().equals(buttonActions[i++])) {
 
-            // Track selected object
+            //
+            // track selected object
             //
 
+            // check roi
+            //
             Roi roi = imp.getRoi();
             if (roi == null || ! (roi.getTypeAsString().equals("Point") || roi.getTypeAsString().equals("Rectangle")) ) {
                 logger.error("Please use ImageJ's Point selection tool on image: '"
@@ -335,24 +338,13 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 return;
             }
 
-            int a = imp.getT();
-            int b = imp.getNFrames();
-
-            if( ((imp.getT()-1) + nt) > imp.getNFrames() )
-            {
-                nt = imp.getNFrames() - (imp.getT()-1);
-
-                // todo: clean up this mess!
-                textFields[TRACKING_LENGTH_ID].setText(""+nt);
-
-                logger.warning("Due to the requested track length, the track would have been longer than the movie; " +
-                        "the length of the track was thus adjusted.");
-            }
+            // configure the tracking
+            //
 
             TrackingSettings trackingSettings = new TrackingSettings();
+
             trackingSettings.trackingMethod = trackingMethod;
             trackingSettings.iterationsCenterOfMass = (int) Math.ceil(Math.pow(trackingFactor, 2));
-            trackingSettings.nt = nt;
             trackingSettings.channel = imp.getC() - 1;
             trackingSettings.trackStartROI = roi;
             trackingSettings.objectSize = objectSize;
@@ -360,7 +352,18 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             trackingSettings.subSamplingT = subSamplingT;
             trackingSettings.trackingFactor = trackingFactor;
             trackingSettings.background = background;
+            trackingSettings.nt = (((imp.getT()-1) + nt) > imp.getNFrames()) ?
+                    imp.getNFrames() - (imp.getT()-1) : nt;
 
+            // give feedback
+            //
+            if ( trackingSettings.nt  != nt )
+            {
+                logger.warning("Requested track length too long => shortened.");
+            }
+
+            // do it
+            //
             bigDataTracker.trackObject(trackingSettings);
 
         }

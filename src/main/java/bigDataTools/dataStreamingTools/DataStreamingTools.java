@@ -837,50 +837,19 @@ public class DataStreamingTools {
 
     }
 
-    public static ImagePlus getCroppedVSS(ImagePlus imp, Roi roi, int zMin, int zMax)
+    public static ImagePlus getCroppedVSS(ImagePlus imp, Roi roi, int zMin, int zMax, int tMin, int tMax)
     {
 
-        if (!Utils.hasVirtualStackOfStacks(imp)) return null;
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+        int nt = tMax - tMin + 1;
 
-        FileInfoSer[][][] infos = vss.getFileInfosSer();
-        if (infos[0][0][0].compression == 6)
-        {
-            logger.info("Zip-compressed tiff files do not support chuncked loading " +
-                    "=> the cropped stream will not be streamed faster");
-        }
-        if (zMin < 1)
-        {
-            IJ.showMessage(
-                    "zMin must be >= 1; please change the value."
-            );
-            return null;
-        }
-        if (zMax - zMin + 1 > vss.getDepth())
-        {
-            IJ.showMessage(
-                    "The z-cropping range is larger than the data; please change the values."
-            );
-            return null;
-        }
-
-        if (zMax <= zMin)
-        {
-            IJ.showMessage(
-                    "zMax of the cropping range needs to be larger than zMin; " +
-                            "please change the values."
-            );
-            return null;
-        }
-
-        Point3D[] po = new Point3D[vss.getFrames()];
+        Point3D[] po = new Point3D[ nt ];
         Point3D ps = null;
 
         if (roi != null && roi.isArea())
         {
-            for (int t = 0; t < vss.getFrames(); t++)
+            for ( int t = 0; t < nt; t++ )
             {
-                po[t] = new Point3D(roi.getBounds().getX(), roi.getBounds().getY(), zMin - 1);
+                po[t] = new Point3D(roi.getBounds().getX(), roi.getBounds().getY(), zMin);
             }
             ps = new Point3D(roi.getBounds().getWidth(), roi.getBounds().getHeight(), zMax - zMin + 1);
         }
@@ -888,17 +857,13 @@ public class DataStreamingTools {
         {
             logger.warning("No area ROI provided => no cropping in XY.");
 
-            for (int t = 0; t < vss.getFrames(); t++)
+            for ( int t = 0; t < nt; t++ )
             {
                 po[t] = new Point3D(0, 0, zMin - 1);
             }
             ps = new Point3D(imp.getWidth(), imp.getHeight(), zMax - zMin + 1);
 
         }
-
-        // TODO: make this an option as well
-        int tMin = 0;
-        int tMax = vss.getFrames() - 1;
 
         // Crop
         //
