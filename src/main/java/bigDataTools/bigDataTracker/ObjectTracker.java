@@ -1,6 +1,9 @@
 package bigDataTools.bigDataTracker;
 
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import bigDataTools.imageFilter.DoNotFilter;
+import bigDataTools.imageFilter.FFTBandPass;
+import bigDataTools.imageFilter.ImageFilter;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
@@ -19,6 +22,7 @@ class ObjectTracker implements Runnable
     BigDataTracker bigDataTracker;
     Logger logger;
     TrackingSettings trackingSettings;
+    ImageFilter imageFilter;
 
     public ObjectTracker(BigDataTracker bigDataTracker,
                          TrackingSettings trackingSettings,
@@ -27,6 +31,18 @@ class ObjectTracker implements Runnable
         this.bigDataTracker = bigDataTracker;
         this.trackingSettings = trackingSettings;
         this.logger = logger;
+
+        // filter image (mainly good for improving the correlation)
+        //
+
+        // don't filter
+        imageFilter = new DoNotFilter();
+
+        // FFT BandPass
+        //imageFilter = new FFTBandPass();
+        //((FFTBandPass)imageFilter).sizeMax = 10;
+        //((FFTBandPass)imageFilter).sizeMin = 5;
+
     }
 
     public void run() {
@@ -60,7 +76,7 @@ class ObjectTracker implements Runnable
         //
 
         // get selected track coordinates
-        // load more data that the user selected
+        // load more data than the user selected
         pSize = track.getObjectSize().multiply(trackingSettings.trackingFactor);
         p0offset = Utils.computeOffsetFromCenterSize(pStart, pSize);
 
@@ -71,6 +87,10 @@ class ObjectTracker implements Runnable
                 trackingSettings.subSamplingXYZ, trackingSettings.background);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
+        // filter the image to ease the tracking
+        //
+        imp0 = imageFilter.filter(imp0);
+
         // iteratively compute the shift of the center of mass relative to the center of the image stack
         // using only half the image size for iteration
         startTime = System.currentTimeMillis();
@@ -80,18 +100,18 @@ class ObjectTracker implements Runnable
         elapsedProcessingTime = System.currentTimeMillis() - startTime;
 
         // correct for sub-sampling
+        //
         pShift = Utils.multiplyPoint3dComponents(pShift,
                 trackingSettings.subSamplingXYZ);
 
-        //
-        // Add track location for first image
+        // add track location for first image
         //
         Point3D pUpdate = Utils.computeCenterFromOffsetSize(p0offset.add(pShift), pSize);
 
 
-        // Store results
-
-        publishResult(track, trackTable, logger, pUpdate, tStart,
+        // store results
+        //
+        publishResult(track, trackTable, logger, pUpdate, tStart, nt,
                 elapsedReadingTime, elapsedProcessingTime);
 
         //
@@ -104,7 +124,6 @@ class ObjectTracker implements Runnable
         int tNow;
         int tMaxUpdate;
 
-        //
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
         //  - p1offset has to be the position where the current image was loaded
@@ -136,13 +155,18 @@ class ObjectTracker implements Runnable
                     trackingSettings.subSamplingXYZ, trackingSettings.background);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
+            // filter image
+            //
+            imp1 = imageFilter.filter(imp1);
+
+
             if (trackingSettings.trackingMethod.equals("correlation") ) {
 
                 logger.debug("measuring drift using correlation...");
 
                 // compute shift relative to previous time-point
                 startTime = System.currentTimeMillis();
-                pShift = compute16bitShiftUsingPhaseCorrelation(imp1, imp0);
+                pShift = computeShiftUsingPhaseCorrelation(imp1, imp0);
                 stopTime = System.currentTimeMillis();
                 elapsedProcessingTime = stopTime - startTime;
 
@@ -208,7 +232,7 @@ class ObjectTracker implements Runnable
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add(pShift.multiply(interpolation));
 
-                publishResult(track, trackTable, logger, pUpdate, tUpdate, elapsedReadingTime, elapsedProcessingTime);
+                publishResult(track, trackTable, logger, pUpdate, tUpdate, nt, elapsedReadingTime, elapsedProcessingTime);
 
             }
 
@@ -228,7 +252,8 @@ class ObjectTracker implements Runnable
 
     }
 
-    private void publishResult(Track track, TrackTable trackTable, Logger logger, Point3D location, int t,
+    private void publishResult(Track track, TrackTable trackTable, Logger logger, Point3D location,
+                               int t, int nt,
                                long elapsedReadingTime, long elapsedProcessingTime)
     {
 
@@ -243,7 +268,7 @@ class ObjectTracker implements Runnable
 
         // TODO: make this somehow a logger.progress
         logger.info("Track ID: " + track.getID() +
-                "; Time points tracked: " + (t - track.getTmin() + 1) + "/" + track.getLength() +
+                "; Time points tracked: " + (t - track.getTmin() + 1) + "/" + nt +
                 "; reading [ms] = " + elapsedReadingTime +
                 "; processing [ms] = " + elapsedProcessingTime);
 
@@ -276,7 +301,7 @@ class ObjectTracker implements Runnable
         return(pCenter.subtract(pStackCenter));
     }
 
-    private Point3D compute16bitShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0) {
+    private Point3D computeShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0) {
         if( logger.isShowDebug() )   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
         PhaseCorrelation phc = new PhaseCorrelation(ImagePlusAdapter.wrap(imp1), ImagePlusAdapter.wrap(imp0), 5, true);
         if( logger.isShowDebug() )   logger.info("phc.process()... ");

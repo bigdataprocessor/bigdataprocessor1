@@ -33,6 +33,16 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     String trackingMethod = "center of mass";
     BigDataTracker bigDataTracker;
     TrackTablePanel trackTablePanel;
+    String TRACKING_LENGTH = "Length [frames]";
+    Integer TRACKING_LENGTH_ID = 3;
+    String[] defaults = {
+            String.valueOf((int) objectSize.getX()) + "," + (int) objectSize.getY() + "," +String.valueOf((int) objectSize.getZ()),
+            String.valueOf(trackingFactor),
+            String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
+            String.valueOf(nt),
+            String.valueOf(background),
+            String.valueOf(resizeFactor)
+    };
 
     ImagePlus imp;
 
@@ -42,7 +52,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             "Object size: x,y,z [pixels]",
             "Tracking window size [factor]",
             "dx, dy, dz, dt [pixels, frames]",
-            "Length [frames]",
+            TRACKING_LENGTH,
             "Background value [gray values]",
             "Resize objects by [factor]"
     };
@@ -60,16 +70,6 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     };
 
 
-    // TODO: call this later and make educated guesses from the ImagePlus
-    String[] defaults = {
-            String.valueOf((int) objectSize.getX()) + "," + (int) objectSize.getY() + "," +String.valueOf((int) objectSize.getZ()),
-            String.valueOf(trackingFactor),
-            String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
-            String.valueOf(nt),
-            String.valueOf(background),
-            String.valueOf(resizeFactor)
-    };
-
     String[] comboNames = {
             "Method"
     };
@@ -79,6 +79,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     };
 
     JTextField[] textFields = new JTextField[texts.length];
+
     JLabel[] labels = new JLabel[texts.length];
 
     int previouslySelectedZ = -1;
@@ -91,6 +92,22 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         this.imp = imp;
         this.bigDataTracker = new BigDataTracker(imp);
         trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(), imp);
+        setDefaults();
+    }
+
+    public void setDefaults()
+    {
+
+        String[] defaults = {
+                String.valueOf((int) objectSize.getX()) + "," + (int) objectSize.getY() + "," +String.valueOf((int) objectSize.getZ()),
+                String.valueOf(trackingFactor),
+                String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
+                String.valueOf(nt),
+                String.valueOf(background),
+                String.valueOf(resizeFactor)
+        };
+
+        this.defaults = defaults;
     }
 
     public void showDialog()
@@ -318,9 +335,15 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 return;
             }
 
-            if( (imp.getT()-1) + nt > imp.getNFrames() )
+            int a = imp.getT();
+            int b = imp.getNFrames();
+
+            if( ((imp.getT()-1) + nt) > imp.getNFrames() )
             {
                 nt = imp.getNFrames() - (imp.getT()-1);
+
+                // todo: clean up this mess!
+                textFields[TRACKING_LENGTH_ID].setText(""+nt);
 
                 logger.warning("Due to the requested track length, the track would have been longer than the movie; " +
                         "the length of the track was thus adjusted.");

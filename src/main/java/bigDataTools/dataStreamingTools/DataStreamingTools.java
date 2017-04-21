@@ -78,6 +78,7 @@ import java.util.regex.Pattern;
 
 //import net.imagej.ImageJ;
 
+// todo: put filename as slice label!!
 // todo: test
 // todo: brightness and contrast adjustment upon loading does not work
 // todo: can only some combobox fields be editable?

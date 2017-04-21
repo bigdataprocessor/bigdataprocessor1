@@ -36,7 +36,12 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfRowsPerStrip = new JTextField("10", 3);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
-    JComboBox channelTimePatternComboBox = new JComboBox(new String[] {"None", Utils.LOAD_CHANNELS_FROM_FOLDERS,".*_C<channel>_T<t>.tif"});
+    JComboBox channelTimePatternComboBox = new JComboBox(new String[] {
+            "None",
+            Utils.LOAD_CHANNELS_FROM_FOLDERS,
+            ".*_C<channel>_T<t>.tif",
+            "Cam_<channel>_<t>.h5",
+    });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
     JComboBox comboFileTypeForSaving = new JComboBox(Utils.FileType.values());
 
