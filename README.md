@@ -22,7 +22,7 @@ You will be in the "Streaming" tab.
 [Load multiple channels]:
 - [None] you will only load one channel
 - [from sub-folders] assumes that the channels are in different folders, below you have to chose the parent folder
-- [.*\_C&lt;c>\_T<t>.tif] regular expression matching for the case that the different channels are in the same folder; you can edit this field to adapt it to your naming scheme.
+- [.*\_C&lt;c>\_T&lt;t>.tif] regular expression matching for the case that the different channels are in the same folder; you can edit this field to adapt it to your naming scheme.
 
 "Hdf5 data set": 
 - for elastix output data select: [ITKImage/0/VoxelData]
