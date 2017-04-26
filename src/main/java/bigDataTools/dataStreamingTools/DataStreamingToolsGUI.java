@@ -41,8 +41,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JComboBox channelTimePatternComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
-            ".*_C<channel>_T<t>.tif",
-            "Cam_<channel>_<t>.h5",
+            ".*_C<c>_T<t>.tif",
+            "Cam_<c>_<t>.h5",
     });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
     JComboBox comboFileTypeForSaving = new JComboBox(Utils.FileType.values());

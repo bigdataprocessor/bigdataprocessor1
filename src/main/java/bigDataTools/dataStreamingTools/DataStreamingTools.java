@@ -404,15 +404,15 @@ public class DataStreamingTools {
 
                 hasCTPattern = true;
 
-                if (!(channelTimePattern.contains("<channel>") && channelTimePattern.contains("<t>")))
+                if (!(channelTimePattern.contains("<c>") && channelTimePattern.contains("<t>")))
                 {
                     IJ.showMessage("The pattern for multi-channel loading must" +
-                            "contain  <channel> and <t> to match channels and time in the filenames.");
+                            "contain <c> and <t> to match channels and time in the filenames.");
                     return (null);
                 }
 
                 // replace shortcuts by actual regexp
-                channelTimePattern = channelTimePattern.replace("<channel>", "(?<C>.*)");
+                channelTimePattern = channelTimePattern.replace("<c>", "(?<C>.*)");
                 channelTimePattern = channelTimePattern.replace("<t>", "(?<T>.*)");
 
                 channelFolders = new String[]{""};
