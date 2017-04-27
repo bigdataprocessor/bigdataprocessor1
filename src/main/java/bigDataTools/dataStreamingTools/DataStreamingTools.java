@@ -487,7 +487,7 @@ public class DataStreamingTools {
                 }
                 nX = fi0.width;
                 nY = fi0.height;
-                bitDepth = 16; // todo: determine from files
+                bitDepth = fi0.getBytesPerPixel() * 8;
 
 
 
@@ -503,9 +503,18 @@ public class DataStreamingTools {
 
                 HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/" + hdf5DataSet);
 
-                nZ = (int) dsInfo.getDimensions()[0];
-                nY = (int) dsInfo.getDimensions()[1];
-                nX = (int) dsInfo.getDimensions()[2];
+                if ( dsInfo.getDimensions().length == 3 )
+                {
+                    nZ = (int) dsInfo.getDimensions()[0];
+                    nY = (int) dsInfo.getDimensions()[1];
+                    nX = (int) dsInfo.getDimensions()[2];
+                }
+                else if ( dsInfo.getDimensions().length == 2 )
+                {
+                    nZ = 1;
+                    nY = (int) dsInfo.getDimensions()[0];
+                    nX = (int) dsInfo.getDimensions()[1];
+                }
 
                 bitDepth = assignHDF5TypeToImagePlusBitdepth(dsInfo);
 

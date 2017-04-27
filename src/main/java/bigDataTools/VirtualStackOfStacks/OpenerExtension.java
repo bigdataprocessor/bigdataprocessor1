@@ -145,7 +145,15 @@ class OpenerExtension extends Opener {
             */
             if ( dsTypeString.equals("int16") )
             {
-                block = reader.int16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{nz, ny, nx}, new long[]{zs, ys, xs});
+                try
+                {
+                    block = reader.int16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{nz, ny, nx}, new long[]{zs, ys, xs});
+                }
+                catch (Exception e)
+                {
+                    //logger.warning(e.toString());
+                    block = reader.int16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{ny, nx}, new long[]{ys, xs});
+                }
             }
             else if ( dsTypeString.equals("uint16") )
             {
@@ -694,7 +702,7 @@ class OpenerExtension extends Opener {
         public void setShortPixelsCropXY(short[] pixels, int ys, int ny, int xs, int nx, int imByteWidth, byte[] buffer) {
             int ip = 0;
             int bs, be;
-            if(fi0.bytesPerPixel!=2) {
+            if(fi0.bytesPerPixel !=2 ) {
                  logger.error("Unsupported bit depth: " + fi0.bytesPerPixel * 8);
             }
 

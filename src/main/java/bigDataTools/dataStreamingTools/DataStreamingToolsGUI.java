@@ -34,7 +34,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
     JTextField tfCropTMinMax = new JTextField("1,all", 5);
-    JTextField tfIOThreads = new JTextField("10", 2);
+    JTextField tfIOThreads = new JTextField("30", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});

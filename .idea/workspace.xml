@@ -2,120 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/Parameter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParameterCollection.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParameterType.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParametrisedFunction.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParametrisedProtocolInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/automic/parameters/ParametrisedStepInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/AnalyzeFISHSpotsGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/AnalyzeFISHSpotsPlugIn$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/AnalyzeFISHSpotsPlugIn.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackTable$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackTable$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackTable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackTablePanel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$Tracking.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackingGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker$TrackingGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTracker.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTrackerGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTrackerPlugIn$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/BigDataTrackerPlugIn.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/ByteVector.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$LoadFrameIntoRAM.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$ParseFilesIntoVirtualStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$SaveToStacks.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$SetFilesInVirtualStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools$StackStreamToolsGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingTools.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsGUI$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsGUI$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsPlugIn$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/DataStreamingToolsPlugIn.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/FastTiffDecoder.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/FileInfoSer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/IJLazySwingLogger$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/IJLazySwingLogger$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/IJLazySwingLogger.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/LoadFrameFromVssIntoRAM.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/LoadSingleFrameFromVSSIntoRAM.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Logger.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/MonitorThreadPoolStatus.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/ObjectTracker.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenHDF5test$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenHDF5test.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$LoadFrameIntoRAM.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$SaveToStacks.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$SetFilesInVirtualStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack$StackStreamToolsGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenStacksAsVirtualStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension$process2stack$ByteVector.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension$process2stack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack$ByteVector.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtension.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtensions$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtensions$process2stack.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/OpenerExtensions.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Point5D.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackTable$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackTable$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackTable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackTablePanel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$Tracking.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackingGUI$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration$TrackingGUI.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Registration.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SaveToStacks.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SaveVSSFrame.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SegmentObjects.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SegmentationAnalysis.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SegmentationOverlay.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SegmentationResults.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/SegmentationSettings.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Track.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/TrackTable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/TrackTablePanel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/TrackingSettings.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Utils$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Utils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/jTableSpots.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -138,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.77874184">
-              <caret line="1043" column="0" selection-start-line="1043" selection-start-column="0" selection-end-line="1043" selection-end-column="0" />
+            <state vertical-scroll-proportion="-13.444445">
+              <caret line="515" column="57" selection-start-line="515" selection-start-column="57" selection-end-line="515" selection-end-column="57" />
               <folding>
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
                 <element signature="e#4334#4336#0" expanded="false" />
@@ -157,30 +48,43 @@
                 <element signature="e#13215#13217#0" expanded="false" />
                 <element signature="e#15313#15315#0" expanded="false" />
                 <element signature="e#15639#15641#0" expanded="false" />
-                <element signature="e#17467#17469#0" expanded="false" />
-                <element signature="e#17640#17657#0" expanded="false" />
-                <element signature="e#19434#19436#0" expanded="false" />
-                <element signature="e#19693#19695#0" expanded="false" />
-                <element signature="e#19799#19819#0" expanded="false" />
-                <element signature="e#20125#20148#0" expanded="false" />
-                <element signature="class#20207:20495" expanded="false" />
-                <element signature="class#25218:25419" expanded="false" />
-                <element signature="e#27508#27515#0" expanded="false" />
-                <element signature="e#29112#29139#0" expanded="false" />
+                <element signature="e#17810#17812#0" expanded="false" />
+                <element signature="e#17983#18000#0" expanded="false" />
+                <element signature="e#20036#20038#0" expanded="false" />
+                <element signature="e#20142#20162#0" expanded="false" />
+                <element signature="class#20550:20838" expanded="false" />
+                <element signature="class#25561:25762" expanded="false" />
+                <element signature="e#27851#27858#0" expanded="false" />
+                <element signature="e#29455#29482#0" expanded="false" />
                 <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#30832#30855#0" expanded="false" />
-                <element signature="e#31197#31271#0" expanded="false" />
-                <element signature="class#31597:31856" expanded="false" />
-                <element signature="e#32421#32435#0" expanded="false" />
-                <element signature="e#32807#32830#0" expanded="false" />
-                <element signature="class#32881:33138" expanded="false" />
+                <element signature="e#31175#31198#0" expanded="false" />
+                <element signature="e#31540#31614#0" expanded="false" />
+                <element signature="class#31940:32199" expanded="false" />
+                <element signature="e#32764#32778#0" expanded="false" />
+                <element signature="e#33150#33173#0" expanded="false" />
+                <element signature="class#33224:33481" expanded="false" />
                 <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#33844#33857#0" expanded="false" />
-                <element signature="e#34285#34309#0" expanded="false" />
-                <element signature="e#35520#35583#0" expanded="false" />
-                <element signature="e#36021#36086#0" expanded="false" />
-                <element signature="e#36556#36646#0" expanded="false" />
-                <element signature="class#37499:37715" expanded="false" />
+                <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+                <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+                <element signature="e#34187#34200#0" expanded="false" />
+                <element signature="e#35863#35926#0" expanded="false" />
+                <element signature="e#36364#36429#0" expanded="false" />
+                <element signature="e#36899#36989#0" expanded="false" />
+                <element signature="class#37842:38058" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OpenerExtension.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.73155737">
+              <caret line="153" column="22" selection-start-line="153" selection-start-column="22" selection-end-line="153" selection-end-column="22" />
+              <folding>
+                <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
+                <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
+                <element signature="method#setShortPixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -196,23 +100,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BigDataTracker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="71" column="40" selection-start-line="71" selection-start-column="40" selection-end-line="71" selection-end-column="40" />
-              <folding>
-                <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DataStreamingToolsGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="52.185184">
-              <caret line="41" column="19" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="19" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="36" column="53" selection-start-line="36" selection-start-column="53" selection-end-line="36" selection-end-column="53" />
               <folding>
                 <element signature="docComment;class#DataStreamingToolsGUI#0" expanded="false" />
                 <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="true" />
@@ -262,8 +154,8 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="30" column="45" selection-start-line="30" selection-start-column="45" selection-end-line="30" selection-end-column="45" />
               <folding>
+                <element signature="imports" expanded="false" />
                 <element signature="e#1062#1121#0" expanded="false" />
-                <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
                 <element signature="e#1644#1674#0" expanded="false" />
                 <element signature="e#2417#2419#0" expanded="false" />
                 <element signature="e#2734#2746#0" expanded="false" />
@@ -282,9 +174,15 @@
                 <element signature="e#7202#7248#0" expanded="false" />
                 <element signature="e#8158#8251#0" expanded="false" />
                 <element signature="e#8937#9005#0" expanded="false" />
+                <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="false" />
+                <element signature="method#compute16bitShiftUsingIterativeCenterOfMass#0;class#ObjectTracker#0" expanded="false" />
                 <element signature="e#11200#11242#0" expanded="false" />
                 <element signature="e#11778#11873#0" expanded="false" />
+                <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="false" />
                 <element signature="e#13013#13059#0" expanded="false" />
+                <element signature="method#compute16bitCenterOfMass#0;class#ObjectTracker#0" expanded="false" />
+                <element signature="method#compute16bitMean#0;class#ObjectTracker#0" expanded="false" />
+                <element signature="method#compute16bitMaximumLocation#0;class#ObjectTracker#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -293,11 +191,11 @@
       <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.185185">
+            <state vertical-scroll-proportion="0.0">
               <caret line="334" column="63" selection-start-line="334" selection-start-column="63" selection-end-line="334" selection-end-column="63" />
               <folding>
-                <element signature="method#BigDataTrackerGUI#0;class#BigDataTrackerGUI#0" expanded="true" />
-                <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="false" />
                 <element signature="e#3927#3929#0" expanded="false" />
                 <element signature="e#4498#4500#0" expanded="false" />
                 <element signature="e#4911#4913#0" expanded="false" />
@@ -307,10 +205,6 @@
                 <element signature="e#8279#8281#0" expanded="false" />
                 <element signature="e#8792#8794#0" expanded="false" />
                 <element signature="e#9179#9181#0" expanded="false" />
-                <element signature="e#9435#9436#0" expanded="true" />
-                <element signature="e#9478#9479#0" expanded="true" />
-                <element signature="method#focusGained#0;class#BigDataTrackerGUI#0" expanded="true" />
-                <element signature="method#focusLost#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="e#10036#10038#0" expanded="false" />
                 <element signature="e#10642#10644#0" expanded="false" />
                 <element signature="e#12902#12904#0" expanded="false" />
@@ -325,7 +219,9 @@
                 <element signature="e#16111#16113#0" expanded="false" />
                 <element signature="e#16373#16375#0" expanded="false" />
                 <element signature="e#16622#16624#0" expanded="false" />
-                <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
+                <element signature="e#17644#17645#0" expanded="false" />
+                <element signature="e#17687#17688#0" expanded="false" />
+                <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -336,9 +232,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="15" column="1" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
-              <folding>
-                <element signature="method#filter#0;class#DoNotFilter#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -348,18 +242,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FFTBandPass.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/FFTBandPass.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -434,6 +316,7 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
       </list>
     </option>
   </component>
@@ -458,9 +341,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="85" />
-    <option name="y" value="52" />
-    <option name="width" value="1231" />
+    <option name="x" value="773" />
+    <option name="y" value="106" />
+    <option name="width" value="1383" />
     <option name="height" value="807" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -486,7 +369,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="PackagesPane">
         <subPane>
@@ -502,6 +384,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -828,7 +711,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="85" y="52" width="1231" height="807" extended-state="0" />
+    <frame x="773" y="106" width="1383" height="807" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -846,7 +729,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30277544" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26845637" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27832168" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -858,16 +741,16 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30277544" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27912933" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -904,7 +787,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>1020</line>
+          <line>1029</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
@@ -922,7 +805,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>844</line>
+          <line>853</line>
           <properties />
           <option name="timeStamp" value="35" />
         </line-breakpoint>
@@ -1005,30 +888,29 @@
             <element signature="e#13215#13217#0" expanded="false" />
             <element signature="e#15313#15315#0" expanded="false" />
             <element signature="e#15639#15641#0" expanded="false" />
-            <element signature="e#17467#17469#0" expanded="false" />
-            <element signature="e#17640#17657#0" expanded="false" />
-            <element signature="e#19434#19436#0" expanded="false" />
-            <element signature="e#19693#19695#0" expanded="false" />
-            <element signature="e#19799#19819#0" expanded="false" />
-            <element signature="e#20125#20148#0" expanded="false" />
-            <element signature="class#20207:20495" expanded="false" />
-            <element signature="class#25218:25419" expanded="false" />
-            <element signature="e#27508#27515#0" expanded="false" />
-            <element signature="e#29112#29139#0" expanded="false" />
+            <element signature="e#17810#17812#0" expanded="false" />
+            <element signature="e#17983#18000#0" expanded="false" />
+            <element signature="e#20036#20038#0" expanded="false" />
+            <element signature="e#20142#20162#0" expanded="false" />
+            <element signature="class#20550:20838" expanded="false" />
+            <element signature="class#25561:25762" expanded="false" />
+            <element signature="e#27851#27858#0" expanded="false" />
+            <element signature="e#29455#29482#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30832#30855#0" expanded="false" />
-            <element signature="e#31197#31271#0" expanded="false" />
-            <element signature="class#31597:31856" expanded="false" />
-            <element signature="e#32421#32435#0" expanded="false" />
-            <element signature="e#32807#32830#0" expanded="false" />
-            <element signature="class#32881:33138" expanded="false" />
+            <element signature="e#31175#31198#0" expanded="false" />
+            <element signature="e#31540#31614#0" expanded="false" />
+            <element signature="class#31940:32199" expanded="false" />
+            <element signature="e#32764#32778#0" expanded="false" />
+            <element signature="e#33150#33173#0" expanded="false" />
+            <element signature="class#33224:33481" expanded="false" />
             <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33844#33857#0" expanded="false" />
-            <element signature="e#34285#34309#0" expanded="false" />
-            <element signature="e#35520#35583#0" expanded="false" />
-            <element signature="e#36021#36086#0" expanded="false" />
-            <element signature="e#36556#36646#0" expanded="false" />
-            <element signature="class#37499:37715" expanded="false" />
+            <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#34187#34200#0" expanded="false" />
+            <element signature="e#35863#35926#0" expanded="false" />
+            <element signature="e#36364#36429#0" expanded="false" />
+            <element signature="e#36899#36989#0" expanded="false" />
+            <element signature="class#37842:38058" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1058,30 +940,29 @@
             <element signature="e#13215#13217#0" expanded="false" />
             <element signature="e#15313#15315#0" expanded="false" />
             <element signature="e#15639#15641#0" expanded="false" />
-            <element signature="e#17467#17469#0" expanded="false" />
-            <element signature="e#17640#17657#0" expanded="false" />
-            <element signature="e#19434#19436#0" expanded="false" />
-            <element signature="e#19693#19695#0" expanded="false" />
-            <element signature="e#19799#19819#0" expanded="false" />
-            <element signature="e#20125#20148#0" expanded="false" />
-            <element signature="class#20207:20495" expanded="false" />
-            <element signature="class#25218:25419" expanded="false" />
-            <element signature="e#27508#27515#0" expanded="false" />
-            <element signature="e#29112#29139#0" expanded="false" />
+            <element signature="e#17810#17812#0" expanded="false" />
+            <element signature="e#17983#18000#0" expanded="false" />
+            <element signature="e#20036#20038#0" expanded="false" />
+            <element signature="e#20142#20162#0" expanded="false" />
+            <element signature="class#20550:20838" expanded="false" />
+            <element signature="class#25561:25762" expanded="false" />
+            <element signature="e#27851#27858#0" expanded="false" />
+            <element signature="e#29455#29482#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30832#30855#0" expanded="false" />
-            <element signature="e#31197#31271#0" expanded="false" />
-            <element signature="class#31597:31856" expanded="false" />
-            <element signature="e#32421#32435#0" expanded="false" />
-            <element signature="e#32807#32830#0" expanded="false" />
-            <element signature="class#32881:33138" expanded="false" />
+            <element signature="e#31175#31198#0" expanded="false" />
+            <element signature="e#31540#31614#0" expanded="false" />
+            <element signature="class#31940:32199" expanded="false" />
+            <element signature="e#32764#32778#0" expanded="false" />
+            <element signature="e#33150#33173#0" expanded="false" />
+            <element signature="class#33224:33481" expanded="false" />
             <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33844#33857#0" expanded="false" />
-            <element signature="e#34285#34309#0" expanded="false" />
-            <element signature="e#35520#35583#0" expanded="false" />
-            <element signature="e#36021#36086#0" expanded="false" />
-            <element signature="e#36556#36646#0" expanded="false" />
-            <element signature="class#37499:37715" expanded="false" />
+            <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#34187#34200#0" expanded="false" />
+            <element signature="e#35863#35926#0" expanded="false" />
+            <element signature="e#36364#36429#0" expanded="false" />
+            <element signature="e#36899#36989#0" expanded="false" />
+            <element signature="class#37842:38058" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1132,13 +1013,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="568" column="23" selection-start-line="568" selection-start-column="23" selection-end-line="568" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1299,10 +1173,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#showProgressAndWaitUntilDone#0;class#MonitorThreadPoolStatus#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1332,7 +1202,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1350,7 +1219,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="49" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1367,7 +1235,20 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="71" column="40" selection-start-line="71" selection-start-column="40" selection-end-line="71" selection-end-column="40" />
           <folding>
-            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
+            <element signature="e#0#8026#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#BigDataTracker#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="e#2740#2741#0" expanded="false" />
+            <element signature="e#2773#2774#0" expanded="false" />
+            <element signature="e#2816#2817#0" expanded="false" />
+            <element signature="e#2845#2846#0" expanded="false" />
+            <element signature="e#2878#2879#0" expanded="false" />
+            <element signature="e#2904#2905#0" expanded="false" />
+            <element signature="method#clearAllTracks#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#getViewsOnTrackedObjects#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#addLocationToOverlay#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#addNewTrack#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#cancelTracking#0;class#BigDataTracker#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1376,9 +1257,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1386,9 +1265,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="1" selection-start-line="14" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
-          <folding>
-            <element signature="method#filter#0;class#DoNotFilter#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1397,8 +1274,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="30" column="45" selection-start-line="30" selection-start-column="45" selection-end-line="30" selection-end-column="45" />
           <folding>
+            <element signature="imports" expanded="false" />
             <element signature="e#1062#1121#0" expanded="false" />
-            <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
             <element signature="e#1644#1674#0" expanded="false" />
             <element signature="e#2417#2419#0" expanded="false" />
             <element signature="e#2734#2746#0" expanded="false" />
@@ -1417,9 +1294,15 @@
             <element signature="e#7202#7248#0" expanded="false" />
             <element signature="e#8158#8251#0" expanded="false" />
             <element signature="e#8937#9005#0" expanded="false" />
+            <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="false" />
+            <element signature="method#compute16bitShiftUsingIterativeCenterOfMass#0;class#ObjectTracker#0" expanded="false" />
             <element signature="e#11200#11242#0" expanded="false" />
             <element signature="e#11778#11873#0" expanded="false" />
+            <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="false" />
             <element signature="e#13013#13059#0" expanded="false" />
+            <element signature="method#compute16bitCenterOfMass#0;class#ObjectTracker#0" expanded="false" />
+            <element signature="method#compute16bitMean#0;class#ObjectTracker#0" expanded="false" />
+            <element signature="method#compute16bitMaximumLocation#0;class#ObjectTracker#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1434,11 +1317,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.185185">
+        <state vertical-scroll-proportion="0.0">
           <caret line="334" column="63" selection-start-line="334" selection-start-column="63" selection-end-line="334" selection-end-column="63" />
           <folding>
-            <element signature="method#BigDataTrackerGUI#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="false" />
             <element signature="e#3927#3929#0" expanded="false" />
             <element signature="e#4498#4500#0" expanded="false" />
             <element signature="e#4911#4913#0" expanded="false" />
@@ -1448,10 +1331,6 @@
             <element signature="e#8279#8281#0" expanded="false" />
             <element signature="e#8792#8794#0" expanded="false" />
             <element signature="e#9179#9181#0" expanded="false" />
-            <element signature="e#9435#9436#0" expanded="true" />
-            <element signature="e#9478#9479#0" expanded="true" />
-            <element signature="method#focusGained#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#focusLost#0;class#BigDataTrackerGUI#0" expanded="true" />
             <element signature="e#10036#10038#0" expanded="false" />
             <element signature="e#10642#10644#0" expanded="false" />
             <element signature="e#12902#12904#0" expanded="false" />
@@ -1466,7 +1345,9 @@
             <element signature="e#16111#16113#0" expanded="false" />
             <element signature="e#16373#16375#0" expanded="false" />
             <element signature="e#16622#16624#0" expanded="false" />
-            <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="e#17644#17645#0" expanded="false" />
+            <element signature="e#17687#17688#0" expanded="false" />
+            <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1483,8 +1364,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="52.185184">
-          <caret line="41" column="19" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="19" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="53" selection-start-line="36" selection-start-column="53" selection-end-line="36" selection-end-column="53" />
           <folding>
             <element signature="docComment;class#DataStreamingToolsGUI#0" expanded="false" />
             <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="true" />
@@ -1517,8 +1398,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.77874184">
-          <caret line="1043" column="0" selection-start-line="1043" selection-start-column="0" selection-end-line="1043" selection-end-column="0" />
+        <state vertical-scroll-proportion="-13.444445">
+          <caret line="515" column="57" selection-start-line="515" selection-start-column="57" selection-end-line="515" selection-end-column="57" />
           <folding>
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
             <element signature="e#4334#4336#0" expanded="false" />
@@ -1533,30 +1414,49 @@
             <element signature="e#13215#13217#0" expanded="false" />
             <element signature="e#15313#15315#0" expanded="false" />
             <element signature="e#15639#15641#0" expanded="false" />
-            <element signature="e#17467#17469#0" expanded="false" />
-            <element signature="e#17640#17657#0" expanded="false" />
-            <element signature="e#19434#19436#0" expanded="false" />
-            <element signature="e#19693#19695#0" expanded="false" />
-            <element signature="e#19799#19819#0" expanded="false" />
-            <element signature="e#20125#20148#0" expanded="false" />
-            <element signature="class#20207:20495" expanded="false" />
-            <element signature="class#25218:25419" expanded="false" />
-            <element signature="e#27508#27515#0" expanded="false" />
-            <element signature="e#29112#29139#0" expanded="false" />
+            <element signature="e#17810#17812#0" expanded="false" />
+            <element signature="e#17983#18000#0" expanded="false" />
+            <element signature="e#20036#20038#0" expanded="false" />
+            <element signature="e#20142#20162#0" expanded="false" />
+            <element signature="class#20550:20838" expanded="false" />
+            <element signature="class#25561:25762" expanded="false" />
+            <element signature="e#27851#27858#0" expanded="false" />
+            <element signature="e#29455#29482#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#30832#30855#0" expanded="false" />
-            <element signature="e#31197#31271#0" expanded="false" />
-            <element signature="class#31597:31856" expanded="false" />
-            <element signature="e#32421#32435#0" expanded="false" />
-            <element signature="e#32807#32830#0" expanded="false" />
-            <element signature="class#32881:33138" expanded="false" />
+            <element signature="e#31175#31198#0" expanded="false" />
+            <element signature="e#31540#31614#0" expanded="false" />
+            <element signature="class#31940:32199" expanded="false" />
+            <element signature="e#32764#32778#0" expanded="false" />
+            <element signature="e#33150#33173#0" expanded="false" />
+            <element signature="class#33224:33481" expanded="false" />
             <element signature="class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#33844#33857#0" expanded="false" />
-            <element signature="e#34285#34309#0" expanded="false" />
-            <element signature="e#35520#35583#0" expanded="false" />
-            <element signature="e#36021#36086#0" expanded="false" />
-            <element signature="e#36556#36646#0" expanded="false" />
-            <element signature="class#37499:37715" expanded="false" />
+            <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#34187#34200#0" expanded="false" />
+            <element signature="e#35863#35926#0" expanded="false" />
+            <element signature="e#36364#36429#0" expanded="false" />
+            <element signature="e#36899#36989#0" expanded="false" />
+            <element signature="class#37842:38058" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ch/systemsx/cisd/hdf5/IHDF5ShortReader.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53796095">
+          <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.73155737">
+          <caret line="153" column="22" selection-start-line="153" selection-start-column="22" selection-end-line="153" selection-end-column="22" />
+          <folding>
+            <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
+            <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
+            <element signature="method#setShortPixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
           </folding>
         </state>
       </provider>
