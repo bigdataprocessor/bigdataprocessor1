@@ -51,7 +51,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JButton viewInBigDataViewer =  new JButton(BDV);
 
     final String SAVE = "Save";
-    JButton save =  new JButton(SAVE);
+    JButton save = new JButton(SAVE);
+
+    final String STOP_SAVING = "Stop Saving";
+    JButton stopSaving =  new JButton(STOP_SAVING);
 
     final String STREAMfromFolder = "Stream from folder";
     JButton streamFromFolder =  new JButton(STREAMfromFolder);
@@ -70,6 +73,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
     Logger logger = new IJLazySwingLogger();
 
+    DataStreamingTools dataStreamingToolsSavingThreads;
 
     JFileChooser fc;
 
@@ -211,6 +215,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         save.setActionCommand(SAVE);
         save.addActionListener(this);
         panels.get(j).add(save);
+        stopSaving.setActionCommand(STOP_SAVING);
+        stopSaving.addActionListener(this);
+        panels.get(j).add(stopSaving);
         mainPanels.get(k).add(panels.get(j++));
 
         jtp.add("Saving", mainPanels.get(k++));
@@ -404,13 +411,22 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     if(cbLZW.isSelected())
                         compression="LZW";
 
-                    DataStreamingTools.saveVSSAsStacks(imp, tfBinning.getText(), cbSaveVolume.isSelected(),
+                    dataStreamingToolsSavingThreads = new DataStreamingTools();
+                    dataStreamingToolsSavingThreads.saveVSSAsStacks(imp, tfBinning.getText(), cbSaveVolume.isSelected(),
                             cbSaveProjection.isSelected(),
                             file.getAbsolutePath(), fileType,
                             compression, rowsPerStrip, ioThreads);
 
                 }
 
+            }
+
+        }
+        else if (e.getActionCommand().equals(STOP_SAVING))
+        {
+            if ( dataStreamingToolsSavingThreads != null )
+            {
+                dataStreamingToolsSavingThreads.cancelSaving();
             }
 
         }

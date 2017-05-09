@@ -1,5 +1,6 @@
 package bigDataTools.VirtualStackOfStacks;
 
+import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.ProjectionXYZ;
@@ -38,13 +39,14 @@ public class SaveVSSFrame implements Runnable {
     int t;
     String bin;
     boolean saveVolume, saveProjection;
-
+    DataStreamingTools dataStreamingTools;
 
     Logger logger = new IJLazySwingLogger();
 
-    public SaveVSSFrame(ImagePlus imp, int t, String bin, boolean saveVolume, boolean saveProjection,
+    public SaveVSSFrame(DataStreamingTools dataStreamingTools, ImagePlus imp, int t, String bin, boolean saveVolume, boolean saveProjection,
                  String path, Utils.FileType fileType, String compression, int rowsPerStrip)
     {
+        this.dataStreamingTools = dataStreamingTools;
         this.imp = imp;
         this.t = t;
         this.bin = bin;
@@ -70,6 +72,12 @@ public class SaveVSSFrame implements Runnable {
 
             for ( String binning : binnings )
             {
+
+                if ( dataStreamingTools.interruptSavingThreads )
+                {
+                    logger.info("Interrupted saving thread.");
+                    return;
+                }
 
                 String newPath = path;
                 ImagePlus impBinned = impChannelTime;

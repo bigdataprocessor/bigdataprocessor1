@@ -99,6 +99,7 @@ import java.util.regex.Pattern;
 public class DataStreamingTools {
 
     private static Logger logger = new IJLazySwingLogger();
+    public boolean interruptSavingThreads = false;
 
     public DataStreamingTools()
     {
@@ -1019,10 +1020,12 @@ public class DataStreamingTools {
 
     }
 
-    public static void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
+    public void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
                                        String filePath, Utils.FileType fileType,
                                        String compression, int rowsPerStrip, int threads)
     {
+
+        interruptSavingThreads = false;
 
         // Do the jobs
         //
@@ -1030,7 +1033,7 @@ public class DataStreamingTools {
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < imp.getNFrames(); i++)
         {
-            futures.add(es.submit(new SaveVSSFrame(imp, i, bin, saveVolume, saveProjection,
+            futures.add(es.submit(new SaveVSSFrame(this, imp, i, bin, saveVolume, saveProjection,
                     filePath, fileType, compression, rowsPerStrip)));
         }
 
@@ -1050,6 +1053,12 @@ public class DataStreamingTools {
 
     }
 
+
+    public void cancelSaving()
+    {
+         logger.info("Stopping all saving threads...");
+         interruptSavingThreads = true;
+    }
 
     class ParseFilesIntoVirtualStack implements Runnable {
         ImagePlus imp;
@@ -1259,6 +1268,9 @@ public class DataStreamingTools {
     */
 
     }
+
+
+
 
 
     static int assignHDF5TypeToImagePlusBitdepth(HDF5DataSetInformation dsInfo)
