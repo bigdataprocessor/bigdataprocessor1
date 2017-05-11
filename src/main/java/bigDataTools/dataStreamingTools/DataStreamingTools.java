@@ -470,7 +470,8 @@ public class DataStreamingTools {
                 {
                     FastTiffDecoder ftd = new FastTiffDecoder(directory + channelFolders[0], fileLists[0][0]);
                     info = ftd.getTiffInfo();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     info = null;
                     IJ.showMessage("Error: " + e.toString());
@@ -1159,7 +1160,10 @@ public class DataStreamingTools {
         //final String directory = "/Users/tischi/Desktop/example-data/luxendo/";
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
+
         final String directory = "/Volumes/almf/tischer/6GB_tiff/";
+        //final String directory = "/Volumes/almf/tischer/Gustavo/";
+
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
 

@@ -420,7 +420,7 @@ class OpenerExtension extends Opener {
                     throw new IllegalArgumentException("could not open file");
                 }
 
-                if((fi.compression!=1) && (fi.compression!=2) && (fi.compression!=6)) {
+                if((fi.compression!=0) && (fi.compression!=1) && (fi.compression!=2) && (fi.compression!=6)) {
                     logger.error("Tiff compression not implemented: fi.compression = " + fi.compression);
                     return;
                 }
@@ -448,11 +448,13 @@ class OpenerExtension extends Opener {
 
             if(hasStrips) {
 
-                if(fi0.compression == COMPRESSION_NONE) {
-
+                if( (fi0.compression == COMPRESSION_NONE) ||
+                        (fi0.compression == 0) )
+                {
                     // do nothing
-
-                }  else if (fi0.compression == LZW) {
+                }
+                else if (fi0.compression == LZW)
+                {
 
                     // init to hold all data present in the uncompressed strips
                     byte[] unCompressedBuffer = new byte[(se - ss + 1) * rps * imByteWidth];

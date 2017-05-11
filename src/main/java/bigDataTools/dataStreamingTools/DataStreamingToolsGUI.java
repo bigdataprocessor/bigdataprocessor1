@@ -358,7 +358,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             imp.updateAndDraw();
             imp.resetDisplayRange();
         }
-        else if (e.getActionCommand().equals(SAVE))
+        else if ( e.getActionCommand().equals(SAVE) )
         {
 
             ImagePlus imp = IJ.getImage();

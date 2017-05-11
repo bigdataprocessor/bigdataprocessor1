@@ -98,7 +98,6 @@ public class FastTiffDecoder {
     static final int RATIONALE = 5;
     static final int LONG8 = 16;
 
-
     // metadata types
     static final int MAGIC_NUMBER = 0x494a494a;  // "IJIJ"
     static final int INFO = 0x696e666f;  // "info" (Info image property)
@@ -290,17 +289,13 @@ public class FastTiffDecoder {
         {
             if (fieldType == SHORT || fieldType == RATIONALE )
             {
-                value = getShort();
-                unused = getShort();
-                if ( isBigTiff )
-                {
-                    unused = getShort();
-                    unused = getShort();
-                }
+                value = getShort(); // 2
+                unused = getShort(); // 2
+                if (isBigTiff) unused = getInt(); // 4
             }
             else if ( fieldType == LONG )
             {
-                value = getLong();  // get 2 words
+                value = isBigTiff ? getLong() : getInt(); // 8 : 4
             }
             else
             {
@@ -710,15 +705,15 @@ public class FastTiffDecoder {
 
             if ( tag == STRIP_OFFSETS )
             {
-                relativeStripInfoLocations[0] = in.getFilePointer() - 2; // store relative position of the StripOffsets Infos
+                relativeStripInfoLocations[0] = in.getFilePointer() - ifdLoc - 2; // store relative position of the StripOffsets Infos
             }
             if ( tag == STRIP_BYTE_COUNT )
             {
-                relativeStripInfoLocations[1] = in.getFilePointer() - 2; // store relative position of the StripOffsets Infos
+                relativeStripInfoLocations[1] = in.getFilePointer() - ifdLoc - 2; // store relative position of the StripOffsets Infos
             }
 
             fieldType = getShort();
-            count = isBigTiff ? getLong() : getShort();
+            count = isBigTiff ? getLong() : getInt();
             value = getValue(fieldType, count)&0xffffffffL;
 
             if (debugMode && ifdCount<10) dumpTag(tag, (int)count, (int)value, fi);
@@ -815,18 +810,37 @@ public class FastTiffDecoder {
                 case BITS_PER_SAMPLE:
                     if (count==1) {
                         if (value==8)
+                        {
                             fi.fileType = FileInfo.GRAY8;
+                            fi.bytesPerPixel = 1;
+                        }
                         else if (value==16)
+                        {
                             fi.fileType = FileInfo.GRAY16_UNSIGNED;
+                            fi.bytesPerPixel = 2;
+                        }
                         else if (value==32)
+                        {
+                            logger.error("Unsupported FileType: " + value);
                             fi.fileType = FileInfo.GRAY32_INT;
+                        }
                         else if (value==12)
+                        {
                             fi.fileType = FileInfo.GRAY12_UNSIGNED;
+                            logger.error("Unsupported FileType: " + value);
+                        }
                         else if (value==1)
+                        {
+                            logger.error("Unsupported FileType: " + value);
                             fi.fileType = FileInfo.BITMAP;
+                        }
                         else
-                            error("Unsupported BitsPerSample: " + value);
-                    } else if (count>1) {
+                            logger.error("Unsupported FileType: " + value);
+
+                    }
+                    else if (count>1)
+                    {
+                        logger.error("Unsupported FileType: " + value);
                         long saveLoc = in.getLongFilePointer();
                         in.seek(value);
                         int bitDepth = getShort();
@@ -1008,7 +1022,7 @@ public class FastTiffDecoder {
         }
 
         fieldType = getShort();
-        count = isBigTiff ? getLong() : getShort();
+        count = isBigTiff ? getLong() : getInt();
         value = getValue(fieldType, count)&0xffffffffL;
 
         //
@@ -1068,7 +1082,7 @@ public class FastTiffDecoder {
             return(null);
         }
         fieldType = getShort();
-        count = isBigTiff ? getLong() : getShort();
+        count = isBigTiff ? getLong() : getInt();
         value = getValue(fieldType, count)&0xffffffffL;
 
         if(count==1)
@@ -1119,7 +1133,7 @@ public class FastTiffDecoder {
 
         startTimeTotal = System.currentTimeMillis();
 
-        long[] relativeStripInfoLocations = new long[2];
+        long[] relativeStripInfoLocations = new long[3];
 
         long ifdOffset;
         ArrayList listIFDs = new ArrayList();
@@ -1150,7 +1164,9 @@ public class FastTiffDecoder {
                 logger.info("stripLengthFieldType " + stripInfos[3]);
                 logger.info("ifdSize " + stripInfos[4]);
                 */
-            } else {
+            }
+            else
+            {
                fi = onlyReadStripsFromIFD( relativeStripInfoLocations );
             }
             if( logger.isShowDebug() ) {
