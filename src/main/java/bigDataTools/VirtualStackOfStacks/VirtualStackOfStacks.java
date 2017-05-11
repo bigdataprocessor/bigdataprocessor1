@@ -149,8 +149,8 @@ public class VirtualStackOfStacks extends ImageStack {
 
     /** Adds an image stack from file infos */
     public void setStackFromFile(int t, int c) {
-        FileInfo[] info = null;
-        FileInfoSer[] infoSer = null;
+        FileInfoSer[] info = null;
+        FileInfoSer[] info2 = null;
         FastTiffDecoder ftd;
 
         long startTime = System.currentTimeMillis();
@@ -164,17 +164,17 @@ public class VirtualStackOfStacks extends ImageStack {
                 info = ftd.getTiffInfo();
 
                 // convert FileInfo[] to FileInfoSer[]
-                infoSer = new FileInfoSer[nZ];
+                info2 = new FileInfoSer[nZ];
                 for (int z = 0; z < nZ; z++) {
-                    infoSer[z] = new FileInfoSer(info[z]);
-                    infoSer[z].fileName = fileList[c][t][z]; // relative path to main directory
-                    infoSer[z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    infoSer[z].fileTypeString = fileType;
+                    info2[z] = new FileInfoSer(info[z]);
+                    info2[z].fileName = fileList[c][t][z]; // relative path to main directory
+                    info2[z].directory = channelFolders[c] + "/"; // relative path to main directory
+                    info2[z].fileTypeString = fileType;
                 }
 
             } else if (fileType.equals("leica single tif")) {
 
-                infoSer = new FileInfoSer[nZ];
+                info2 = new FileInfoSer[nZ];
 
                 //
                 // open all IFDs from all files and convert to FileInfoSer
@@ -184,10 +184,10 @@ public class VirtualStackOfStacks extends ImageStack {
 
                     ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][z]);
                     info = ftd.getTiffInfo();
-                    infoSer[z] = new FileInfoSer(info[0]); // just duplicate from first file
-                    infoSer[z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    infoSer[z].fileName = fileList[c][t][z];
-                    infoSer[z].fileTypeString = fileType;
+                    info2[z] = new FileInfoSer(info[0]); // just duplicate from first file
+                    info2[z].directory = channelFolders[c] + "/"; // relative path to main directory
+                    info2[z].fileName = fileList[c][t][z];
+                    info2[z].fileTypeString = fileType;
 
                 }
 
@@ -199,16 +199,16 @@ public class VirtualStackOfStacks extends ImageStack {
                 // todo: this could be much leaner
                 // e.g. the nX, nY and bit depth
                 //
-                infoSer = new FileInfoSer[nZ];
+                info2 = new FileInfoSer[nZ];
                 for (int z = 0; z < nZ; z++) {
-                    infoSer[z] = new FileInfoSer();
-                    infoSer[z].fileName = fileList[c][t][z];
-                    infoSer[z].directory = channelFolders[c] + "/";
-                    infoSer[z].width = nX;
-                    infoSer[z].height = nY;
-                    infoSer[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
-                    infoSer[z].h5DataSet = h5DataSet;
-                    infoSer[z].fileTypeString = fileType;
+                    info2[z] = new FileInfoSer();
+                    info2[z].fileName = fileList[c][t][z];
+                    info2[z].directory = channelFolders[c] + "/";
+                    info2[z].width = nX;
+                    info2[z].height = nY;
+                    info2[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
+                    info2[z].h5DataSet = h5DataSet;
+                    info2[z].fileTypeString = fileType;
                 }
 
             } // h5
@@ -219,7 +219,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         }
 
-        this.infos[c][t] = infoSer;
+        this.infos[c][t] = info2;
 
     }
 

@@ -462,7 +462,7 @@ class OpenerExtension extends Opener {
 
                         // todo: multithreading here
 
-                        int stripLength = fi.stripLengths[s];
+                        int stripLength = (int)fi.stripLengths[s];
                         byte[] strip = new byte[stripLength];
 
                         // get strip from read data
@@ -769,12 +769,12 @@ class OpenerExtension extends Opener {
             {  // none or one strip
                 if(fi0.compression == ZIP) {
                     // read all data
-                    readStart = fi.longOffset;
-                    readLength = fi.stripLengths[0];
+                    readStart = fi.offset;
+                    readLength = (int)fi.stripLengths[0];
                 } else {
                     // read subset
                     // convert rows to bytes
-                    readStart = fi.longOffset + ys * fi0.width * fi0.bytesPerPixel;
+                    readStart = fi.offset + ys * fi0.width * fi0.bytesPerPixel;
                     readLength = ((ye-ys)+1) * fi0.width * fi0.bytesPerPixel;
                 }
             }

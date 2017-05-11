@@ -114,8 +114,8 @@ public class DataStreamingTools {
         int t = 0, z = 0, c = 0;
         ImagePlus imp;
         String fileType = "not determined";
-        FileInfo[] info;
-        FileInfo fi0;
+        FileInfoSer[] info;
+        FileInfoSer fi0;
         String[] channelFolders = null;
         List<String> channels = null, timepoints = null;
         int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
@@ -488,9 +488,7 @@ public class DataStreamingTools {
                 }
                 nX = fi0.width;
                 nY = fi0.height;
-                bitDepth = fi0.getBytesPerPixel() * 8;
-
-
+                bitDepth = fi0.bytesPerPixel * 8;
 
             }
             else if (fileLists[0][0].endsWith(".h5"))
@@ -957,6 +955,7 @@ public class DataStreamingTools {
         if (imp.getType() == ImagePlus.GRAY16 || imp.getType() == ImagePlus.GRAY32)
             imp.getProcessor().setMinAndMax(min, max);
 
+        // TODO: this needs be checked!
         imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
 
         if (logger.isShowDebug())
@@ -1159,7 +1158,9 @@ public class DataStreamingTools {
 
         //final String directory = "/Users/tischi/Desktop/example-data/luxendo/";
 
-        final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
+        //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
+        final String directory = "/Volumes/almf/tischer/6GB_tiff/";
+
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
 
         // final String directory = "/Volumes/USB DISK/Ashna -test/";
@@ -1268,9 +1269,6 @@ public class DataStreamingTools {
     */
 
     }
-
-
-
 
 
     static int assignHDF5TypeToImagePlusBitdepth(HDF5DataSetInformation dsInfo)

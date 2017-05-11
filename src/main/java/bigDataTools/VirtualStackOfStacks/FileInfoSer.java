@@ -51,17 +51,42 @@ public class FileInfoSer implements Cloneable, Serializable {
     public String url;
     public int width;
     public int height;
-    public long longOffset;
     public boolean intelByteOrder;
     public int compression;
-    public int[] stripOffsets;
-    public int[] stripLengths;
+    public long[] stripOffsets;
+    public long offset;
+    public long[] stripLengths;
     public int rowsPerStrip;
 
     public double pixelWidth=1.0;
     public double pixelHeight=1.0;
     public double pixelDepth=1.0;
     public double frameInterval;
+
+    public int nImages;
+    public boolean whiteIsZero;
+    public int samplesPerPixel;
+    public String unit;
+    public String description;
+
+    public int gapBetweenImages;
+    public String info;
+
+    // add to copy:
+    public int calibrationFunction;
+    public String valueUnit;
+    public double[] coefficients;
+    public int[] metaDataTypes; // must be < 0xffffff
+    public byte[][] metaData;
+    public String[] sliceLabels;
+    public double[] displayRanges;
+    public byte[][] channelLuts;
+    public byte[] roi;
+    public byte[][] overlay;
+    public int lutSize;
+    public byte[] reds;
+    public byte[] greens;
+    public byte[] blues;
 
     // own stuff
     public int bytesPerPixel;
@@ -70,6 +95,10 @@ public class FileInfoSer implements Cloneable, Serializable {
     public boolean isCropped = false;
     public int[] pCropOffset = new int[3];
     public int[] pCropSize = new int[3];
+
+    // File formats
+    public static final int TIFF = 2;
+
 
     // todo: there is a lot of duplicated information that would only be needed once
 
@@ -87,11 +116,10 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.url = info.url;
         this.width = info.width;
         this.height = info.height;
-        this.longOffset = info.getOffset();
         this.intelByteOrder = info.intelByteOrder;
         this.compression = info.compression;
-        this.stripOffsets = info.stripOffsets;
-        this.stripLengths = info.stripLengths;
+        //this.stripOffsets = info.stripOffsets;
+        //this.stripLengths = info.stripLengths;
         this.rowsPerStrip = info.rowsPerStrip;
         this.pixelWidth = info.pixelWidth;
         this.pixelHeight = info.pixelHeight;
@@ -108,7 +136,7 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.url = info.url;
         this.width = info.width;
         this.height = info.height;
-        this.longOffset = info.longOffset;
+        this.offset = info.offset;
         this.intelByteOrder = info.intelByteOrder;
         this.compression = info.compression;
         this.stripOffsets = info.stripOffsets;
@@ -118,14 +146,20 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.pixelHeight = info.pixelHeight;
         this.pixelDepth = info.pixelDepth;
         this.frameInterval = info.frameInterval;
+        this.nImages = info.nImages;
         this.bytesPerPixel = info.bytesPerPixel;
         this.h5DataSet = info.h5DataSet;
         this.fileTypeString = info.fileTypeString;
         this.isCropped = info.isCropped;
         this.pCropOffset = info.pCropOffset.clone();
         this.pCropSize = info.pCropSize.clone();
+        this.whiteIsZero = info.whiteIsZero;
+        this.samplesPerPixel = info.samplesPerPixel;
+        this.unit = info.unit;
+        this.gapBetweenImages = info.gapBetweenImages;
+        this.info = info.info;
+        this.description = info.description;
     }
-
 
     public FileInfo getFileInfo() {
         FileInfo fi = new FileInfo();
@@ -136,11 +170,11 @@ public class FileInfoSer implements Cloneable, Serializable {
         fi.url = this.url;
         fi.width = this.width;
         fi.height = this.height;
-        fi.longOffset = this.longOffset;
+        //fi.longOffset = this.longOffset;
         fi.intelByteOrder = this.intelByteOrder;
         fi.compression = this.compression;
-        fi.stripOffsets = this.stripOffsets;
-        fi.stripLengths = this.stripLengths;
+        //fi.stripOffsets = this.stripOffsets;
+        //fi.stripLengths = this.stripLengths;
         fi.rowsPerStrip = this.rowsPerStrip;
         fi.pixelWidth = this.pixelWidth;
         fi.pixelHeight = this.pixelHeight;
