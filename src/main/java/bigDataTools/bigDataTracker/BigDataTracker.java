@@ -201,9 +201,9 @@ public class BigDataTracker {
     public void trackObject(TrackingSettings trackingSettings)
     {
         interruptTrackingThreads = false;
-        ObjectTracker objectTracker = new ObjectTracker(this, trackingSettings, logger);
+        // TODO: change number of threads here (currently 1)
+        ObjectTracker objectTracker = new ObjectTracker(this, trackingSettings, logger, 1);
         es.execute(objectTracker);
-
     }
 
     public void cancelTracking()

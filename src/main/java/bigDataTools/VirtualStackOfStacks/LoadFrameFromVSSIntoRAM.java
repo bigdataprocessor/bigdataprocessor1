@@ -15,6 +15,7 @@ public class LoadFrameFromVSSIntoRAM implements Runnable
     int t;
     ImagePlus impRAM;
     Logger logger = new IJLazySwingLogger();
+    int nThreads;
 
     /**
      *
@@ -23,11 +24,12 @@ public class LoadFrameFromVSSIntoRAM implements Runnable
      * @param impRAM
      */
 
-    public LoadFrameFromVSSIntoRAM(ImagePlus imp, int t, ImagePlus impRAM)
+    public LoadFrameFromVSSIntoRAM(ImagePlus imp, int t, ImagePlus impRAM, int nThreads)
     {
         this.imp = imp;
         this.t = t;
         this.impRAM = impRAM;
+        this.nThreads = nThreads;
     }
 
     public void run() {
@@ -38,7 +40,7 @@ public class LoadFrameFromVSSIntoRAM implements Runnable
 
             // Load time-point and channel
             logger.info("Loading time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
-            ImagePlus impChannelTime = vss.getFullFrame(t, c, new Point3D(1, 1, 1));
+            ImagePlus impChannelTime = vss.getFullFrame(t, c, new Point3D(1, 1, 1), nThreads);
 
             // Copy time-point and channel at the right place into impRAM
             ImageStack stack = impChannelTime.getStack();

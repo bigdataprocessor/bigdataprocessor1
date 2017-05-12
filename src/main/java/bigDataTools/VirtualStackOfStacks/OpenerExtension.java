@@ -13,6 +13,7 @@ package bigDataTools.VirtualStackOfStacks;
 
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
+import bigDataTools.utils.MonitorThreadPoolStatus;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.*;
 import ij.IJ;
@@ -25,8 +26,11 @@ import javafx.geometry.Point3D;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -43,7 +47,7 @@ class OpenerExtension extends Opener {
     }
 
     public ImagePlus readDataCube(String directory, FileInfoSer[] info,
-                                  int dz, Point3D po, Point3D ps)
+                                  int dz, Point3D po, Point3D ps, int nThreads)
     {
 
         // compute ranges to be loaded
@@ -270,6 +274,35 @@ class OpenerExtension extends Opener {
 
             // read plane wise
             //
+
+            /*
+            ExecutorService es = Executors.newFixedThreadPool(threads);
+            List<Future> futures = new ArrayList<>();
+            for (int i = 0; i < imp.getNFrames(); i++)
+            {
+                futures.add(es.submit(new SaveVSSFrame(this, imp, i, bin, saveVolume, saveProjection,
+                        filePath, fileType, compression, rowsPerStrip)));
+            }
+
+            // Monitor the progress
+            //
+            Thread thread = new Thread(new Runnable() {
+                public void run()
+                {
+                    MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                            futures,
+                            "Saved to disk: ",
+                            2000);
+                }
+            });
+            thread.start();
+            */
+
+            // TODO: look for IO threads !
+
+            //ExecutorService es = Executors.newFixedThreadPool(threads);
+            //List<Future> futures = new ArrayList<>();
+
             for (int iz=0, z=zs; iz<nz; iz++, z+=dz) {
 
                 if (z < 0 || z >= info.length) {
@@ -462,7 +495,7 @@ class OpenerExtension extends Opener {
                     int pos = 0;
                     for (int s = ss; s <= se; s++) {
 
-                        // todo: multithreading here
+                        // TODO: multithreading here?
 
                         int stripLength = (int)fi.stripLengths[s];
                         byte[] strip = new byte[stripLength];
@@ -756,7 +789,7 @@ class OpenerExtension extends Opener {
                 int rps = fi0.rowsPerStrip;
                 int ss = (int) (1.0*ys/rps);
                 int se = (int) (1.0*ye/rps);
-                readStart = (long)fi.stripOffsets[ss] & 0xffffffffL; // interpret the int as unsigned
+                readStart = fi.stripOffsets[ss];
 
                 readLength = 0;
                 if(se >= fi.stripLengths.length)
@@ -779,6 +812,20 @@ class OpenerExtension extends Opener {
                     readStart = fi.offset + ys * fi0.width * fi0.bytesPerPixel;
                     readLength = ((ye-ys)+1) * fi0.width * fi0.bytesPerPixel;
                 }
+            }
+
+            if ( readLength <= 0 )
+            {
+                logger.warning("file type: Tiff");
+                logger.warning("hasStrips: " + hasStrips);
+                logger.warning("read from [bytes]: "+ readStart );
+                logger.warning("read to [bytes]: "+ (readStart + readLength - 1) );
+                logger.warning("ys: " + ys);
+                logger.warning("ye: " + ye);
+                logger.warning("fileInfo.compression: " + fi0.compression);
+                logger.warning("fileInfo.height: " + fi0.height);
+                logger.error("Error during file reading. See log window for more information");
+                return(null);
             }
 
             buffer = new byte[readLength];

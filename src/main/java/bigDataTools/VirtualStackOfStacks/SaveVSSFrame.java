@@ -40,11 +40,12 @@ public class SaveVSSFrame implements Runnable {
     String bin;
     boolean saveVolume, saveProjection;
     DataStreamingTools dataStreamingTools;
+    int nThreads;
 
     Logger logger = new IJLazySwingLogger();
 
     public SaveVSSFrame(DataStreamingTools dataStreamingTools, ImagePlus imp, int t, String bin, boolean saveVolume, boolean saveProjection,
-                 String path, Utils.FileType fileType, String compression, int rowsPerStrip)
+                 String path, Utils.FileType fileType, String compression, int rowsPerStrip, int nThreads)
     {
         this.dataStreamingTools = dataStreamingTools;
         this.imp = imp;
@@ -56,6 +57,7 @@ public class SaveVSSFrame implements Runnable {
         this.rowsPerStrip = rowsPerStrip;
         this.saveProjection = saveProjection;
         this.saveVolume = saveVolume;
+        this.nThreads = nThreads;
     }
 
     public void run()
@@ -66,7 +68,7 @@ public class SaveVSSFrame implements Runnable {
             // Load
             //
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            ImagePlus impChannelTime = vss.getFullFrame(t, c);
+            ImagePlus impChannelTime = vss.getFullFrame(t, c, nThreads);
 
             String[] binnings = bin.split(";");
 

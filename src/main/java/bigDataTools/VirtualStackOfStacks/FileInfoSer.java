@@ -53,10 +53,10 @@ public class FileInfoSer implements Cloneable, Serializable {
     public int height;
     public boolean intelByteOrder;
     public int compression;
-    public long[] stripOffsets;
+    public long[] stripOffsets = null;
     public long offset;
-    public long[] stripLengths;
-    public int rowsPerStrip;
+    public long[] stripLengths = null;
+    public int rowsPerStrip = 0;
 
     public double pixelWidth=1.0;
     public double pixelHeight=1.0;

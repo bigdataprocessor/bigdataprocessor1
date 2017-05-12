@@ -23,14 +23,16 @@ class ObjectTracker implements Runnable
     Logger logger;
     TrackingSettings trackingSettings;
     ImageFilter imageFilter;
+    int nThreads;
 
     public ObjectTracker(BigDataTracker bigDataTracker,
                          TrackingSettings trackingSettings,
-                         Logger logger)
+                         Logger logger, int nThreads)
     {
         this.bigDataTracker = bigDataTracker;
         this.trackingSettings = trackingSettings;
         this.logger = logger;
+        this.nThreads = nThreads;
 
         // filter image (mainly good for improving the correlation)
         //
@@ -84,7 +86,7 @@ class ObjectTracker implements Runnable
         //
         startTime = System.currentTimeMillis();
         imp0 = vss.getDataCube(tStart, channel, p0offset, pSize,
-                trackingSettings.subSamplingXYZ, trackingSettings.background);
+                trackingSettings.subSamplingXYZ, trackingSettings.background, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
         // filter the image to ease the tracking
@@ -152,7 +154,7 @@ class ObjectTracker implements Runnable
             // load image
             startTime = System.currentTimeMillis();
             imp1 = vss.getDataCube(tNow, channel, p1offset, pSize,
-                    trackingSettings.subSamplingXYZ, trackingSettings.background);
+                    trackingSettings.subSamplingXYZ, trackingSettings.background, nThreads);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
             // filter image

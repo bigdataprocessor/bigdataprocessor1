@@ -121,6 +121,7 @@ public class FastTiffDecoder {
 
     private boolean isBigTiff = false;
 
+    private int check = 0;
 
     //
     long startTimeTotal = 0;
@@ -188,11 +189,18 @@ public class FastTiffDecoder {
     final void convertToLong8(long[] longs, byte[] bytes) {
         if (littleEndian) {
             for (int i = 0, j = 0; i < bytes.length; i += 8, j++) {
-                longs[j] = (((bytes[i+7]&0xff) << 64) + ((bytes[i+6]&0xff) << 56) + ((bytes[i+5]&0xff) << 48) + ((bytes[i+5]&0xff) << 40) + ((bytes[i+4]&0xff) << 32) + ((bytes[i+3]&0xff) << 24) + ((bytes[i+2]&0xff) << 16) + ((bytes[i+1]&0xff) << 8) + ((bytes[i]&0xff) << 0));
+                longs[j] = (((bytes[i+7]&0xFFL) << 56) |
+                            ((bytes[i+6]&0xFFL) << 48) |
+                            ((bytes[i+5]&0xFFL) << 40) |
+                            ((bytes[i+4]&0xFFL) << 32) |
+                            ((bytes[i+3]&0xFFL) << 24) |
+                            ((bytes[i+2]&0xFFL) << 16) |
+                            ((bytes[i+1]&0xFFL) <<  8) |
+                            ((bytes[i+0]&0xFFL) <<  0));
             }
         } else {
             for (int i = 0, j = 0; i < bytes.length; i += 8, j++) {
-                longs[j] = (((bytes[i]&0xff) << 64) + ((bytes[i+1]&0xff) << 56) + ((bytes[i+2]&0xff) << 48) + ((bytes[i+3]&0xff) << 40) + ((bytes[i+4]&0xff) << 32) + ((bytes[i+5]&0xff) << 24) + ((bytes[i+6]&0xff) << 16) + (bytes[i+7]&0xff) );
+                longs[j] = (((bytes[i]&0xff) << 56) + ((bytes[i+1]&0xff) << 48) + ((bytes[i+2]&0xff) << 40) + ((bytes[i+3]&0xff) << 32) + ((bytes[i+4]&0xff) << 24) + ((bytes[i+5]&0xff) << 16) + ((bytes[i+6]&0xff) << 8) + (bytes[i+7]&0xff) );
             }
         }
     }
@@ -230,9 +238,28 @@ public class FastTiffDecoder {
 
     final long getLong() throws IOException {
         if (littleEndian)
+        {
+            /*
+            long value;
+
+            long v1 = getInt()&0xffffffffL;
+            long v2 = getInt()&0xffffffffL;
+            long v2shift = v2<<32;
+
+            value = v1 + v2shift;
+
+            if ( (check==1) || (value > 4294967294L*0.99) )
+            {
+                check = 1;
+            }*/
+
             return ((long)getInt()&0xffffffffL) + ((long)getInt()<<32);
+
+        }
         else
-            return ((long)getInt()<<32) + ((long)getInt()&0xffffffffL);
+        {
+            return ((long) getInt() << 32) + ((long) getInt() & 0xffffffffL);
+        }
         //return in.read()+(in.read()<<8)+(in.read()<<16)+(in.read()<<24)+(in.read()<<32)+(in.read()<<40)+(in.read()<<48)+(in.read()<<56);
     }
 
@@ -304,7 +331,7 @@ public class FastTiffDecoder {
         }
         else  // if count > 1 do not return the actual value but just a pointer to the values
         {
-            value = isBigTiff ? getLong() : getInt();
+            value = isBigTiff ? getLong() : getInt() & 0xffffffffL;
         }
         return value;
     }
@@ -1023,7 +1050,7 @@ public class FastTiffDecoder {
 
         fieldType = getShort();
         count = isBigTiff ? getLong() : getInt();
-        value = getValue(fieldType, count)&0xffffffffL;
+        value = getValue(fieldType, count);
 
         //
         // Initialise
@@ -1048,7 +1075,7 @@ public class FastTiffDecoder {
                 in.readFully(buffer);
                 convertToShort(fi.stripOffsets, buffer);
             }
-            else if ( fieldType == LONG || fieldType == RATIONALE)
+            else if ( fieldType == LONG || fieldType == RATIONALE )
             {
                 buffer = new byte[(int)count * 4];
                 in.readFully(buffer);
@@ -1067,6 +1094,7 @@ public class FastTiffDecoder {
         // TODO: I don't understand below line
         if (count > 1 && ( fi.stripOffsets[(int) count - 1] < fi.stripOffsets[0] )) {
             fi.offset = fi.stripOffsets[(int) count - 1];
+            logger.info("Weird line...");
         }
 
         //
@@ -1083,7 +1111,7 @@ public class FastTiffDecoder {
         }
         fieldType = getShort();
         count = isBigTiff ? getLong() : getInt();
-        value = getValue(fieldType, count)&0xffffffffL;
+        value = getValue(fieldType, count); // & 0xffffffffL;
 
         if(count==1)
         {
@@ -1120,6 +1148,17 @@ public class FastTiffDecoder {
         // go to end of this IFD
         // - this is important since there is the address to the next IFD
         //
+
+        /*
+        if ( value > 4294967294L )
+        {
+            int a = 1;
+        }
+        if ( fi.stripLengths[0] > 10000 )
+        {
+            int a = 1;
+        }
+        */
 
         in.seek(startLoc+relativeStripInfoLocations[2]);
 

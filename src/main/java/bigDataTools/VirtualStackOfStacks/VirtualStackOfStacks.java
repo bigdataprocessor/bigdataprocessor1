@@ -316,7 +316,7 @@ public class VirtualStackOfStacks extends ImageStack {
         }
 
         // imp = new OpenerExtension().readDataCube(directory, infos[channel][t], dz, po, ps);
-        imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0);
+        imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0, 1);
 
         return imp.getProcessor();
 
@@ -334,11 +334,11 @@ public class VirtualStackOfStacks extends ImageStack {
         return(new Point3D(infos[0][0][0].pCropSize[0], infos[0][0][0].pCropSize[1], infos[0][0][0].pCropSize[2]));
     }
 
-    public ImagePlus getFullFrame(int t, int c) {
-        return(getFullFrame(t, c, new Point3D(1,1,1)));
+    public ImagePlus getFullFrame(int t, int c, int nThreads) {
+        return( getFullFrame(t, c, new Point3D(1,1,1), nThreads));
     }
 
-    public ImagePlus getFullFrame(int t, int c, Point3D pSubSample) {
+    public ImagePlus getFullFrame(int t, int c, Point3D pSubSample, int nThreads) {
 
         Point3D po, ps;
         po = new Point3D(0, 0, 0);
@@ -349,7 +349,7 @@ public class VirtualStackOfStacks extends ImageStack {
             ps = new Point3D(nX, nY, nZ);
         }
 
-        ImagePlus imp = getDataCube(t, c, po, ps, pSubSample, 0);
+        ImagePlus imp = getDataCube(t, c, po, ps, pSubSample, 0, nThreads);
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1) {
             return(resizeWidthAndHeight(imp,(int)pSubSample.getX(),(int)pSubSample.getY()));
         } else {
@@ -358,7 +358,8 @@ public class VirtualStackOfStacks extends ImageStack {
 
     }
 
-    public ImagePlus getDataCube(int t, int c, Point3D po, Point3D ps, Point3D pSubSample, int background) {
+    public ImagePlus getDataCube(int t, int c, Point3D po, Point3D ps,
+                                 Point3D pSubSample, int background, int nThreads) {
 
         ImagePlus impLoaded = null;
 
@@ -434,7 +435,7 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            impLoaded = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po2, ps2);
+            impLoaded = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po2, ps2, nThreads);
 
             if (impLoaded == null)
             {

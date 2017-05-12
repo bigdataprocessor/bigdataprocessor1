@@ -590,8 +590,6 @@ public class DataStreamingTools {
 
         }
 
-        logger.info("Bit depth: " + bitDepth);
-
 
         //
         // init the virtual stack
@@ -994,7 +992,7 @@ public class DataStreamingTools {
         List<Future> futures = new ArrayList<>();
         for (int t = 0; t < imp.getNFrames(); t++)
         {
-            futures.add(es.submit(new LoadFrameFromVSSIntoRAM(imp, t, impRAM)));
+            futures.add(es.submit(new LoadFrameFromVSSIntoRAM(imp, t, impRAM, nIOthreads)));
         }
 
 
@@ -1022,19 +1020,19 @@ public class DataStreamingTools {
 
     public void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
                                        String filePath, Utils.FileType fileType,
-                                       String compression, int rowsPerStrip, int threads)
+                                       String compression, int rowsPerStrip, int nThreads)
     {
 
         interruptSavingThreads = false;
 
         // Do the jobs
         //
-        ExecutorService es = Executors.newFixedThreadPool(threads);
+        ExecutorService es = Executors.newFixedThreadPool(nThreads);
         List<Future> futures = new ArrayList<>();
         for (int i = 0; i < imp.getNFrames(); i++)
         {
             futures.add(es.submit(new SaveVSSFrame(this, imp, i, bin, saveVolume, saveProjection,
-                    filePath, fileType, compression, rowsPerStrip)));
+                    filePath, fileType, compression, rowsPerStrip, nThreads)));
         }
 
         // Monitor the progress
@@ -1108,19 +1106,28 @@ public class DataStreamingTools {
             //
             FileInfoSer[][][] infos = vss.getFileInfosSer();
 
-            if (infos[0][0][0].compression == 0)
+            FileInfoSer fi0 = infos[0][0][0];
+            if (fi0.compression == 0)
                 logger.info("Compression = Unknown");
-            else if (infos[0][0][0].compression == 1)
+            else if (fi0.compression == 1)
                 logger.info("Compression = None");
-            else if (infos[0][0][0].compression == 2)
+            else if (fi0.compression == 2)
                 logger.info("Compression = LZW");
-            else if (infos[0][0][0].compression == 6)
+            else if (fi0.compression == 6)
                 logger.info("Compression = ZIP");
             else
-                logger.info("Compression = " + infos[0][0][0].compression);
+                logger.info("Compression = " + fi0.compression);
+
+            logger.info("Bit depth = " + (fi0.bytesPerPixel * 8));
+            logger.info("File type = " + (fi0.fileType));
+
+            if (fi0.stripLengths != null)
+            {
+                logger.info("Tiff: Number of strips  = " + (fi0.stripLengths.length));
+                logger.info("Tiff: Rows per strip  = " + (fi0.stripLengths[0]));
+            }
 
         }
-
     }
 
     // main method for debugging
@@ -1161,8 +1168,8 @@ public class DataStreamingTools {
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
-        final String directory = "/Volumes/almf/tischer/6GB_tiff/";
-        //final String directory = "/Volumes/almf/tischer/Gustavo/";
+        //final String directory = "/Volumes/almf/tischer/browsing/";
+        final String directory = "/Volumes/almf/tischer/Gustavo/";
 
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
