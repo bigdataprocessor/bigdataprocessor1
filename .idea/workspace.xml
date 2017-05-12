@@ -3,15 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5683297">
-              <caret line="1179" column="0" selection-start-line="1179" selection-start-column="0" selection-end-line="1179" selection-end-column="0" />
+            <state vertical-scroll-proportion="-8.37037">
+              <caret line="1167" column="0" selection-start-line="1167" selection-start-column="0" selection-end-line="1167" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
                 <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
@@ -98,13 +91,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FastTiffDecoder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FastTiffDecoder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.407408">
-              <caret line="1047" column="25" selection-start-line="1047" selection-start-column="25" selection-end-line="1047" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.53796095">
+              <caret line="242" column="5" selection-start-line="242" selection-start-column="5" selection-end-line="242" selection-end-column="5" />
               <folding>
-                <element signature="e#0#48644#0" expanded="true" />
+                <element signature="e#0#48561#0" expanded="true" />
                 <element signature="docComment;class#FastTiffDecoder#0" expanded="false" />
                 <element signature="e#4989#5002#0" expanded="false" />
                 <element signature="method#getInt#0;class#FastTiffDecoder#0" expanded="true" />
@@ -112,9 +105,8 @@
                 <element signature="method#convertToLong#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#convertToLong8#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#convertToShort#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="method#getUnsignedInt#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="method#convertToUnsignedLong#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="method#getLong#0;class#FastTiffDecoder#0" expanded="true" />
+                <element signature="method#getUnsignedIntAsLong#0;class#FastTiffDecoder#0" expanded="true" />
+                <element signature="method#getShort#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#readDouble#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#OpenImageFileHeader#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#getValue#0;class#FastTiffDecoder#0" expanded="true" />
@@ -135,19 +127,20 @@
                 <element signature="method#getOverlay#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#error#0;class#FastTiffDecoder#0" expanded="true" />
                 <element signature="method#skipUnknownType#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="e#25633#25634#0" expanded="true" />
-                <element signature="e#25665#25666#0" expanded="true" />
+                <element signature="e#25544#25545#0" expanded="true" />
+                <element signature="e#25576#25577#0" expanded="true" />
                 <element signature="method#fullyReadIFD#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="e#27014#27094#0" expanded="false" />
-                <element signature="e#27593#27654#0" expanded="false" />
-                <element signature="e#28150#28182#0" expanded="false" />
-                <element signature="e#28301#28348#0" expanded="false" />
-                <element signature="e#28750#28774#0" expanded="false" />
-                <element signature="e#36441#36498#0" expanded="false" />
-                <element signature="e#41124#41126#0" expanded="false" />
-                <element signature="e#42520#42522#0" expanded="false" />
+                <element signature="e#26925#27005#0" expanded="false" />
+                <element signature="e#27504#27565#0" expanded="false" />
+                <element signature="e#28061#28093#0" expanded="false" />
+                <element signature="e#28212#28259#0" expanded="false" />
+                <element signature="e#28661#28685#0" expanded="false" />
+                <element signature="e#36352#36409#0" expanded="false" />
+                <element signature="method#onlyReadStripsFromIFD#0;class#FastTiffDecoder#0" expanded="true" />
+                <element signature="e#41035#41037#0" expanded="false" />
+                <element signature="e#42431#42433#0" expanded="false" />
                 <element signature="method#getTiffInfo#0;class#FastTiffDecoder#0" expanded="true" />
-                <element signature="e#46630#46652#0" expanded="false" />
+                <element signature="e#46547#46569#0" expanded="false" />
                 <element signature="method#getGapInfo#0;class#FastTiffDecoder#0" expanded="true" />
               </folding>
             </state>
@@ -861,7 +854,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java</url>
-          <line>1096</line>
+          <line>1087</line>
           <properties />
           <option name="timeStamp" value="145" />
         </line-breakpoint>
@@ -1470,60 +1463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.407408">
-          <caret line="1047" column="25" selection-start-line="1047" selection-start-column="25" selection-end-line="1047" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#48644#0" expanded="true" />
-            <element signature="docComment;class#FastTiffDecoder#0" expanded="false" />
-            <element signature="e#4989#5002#0" expanded="false" />
-            <element signature="method#getInt#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#convertToInt#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#convertToLong#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#convertToLong8#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#convertToShort#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getUnsignedInt#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#convertToUnsignedLong#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getLong#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#readDouble#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#OpenImageFileHeader#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getValue#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getColorMap#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getString#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#saveImageDescription#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#saveMetadata#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#decodeNIHImageHeader#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#dumpTag#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getName#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getRational#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getMetaData#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getInfoProperty#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getSliceLabels#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getDisplayRanges#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getLuts#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getRoi#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#getOverlay#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#error#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="method#skipUnknownType#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="e#25633#25634#0" expanded="true" />
-            <element signature="e#25665#25666#0" expanded="true" />
-            <element signature="method#fullyReadIFD#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="e#27014#27094#0" expanded="false" />
-            <element signature="e#27593#27654#0" expanded="false" />
-            <element signature="e#28150#28182#0" expanded="false" />
-            <element signature="e#28301#28348#0" expanded="false" />
-            <element signature="e#28750#28774#0" expanded="false" />
-            <element signature="e#36441#36498#0" expanded="false" />
-            <element signature="e#41124#41126#0" expanded="false" />
-            <element signature="e#42520#42522#0" expanded="false" />
-            <element signature="method#getTiffInfo#0;class#FastTiffDecoder#0" expanded="true" />
-            <element signature="e#46630#46652#0" expanded="false" />
-            <element signature="method#getGapInfo#0;class#FastTiffDecoder#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33188722">
@@ -1549,17 +1488,6 @@
             <element signature="method#readCroppedPlaneFromTiff#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
             <element signature="e#31466#31480#0" expanded="false" />
             <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding>
-            <element signature="method#LoadFrameFromVSSIntoRAM#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
-            <element signature="method#run#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1601,8 +1529,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5683297">
-          <caret line="1179" column="0" selection-start-line="1179" selection-start-column="0" selection-end-line="1179" selection-end-column="0" />
+        <state vertical-scroll-proportion="-8.37037">
+          <caret line="1167" column="0" selection-start-line="1167" selection-start-column="0" selection-end-line="1167" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
             <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
@@ -1644,6 +1572,71 @@
             <element signature="class#38601:38817" expanded="false" />
             <element signature="method#assignHDF5TypeToImagePlusBitdepth#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="method#dsInfoToTypeString#0;class#DataStreamingTools#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="method#LoadFrameFromVSSIntoRAM#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
+            <element signature="method#run#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53796095">
+          <caret line="242" column="5" selection-start-line="242" selection-start-column="5" selection-end-line="242" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#48561#0" expanded="true" />
+            <element signature="docComment;class#FastTiffDecoder#0" expanded="false" />
+            <element signature="e#4989#5002#0" expanded="false" />
+            <element signature="method#getInt#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#convertToInt#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#convertToLong#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#convertToLong8#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#convertToShort#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getUnsignedIntAsLong#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getShort#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#readDouble#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#OpenImageFileHeader#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getValue#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getColorMap#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getString#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#saveImageDescription#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#saveMetadata#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#decodeNIHImageHeader#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#dumpTag#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getName#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getRational#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getMetaData#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getInfoProperty#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getSliceLabels#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getDisplayRanges#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getLuts#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getRoi#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#getOverlay#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#error#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="method#skipUnknownType#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="e#25544#25545#0" expanded="true" />
+            <element signature="e#25576#25577#0" expanded="true" />
+            <element signature="method#fullyReadIFD#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="e#26925#27005#0" expanded="false" />
+            <element signature="e#27504#27565#0" expanded="false" />
+            <element signature="e#28061#28093#0" expanded="false" />
+            <element signature="e#28212#28259#0" expanded="false" />
+            <element signature="e#28661#28685#0" expanded="false" />
+            <element signature="e#36352#36409#0" expanded="false" />
+            <element signature="method#onlyReadStripsFromIFD#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="e#41035#41037#0" expanded="false" />
+            <element signature="e#42431#42433#0" expanded="false" />
+            <element signature="method#getTiffInfo#0;class#FastTiffDecoder#0" expanded="true" />
+            <element signature="e#46547#46569#0" expanded="false" />
+            <element signature="method#getGapInfo#0;class#FastTiffDecoder#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1168,8 +1168,8 @@ public class DataStreamingTools {
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
-        //final String directory = "/Volumes/almf/tischer/browsing/";
-        final String directory = "/Volumes/almf/tischer/Gustavo/";
+        final String directory = "/Volumes/almf/tischer/browsing/";
+        //final String directory = "/Volumes/almf/tischer/Gustavo/";
 
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";

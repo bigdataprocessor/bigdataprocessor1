@@ -157,31 +157,35 @@ public class FastTiffDecoder {
         int b3 = in.read();
         int b4 = in.read();
         if (littleEndian)
-            return ((b4 << 24) + (b3 << 16) + (b2 << 8) + (b1 << 0));
+            return ((b4 << 24) | (b3 << 16) | (b2 << 8) | (b1 << 0));
         else
-            return ((b1 << 24) + (b2 << 16) + (b3 << 8) + b4);
+            return ((b1 << 24) | (b2 << 16) | (b3 << 8) | b4);
     }
 
     final void convertToInt(long[] ints, byte[] bytes) {
         if (littleEndian) {
             for (int i = 0, j = 0; i < bytes.length; i += 4, j++) {
-                ints[j] = (((bytes[i+3]&0xff) << 24) + ((bytes[i+2]&0xff) << 16) + ((bytes[i+1]&0xff) << 8) + ((bytes[i]&0xff) << 0));
+                ints[j] = (((bytes[i+3]&0xff) << 24) |
+                           ((bytes[i+2]&0xff) << 16) |
+                           ((bytes[i+1]&0xff) << 8) |
+                           ((bytes[i+0]&0xff) << 0));
             }
         } else {
             for (int i = 0, j = 0; i < bytes.length; i += 4, j++) {
-                ints[j] = (((bytes[i]&0xff) << 24) + ((bytes[i+1]&0xff) << 16) + ((bytes[i+2]&0xff) << 8) + (bytes[i+3]&0xff));
+                ints[j] = (((bytes[i]&0xff) << 24) | ((bytes[i+1]&0xff) << 16) | ((bytes[i+2]&0xff) << 8) | (bytes[i+3]&0xff));
             }
         }
     }
 
     final void convertToLong(long[] longs, byte[] bytes) {
+        // this is the weird Tiff Long with only 4 bytes
         if (littleEndian) {
             for (int i = 0, j = 0; i < bytes.length; i += 4, j++) {
-                longs[j] = (((bytes[i+3]&0xff) << 24) + ((bytes[i+2]&0xff) << 16) + ((bytes[i+1]&0xff) << 8) + ((bytes[i]&0xff) << 0));
+                longs[j] = (((bytes[i+3]&0xFFL) << 24) + ((bytes[i+2]&0xFFL) << 16) + ((bytes[i+1]&0xFFL) << 8) + ((bytes[i]&0xFFL) << 0));
             }
         } else {
             for (int i = 0, j = 0; i < bytes.length; i += 4, j++) {
-                longs[j] = (((bytes[i]&0xff) << 24) + ((bytes[i+1]&0xff) << 16) + ((bytes[i+2]&0xff) << 8) + (bytes[i+3]&0xff));
+                longs[j] = (((bytes[i]&0xFFL) << 24) + ((bytes[i+1]&0xFFL) << 16) + ((bytes[i+2]&0xFFL) << 8) + (bytes[i+3]&0xFFL));
             }
         }
     }
@@ -200,7 +204,14 @@ public class FastTiffDecoder {
             }
         } else {
             for (int i = 0, j = 0; i < bytes.length; i += 8, j++) {
-                longs[j] = (((bytes[i]&0xff) << 56) + ((bytes[i+1]&0xff) << 48) + ((bytes[i+2]&0xff) << 40) + ((bytes[i+3]&0xff) << 32) + ((bytes[i+4]&0xff) << 24) + ((bytes[i+5]&0xff) << 16) + ((bytes[i+6]&0xff) << 8) + (bytes[i+7]&0xff) );
+                longs[j] = (((bytes[i+0]&0xFFL) << 56) |
+                            ((bytes[i+1]&0xFFL) << 48) |
+                            ((bytes[i+2]&0xFFL) << 40) |
+                            ((bytes[i+3]&0xFFL) << 32) |
+                            ((bytes[i+4]&0xFFL) << 24) |
+                            ((bytes[i+5]&0xFFL) << 16) |
+                            ((bytes[i+6]&0xFFL) << 8) |
+                             (bytes[i+7]&0xFFL) );
             }
         }
     }
@@ -208,53 +219,33 @@ public class FastTiffDecoder {
     final void convertToShort(long[] ints, byte[] bytes) {
         if (littleEndian) {
             for (int i = 0, j = 0; i < bytes.length; i += 2, j++) {
-                ints[j] = (((bytes[i+1]&0xff) << 8) + ((bytes[i]&0xff) << 0));
+                ints[j] = (((bytes[i+1]&0xff) << 8) | ((bytes[i]&0xff) << 0));
             }
         } else {
             for (int i = 0, j = 0; i < bytes.length; i += 2, j++) {
-                ints[j] = (((bytes[i+2]&0xff) << 8) + (bytes[i+3]&0xff));
+                ints[j] = (((bytes[i+2]&0xff) << 8) | (bytes[i+3]&0xff));
             }
 
         }
     }
 
-    final long getUnsignedInt() throws IOException {
+    final long getUnsignedIntAsLong() throws IOException {
         return (long)getInt()&0xffffffffL;
-    }
-
-    final long convertToUnsignedLong(int integer) {
-        //(long)this.offset & 4294967295L;
-        return (long)integer&0xffffffffL;
     }
 
     final int getShort() throws IOException {
         int b1 = in.read();
         int b2 = in.read();
         if (littleEndian)
-            return ((b2<<8) + b1);
+            return ((b2<<8) | b1);
         else
-            return ((b1<<8) + b2);
+            return ((b1<<8) | b2);
     }
 
     final long getLong() throws IOException {
         if (littleEndian)
         {
-            /*
-            long value;
-
-            long v1 = getInt()&0xffffffffL;
-            long v2 = getInt()&0xffffffffL;
-            long v2shift = v2<<32;
-
-            value = v1 + v2shift;
-
-            if ( (check==1) || (value > 4294967294L*0.99) )
-            {
-                check = 1;
-            }*/
-
             return ((long)getInt()&0xffffffffL) + ((long)getInt()<<32);
-
         }
         else
         {
@@ -533,8 +524,8 @@ public class FastTiffDecoder {
     double getRational(long loc) throws IOException {
         long saveLoc = in.getLongFilePointer();
         in.seek(loc);
-        double numerator = getUnsignedInt();
-        double denominator = getUnsignedInt();
+        double numerator = getUnsignedIntAsLong();
+        double denominator = getUnsignedIntAsLong();
         in.seek(saveLoc);
         if (denominator!=0.0)
             return numerator/denominator;
@@ -1220,7 +1211,7 @@ public class FastTiffDecoder {
                 // add the IFD to the fileInfoSer list
                 listIFDs.add(fi);
                 // and determine where the next IFD is stored
-                ifdOffset = isBigTiff ? getLong() : getUnsignedInt();
+                ifdOffset = isBigTiff ? getLong() : getUnsignedIntAsLong();
             }
             else
             {
