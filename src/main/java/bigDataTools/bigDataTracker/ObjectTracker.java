@@ -60,7 +60,7 @@ class ObjectTracker implements Runnable
 
         // obtain all the info about the track
         Track track = bigDataTracker.addNewTrack(trackingSettings);
-        int tStart = trackingSettings.trackStartROI.getTPosition();
+        int tStart = trackingSettings.trackStartROI.getImage().getT() - 1;
         int channel = trackingSettings.channel;
         int nt = trackingSettings.nt;
         int dt = trackingSettings.subSamplingT;
@@ -215,7 +215,7 @@ class ObjectTracker implements Runnable
                 //info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
                 //info(""+p1offset.add(pLocalShift).toString());
                 pShift = Utils.computeCenterFromOffsetSize(
-                        p1offset.add(pLocalShift), pSize).subtract(track.getPosition(tPrevious - tStart));
+                        p1offset.add(pLocalShift), pSize).subtract( track.getPosition( tPrevious ) );
 
                 if( logger.isShowDebug() )  logger.info("actual shift is "+pShift.toString());
 
@@ -230,7 +230,7 @@ class ObjectTracker implements Runnable
 
             for (int tUpdate = tPrevious + 1; tUpdate <= tMaxUpdate; tUpdate++) {
 
-                Point3D pPrevious = track.getPosition(tPrevious - tStart);
+                Point3D pPrevious = track.getPosition( tPrevious );
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add(pShift.multiply(interpolation));
 
@@ -262,8 +262,12 @@ class ObjectTracker implements Runnable
         track.addLocation(t, location);
 
         trackTable.addRow(new Object[]{
-                String.format("%1$04d", track.getID()) + "_" + String.format("%1$05d", t),
-                (float) location.getX(), (float) location.getY(), (float) location.getZ(), t, track.getID()
+                String.format("%1$04d", track.getID()) + "_" + String.format("%1$05d", t+1),
+                String.format("%.2f", (float) location.getX() ),
+                String.format("%.2f", (float) location.getY() ),
+                String.format("%.2f", (float) location.getZ() ),
+                String.format("%1$04d", t + 1),
+                String.format("%1$04d", track.getID() )
         });
 
         bigDataTracker.addLocationToOverlay(track, t);
