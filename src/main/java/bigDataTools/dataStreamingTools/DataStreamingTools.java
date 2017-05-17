@@ -52,7 +52,7 @@ package bigDataTools.dataStreamingTools;
 
 
 import bigDataTools.VirtualStackOfStacks.*;
-import bigDataTools.bigDataTracker.BigDataTrackerPlugIn;
+import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.MonitorThreadPoolStatus;
@@ -62,7 +62,6 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Roi;
-import ij.io.FileInfo;
 import javafx.geometry.Point3D;
 
 import java.io.*;
@@ -1168,8 +1167,10 @@ public class DataStreamingTools {
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
-        final String directory = "/Volumes/almf/tischer/browsing/";
-        //final String directory = "/Volumes/almf/tischer/Gustavo/";
+        //final String directory = "/Volumes/almf/tischer/browsing/";
+        //final String directory = "/Volumes/almf/tischer/browsing/";
+
+        final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45";
 
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
@@ -1203,7 +1204,7 @@ public class DataStreamingTools {
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
 
-        BigDataTrackerPlugIn bigDataTrackerPlugIn = new BigDataTrackerPlugIn();
+        BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
         bigDataTrackerPlugIn.run("");
 
 

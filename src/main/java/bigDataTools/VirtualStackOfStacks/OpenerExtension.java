@@ -459,7 +459,6 @@ class OpenerExtension extends Opener {
                 }
 
                 //startTime = System.currentTimeMillis();
-                long pointer = 0; // todo: This is actually not used at all in the readCroppedPlaneFromTiff, or?
                 buffer[(z-zs)/dz] = readCroppedPlaneFromTiff(fi0, fi, inputStream, ys, ye);
                 //readingTime += (System.currentTimeMillis() - startTime);
                 inputStream.close();
@@ -540,12 +539,7 @@ class OpenerExtension extends Opener {
 
                 }
 
-                //
-                // copy the correct x and y subset into the image stack
-                //
-
                 ys = ys % rps; // we might have to skip a few rows in the beginning because the strips can hold several rows
-                setShortPixelsCropXY((short[]) stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
 
             } else { // no strips
 
@@ -569,12 +563,12 @@ class OpenerExtension extends Opener {
 
                     buffer[(z - zs)/dz] = imageBuffer.toByteArray();
 
-                    setShortPixelsCropXY((short[]) stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
+                    //setShortPixelsCropXY((short[]) stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
 
                 } else {
 
                     ys = 0; // the buffer contains only the correct y-range
-                    setShortPixelsCropXY((short[]) stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
+                    //setShortPixelsCropXY((short[]) stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
 
                 }
 
@@ -587,12 +581,29 @@ class OpenerExtension extends Opener {
                       logger.info("buffer[z-zs].length : " + buffer[z - zs].length);
                       logger.info("imWidth [bytes] : " + imByteWidth);
                       logger.info("ny [#] : " + ny);
-                    short[] pixels = (short[]) stack.getPixels((z - zs)/dz + 1);
-                      logger.info("stack.getPixels((z - zs)/dz + 1).length: " + pixels.length);
                 }
 
 
             }
+
+            //
+            // Copy (crop of) xy data from buffer into image stack
+            //
+
+            if ( fi0.bytesPerPixel == 1 )
+            {
+                setBytePixelsCropXY( (byte[])stack.getPixels((z - zs) / dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
+            }
+            else if ( fi0.bytesPerPixel == 2 )
+            {
+                setShortPixelsCropXY( (short[])stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
+            }
+            else
+            {
+                logger.error("Unsupported bit depth.");
+                return;
+            }
+
 
         }
 
@@ -763,6 +774,21 @@ class OpenerExtension extends Opener {
                 }
             }
         }
+
+        public void setBytePixelsCropXY(byte[] pixels, int ys, int ny, int xs, int nx, int imByteWidth, byte[] buffer) {
+            int ip = 0;
+            int bs, be;
+
+            for (int y = ys; y < ys + ny; y++) {
+                bs = y * imByteWidth + xs * fi0.bytesPerPixel;
+                be = bs + nx * fi0.bytesPerPixel;
+                for (int j = bs; j < be; j += 1)
+                {
+                    pixels[ip++] = buffer[j];
+                }
+            }
+        }
+
 
         public void start () {
             //info("Starting " +  threadName );

@@ -6,7 +6,7 @@ import ij.plugin.PlugIn;
 
 import javax.swing.*;
 
-public class BigDataTrackerPlugIn implements PlugIn {
+public class BigDataTrackerPlugIn_ implements PlugIn {
 
     @Override
     public void run(String s)
