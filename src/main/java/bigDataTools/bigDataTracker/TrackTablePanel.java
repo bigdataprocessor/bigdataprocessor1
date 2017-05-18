@@ -1,5 +1,6 @@
 package bigDataTools.bigDataTracker;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.PointRoi;
 import ij.gui.Roi;
@@ -10,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 /**
  * Created by tischi on 14/04/17.
@@ -20,14 +22,14 @@ class TrackTablePanel extends JPanel implements MouseListener, KeyListener {
     JTable table;
     JFrame frame;
     JScrollPane scrollPane;
-    ImagePlus imp;
+    ArrayList<Track> tracks;
 
-    public TrackTablePanel(TrackTable trackTable, ImagePlus imp) {
+    public TrackTablePanel(TrackTable trackTable, ArrayList<Track> tracks) {
         super(new GridLayout(1, 0));
 
-        this.imp = imp;
-
         this.table = trackTable.getTable();
+        this.tracks = tracks;
+
         table.setPreferredScrollableViewportSize(new Dimension(500, 200));
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
@@ -58,6 +60,10 @@ class TrackTablePanel extends JPanel implements MouseListener, KeyListener {
     }
 
     public void highlightSelectedTrack() {
+
+        // TODO: somehow get the imp from the tracks
+        ImagePlus imp = IJ.getImage();
+
         int rs = table.getSelectedRow();
         int r = table.convertRowIndexToModel(rs);
         float x = new Float(table.getModel().getValueAt(r, 1).toString());
@@ -69,8 +75,7 @@ class TrackTablePanel extends JPanel implements MouseListener, KeyListener {
         Roi pr = new PointRoi(x,y);
         pr.setPosition(0,(int)z+1,t+1);
         imp.setRoi(pr);
-        //info(" rs="+rs+" r ="+r+" x="+x+" y="+y+" z="+z+" t="+t);
-        //info("t="+jTableSpots.getModel().getValueAt(r, 5));
+
     }
 
     @Override

@@ -11,7 +11,7 @@ public class BigDataTrackerPlugIn_ implements PlugIn {
     @Override
     public void run(String s)
     {
-        BigDataTrackerGUI bigDataTrackerGUI = new BigDataTrackerGUI(IJ.getImage());
+        BigDataTrackerGUI bigDataTrackerGUI = new BigDataTrackerGUI();
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run()

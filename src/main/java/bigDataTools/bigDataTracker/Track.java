@@ -32,6 +32,7 @@ package bigDataTools.bigDataTracker;
 
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
+import ij.ImagePlus;
 import ij.gui.Roi;
 import javafx.geometry.Point3D;
 
@@ -46,6 +47,7 @@ public class Track {
     Map<Integer, Point3D> locations = new LinkedHashMap<>();
     Point3D trackStart;
     int trackID;
+
     Logger logger = new IJLazySwingLogger();
 
     Track(TrackingSettings trackingSettings, int id) {
@@ -108,6 +110,11 @@ public class Track {
 
     public int getLength() {
         return(locations.size());
+    }
+
+    public ImagePlus getImp()
+    {
+        return trackingSettings.imp;
     }
 
 }

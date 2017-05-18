@@ -40,6 +40,8 @@ import java.util.zip.Inflater;
 /** Opens the nth image of the specified TIFF stack.*/
 class OpenerExtension extends Opener {
 
+    // TODO: make it NOT an extension
+
     Logger logger = new IJLazySwingLogger();
 
     public OpenerExtension()
@@ -401,7 +403,8 @@ class OpenerExtension extends Opener {
         public static final int GRAY16_UNSIGNED = 2;
 
         // uncompress
-        byte[][] symbolTable = new byte[4096][1];
+        // byte[][] symbolTable = new byte[4096][1];
+        byte[][] symbolTable = new byte[16384][1]; // enlarged to be compatible with larger images
 
         // input
         ImageStack stack;
@@ -720,8 +723,11 @@ class OpenerExtension extends Opener {
                     if (nextSymbol == 511) { bitsToRead = 10; }
                     if (nextSymbol == 1023) { bitsToRead = 11; }
                     if (nextSymbol == 2047) { bitsToRead = 12; }
-                    if (nextSymbol == 4095) {  logger.error("Symbol Table of LZW uncompression became too large. +" +
-                            "Please contact tischitischer@gmail.com"); return null; };
+                    if (nextSymbol == 4095) { bitsToRead = 13; }
+                    if (nextSymbol == 8191) { bitsToRead = 14; }
+                    if (nextSymbol == 16383) { logger.error("Symbol table of LZW uncompression became too large." +
+                            "\nThe next symbol would have been: " + nextSymbol +
+                            "\nPlease contact tischitischer@gmail.com"); return null; };
                 }
 
             }

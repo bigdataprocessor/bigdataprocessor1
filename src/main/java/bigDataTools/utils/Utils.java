@@ -30,11 +30,13 @@
 
 package bigDataTools.utils;
 
+import bigDataTools.Region5D;
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.plugin.Duplicator;
 import javafx.geometry.Point3D;
 
 import java.util.Iterator;
@@ -132,6 +134,21 @@ public class Utils {
         IJ.wait(200);
         imp.resetDisplayRange();
         imp.updateAndDraw();
+    }
+
+    public static ImagePlus getDataCubeFromImagePlus(ImagePlus imp, Region5D region5D)
+    {
+        imp.setRoi((int)region5D.offset.getX(), (int)region5D.offset.getY(),
+                (int)region5D.size.getX(), (int)region5D.size.getY());
+        Duplicator duplicator = new Duplicator();
+        ImagePlus dataCube = duplicator.run(imp,
+                region5D.c + 1, region5D.c + 1,
+                (int)region5D.offset.getZ() + 1,
+                (int)region5D.offset.getZ() + 1 + (int)region5D.size.getY() - 1,
+                region5D.t + 1, region5D.t + 1);
+        imp.deleteRoi();
+
+        return ( dataCube );
     }
 
     public static VirtualStackOfStacks getVirtualStackOfStacks(ImagePlus imp) {

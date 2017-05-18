@@ -31,16 +31,22 @@
 
 package bigDataTools.bigDataTracker;
 
+import bigDataTools.Region5D;
+import bigDataTools.VirtualStackOfStacks.FileInfoSer;
+import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
+import ij.ImageStack;
 import ij.gui.Overlay;
 import ij.gui.Roi;
+import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -61,43 +67,47 @@ import java.util.concurrent.Executors;
 public class BigDataTracker {
 
     Logger logger = new IJLazySwingLogger();
-
-    private ImagePlus imp;
     private ArrayList<Track> tracks = new ArrayList<Track>();
     private TrackTable trackTable;
     private ExecutorService es = Executors.newCachedThreadPool();
 
     public boolean interruptTrackingThreads = false;
 
-    public BigDataTracker(ImagePlus imp) {
-        this.imp = imp;
+    public BigDataTracker()
+    {
         this.trackTable = new TrackTable();
     }
 
-    public TrackTable getTrackTable() {
+    public TrackTable getTrackTable()
+    {
         return trackTable;
     }
 
-    public ArrayList<Track> getTracks() {
+    public ArrayList<Track> getTracks()
+    {
         return tracks;
-    }
-
-    public ImagePlus getImp() {
-        return imp;
     }
 
     public void clearAllTracks()
     {
-        this.getTrackTable().clear();
-        this.getTracks().clear();
-        this.getImp().setOverlay(new Overlay());
+        getTrackTable().clear();
+        getTracks().clear();
+
+        // clear the overlays from all images
+        List<Track> tracks = getTracks();
+        for ( Track track : tracks )
+        {
+            ImagePlus imp = track.getImp();
+            imp.setOverlay(new Overlay());
+        }
+
     }
 
     public ArrayList<ImagePlus> getViewsOnTrackedObjects(String croppingFactor) {
 
         ArrayList<ImagePlus> imps = new ArrayList<>();
 
-        for( Track track : tracks) {
+        for( Track track : tracks ) {
 
             Point3D pCropSize;
 
@@ -111,7 +121,7 @@ public class BigDataTracker {
 
                 // the object was used to "drift correct" the whole image
                 // thus, show the whole image
-                Point3D pImageSize = new Point3D(imp.getWidth(), imp.getHeight(), imp.getNSlices());
+                Point3D pImageSize = new Point3D(track.getImp().getWidth(), track.getImp().getHeight(), track.getImp().getNSlices());
                 Point3D pImageCenter = pImageSize.multiply(0.5);
                 Point3D offsetToImageCenter = locations.get(track.getTmin()).subtract(pImageCenter);
                 for( Point3D position : locations.values() )
@@ -149,18 +159,84 @@ public class BigDataTracker {
 
             }
 
-            ImagePlus impObjectTrack = DataStreamingTools.getCroppedVSS(imp,
-                    trackOffsets.toArray(new Point3D[trackOffsets.size()]),
-                    pCropSize, track.getTmin(), track.getTmax());
-            impObjectTrack.setTitle("Track_"+track.getID());
+            ImagePlus impCroppedAlongObject = null;
 
-            imps.add(impObjectTrack);
+            // TODO: convert to Region5D[] for more consistency ?
+
+            if ( track.getImp().getStack() instanceof VirtualStackOfStacks )
+            {
+                impCroppedAlongObject = DataStreamingTools.getCroppedVSS(track.getImp(),
+                        trackOffsets.toArray(new Point3D[trackOffsets.size()]),
+                        pCropSize, track.getTmin(), track.getTmax());
+            }
+            else
+            {
+                impCroppedAlongObject = getCroppedImagePlus(track.getImp(),
+                        trackOffsets.toArray(new Point3D[trackOffsets.size()]),
+                        pCropSize, track.getTmin(), track.getTmax());
+
+                logger.error("Currently not supported for non VSS.");
+                return null;
+                // construct cropped view from "normal" ImagePlus
+            }
+
+
+            impCroppedAlongObject.setTitle("Track_" + track.getID());
+            imps.add(impCroppedAlongObject);
 
         }
 
         return imps;
 
     }
+
+    private ImagePlus getCroppedImagePlus(ImagePlus imp, Point3D[] po, Point3D ps, int tMin, int tMax)
+    {
+
+        int nC = imp.getNChannels();
+        int nT = tMax - tMin + 1;
+        int nZ = imp.getNSlices();
+
+        ImageStack stackOut = null;
+
+        for (int c = 0; c < nC; c++)
+        {
+            for (int t = tMin; t <= tMax; t++)
+            {
+
+                Region5D region5D = new Region5D();
+                region5D.t = t;
+                region5D.c = c;
+                region5D.offset = po[t-tMax];
+                region5D.size = ps;
+                region5D.subSampling = new Point3D(1,1,1);
+
+                ImagePlus imp2 = Utils.getDataCubeFromImagePlus(imp, region5D);
+                ImageStack stack2 = imp2.getStack();
+
+                int n = stack2.getSize();
+
+                for ( int i = 1; i <= n; i++ )
+                {
+                    ImageProcessor ip2 = stack2.getProcessor(i);
+                    if (stackOut == null)
+                        stackOut = new ImageStack(ip2.getWidth(), ip2.getHeight(), imp.getProcessor().getColorModel());
+                    stackOut.addSlice( stack2.getSliceLabel(i), ip2 );
+                }
+            }
+        }
+
+        ImagePlus impOut = imp.createImagePlus();
+        impOut.setStack("DUP_"+imp.getTitle(), stackOut);
+        String info = (String)imp.getProperty("Info");
+        if (info!=null)
+            impOut.setProperty("Info", info);
+        int[] dim = imp.getDimensions();
+
+        return ( impOut );
+
+    }
+
 
     public synchronized void addLocationToOverlay(final Track track, int t) {
 
@@ -169,10 +245,10 @@ public class BigDataTracker {
         int rz = (int) track.getObjectSize().getZ()/2;
 
         Roi roi;
-        Overlay o = imp.getOverlay();
+        Overlay o = track.getImp().getOverlay();
         if(o==null) {
             o = new Overlay();
-            imp.setOverlay(o);
+            track.getImp().setOverlay(o);
         }
 
         int x = (int) track.getPosition(t).getX();
@@ -181,7 +257,7 @@ public class BigDataTracker {
         int c = (int) track.getC();
 
         int rrx, rry;
-        for(int iz=0; iz<imp.getNSlices(); iz++) {
+        for(int iz=0; iz<track.getImp().getNSlices(); iz++) {
             rrx = Math.max(rx/(Math.abs(iz-z)+1),1);
             rry = Math.max(ry/(Math.abs(iz-z)+1),1);
             roi = new Roi(x - rrx, y - rry, 2 * rrx + 1, 2 * rry + 1);

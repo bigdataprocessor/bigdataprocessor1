@@ -34,6 +34,7 @@ package bigDataTools.VirtualStackOfStacks;
  * Created by tischi on 27/10/16.
  */
 
+import bigDataTools.Region5D;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
@@ -316,7 +317,13 @@ public class VirtualStackOfStacks extends ImageStack {
         }
 
         // imp = new OpenerExtension().readDataCube(directory, infos[channel][t], dz, po, ps);
-        imp = getDataCube(t, c, po, ps, new Point3D(1, 1, 1), 0, 1);
+        Region5D region5D = new Region5D();
+        region5D.t = t;
+        region5D.c = c;
+        region5D.offset = po;
+        region5D.size = ps;
+        region5D.subSampling = new Point3D(1, 1, 1);
+        imp = getDataCube(region5D, 0, 1);
 
         return imp.getProcessor();
 
@@ -334,7 +341,8 @@ public class VirtualStackOfStacks extends ImageStack {
         return(new Point3D(infos[0][0][0].pCropSize[0], infos[0][0][0].pCropSize[1], infos[0][0][0].pCropSize[2]));
     }
 
-    public ImagePlus getFullFrame(int t, int c, int nThreads) {
+    public ImagePlus getFullFrame(int t, int c, int nThreads)
+    {
         return( getFullFrame(t, c, new Point3D(1,1,1), nThreads));
     }
 
@@ -349,46 +357,56 @@ public class VirtualStackOfStacks extends ImageStack {
             ps = new Point3D(nX, nY, nZ);
         }
 
-        ImagePlus imp = getDataCube(t, c, po, ps, pSubSample, 0, nThreads);
-        if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1) {
+        Region5D region5D = new Region5D();
+        region5D.t = t;
+        region5D.c = c;
+        region5D.offset = po;
+        region5D.size = ps;
+        region5D.subSampling = pSubSample;
+
+        ImagePlus imp = getDataCube(region5D, 0, nThreads);
+
+        if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1)
+        {
             return(resizeWidthAndHeight(imp,(int)pSubSample.getX(),(int)pSubSample.getY()));
-        } else {
+        }
+        else
+        {
             return(imp);
         }
 
     }
 
-    public ImagePlus getDataCube(int t, int c, Point3D po, Point3D ps,
-                                 Point3D pSubSample, int background, int nThreads) {
+    public ImagePlus getDataCube(Region5D region5D, int background, int nThreads) {
 
         ImagePlus impLoaded = null;
 
         if ( logger.isShowDebug() ) {
               logger.info("# VirtualStackOfStacks.getDataCube");
-              logger.info("t: " + t);
-              logger.info("channel: " + c);
+              logger.info("t: " + region5D.t);
+              logger.info("channel: " + region5D.c);
         }
 
-        FileInfoSer fi = infos[c][t][0];
+        FileInfoSer fi = infos[region5D.c][region5D.t][0];
 
         if (fi.isCropped) {
-            po = po.add(fi.getCropOffset());
+            region5D.offset = region5D.offset.add(fi.getCropOffset());
         }
 
-        if (infos[c][t] == null) {
+        if (infos[region5D.c][region5D.t] == null) {
             // file info not yet loaded => get it!
-            setStackFromFile(t, c);
+            setStackFromFile(region5D.t, region5D.c);
         }
 
-        int dz = (int) pSubSample.getZ();
+        int dz = (int) region5D.subSampling.getZ();
 
         // compute ranges to be loaded
-        int ox = (int) (po.getX() + 0.5);
-        int oy = (int) (po.getY() + 0.5);
-        int oz = (int) (po.getZ() + 0.5);
-        int sx = (int) (ps.getX() + 0.5);
-        int sy = (int) (ps.getY() + 0.5);
-        int sz = (int) (ps.getZ() + 0.5);
+        int ox = (int) (region5D.offset.getX() + 0.5);
+        int oy = (int) (region5D.offset.getY() + 0.5);
+        int oz = (int) (region5D.offset.getZ() + 0.5);
+        int sx = (int) (region5D.size.getX() + 0.5);
+        int sy = (int) (region5D.size.getY() + 0.5);
+        int sz = (int) (region5D.size.getZ() + 0.5);
 
         // adjust ranges for loading to stay within the image bounds
 
@@ -411,7 +429,7 @@ public class VirtualStackOfStacks extends ImageStack {
         // - note: ox2=ox and sx2=sx if ox was positive
         int nX = fi.width;
         int nY = fi.height;
-        int nZ = infos[c][t].length;
+        int nZ = infos[region5D.c][region5D.t].length;
 
         sx2 = (ox2+sx2 > nX) ? nX-ox2 : sx2;
         sy2 = (oy2+sy2 > nY) ? nY-oy2 : sy2;
@@ -435,7 +453,7 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            impLoaded = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po2, ps2, nThreads);
+            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2, nThreads);
 
             if (impLoaded == null)
             {
@@ -496,8 +514,8 @@ public class VirtualStackOfStacks extends ImageStack {
         ImagePlus finalImp = new ImagePlus("", finalStack);
 
         // subsample in x and y
-        if ((int) pSubSample.getX() > 1 || (int) pSubSample.getY() > 1) {
-            return (resizeWidthAndHeight(finalImp, (int) pSubSample.getX(), (int) pSubSample.getY()));
+        if ((int) region5D.subSampling.getX() > 1 || (int) region5D.subSampling.getY() > 1) {
+            return (resizeWidthAndHeight(finalImp, (int) region5D.subSampling.getX(), (int) region5D.subSampling.getY()));
         } else {
             return (finalImp);
         }

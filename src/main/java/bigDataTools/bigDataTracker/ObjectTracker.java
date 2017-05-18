@@ -1,5 +1,6 @@
 package bigDataTools.bigDataTracker;
 
+import bigDataTools.Region5D;
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.imageFilter.DoNotFilter;
 import bigDataTools.imageFilter.FFTBandPass;
@@ -8,6 +9,7 @@ import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
@@ -69,9 +71,8 @@ class ObjectTracker implements Runnable
                 trackingSettings.trackStartROI.getYBase(),
                 trackingSettings.trackStartROI.getImage().getZ() - 1);
 
-        ImagePlus imp = bigDataTracker.getImp();
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
         TrackTable trackTable = bigDataTracker.getTrackTable();
+        ImagePlus imp =  trackingSettings.imp;
 
         //
         // track first time-point by center of mass
@@ -85,8 +86,13 @@ class ObjectTracker implements Runnable
         // read data
         //
         startTime = System.currentTimeMillis();
-        imp0 = vss.getDataCube(tStart, channel, p0offset, pSize,
-                trackingSettings.subSamplingXYZ, trackingSettings.background, nThreads);
+        Region5D region5D = new Region5D();
+        region5D.t = tStart;
+        region5D.c = channel;
+        region5D.offset = p0offset;
+        region5D.size = pSize;
+        region5D.subSampling = trackingSettings.subSamplingXYZ;
+        imp0 = getDataCube(imp, region5D, trackingSettings.background, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
         // filter the image to ease the tracking
@@ -113,7 +119,7 @@ class ObjectTracker implements Runnable
 
         // store results
         //
-        publishResult(track, trackTable, logger, pUpdate, tStart, nt,
+        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt,
                 elapsedReadingTime, elapsedProcessingTime);
 
         //
@@ -153,8 +159,12 @@ class ObjectTracker implements Runnable
 
             // load image
             startTime = System.currentTimeMillis();
-            imp1 = vss.getDataCube(tNow, channel, p1offset, pSize,
-                    trackingSettings.subSamplingXYZ, trackingSettings.background, nThreads);
+            region5D.t = tNow;
+            region5D.c = channel;
+            region5D.offset = p1offset;
+            region5D.size = pSize;
+            region5D.subSampling = trackingSettings.subSamplingXYZ;
+            imp1 = getDataCube(imp, region5D, trackingSettings.background, nThreads);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
             // filter image
@@ -234,7 +244,7 @@ class ObjectTracker implements Runnable
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add(pShift.multiply(interpolation));
 
-                publishResult(track, trackTable, logger, pUpdate, tUpdate, nt, elapsedReadingTime, elapsedProcessingTime);
+                publishResult(imp, track, trackTable, logger, pUpdate, tUpdate, nt, elapsedReadingTime, elapsedProcessingTime);
 
             }
 
@@ -254,7 +264,7 @@ class ObjectTracker implements Runnable
 
     }
 
-    private void publishResult(Track track, TrackTable trackTable, Logger logger, Point3D location,
+    private void publishResult(ImagePlus imp, Track track, TrackTable trackTable, Logger logger, Point3D location,
                                int t, int nt,
                                long elapsedReadingTime, long elapsedProcessingTime)
     {
@@ -273,14 +283,32 @@ class ObjectTracker implements Runnable
         bigDataTracker.addLocationToOverlay(track, t);
 
         // TODO: make this somehow a logger.progress
-        logger.info("Track ID: " + track.getID() +
-                "; Time points tracked: " + (t - track.getTmin() + 1) + "/" + nt +
-                "; reading [ms] = " + elapsedReadingTime +
-                "; processing [ms] = " + elapsedProcessingTime);
+        logger.info("Track: " + track.getID() +
+                "; Image: " + imp.getTitle() +
+                "; Frame: " + (t - track.getTmin() + 1) + "/" + nt +
+                "; Reading [ms] = " + elapsedReadingTime +
+                "; Processing [ms] = " + elapsedProcessingTime);
 
 
     }
 
+
+    private ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int background, int nThreads)
+    {
+        ImagePlus dataCube = null;
+
+        if(imp.getStack() instanceof VirtualStackOfStacks)
+        {
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            dataCube = vss.getDataCube(region5D, background, nThreads);
+        }
+        else
+        {
+            dataCube = Utils.getDataCubeFromImagePlus(imp, region5D);
+        }
+
+        return(dataCube);
+    };
 
     private Point3D compute16bitShiftUsingIterativeCenterOfMass(ImageStack stack,
                                                                 double trackingFactor,
@@ -308,7 +336,8 @@ class ObjectTracker implements Runnable
     }
 
 
-    private Point3D computeShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0) {
+    private Point3D computeShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0)
+    {
         if( logger.isShowDebug() )   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
         PhaseCorrelation phc = new PhaseCorrelation(ImagePlusAdapter.wrap(imp1), ImagePlusAdapter.wrap(imp0), 5, true);
         if( logger.isShowDebug() )   logger.info("phc.process()... ");
@@ -343,8 +372,8 @@ class ObjectTracker implements Runnable
         return(centerOfMass);
     }
 
-
-    private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax) {
+    private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
+    {
 
         final String centeringMethod = "center of mass";
 
@@ -412,7 +441,8 @@ class ObjectTracker implements Runnable
         return(new Point3D(xCenter,yCenter,zCenter));
     }
 
-    private Point3D compute8bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax) {
+    private Point3D compute8bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
+    {
 
         final String centeringMethod = "center of mass";
 
@@ -480,8 +510,8 @@ class ObjectTracker implements Runnable
         return(new Point3D(xCenter,yCenter,zCenter));
     }
 
-
-    private int compute16bitMean(ImageStack stack) {
+    private int compute16bitMean(ImageStack stack)
+    {
 
         //long startTime = System.currentTimeMillis();
         double sum = 0.0;
@@ -511,7 +541,8 @@ class ObjectTracker implements Runnable
 
     }
 
-    private Point3D compute16bitMaximumLocation(ImageStack stack) {
+    private Point3D compute16bitMaximumLocation(ImageStack stack)
+    {
         long startTime = System.currentTimeMillis();
         int vmax = 0, xmax = 0, ymax = 0, zmax = 0;
         int i, v;

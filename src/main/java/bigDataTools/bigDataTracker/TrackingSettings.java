@@ -1,5 +1,6 @@
 package bigDataTools.bigDataTracker;
 
+import ij.ImagePlus;
 import ij.gui.Roi;
 import javafx.geometry.Point3D;
 
@@ -8,6 +9,7 @@ import javafx.geometry.Point3D;
  */
 public class TrackingSettings {
 
+    public ImagePlus imp;
     public String trackingMethod;
     public Roi trackStartROI;
     public Point3D objectSize;

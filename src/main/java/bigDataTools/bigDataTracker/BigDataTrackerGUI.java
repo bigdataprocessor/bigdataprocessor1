@@ -4,6 +4,7 @@ import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.Roi;
 import javafx.geometry.Point3D;
@@ -44,8 +45,6 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             String.valueOf(resizeFactor)
     };
 
-    ImagePlus imp;
-
     Logger logger = new IJLazySwingLogger();
 
     String[] texts = {
@@ -84,14 +83,17 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
     int previouslySelectedZ = -1;
 
-    public BigDataTrackerGUI(ImagePlus imp)
+    public BigDataTrackerGUI()
     {
-        if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
-        nt = imp.getNFrames();
-        background = (int) imp.getProcessor().getMin();
-        this.imp = imp;
-        this.bigDataTracker = new BigDataTracker(imp);
-        trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(), imp);
+        ImagePlus imp = IJ.getImage();
+        if ( imp != null )
+        {
+            nt = imp.getNFrames();
+            background = (int) imp.getProcessor().getMin();
+        }
+        this.bigDataTracker = new BigDataTracker();
+        trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(),
+                bigDataTracker.getTracks());
         setDefaults();
     }
 
@@ -262,7 +264,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         // Show the GUI
         //
         frame.pack();
-        frame.setLocation(imp.getWindow().getX() + imp.getWindow().getWidth(), imp.getWindow().getY());
+        //frame.setLocation(imp.getWindow().getX() + imp.getWindow().getWidth(), imp.getWindow().getY());
         frame.setVisible(true);
 
     }
@@ -287,8 +289,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         int i = 0, j = 0, k = 0;
         JFileChooser fc;
 
-        if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
-        VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+        ImagePlus imp = IJ.getImage();
 
         if (e.getActionCommand().equals(buttonActions[i++])) {
 
@@ -342,7 +343,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             //
 
             TrackingSettings trackingSettings = new TrackingSettings();
-
+            trackingSettings.imp = imp;
             trackingSettings.trackingMethod = trackingMethod;
             trackingSettings.iterationsCenterOfMass = (int) Math.ceil(Math.pow(trackingFactor, 2));
             trackingSettings.channel = imp.getC() - 1;
@@ -400,7 +401,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 logger.error("There are no tracks yet.");
                 return;
             }
-            fc = new JFileChooser(vss.getDirectory());
+            fc = new JFileChooser();
             if (fc.showSaveDialog(this.frame) == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 bigDataTracker.getTrackTable().saveTrackTable(file);
@@ -534,7 +535,6 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     public void showTrackedObjects() {
 
         ArrayList<ImagePlus> imps = bigDataTracker.getViewsOnTrackedObjects(resizeFactor);
-
 
         if( imps == null )
         {

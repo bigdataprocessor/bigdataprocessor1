@@ -1207,6 +1207,8 @@ public class DataStreamingTools {
         BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
         bigDataTrackerPlugIn.run("");
 
+        ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Cell-45.tif");
+        imp3.show();
 
         /*
         if (Mitosis_ome) {
