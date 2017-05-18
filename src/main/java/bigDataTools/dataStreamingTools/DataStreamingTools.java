@@ -1170,7 +1170,7 @@ public class DataStreamingTools {
         //final String directory = "/Volumes/almf/tischer/browsing/";
         //final String directory = "/Volumes/almf/tischer/browsing/";
 
-        final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45";
+        final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45/";
 
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
@@ -1190,6 +1190,10 @@ public class DataStreamingTools {
         //oh5.openOneFileAsImp("/Users/tischi/Desktop/example-data/luxendo/ch0/fused_t00000_c0.h5");
         // logger.isShowDebug()  = true;
 
+
+        ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
+        imp3.show();
+
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
             public void run()
@@ -1207,8 +1211,7 @@ public class DataStreamingTools {
         BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
         bigDataTrackerPlugIn.run("");
 
-        ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Cell-45.tif");
-        imp3.show();
+
 
         /*
         if (Mitosis_ome) {

@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="BigDataTools_:jar">
+  <artifact type="jar" build-on-make="true" name="BigDataTools_MyLocalFiji:jar">
     <output-path>/Applications/Fiji.app/plugins</output-path>
     <root id="archive" name="BigDataTools_.jar">
       <element id="module-output" name="fiji--bigDataTools" />

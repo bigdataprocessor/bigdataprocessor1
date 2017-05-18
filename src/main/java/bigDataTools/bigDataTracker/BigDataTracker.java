@@ -90,16 +90,20 @@ public class BigDataTracker {
 
     public void clearAllTracks()
     {
-        getTrackTable().clear();
-        getTracks().clear();
 
-        // clear the overlays from all images
+        // clear overlays from all images
         List<Track> tracks = getTracks();
         for ( Track track : tracks )
         {
             ImagePlus imp = track.getImp();
             imp.setOverlay(new Overlay());
         }
+
+        // remove tracks
+        tracks.clear();
+        // empty the table
+        getTrackTable().clear();
+
 
     }
 

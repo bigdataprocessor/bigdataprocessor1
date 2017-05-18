@@ -81,6 +81,9 @@ class ObjectTracker implements Runnable
         // get selected track coordinates
         // load more data than the user selected
         pSize = track.getObjectSize().multiply(trackingSettings.trackingFactor);
+        // only one slice
+        if ( imp.getNSlices() == 1 ) pSize = new Point3D( pSize.getX(), pSize.getY(), 1);
+
         p0offset = Utils.computeOffsetFromCenterSize(pStart, pSize);
 
         // read data
@@ -111,6 +114,10 @@ class ObjectTracker implements Runnable
         //
         pShift = Utils.multiplyPoint3dComponents(pShift,
                 trackingSettings.subSamplingXYZ);
+        // no z-shift if only one slice
+        if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
+
+
 
         // add track location for first image
         //
@@ -184,12 +191,10 @@ class ObjectTracker implements Runnable
 
                 // correct for sub-sampling
                 pShift = Utils.multiplyPoint3dComponents(pShift, trackingSettings.subSamplingXYZ);
-                //info("Correlation ObjectTracker Shift: "+pShift);
-
-
                 // take into account the different loading positions of this and the previous image
                 pShift = pShift.add(p1offset.subtract(p0offset));
-                //info("Correlation ObjectTracker Shift including image shift: "+pShift);
+                // no z-shift if there is only one slice
+                if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
 
                 if( logger.isShowDebug() )  logger.info("actual final shift is " + pShift.toString());
 
@@ -226,6 +231,8 @@ class ObjectTracker implements Runnable
                 //info(""+p1offset.add(pLocalShift).toString());
                 pShift = Utils.computeCenterFromOffsetSize(
                         p1offset.add(pLocalShift), pSize).subtract( track.getPosition( tPrevious ) );
+                // no z-shift if only one slice
+                if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
 
                 if( logger.isShowDebug() )  logger.info("actual shift is "+pShift.toString());
 
@@ -308,6 +315,8 @@ class ObjectTracker implements Runnable
             dataCube = Utils.getDataCubeFromImagePlus(imp, region5D);
         }
 
+        //dataCube.show();
+
         return(dataCube);
     };
 
@@ -354,7 +363,10 @@ class ObjectTracker implements Runnable
         }
         //info(""+ccPeak);
         int[] shift = pcp.get(iPeak).getPosition();
-        return(new Point3D(shift[0],shift[1],shift[2]));
+        if ( imp1.getNSlices() == 1 )
+            return(new Point3D(shift[0],shift[1],0));
+        else
+            return(new Point3D(shift[0],shift[1],shift[2]));
     }
 
     private Point3D computeCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
