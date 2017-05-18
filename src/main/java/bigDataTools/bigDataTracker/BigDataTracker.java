@@ -253,7 +253,7 @@ public class BigDataTracker {
 
         int x = (int) track.getPosition(t).getX();
         int y = (int) track.getPosition(t).getY();
-        int z = (int) track.getPosition(t).getZ();
+        int z = (int) track.getPosition(t).getZ();  // one-based in IJ
         int c = (int) track.getC();
 
         int rrx, rry;

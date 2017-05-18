@@ -271,11 +271,12 @@ class ObjectTracker implements Runnable
 
         track.addLocation(t, location);
 
+        // store one-based values in table
         trackTable.addRow(new Object[]{
                 String.format("%1$04d", track.getID()) + "_" + String.format("%1$05d", t+1),
                 String.format("%.2f", (float) location.getX() ),
                 String.format("%.2f", (float) location.getY() ),
-                String.format("%.2f", (float) location.getZ() ),
+                String.format("%.2f", (float) location.getZ() + 1.0 ),
                 String.format("%1$04d", t + 1),
                 String.format("%1$04d", track.getID() )
         });

@@ -71,9 +71,11 @@ class TrackTablePanel extends JPanel implements MouseListener, KeyListener {
         float z = new Float(table.getModel().getValueAt(r, 3).toString());
         int t = new Integer(table.getModel().getValueAt(r, 4).toString());
         int id = new Integer(table.getModel().getValueAt(r, 5).toString());
-        imp.setPosition(0,(int)z+1,t+1);
+
+        // Values in the table are one-based already
+        imp.setPosition(0,(int)z, t);
         Roi pr = new PointRoi(x,y);
-        pr.setPosition(0,(int)z+1,t+1);
+        pr.setPosition(0,(int)z, t);
         imp.setRoi(pr);
 
     }

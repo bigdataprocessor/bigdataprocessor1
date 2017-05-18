@@ -34,11 +34,20 @@ import bigDataTools.Region5D;
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
+import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.ImageStack;
+import ij.gui.Overlay;
+import ij.gui.Roi;
+import ij.measure.Calibration;
 import ij.plugin.Duplicator;
+import ij.plugin.frame.Recorder;
+import ij.process.ImageProcessor;
+import ij.process.LUT;
 import javafx.geometry.Point3D;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -138,18 +147,45 @@ public class Utils {
 
     public static ImagePlus getDataCubeFromImagePlus(ImagePlus imp, Region5D region5D)
     {
-        imp.setRoi((int)region5D.offset.getX(), (int)region5D.offset.getY(),
-                (int)region5D.size.getX(), (int)region5D.size.getY());
-        Duplicator duplicator = new Duplicator();
-        ImagePlus dataCube = duplicator.run(imp,
-                region5D.c + 1, region5D.c + 1,
-                (int)region5D.offset.getZ() + 1,
-                (int)region5D.offset.getZ() + 1 + (int)region5D.size.getY() - 1,
-                region5D.t + 1, region5D.t + 1);
-        imp.deleteRoi();
 
-        return ( dataCube );
+        Rectangle rect = new Rectangle(
+                (int)region5D.offset.getX(),
+                (int)region5D.offset.getY(),
+                (int)region5D.size.getX(),
+                (int)region5D.size.getY());
+
+        ImageStack stack = imp.getStack();
+        ImageStack stack2 = null;
+
+        int firstT = region5D.t + 1;
+        int lastT = region5D.t + 1;
+        int firstC = region5D.c + 1;
+        int lastC = region5D.c + 1;
+        int firstZ = (int)region5D.offset.getZ() + 1;
+        int lastZ = (int)region5D.offset.getZ() + (int)region5D.size.getZ();
+
+        for (int t=firstT; t<=lastT; t++) {
+            for (int z=firstZ; z<=lastZ; z++) {
+                for (int c=firstC; c<=lastC; c++) {
+                    int n1 = imp.getStackIndex(c, z, t);
+                    ImageProcessor ip = stack.getProcessor(n1);
+                    String label = stack.getSliceLabel(n1);
+                    ip.setRoi(rect);
+                    ip = ip.crop();
+                    if (stack2==null)
+                        stack2 = new ImageStack(ip.getWidth(), ip.getHeight(), null);
+                    stack2.addSlice(label, ip);
+                }
+            }
+        }
+        ImagePlus imp2 = imp.createImagePlus();
+        imp2.setStack("DUP_"+imp.getTitle(), stack2);
+        imp2.setDimensions(lastC-firstC+1, lastZ-firstZ+1, lastT-firstT+1);
+        imp2.setOpenAsHyperStack(true);
+
+        return imp2;
     }
+
 
     public static VirtualStackOfStacks getVirtualStackOfStacks(ImagePlus imp) {
         VirtualStackOfStacks vss = null;
@@ -184,7 +220,6 @@ public class Utils {
         return nums;
     }
 
-
     public static void printMap(Map mp) {
         Iterator it = mp.entrySet().iterator();
         while (it.hasNext()) {
@@ -193,7 +228,6 @@ public class Utils {
             it.remove(); // avoids a ConcurrentModificationException
         }
     }
-
 
     public static boolean hasVirtualStackOfStacks(ImagePlus imp) {
 
@@ -210,14 +244,12 @@ public class Utils {
 
     }
 
-
     public static boolean checkMemoryRequirements(ImagePlus imp)
     {
         long numPixels = (long)imp.getWidth()*imp.getHeight()*imp.getNSlices()*imp.getNChannels()*imp.getNFrames();
         boolean ok = checkMemoryRequirements(numPixels, imp.getBitDepth(), 1);
         return(ok);
     }
-
 
     public static boolean checkMemoryRequirements(ImagePlus imp, int nThreads)
     {
