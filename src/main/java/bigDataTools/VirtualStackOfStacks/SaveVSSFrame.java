@@ -6,6 +6,7 @@ import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.ProjectionXYZ;
 import bigDataTools.utils.Utils;
+import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
@@ -101,7 +102,7 @@ public class SaveVSSFrame implements Runnable {
                     //
                     if ( savingSettings.fileType.equals(Utils.FileType.TIFF) )
                     {
-                        saveAsTiffStack(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath );
+                        saveAsTiff(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath);
                     }
                     else if ( savingSettings.fileType.equals(Utils.FileType.HDF5) )
                     {
@@ -149,11 +150,13 @@ public class SaveVSSFrame implements Runnable {
         //  Open output file
         //
 
+        /*
         if (! (imp.getType() == ImagePlus.GRAY16) )
         {
             logger.error("Sorry, only 16bit images are currently supported.");
             return;
         }
+        */
 
         try
         {
@@ -218,7 +221,7 @@ public class SaveVSSFrame implements Runnable {
             }
 
 
-            String dsetName = "data";
+            String dsetName = "Data";
 
             for( int block = 0; block < nSaveBlocks; ++block) {
                 // compute offset and size of next block, that is saved
@@ -261,10 +264,34 @@ public class SaveVSSFrame implements Runnable {
                     // save it
                     //
                     writer.uint16().writeMDArray( dsetName, arr, HDF5IntStorageFeatures.createDeflationDelete(compressionLevel));
+
                 }
-                else
+                else if (imgColorType == ImagePlus.GRAY8 )
                 {
-                    // other image bit-depths....
+
+                    // Save as Byte Array
+                    //
+                    MDByteArray arr = new MDByteArray( saveBlockDimensions);
+                    // copy data
+                    //
+                    ImageStack stack = imp.getStack();
+                    byte[] flatArr   = arr.getAsFlatArray();
+                    int sliceSize    = nY*nX;
+
+                    for(int lev = 0; lev < saveBlockDimensions[0]; ++lev)
+                    {
+                        int stackIndex = imp.getStackIndex(c + 1,
+                                srcLevel + lev + 1,
+                                t + 1);
+                        System.arraycopy( stack.getPixels(stackIndex), 0,
+                                flatArr, lev*sliceSize,
+                                sliceSize);
+                    }
+
+                    // save it
+                    //
+                    writer.uint8().writeMDArray( dsetName, arr, HDF5IntStorageFeatures.createDeflationDelete(compressionLevel));
+
                 }
 
                 //  add element_size_um attribute
@@ -292,7 +319,7 @@ public class SaveVSSFrame implements Runnable {
 
     }
 
-    public void saveAsTiffStack( ImagePlus imp, int c, int t, String compression, int rowsPerStrip, String path )
+    public void saveAsTiff(ImagePlus imp, int c, int t, String compression, int rowsPerStrip, String path)
     {
 
         if( compression.equals("LZW") ) // Use BioFormats

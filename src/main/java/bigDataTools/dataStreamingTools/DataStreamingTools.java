@@ -1160,14 +1160,14 @@ public class DataStreamingTools {
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files/";
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files 2channels/";
 
-        //final String directory = "/Users/tischi/Desktop/example-data/luxendo/";
+        final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
         //final String directory = "/Volumes/almf/tischer/browsing/";
         //final String directory = "/Volumes/almf/tischer/browsing/";
 
-        final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45/";
+        //final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45/";
 
 
         //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
