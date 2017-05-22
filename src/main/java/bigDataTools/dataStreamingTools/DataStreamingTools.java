@@ -1017,21 +1017,18 @@ public class DataStreamingTools {
 
     }
 
-    public void saveVSSAsStacks(ImagePlus imp, String bin, boolean saveVolume, boolean saveProjection,
-                                       String filePath, Utils.FileType fileType,
-                                       String compression, int rowsPerStrip, int nThreads)
+    public void saveVSSAsStacks(SavingSettings savingSettings)
     {
 
         interruptSavingThreads = false;
 
         // Do the jobs
         //
-        ExecutorService es = Executors.newFixedThreadPool(nThreads);
+        ExecutorService es = Executors.newFixedThreadPool(savingSettings.nThreads);
         List<Future> futures = new ArrayList<>();
-        for (int i = 0; i < imp.getNFrames(); i++)
+        for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
-            futures.add(es.submit(new SaveVSSFrame(this, imp, i, bin, saveVolume, saveProjection,
-                    filePath, fileType, compression, rowsPerStrip, nThreads)));
+            futures.add(es.submit(new SaveVSSFrame(this, t, savingSettings)));
         }
 
         // Monitor the progress

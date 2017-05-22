@@ -203,7 +203,7 @@ public class Utils {
         String[] sA = s.split(delimiter);
         double[] nums = new double[sA.length];
         for (int i = 0; i < nums.length; i++) {
-            nums[i] = Double.parseDouble(sA[i]);
+            nums[i] = Double.parseDouble(sA[i].trim());
         }
 
         return nums;
@@ -213,8 +213,9 @@ public class Utils {
 
         String[] sA = s.split(delimiter);
         int[] nums = new int[sA.length];
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = Integer.parseInt(sA[i]);
+        for (int i = 0; i < nums.length; i++)
+        {
+            nums[i] = Integer.parseInt(sA[i].trim());
         }
 
         return nums;

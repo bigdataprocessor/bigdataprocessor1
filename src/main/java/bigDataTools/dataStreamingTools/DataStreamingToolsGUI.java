@@ -1,6 +1,5 @@
 package bigDataTools.dataStreamingTools;
 
-import bigDataTools.VirtualStackOfStacks.FileInfoSer;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
@@ -27,15 +26,18 @@ import static java.awt.Desktop.isDesktopSupported;
 public class DataStreamingToolsGUI extends JFrame implements ActionListener, FocusListener, ItemListener {
 
     JCheckBox cbLog = new JCheckBox("Verbose logging");
-    JCheckBox cbLZW = new JCheckBox("LZW compression");
+    JCheckBox cbLZW = new JCheckBox("LZW compression (Tiff)");
     JCheckBox cbSaveVolume = new JCheckBox("Save volume data");
-    JCheckBox cbSaveProjection = new JCheckBox("Save xyz max-projection");
+    JCheckBox cbSaveProjection = new JCheckBox("Save projections");
+    JCheckBox cbConvertTo8Bit = new JCheckBox("8-bit conversion");
 
     JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
     JTextField tfCropTMinMax = new JTextField("1,all", 5);
     JTextField tfIOThreads = new JTextField("30", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
+    JTextField tfMapTo255 = new JTextField("65535",5);
+    JTextField tfMapTo0 = new JTextField("0",5);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox channelTimePatternComboBox = new JComboBox(new String[] {
@@ -83,8 +85,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
     public void showDialog()
     {
-
-
         JTabbedPane jtp = new JTabbedPane();
 
         String[] toolTipTexts = getToolTipFile("DataStreamingHelp.html");
@@ -206,9 +206,17 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        panels.get(j).add(cbLZW);
-        panels.get(j).add(new JLabel("LZW chunks [ny]"));
+        panels.get(j).add(new JLabel("Chunks [ny]"));
         panels.get(j).add(tfRowsPerStrip);
+        panels.get(j).add(cbLZW);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        panels.get(j).add(new JLabel("255 ="));
+        panels.get(j).add(tfMapTo255);
+        panels.get(j).add(new JLabel("0 ="));
+        panels.get(j).add(tfMapTo0);
+        panels.get(j).add(cbConvertTo8Bit);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
@@ -411,11 +419,22 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     if(cbLZW.isSelected())
                         compression="LZW";
 
+                    SavingSettings savingSettings = new SavingSettings();
+                    savingSettings.imp = imp;
+                    savingSettings.bin = tfBinning.getText();
+                    savingSettings.saveVolume = cbSaveVolume.isSelected();
+                    savingSettings.saveProjection = cbSaveProjection.isSelected();
+                    savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
+                    savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
+                    savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
+                    savingSettings.filePath = file.getAbsolutePath();
+                    savingSettings.fileType = fileType;
+                    savingSettings.compression = compression;
+                    savingSettings.rowsPerStrip = rowsPerStrip;
+                    savingSettings.nThreads = ioThreads;
+
                     dataStreamingToolsSavingThreads = new DataStreamingTools();
-                    dataStreamingToolsSavingThreads.saveVSSAsStacks(imp, tfBinning.getText(), cbSaveVolume.isSelected(),
-                            cbSaveProjection.isSelected(),
-                            file.getAbsolutePath(), fileType,
-                            compression, rowsPerStrip, ioThreads);
+                    dataStreamingToolsSavingThreads.saveVSSAsStacks(savingSettings);
 
                 }
 

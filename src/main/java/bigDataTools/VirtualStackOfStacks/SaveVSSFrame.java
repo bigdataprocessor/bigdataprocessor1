@@ -1,6 +1,7 @@
 package bigDataTools.VirtualStackOfStacks;
 
 import bigDataTools.dataStreamingTools.DataStreamingTools;
+import bigDataTools.dataStreamingTools.SavingSettings;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.ProjectionXYZ;
@@ -31,47 +32,45 @@ import ij.plugin.Binner;
  */
 
 public class SaveVSSFrame implements Runnable {
-    ImagePlus imp;
-    Utils.FileType fileType;
-    String path;
-    String compression;
-    int rowsPerStrip;
     int t;
-    String bin;
-    boolean saveVolume, saveProjection;
     DataStreamingTools dataStreamingTools;
-    int nThreads;
+    SavingSettings savingSettings;
 
     Logger logger = new IJLazySwingLogger();
 
-    public SaveVSSFrame(DataStreamingTools dataStreamingTools, ImagePlus imp, int t, String bin, boolean saveVolume, boolean saveProjection,
-                 String path, Utils.FileType fileType, String compression, int rowsPerStrip, int nThreads)
+    public SaveVSSFrame(DataStreamingTools dataStreamingTools,
+                        int t,
+                        SavingSettings savingSettings)
     {
         this.dataStreamingTools = dataStreamingTools;
-        this.imp = imp;
         this.t = t;
-        this.bin = bin;
-        this.fileType = fileType;
-        this.path = path;
-        this.compression = compression;
-        this.rowsPerStrip = rowsPerStrip;
-        this.saveProjection = saveProjection;
-        this.saveVolume = saveVolume;
-        this.nThreads = nThreads;
+        this.savingSettings = savingSettings;
     }
+
 
     public void run()
     {
 
-        for (int c = 0; c < imp.getNChannels(); c++) {
+
+        for (int c = 0; c < savingSettings.imp.getNChannels(); c++) {
 
             // Load
             //
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            ImagePlus impChannelTime = vss.getFullFrame(t, c, nThreads);
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
+            ImagePlus impChannelTime = vss.getFullFrame(t, c, savingSettings.nThreads);
 
-            String[] binnings = bin.split(";");
 
+            // Convert
+            //
+            if ( savingSettings.convertTo8Bit )
+            {
+                IJ.setMinAndMax(impChannelTime, savingSettings.mapTo0, savingSettings.mapTo255);
+                IJ.run(impChannelTime, "8-bit", "");
+            }
+
+            // Bin, project and save
+            //
+            String[] binnings = savingSettings.bin.split(";");
             for ( String binning : binnings )
             {
 
@@ -81,8 +80,8 @@ public class SaveVSSFrame implements Runnable {
                     return;
                 }
 
-                String newPath = path;
-                ImagePlus impBinned = impChannelTime;
+                String newPath = savingSettings.filePath;
+                ImagePlus impBinned = impChannelTime; // in case binning is 1,1,1 just keep the original
 
                 int[] binningA = Utils.delimitedStringToIntegerArray(binning,",");
 
@@ -92,19 +91,19 @@ public class SaveVSSFrame implements Runnable {
                 {
                     Binner binner = new Binner();
                     impBinned = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
-                    newPath = path + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
+                    newPath = savingSettings.filePath + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
                 }
 
 
-                if ( saveVolume )
+                if ( savingSettings.saveVolume )
                 {
                     // Save
                     //
-                    if ( fileType.equals(Utils.FileType.TIFF) )
+                    if ( savingSettings.fileType.equals(Utils.FileType.TIFF) )
                     {
-                        saveAsTiffStack( impBinned, c, t, compression, newPath );
+                        saveAsTiffStack(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath );
                     }
-                    else if ( fileType.equals(Utils.FileType.HDF5) )
+                    else if ( savingSettings.fileType.equals(Utils.FileType.HDF5) )
                     {
                         int compressionLevel = 0;
                         saveAsHDF5(impBinned, c, t, compressionLevel, newPath);
@@ -114,7 +113,7 @@ public class SaveVSSFrame implements Runnable {
 
                 }
 
-                if ( saveProjection )
+                if ( savingSettings.saveProjection )
                 {
                     saveAsTiffXYZMaxProjection(impBinned, c, t, newPath);
                 }
@@ -293,7 +292,7 @@ public class SaveVSSFrame implements Runnable {
 
     }
 
-    public void saveAsTiffStack( ImagePlus imp, int c, int t, String compression, String path )
+    public void saveAsTiffStack( ImagePlus imp, int c, int t, String compression, int rowsPerStrip, String path )
     {
 
         if( compression.equals("LZW") ) // Use BioFormats
