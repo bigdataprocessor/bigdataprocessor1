@@ -39,7 +39,7 @@ public class LoadFrameFromVSSIntoRAM implements Runnable
         for (int c = 0; c < imp.getNChannels(); c++) {
 
             // Load time-point and channel
-            logger.info("Loading time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
+            //logger.info("Loading time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
             ImagePlus impChannelTime = vss.getFullFrame(t, c, new Point3D(1, 1, 1), nThreads);
 
             // Copy time-point and channel at the right place into impRAM

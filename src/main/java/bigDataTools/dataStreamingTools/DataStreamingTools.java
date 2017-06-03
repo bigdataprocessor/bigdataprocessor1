@@ -1160,7 +1160,8 @@ public class DataStreamingTools {
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files/";
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files 2channels/";
 
-        final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
+        //final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
+        final String directory = "/Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF/";
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
@@ -1188,8 +1189,8 @@ public class DataStreamingTools {
         // logger.isShowDebug()  = true;
 
 
-        ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
-        imp3.show();
+        //ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
+        //imp3.show();
 
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {

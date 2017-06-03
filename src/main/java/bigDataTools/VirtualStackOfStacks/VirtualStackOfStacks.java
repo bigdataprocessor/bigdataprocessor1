@@ -42,8 +42,11 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.FileInfo;
+import ij.io.FileSaver;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
+
+import java.io.IOException;
 
 // todo: replace all == with "equals"
 // TODO: extend VirtualStack rather than ImageStack ?
@@ -56,8 +59,9 @@ public class VirtualStackOfStacks extends ImageStack {
     private int nX, nY, nZ, nC, nT;
     int bitDepth = 0;
     FileInfoSer[][][] infos;  // channel, t, z
-    String fileType = "tiff"; // h5
+    String fileType = "tif"; // h5 // TODO: make constants
     String directory = "";
+    String imageBaseName = "";
     String[] channelFolders;
     String[][][] fileList;
     String h5DataSet;
@@ -130,6 +134,11 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("t: " + nT);
     }
 
+    public void setImageBaseName(String imageBaseName)
+    {
+        this.imageBaseName = imageBaseName;
+    }
+
     public FileInfoSer[][][] getFileInfosSer() {
         return(infos);
     }
@@ -185,7 +194,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
                     ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][z]);
                     info = ftd.getTiffInfo();
-                    info2[z] = new FileInfoSer(info[0]); // just duplicate from first file
+                    info2[z] = new FileInfoSer(info[0]); // there is only one, but ftd returns an array
                     info2[z].directory = channelFolders[c] + "/"; // relative path to main directory
                     info2[z].fileName = fileList[c][t][z];
                     info2[z].fileTypeString = fileType;
@@ -212,7 +221,7 @@ public class VirtualStackOfStacks extends ImageStack {
                     info2[z].fileTypeString = fileType;
                 }
 
-            } // h5
+            }
 
         } catch(Exception e) {
 
@@ -275,7 +284,62 @@ public class VirtualStackOfStacks extends ImageStack {
     /** Assigns a pixel array to the specified slice,
      were 1<=n<=nslices. */
     public void setPixels(Object pixels, int n) {
+
     }
+
+    /** Assigns and saves a pixel array to the specified slice,
+     were 1<=n<=nslices. */
+    public void setAndSavePixels(Object pixels, int n) {
+        n -= 1;
+        int c = (n % nC);
+        int z = ((n-c)%(nZ*nC))/nC;
+        int t = (n-c-z*nC)/(nZ*nC);
+
+        ImageStack stack = ImageStack.create(nX,nY,1,bitDepth);
+        stack.setPixels(pixels, 1);
+        ImagePlus imp = new ImagePlus("", stack);
+
+        FileSaver fileSaver = new FileSaver(imp);
+        String sC = String.format("%1$02d", c);
+        String sT = String.format("%1$05d", t);
+        String sZ = String.format("%1$05d", z);
+        String fileName = imageBaseName + "--C" + sC + "--T" + sT+ "--Z" + sZ + ".tif";
+        String pathCTZ = directory + fileName;
+        fileSaver.saveAsTiff(pathCTZ);
+
+        fileList[c][t][z] = fileName;
+
+        FastTiffDecoder ftd = new FastTiffDecoder(directory, fileList[c][t][z]);
+
+        FileInfoSer[] info = new FileInfoSer[0];
+        try
+        {
+            info = ftd.getTiffInfo();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        if ( infos[c][t] == null )
+        {
+            infos[c][t] = new FileInfoSer[nZ];
+
+            // fill with some info (this is necessary
+            // because infos[0][0][0] is often accessed
+            for (int iz = 0; iz < nZ; iz++) {
+                infos[c][t][iz] = new FileInfoSer(info[0]);
+                infos[c][t][iz].directory = ""; // relative path to main directory
+                infos[c][t][iz].fileName = null;
+                infos[c][t][iz].fileTypeString = fileType;
+            }
+        }
+
+        infos[c][t][z].fileName = fileList[c][t][z];
+
+    }
+
+
 
     /** Returns an ImageProcessor for the specified slice,
      were 1<=n<=nslices. Returns null if the stack is empty.
@@ -298,6 +362,14 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("z [one-based]: " + (z + 1));
               logger.info("t [one-based]: " + (t + 1));
               logger.info("opening file: " + directory + infos[c][t][z].directory + infos[c][t][z].fileName);
+        }
+
+        if ( fileList[c][t][z] == null )
+        {
+            // if there is no information how to load
+            // the image just create a black one
+            ImageStack stack = ImageStack.create(nX,nY,1,bitDepth);
+            return stack.getProcessor(1);
         }
 
         Point3D po, ps;
@@ -453,7 +525,8 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2, nThreads);
+            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2,
+                    nThreads);
 
             if (impLoaded == null)
             {

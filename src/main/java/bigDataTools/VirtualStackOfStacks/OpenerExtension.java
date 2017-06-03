@@ -69,13 +69,24 @@ class OpenerExtension extends Opener {
 
         ImagePlus imp = null;
 
-        if(info[0].fileTypeString.equals("tif stacks")) {
+        if(info[0].fileTypeString.equals("tif stacks"))
+        {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
-        } else if(info[0].fileTypeString.equals("leica single tif")) {
+        }
+        else if(info[0].fileTypeString.equals("leica single tif"))
+        {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
-        } else if(info[0].fileTypeString.equals("h5")) {
+        }
+        else if(info[0].fileTypeString.equals("single tif"))
+        {
+            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+        }
+        else if(info[0].fileTypeString.equals("h5"))
+        {
             imp = readDataCubeFromHdf5(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
-        } else {
+        }
+        else
+        {
             logger.error("unsupported file type: " + info[0].fileTypeString);
         }
 
@@ -157,18 +168,25 @@ class OpenerExtension extends Opener {
                 }
                 catch (Exception e)
                 {
-                    //logger.warning(e.toString());
+                    // 2-d data set
                     block = reader.int16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{ny, nx}, new long[]{ys, xs});
                 }
             }
             else if ( dsTypeString.equals("uint16") )
             {
-                block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{nz, ny, nx}, new long[]{zs, ys, xs});
-
+                try
+                {
+                    block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{nz, ny, nx}, new long[]{zs, ys, xs});
+                }
+                catch (Exception e)
+                {
+                    // 2-d data set
+                    block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{ny, nx}, new long[]{ys, xs});
+                }
             }
             else
             {
-                 logger.error("Data type " + dsTypeString + " is currently not supported");
+                logger.error("Data type " + dsTypeString + " is currently not supported");
                 return ( null );
             }
 
