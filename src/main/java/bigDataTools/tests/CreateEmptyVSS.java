@@ -37,7 +37,7 @@ public class CreateEmptyVSS {
 
         byte[] pixels = new byte[nX*nY];
         Arrays.fill(pixels, (byte) 255);
-        vss.setAndSavePixels(pixels, 5);
+        //vss.setAndSavePixels(pixels, 5);
 
         ImagePlus imp = new ImagePlus("", vss);
 

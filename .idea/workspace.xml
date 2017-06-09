@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$5.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$6.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$1.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack$ByteVector.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack$ByteVector.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension$readCroppedPlaneFromTiffIntoImageStack.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/OpenerExtension.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -43,8 +32,8 @@
       <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.111111">
-              <caret line="1140" column="24" selection-start-line="1130" selection-start-column="0" selection-end-line="1140" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
                 <element signature="e#4369#4371#0" expanded="false" />
@@ -79,20 +68,9 @@
                 <element signature="class#33043:33300" expanded="false" />
                 <element signature="e#34146#34159#0" expanded="false" />
                 <element signature="e#34587#34611#0" expanded="false" />
+                <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#36177#36240#0" expanded="false" />
                 <element signature="class#38631:38847" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoadFrameFromVSSIntoRAM.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-              <folding>
-                <element signature="method#LoadFrameFromVSSIntoRAM#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -107,7 +85,6 @@
                 <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
                 <element signature="e#2785#2791#0" expanded="false" />
                 <element signature="e#3289#3296#0" expanded="false" />
-                <element signature="method#saveAsTiffXYZMaxProjection#0;class#SaveVSSFrame#0" expanded="true" />
                 <element signature="e#4924#4926#0" expanded="false" />
               </folding>
             </state>
@@ -120,49 +97,65 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="88" column="8" selection-start-line="88" selection-start-column="8" selection-end-line="88" selection-end-column="8" />
               <folding>
+                <element signature="e#0#49381#0" expanded="false" />
+                <element signature="imports" expanded="false" />
                 <element signature="docComment;class#OpenerExtension#0" expanded="false" />
-                <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="true" />
+                <element signature="method#OpenerExtension#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#5096#5124#0" expanded="false" />
                 <element signature="e#8773#8820#0" expanded="false" />
+                <element signature="method#readDataCubeFromTiff#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#10749#10767#0" expanded="false" />
                 <element signature="e#11627#11657#0" expanded="false" />
                 <element signature="e#12031#12089#0" expanded="false" />
+                <element signature="method#hdf5InfoToString#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#13387#13389#0" expanded="false" />
                 <element signature="docComment;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="docComment;field#GRAY16_SIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="docComment;field#GRAY16_UNSIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-                <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
+                <element signature="method#readCroppedPlaneFromTiffIntoImageStack#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#20055#20094#0" expanded="false" />
                 <element signature="e#22728#22730#0" expanded="false" />
+                <element signature="method#lzwUncompress#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#24566#24594#0" expanded="false" />
                 <element signature="e#25088#25121#0" expanded="false" />
                 <element signature="e#25882#25915#0" expanded="false" />
                 <element signature="e#26302#26351#0" expanded="false" />
                 <element signature="e#27272#27305#0" expanded="false" />
-                <element signature="method#readCroppedPlaneFromTiff#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
+                <element signature="method#setShortPixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#setBytePixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#start#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#readCroppedPlaneFromTiff#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="e#32913#32927#0" expanded="false" />
                 <element signature="docComment;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#ByteVector#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#ByteVector#1;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#ByteVector#2;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#add#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="e#35757#35758#0" expanded="false" />
+                <element signature="e#35800#35801#0" expanded="false" />
+                <element signature="method#add#1;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="method#doubleCapacity#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+                <element signature="e#36373#36374#0" expanded="false" />
+                <element signature="e#36413#36414#0" expanded="false" />
+                <element signature="method#toByteArray#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3519553">
-              <caret line="529" column="0" selection-start-line="529" selection-start-column="0" selection-end-line="529" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="375" column="12" selection-start-line="375" selection-start-column="12" selection-end-line="375" selection-end-column="12" />
               <folding>
                 <element signature="docComment;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#4516#4517#0" expanded="true" />
-                <element signature="e#4566#4567#0" expanded="true" />
-                <element signature="e#4616#4617#0" expanded="true" />
-                <element signature="e#4645#4646#0" expanded="true" />
                 <element signature="method#numberOfUnparsedFiles#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#setStackFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#setStackFromFile#0;class#VirtualStackOfStacks#0" expanded="true" />
@@ -171,56 +164,85 @@
                 <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#addSlice#1;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="e#8084#8085#0" expanded="true" />
-                <element signature="e#8118#8119#0" expanded="true" />
                 <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#getPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#setPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#setAndSavePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#12767#12768#0" expanded="true" />
-                <element signature="e#12815#12816#0" expanded="true" />
                 <element signature="method#getCropOffset#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#getCropSize#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#getFullFrame#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="true" />
+                <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#computeMean16bit#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#resizeWidthAndHeight#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#21177#21178#0" expanded="true" />
-                <element signature="e#21207#21208#0" expanded="true" />
-                <element signature="e#21236#21237#0" expanded="true" />
-                <element signature="e#21261#21262#0" expanded="true" />
-                <element signature="e#21291#21292#0" expanded="true" />
-                <element signature="e#21316#21317#0" expanded="true" />
-                <element signature="e#21345#21346#0" expanded="true" />
-                <element signature="e#21370#21371#0" expanded="true" />
-                <element signature="e#21402#21403#0" expanded="true" />
-                <element signature="e#21427#21428#0" expanded="true" />
-                <element signature="e#21457#21458#0" expanded="true" />
-                <element signature="e#21482#21483#0" expanded="true" />
                 <element signature="method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#21770#21771#0" expanded="true" />
-                <element signature="e#21797#21798#0" expanded="true" />
                 <element signature="method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#21947#21948#0" expanded="true" />
-                <element signature="e#21994#21995#0" expanded="true" />
                 <element signature="method#trim#0;class#VirtualStackOfStacks#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CreateEmptyVSS.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java">
+      <file leaf-file-name="NewImage.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/gui/NewImage.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+              <caret line="126" column="28" selection-start-line="126" selection-start-column="28" selection-end-line="126" selection-end-column="28" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="method#createByteImage#0;class#NewImage#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ByteProcessor.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/process/ByteProcessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="58" column="11" selection-start-line="58" selection-start-column="11" selection-end-line="58" selection-end-column="11" />
+              <folding>
+                <element signature="e#1779#1780#0" expanded="true" />
+                <element signature="e#1819#1820#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IJLazySwingLogger.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="method#IJLazySwingLogger#0;class#IJLazySwingLogger#0" expanded="false" />
+                <element signature="e#304#305#0" expanded="false" />
+                <element signature="e#346#347#0" expanded="false" />
+                <element signature="e#400#401#0" expanded="false" />
+                <element signature="e#436#437#0" expanded="false" />
+                <element signature="e#490#491#0" expanded="false" />
+                <element signature="e#558#559#0" expanded="false" />
+                <element signature="e#1208#1209#0" expanded="false" />
+                <element signature="e#1278#1279#0" expanded="false" />
+                <element signature="e#1335#1336#0" expanded="false" />
+                <element signature="e#1407#1408#0" expanded="false" />
+                <element signature="method#debug#0;class#IJLazySwingLogger#0" expanded="false" />
+                <element signature="method#ijLazySwingLog#0;class#IJLazySwingLogger#0" expanded="false" />
+                <element signature="e#1733#1734#0" expanded="false" />
+                <element signature="e#1780#1781#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CreateEmptyVSS.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.0671506">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -231,53 +253,72 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
               <folding>
-                <element signature="method#setPixels#0;class#ImageStack#0" expanded="true" />
-                <element signature="method#create#0;class#ImageStack#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#776#777#0" expanded="false" />
+                <element signature="e#808#809#0" expanded="false" />
+                <element signature="method#ImageStack#2;class#ImageStack#0" expanded="false" />
+                <element signature="method#ImageStack#3;class#ImageStack#0" expanded="false" />
+                <element signature="method#addSlice#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setType#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#2536#2537#0" expanded="false" />
+                <element signature="e#2571#2572#0" expanded="false" />
+                <element signature="e#2672#2673#0" expanded="false" />
+                <element signature="e#2697#2698#0" expanded="false" />
+                <element signature="method#addSlice#2;class#ImageStack#0" expanded="false" />
+                <element signature="method#addSlice#3;class#ImageStack#0" expanded="false" />
+                <element signature="method#deleteSlice#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#deleteLastSlice#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#4221#4222#0" expanded="false" />
+                <element signature="e#4246#4247#0" expanded="false" />
+                <element signature="e#4276#4277#0" expanded="false" />
+                <element signature="e#4302#4303#0" expanded="false" />
+                <element signature="e#4344#4345#0" expanded="false" />
+                <element signature="e#4365#4366#0" expanded="false" />
+                <element signature="method#getRoi#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#update#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getPixels#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setPixels#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#5510#5511#0" expanded="false" />
+                <element signature="e#5529#5530#0" expanded="false" />
+                <element signature="e#5607#5608#0" expanded="false" />
+                <element signature="e#5628#5629#0" expanded="false" />
+                <element signature="e#5702#5703#0" expanded="false" />
+                <element signature="e#5725#5726#0" expanded="false" />
+                <element signature="method#getSliceLabels#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getSliceLabel#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getShortSliceLabel#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setSliceLabel#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getProcessor#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setProcessor#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#8993#8994#0" expanded="false" />
+                <element signature="e#9012#9013#0" expanded="false" />
+                <element signature="e#9110#9111#0" expanded="false" />
+                <element signature="e#9126#9127#0" expanded="false" />
+                <element signature="method#isRGB#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#9414#9415#0" expanded="false" />
+                <element signature="e#9501#9502#0" expanded="false" />
+                <element signature="e#9573#9574#0" expanded="false" />
+                <element signature="e#9660#9661#0" expanded="false" />
+                <element signature="e#9815#9816#0" expanded="false" />
+                <element signature="e#9834#9835#0" expanded="false" />
+                <element signature="method#trim#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#toString#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getVoxel#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setVoxel#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getVoxels#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getVoxels#1;class#ImageStack#0" expanded="false" />
+                <element signature="method#setVoxels#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#setVoxels#1;class#ImageStack#0" expanded="false" />
+                <element signature="method#drawSphere#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getBitDepth#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#getType#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#create#0;class#ImageStack#0" expanded="false" />
+                <element signature="e#17999#18000#0" expanded="false" />
+                <element signature="e#18054#18055#0" expanded="false" />
+                <element signature="method#crop#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#convertToFloat#0;class#ImageStack#0" expanded="false" />
+                <element signature="method#viewers#0;class#ImageStack#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataStreamingToolsGUI.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="208" column="53" selection-start-line="208" selection-start-column="53" selection-end-line="208" selection-end-column="53" />
-              <folding>
-                <element signature="docComment;class#DataStreamingToolsGUI#0" expanded="false" />
-                <element signature="e#3601#3613#0" expanded="false" />
-                <element signature="e#5947#5958#0" expanded="false" />
-                <element signature="e#8386#8396#0" expanded="false" />
-                <element signature="e#8834#8841#0" expanded="false" />
-                <element signature="e#10397#10399#0" expanded="false" />
-                <element signature="class#11190:11393" expanded="false" />
-                <element signature="e#11505#11507#0" expanded="false" />
-                <element signature="e#12444#12461#0" expanded="false" />
-                <element signature="e#13172#13218#0" expanded="false" />
-                <element signature="e#14052#14073#0" expanded="false" />
-                <element signature="class#14144:14463" expanded="false" />
-                <element signature="e#14744#14817#0" expanded="false" />
-                <element signature="class#16687:16997" expanded="false" />
-                <element signature="e#17093#17095#0" expanded="false" />
-                <element signature="e#17343#17345#0" expanded="false" />
-                <element signature="e#17821#17836#0" expanded="false" />
-                <element signature="e#18019#18027#0" expanded="false" />
-                <element signature="e#18216#18226#0" expanded="false" />
-                <element signature="e#18462#18472#0" expanded="false" />
-                <element signature="e#18659#18661#0" expanded="false" />
-                <element signature="e#19546#19578#0" expanded="false" />
-                <element signature="e#20317#20344#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="211" column="24" selection-start-line="211" selection-start-column="24" selection-end-line="211" selection-end-column="24" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -288,7 +329,248 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="1971" column="29" selection-start-line="1971" selection-start-column="29" selection-end-line="1971" selection-end-column="29" />
               <folding>
-                <element signature="method#createImage#0;class#IJ#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="initializer##0;class#IJ#0" expanded="false" />
+                <element signature="method#init#0;class#IJ#0" expanded="false" />
+                <element signature="method#cleanup#0;class#IJ#0" expanded="false" />
+                <element signature="e#3651#3652#0" expanded="false" />
+                <element signature="e#3667#3668#0" expanded="false" />
+                <element signature="method#setDebugMode#0;class#IJ#0" expanded="false" />
+                <element signature="e#4117#4118#0" expanded="false" />
+                <element signature="e#4150#4151#0" expanded="false" />
+                <element signature="method#runMacro#1;class#IJ#0" expanded="false" />
+                <element signature="method#runMacroFile#0;class#IJ#0" expanded="false" />
+                <element signature="e#5360#5361#0" expanded="false" />
+                <element signature="e#5398#5399#0" expanded="false" />
+                <element signature="method#runPlugIn#0;class#IJ#0" expanded="false" />
+                <element signature="e#5939#5940#0" expanded="false" />
+                <element signature="e#5982#5983#0" expanded="false" />
+                <element signature="method#runPlugIn#2;class#IJ#0" expanded="false" />
+                <element signature="method#runUserPlugIn#0;class#IJ#0" expanded="false" />
+                <element signature="method#argument#0;class#IJ#0" expanded="false" />
+                <element signature="method#wrongType#0;class#IJ#0" expanded="false" />
+                <element signature="e#9665#9666#0" expanded="false" />
+                <element signature="e#9699#9700#0" expanded="false" />
+                <element signature="e#9844#9845#0" expanded="false" />
+                <element signature="e#9877#9878#0" expanded="false" />
+                <element signature="e#10156#10157#0" expanded="false" />
+                <element signature="e#10181#10182#0" expanded="false" />
+                <element signature="method#run#1;class#IJ#0" expanded="false" />
+                <element signature="method#convert#0;class#IJ#0" expanded="false" />
+                <element signature="method#run#2;class#IJ#0" expanded="false" />
+                <element signature="method#init#1;class#IJ#0" expanded="false" />
+                <element signature="method#testAbort#0;class#IJ#0" expanded="false" />
+                <element signature="e#13903#13904#0" expanded="false" />
+                <element signature="e#13929#13930#0" expanded="false" />
+                <element signature="e#14071#14072#0" expanded="false" />
+                <element signature="e#14132#14133#0" expanded="false" />
+                <element signature="e#14269#14270#0" expanded="false" />
+                <element signature="e#14289#14290#0" expanded="false" />
+                <element signature="method#showStatus#0;class#IJ#0" expanded="false" />
+                <element signature="method#write#0;class#IJ#0" expanded="false" />
+                <element signature="method#showResults#0;class#IJ#0" expanded="false" />
+                <element signature="method#log#0;class#IJ#0" expanded="false" />
+                <element signature="method#handleLogCommand#0;class#IJ#0" expanded="false" />
+                <element signature="method#getLog#0;class#IJ#0" expanded="false" />
+                <element signature="method#setColumnHeadings#0;class#IJ#0" expanded="false" />
+                <element signature="e#17433#17434#0" expanded="false" />
+                <element signature="e#17462#17463#0" expanded="false" />
+                <element signature="method#renameResults#0;class#IJ#0" expanded="false" />
+                <element signature="method#renameResults#1;class#IJ#0" expanded="false" />
+                <element signature="method#deleteRows#0;class#IJ#0" expanded="false" />
+                <element signature="method#getTextPanel#0;class#IJ#0" expanded="false" />
+                <element signature="e#19361#19362#0" expanded="false" />
+                <element signature="e#19382#19383#0" expanded="false" />
+                <element signature="e#19472#19473#0" expanded="false" />
+                <element signature="e#19525#19526#0" expanded="false" />
+                <element signature="method#outOfMemory#0;class#IJ#0" expanded="false" />
+                <element signature="e#20471#20472#0" expanded="false" />
+                <element signature="e#20534#20535#0" expanded="false" />
+                <element signature="method#showProgress#1;class#IJ#0" expanded="false" />
+                <element signature="e#21264#21265#0" expanded="false" />
+                <element signature="e#21298#21299#0" expanded="false" />
+                <element signature="method#showMessage#1;class#IJ#0" expanded="false" />
+                <element signature="method#error#0;class#IJ#0" expanded="false" />
+                <element signature="method#error#1;class#IJ#0" expanded="false" />
+                <element signature="method#getErrorMessage#0;class#IJ#0" expanded="false" />
+                <element signature="method#showMessageWithCancel#0;class#IJ#0" expanded="false" />
+                <element signature="method#getNumber#0;class#IJ#0" expanded="false" />
+                <element signature="method#getString#0;class#IJ#0" expanded="false" />
+                <element signature="method#wait#0;class#IJ#0" expanded="false" />
+                <element signature="e#24948#24949#0" expanded="false" />
+                <element signature="e#24998#24999#0" expanded="false" />
+                <element signature="method#freeMemory#0;class#IJ#0" expanded="false" />
+                <element signature="method#currentMemory#0;class#IJ#0" expanded="false" />
+                <element signature="method#maxMemory#0;class#IJ#0" expanded="false" />
+                <element signature="e#26219#26220#0" expanded="false" />
+                <element signature="e#26254#26255#0" expanded="false" />
+                <element signature="method#showTime#1;class#IJ#0" expanded="false" />
+                <element signature="method#time#0;class#IJ#0" expanded="false" />
+                <element signature="e#27343#27344#0" expanded="false" />
+                <element signature="e#27366#27367#0" expanded="false" />
+                <element signature="method#d2s#1;class#IJ#0" expanded="false" />
+                <element signature="method#d2s#2;class#IJ#0" expanded="false" />
+                <element signature="method#pad#0;class#IJ#0" expanded="false" />
+                <element signature="e#30205#30206#0" expanded="false" />
+                <element signature="e#30240#30241#0" expanded="false" />
+                <element signature="e#30329#30330#0" expanded="false" />
+                <element signature="e#30352#30353#0" expanded="false" />
+                <element signature="e#30444#30445#0" expanded="false" />
+                <element signature="e#30469#30470#0" expanded="false" />
+                <element signature="e#30553#30554#0" expanded="false" />
+                <element signature="e#30574#30575#0" expanded="false" />
+                <element signature="e#30662#30663#0" expanded="false" />
+                <element signature="e#30685#30686#0" expanded="false" />
+                <element signature="method#setKeyDown#0;class#IJ#0" expanded="false" />
+                <element signature="method#setKeyUp#0;class#IJ#0" expanded="false" />
+                <element signature="method#updateStatus#0;class#IJ#0" expanded="false" />
+                <element signature="method#setInputEvent#0;class#IJ#0" expanded="false" />
+                <element signature="e#32492#32493#0" expanded="false" />
+                <element signature="e#32511#32512#0" expanded="false" />
+                <element signature="e#32615#32616#0" expanded="false" />
+                <element signature="e#32642#32643#0" expanded="false" />
+                <element signature="e#32737#32738#0" expanded="false" />
+                <element signature="e#32756#32757#0" expanded="false" />
+                <element signature="e#32822#32823#0" expanded="false" />
+                <element signature="e#32840#32841#0" expanded="false" />
+                <element signature="e#32907#32908#0" expanded="false" />
+                <element signature="e#32925#32926#0" expanded="false" />
+                <element signature="e#32991#32992#0" expanded="false" />
+                <element signature="e#33009#33010#0" expanded="false" />
+                <element signature="e#33118#33119#0" expanded="false" />
+                <element signature="e#33140#33141#0" expanded="false" />
+                <element signature="e#33249#33250#0" expanded="false" />
+                <element signature="e#33271#33272#0" expanded="false" />
+                <element signature="e#33380#33381#0" expanded="false" />
+                <element signature="e#33402#33403#0" expanded="false" />
+                <element signature="e#33511#33512#0" expanded="false" />
+                <element signature="e#33533#33534#0" expanded="false" />
+                <element signature="e#33621#33622#0" expanded="false" />
+                <element signature="e#33642#33643#0" expanded="false" />
+                <element signature="e#33718#33719#0" expanded="false" />
+                <element signature="e#33737#33738#0" expanded="false" />
+                <element signature="method#is64Bit#0;class#IJ#0" expanded="false" />
+                <element signature="method#versionLessThan#0;class#IJ#0" expanded="false" />
+                <element signature="method#setupDialog#0;class#IJ#0" expanded="false" />
+                <element signature="method#makeRectangle#0;class#IJ#0" expanded="false" />
+                <element signature="method#makeRectangle#1;class#IJ#0" expanded="false" />
+                <element signature="method#makeOval#0;class#IJ#0" expanded="false" />
+                <element signature="method#makeOval#1;class#IJ#0" expanded="false" />
+                <element signature="e#37608#37609#0" expanded="false" />
+                <element signature="e#37658#37659#0" expanded="false" />
+                <element signature="method#makeLine#1;class#IJ#0" expanded="false" />
+                <element signature="method#makePoint#0;class#IJ#0" expanded="false" />
+                <element signature="method#makePoint#1;class#IJ#0" expanded="false" />
+                <element signature="e#39210#39211#0" expanded="false" />
+                <element signature="e#39254#39255#0" expanded="false" />
+                <element signature="e#39429#39430#0" expanded="false" />
+                <element signature="e#39466#39467#0" expanded="false" />
+                <element signature="e#39665#39666#0" expanded="false" />
+                <element signature="e#39716#39717#0" expanded="false" />
+                <element signature="method#setMinAndMax#3;class#IJ#0" expanded="false" />
+                <element signature="e#40212#40213#0" expanded="false" />
+                <element signature="e#40245#40246#0" expanded="false" />
+                <element signature="method#resetMinAndMax#1;class#IJ#0" expanded="false" />
+                <element signature="method#setThreshold#0;class#IJ#0" expanded="false" />
+                <element signature="method#setThreshold#1;class#IJ#0" expanded="false" />
+                <element signature="method#setThreshold#2;class#IJ#0" expanded="false" />
+                <element signature="method#setThreshold#3;class#IJ#0" expanded="false" />
+                <element signature="method#setRawThreshold#0;class#IJ#0" expanded="false" />
+                <element signature="method#setAutoThreshold#0;class#IJ#0" expanded="false" />
+                <element signature="method#setStackThreshold#0;class#IJ#0" expanded="false" />
+                <element signature="e#44907#44908#0" expanded="false" />
+                <element signature="e#44940#44941#0" expanded="false" />
+                <element signature="method#resetThreshold#1;class#IJ#0" expanded="false" />
+                <element signature="method#selectWindow#0;class#IJ#0" expanded="false" />
+                <element signature="method#selectWindow#1;class#IJ#0" expanded="false" />
+                <element signature="method#selectWindow#2;class#IJ#0" expanded="false" />
+                <element signature="e#47888#47889#0" expanded="false" />
+                <element signature="e#47927#47928#0" expanded="false" />
+                <element signature="e#48034#48035#0" expanded="false" />
+                <element signature="e#48074#48075#0" expanded="false" />
+                <element signature="method#setColor#0;class#IJ#0" expanded="false" />
+                <element signature="e#48680#48681#0" expanded="false" />
+                <element signature="e#48720#48721#0" expanded="false" />
+                <element signature="e#48909#48910#0" expanded="false" />
+                <element signature="e#48958#48959#0" expanded="false" />
+                <element signature="e#49043#49044#0" expanded="false" />
+                <element signature="e#49078#49079#0" expanded="false" />
+                <element signature="e#49255#49256#0" expanded="false" />
+                <element signature="e#49302#49303#0" expanded="false" />
+                <element signature="method#doWand#1;class#IJ#0" expanded="false" />
+                <element signature="method#doWand#2;class#IJ#0" expanded="false" />
+                <element signature="method#setPasteMode#0;class#IJ#0" expanded="false" />
+                <element signature="method#getImage#0;class#IJ#0" expanded="false" />
+                <element signature="method#getProcessor#0;class#IJ#0" expanded="false" />
+                <element signature="e#52798#52799#0" expanded="false" />
+                <element signature="e#52831#52832#0" expanded="false" />
+                <element signature="e#52924#52925#0" expanded="false" />
+                <element signature="e#52952#52953#0" expanded="false" />
+                <element signature="method#getFullVersion#0;class#IJ#0" expanded="false" />
+                <element signature="method#getDirectory#0;class#IJ#0" expanded="false" />
+                <element signature="e#55221#55222#0" expanded="false" />
+                <element signature="e#55254#55255#0" expanded="false" />
+                <element signature="method#getFilePath#0;class#IJ#0" expanded="false" />
+                <element signature="e#55804#55805#0" expanded="false" />
+                <element signature="e#55821#55822#0" expanded="false" />
+                <element signature="method#open#1;class#IJ#0" expanded="false" />
+                <element signature="method#open#2;class#IJ#0" expanded="false" />
+                <element signature="e#57098#57099#0" expanded="false" />
+                <element signature="e#57142#57143#0" expanded="false" />
+                <element signature="e#57257#57258#0" expanded="false" />
+                <element signature="e#57304#57305#0" expanded="false" />
+                <element signature="e#57415#57416#0" expanded="false" />
+                <element signature="e#57467#57468#0" expanded="false" />
+                <element signature="e#57594#57595#0" expanded="false" />
+                <element signature="e#57623#57624#0" expanded="false" />
+                <element signature="method#openUrlAsString#0;class#IJ#0" expanded="false" />
+                <element signature="e#60544#60545#0" expanded="false" />
+                <element signature="e#60567#60568#0" expanded="false" />
+                <element signature="method#save#1;class#IJ#0" expanded="false" />
+                <element signature="e#61991#61992#0" expanded="false" />
+                <element signature="e#62026#62027#0" expanded="false" />
+                <element signature="method#saveAs#1;class#IJ#0" expanded="false" />
+                <element signature="method#saveAsTiff#0;class#IJ#0" expanded="false" />
+                <element signature="method#updateExtension#0;class#IJ#0" expanded="false" />
+                <element signature="e#66104#66105#0" expanded="false" />
+                <element signature="e#66144#66145#0" expanded="false" />
+                <element signature="e#66416#66417#0" expanded="false" />
+                <element signature="e#66460#66461#0" expanded="false" />
+                <element signature="method#write#1;class#IJ#0" expanded="false" />
+                <element signature="method#openAsString#0;class#IJ#0" expanded="false" />
+                <element signature="method#createImage#0;class#IJ#0" expanded="false" />
+                <element signature="method#createImage#1;class#IJ#0" expanded="false" />
+                <element signature="method#createImage#2;class#IJ#0" expanded="false" />
+                <element signature="method#createHyperStack#0;class#IJ#0" expanded="false" />
+                <element signature="method#newImage#0;class#IJ#0" expanded="false" />
+                <element signature="e#72157#72158#0" expanded="false" />
+                <element signature="e#72184#72185#0" expanded="false" />
+                <element signature="e#72388#72389#0" expanded="false" />
+                <element signature="e#72416#72417#0" expanded="false" />
+                <element signature="method#redirectErrorMessages#0;class#IJ#0" expanded="false" />
+                <element signature="method#redirectErrorMessages#1;class#IJ#0" expanded="false" />
+                <element signature="e#72993#72994#0" expanded="false" />
+                <element signature="e#73028#73029#0" expanded="false" />
+                <element signature="e#73137#73138#0" expanded="false" />
+                <element signature="e#73178#73179#0" expanded="false" />
+                <element signature="method#getClassLoader#0;class#IJ#0" expanded="false" />
+                <element signature="method#getScreenSize#0;class#IJ#0" expanded="false" />
+                <element signature="method#getLuts#0;class#IJ#0" expanded="false" />
+                <element signature="method#abort#0;class#IJ#0" expanded="false" />
+                <element signature="e#75940#75941#0" expanded="false" />
+                <element signature="e#75967#75968#0" expanded="false" />
+                <element signature="e#76009#76010#0" expanded="false" />
+                <element signature="e#76036#76037#0" expanded="false" />
+                <element signature="method#handleException#0;class#IJ#0" expanded="false" />
+                <element signature="e#76790#76791#0" expanded="false" />
+                <element signature="e#76823#76824#0" expanded="false" />
+                <element signature="e#77009#77010#0" expanded="false" />
+                <element signature="e#77051#77052#0" expanded="false" />
+                <element signature="e#77121#77122#0" expanded="false" />
+                <element signature="e#77166#77167#0" expanded="false" />
+                <element signature="method#notifyEventListeners#0;class#IJ#0" expanded="false" />
+                <element signature="method#setProperty#0;class#IJ#0" expanded="false" />
+                <element signature="method#getProperty#0;class#IJ#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -364,8 +646,8 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" />
       </list>
     </option>
   </component>
@@ -390,7 +672,7 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="19" />
+    <option name="x" value="5" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="873" />
@@ -418,20 +700,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji--bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -542,7 +811,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="VirtualStackOfStacks" />
+              <option name="myItemId" value="logging" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -576,24 +845,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="out" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -808,25 +1063,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="19" y="23" width="1440" height="873" extended-state="0" />
+    <frame x="5" y="23" width="1440" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35323384" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2636816" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25864276" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22291666" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22246066" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2375622" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -958,20 +1213,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/util/concurrent/Executor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.5118484">
-          <caret line="139" column="9" selection-start-line="139" selection-start-column="9" selection-end-line="139" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/util/concurrent/ExecutorService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="180" column="19" selection-start-line="180" selection-start-column="19" selection-end-line="180" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1032,13 +1273,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33271027">
           <caret line="141" column="25" selection-start-line="141" selection-start-column="25" selection-end-line="141" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1109,7 +1343,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3315508">
           <caret line="744" column="0" selection-start-line="744" selection-start-column="0" selection-end-line="744" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1211,7 +1444,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1247,10 +1479,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="71" column="16" selection-start-line="71" selection-start-column="16" selection-end-line="71" selection-end-column="16" />
-          <folding>
-            <element signature="e#2495#2496#0" expanded="false" />
-            <element signature="e#2530#2531#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1324,24 +1552,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10724#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#2814#2815#0" expanded="false" />
-            <element signature="e#2864#2865#0" expanded="false" />
-            <element signature="e#2909#2910#0" expanded="false" />
-            <element signature="e#2942#2943#0" expanded="false" />
-            <element signature="e#2989#2990#0" expanded="false" />
-            <element signature="e#3018#3019#0" expanded="false" />
-            <element signature="method#getViewsOnTrackedObjects#0;class#BigDataTracker#0" expanded="false" />
-            <element signature="e#3630#3632#0" expanded="false" />
-            <element signature="e#3920#3977#0" expanded="false" />
-            <element signature="method#getCroppedImagePlus#0;class#BigDataTracker#0" expanded="false" />
-            <element signature="method#addLocationToOverlay#0;class#BigDataTracker#0" expanded="false" />
-            <element signature="method#addNewTrack#0;class#BigDataTracker#0" expanded="false" />
-            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="false" />
-            <element signature="method#cancelTracking#0;class#BigDataTracker#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1349,9 +1559,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1378,20 +1585,29 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="208" column="53" selection-start-line="208" selection-start-column="53" selection-end-line="208" selection-end-column="53" />
           <folding>
+            <element signature="imports" expanded="false" />
             <element signature="docComment;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#StackStreamToolsGUI#0;class#DataStreamingToolsGUI#0" expanded="false" />
             <element signature="e#3601#3613#0" expanded="false" />
             <element signature="e#5947#5958#0" expanded="false" />
             <element signature="e#8386#8396#0" expanded="false" />
             <element signature="e#8834#8841#0" expanded="false" />
+            <element signature="method#focusGained#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#focusLost#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#itemStateChanged#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="false" />
             <element signature="e#10397#10399#0" expanded="false" />
             <element signature="class#11190:11393" expanded="false" />
+            <element signature="method#run#0;class#11190:11393" expanded="false" />
             <element signature="e#11505#11507#0" expanded="false" />
             <element signature="e#12444#12461#0" expanded="false" />
             <element signature="e#13172#13218#0" expanded="false" />
             <element signature="e#14052#14073#0" expanded="false" />
             <element signature="class#14144:14463" expanded="false" />
+            <element signature="method#run#0;class#14144:14463" expanded="false" />
             <element signature="e#14744#14817#0" expanded="false" />
             <element signature="class#16687:16997" expanded="false" />
+            <element signature="method#run#0;class#16687:16997" expanded="false" />
             <element signature="e#17093#17095#0" expanded="false" />
             <element signature="e#17343#17345#0" expanded="false" />
             <element signature="e#17821#17836#0" expanded="false" />
@@ -1399,8 +1615,11 @@
             <element signature="e#18216#18226#0" expanded="false" />
             <element signature="e#18462#18472#0" expanded="false" />
             <element signature="e#18659#18661#0" expanded="false" />
+            <element signature="method#getToolTipFile#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="e#19525#19533#0" expanded="false" />
             <element signature="e#19546#19578#0" expanded="false" />
             <element signature="e#20317#20344#0" expanded="false" />
+            <element signature="method#getMinMaxFromTextField#0;class#DataStreamingToolsGUI#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1410,7 +1629,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
           <folding>
-            <element signature="method#LoadFrameFromVSSIntoRAM#0;class#LoadFrameFromVSSIntoRAM#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#LoadFrameFromVSSIntoRAM#0;class#LoadFrameFromVSSIntoRAM#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1420,7 +1640,248 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="1971" column="29" selection-start-line="1971" selection-start-column="29" selection-end-line="1971" selection-end-column="29" />
           <folding>
-            <element signature="method#createImage#0;class#IJ#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="initializer##0;class#IJ#0" expanded="false" />
+            <element signature="method#init#0;class#IJ#0" expanded="false" />
+            <element signature="method#cleanup#0;class#IJ#0" expanded="false" />
+            <element signature="e#3651#3652#0" expanded="false" />
+            <element signature="e#3667#3668#0" expanded="false" />
+            <element signature="method#setDebugMode#0;class#IJ#0" expanded="false" />
+            <element signature="e#4117#4118#0" expanded="false" />
+            <element signature="e#4150#4151#0" expanded="false" />
+            <element signature="method#runMacro#1;class#IJ#0" expanded="false" />
+            <element signature="method#runMacroFile#0;class#IJ#0" expanded="false" />
+            <element signature="e#5360#5361#0" expanded="false" />
+            <element signature="e#5398#5399#0" expanded="false" />
+            <element signature="method#runPlugIn#0;class#IJ#0" expanded="false" />
+            <element signature="e#5939#5940#0" expanded="false" />
+            <element signature="e#5982#5983#0" expanded="false" />
+            <element signature="method#runPlugIn#2;class#IJ#0" expanded="false" />
+            <element signature="method#runUserPlugIn#0;class#IJ#0" expanded="false" />
+            <element signature="method#argument#0;class#IJ#0" expanded="false" />
+            <element signature="method#wrongType#0;class#IJ#0" expanded="false" />
+            <element signature="e#9665#9666#0" expanded="false" />
+            <element signature="e#9699#9700#0" expanded="false" />
+            <element signature="e#9844#9845#0" expanded="false" />
+            <element signature="e#9877#9878#0" expanded="false" />
+            <element signature="e#10156#10157#0" expanded="false" />
+            <element signature="e#10181#10182#0" expanded="false" />
+            <element signature="method#run#1;class#IJ#0" expanded="false" />
+            <element signature="method#convert#0;class#IJ#0" expanded="false" />
+            <element signature="method#run#2;class#IJ#0" expanded="false" />
+            <element signature="method#init#1;class#IJ#0" expanded="false" />
+            <element signature="method#testAbort#0;class#IJ#0" expanded="false" />
+            <element signature="e#13903#13904#0" expanded="false" />
+            <element signature="e#13929#13930#0" expanded="false" />
+            <element signature="e#14071#14072#0" expanded="false" />
+            <element signature="e#14132#14133#0" expanded="false" />
+            <element signature="e#14269#14270#0" expanded="false" />
+            <element signature="e#14289#14290#0" expanded="false" />
+            <element signature="method#showStatus#0;class#IJ#0" expanded="false" />
+            <element signature="method#write#0;class#IJ#0" expanded="false" />
+            <element signature="method#showResults#0;class#IJ#0" expanded="false" />
+            <element signature="method#log#0;class#IJ#0" expanded="false" />
+            <element signature="method#handleLogCommand#0;class#IJ#0" expanded="false" />
+            <element signature="method#getLog#0;class#IJ#0" expanded="false" />
+            <element signature="method#setColumnHeadings#0;class#IJ#0" expanded="false" />
+            <element signature="e#17433#17434#0" expanded="false" />
+            <element signature="e#17462#17463#0" expanded="false" />
+            <element signature="method#renameResults#0;class#IJ#0" expanded="false" />
+            <element signature="method#renameResults#1;class#IJ#0" expanded="false" />
+            <element signature="method#deleteRows#0;class#IJ#0" expanded="false" />
+            <element signature="method#getTextPanel#0;class#IJ#0" expanded="false" />
+            <element signature="e#19361#19362#0" expanded="false" />
+            <element signature="e#19382#19383#0" expanded="false" />
+            <element signature="e#19472#19473#0" expanded="false" />
+            <element signature="e#19525#19526#0" expanded="false" />
+            <element signature="method#outOfMemory#0;class#IJ#0" expanded="false" />
+            <element signature="e#20471#20472#0" expanded="false" />
+            <element signature="e#20534#20535#0" expanded="false" />
+            <element signature="method#showProgress#1;class#IJ#0" expanded="false" />
+            <element signature="e#21264#21265#0" expanded="false" />
+            <element signature="e#21298#21299#0" expanded="false" />
+            <element signature="method#showMessage#1;class#IJ#0" expanded="false" />
+            <element signature="method#error#0;class#IJ#0" expanded="false" />
+            <element signature="method#error#1;class#IJ#0" expanded="false" />
+            <element signature="method#getErrorMessage#0;class#IJ#0" expanded="false" />
+            <element signature="method#showMessageWithCancel#0;class#IJ#0" expanded="false" />
+            <element signature="method#getNumber#0;class#IJ#0" expanded="false" />
+            <element signature="method#getString#0;class#IJ#0" expanded="false" />
+            <element signature="method#wait#0;class#IJ#0" expanded="false" />
+            <element signature="e#24948#24949#0" expanded="false" />
+            <element signature="e#24998#24999#0" expanded="false" />
+            <element signature="method#freeMemory#0;class#IJ#0" expanded="false" />
+            <element signature="method#currentMemory#0;class#IJ#0" expanded="false" />
+            <element signature="method#maxMemory#0;class#IJ#0" expanded="false" />
+            <element signature="e#26219#26220#0" expanded="false" />
+            <element signature="e#26254#26255#0" expanded="false" />
+            <element signature="method#showTime#1;class#IJ#0" expanded="false" />
+            <element signature="method#time#0;class#IJ#0" expanded="false" />
+            <element signature="e#27343#27344#0" expanded="false" />
+            <element signature="e#27366#27367#0" expanded="false" />
+            <element signature="method#d2s#1;class#IJ#0" expanded="false" />
+            <element signature="method#d2s#2;class#IJ#0" expanded="false" />
+            <element signature="method#pad#0;class#IJ#0" expanded="false" />
+            <element signature="e#30205#30206#0" expanded="false" />
+            <element signature="e#30240#30241#0" expanded="false" />
+            <element signature="e#30329#30330#0" expanded="false" />
+            <element signature="e#30352#30353#0" expanded="false" />
+            <element signature="e#30444#30445#0" expanded="false" />
+            <element signature="e#30469#30470#0" expanded="false" />
+            <element signature="e#30553#30554#0" expanded="false" />
+            <element signature="e#30574#30575#0" expanded="false" />
+            <element signature="e#30662#30663#0" expanded="false" />
+            <element signature="e#30685#30686#0" expanded="false" />
+            <element signature="method#setKeyDown#0;class#IJ#0" expanded="false" />
+            <element signature="method#setKeyUp#0;class#IJ#0" expanded="false" />
+            <element signature="method#updateStatus#0;class#IJ#0" expanded="false" />
+            <element signature="method#setInputEvent#0;class#IJ#0" expanded="false" />
+            <element signature="e#32492#32493#0" expanded="false" />
+            <element signature="e#32511#32512#0" expanded="false" />
+            <element signature="e#32615#32616#0" expanded="false" />
+            <element signature="e#32642#32643#0" expanded="false" />
+            <element signature="e#32737#32738#0" expanded="false" />
+            <element signature="e#32756#32757#0" expanded="false" />
+            <element signature="e#32822#32823#0" expanded="false" />
+            <element signature="e#32840#32841#0" expanded="false" />
+            <element signature="e#32907#32908#0" expanded="false" />
+            <element signature="e#32925#32926#0" expanded="false" />
+            <element signature="e#32991#32992#0" expanded="false" />
+            <element signature="e#33009#33010#0" expanded="false" />
+            <element signature="e#33118#33119#0" expanded="false" />
+            <element signature="e#33140#33141#0" expanded="false" />
+            <element signature="e#33249#33250#0" expanded="false" />
+            <element signature="e#33271#33272#0" expanded="false" />
+            <element signature="e#33380#33381#0" expanded="false" />
+            <element signature="e#33402#33403#0" expanded="false" />
+            <element signature="e#33511#33512#0" expanded="false" />
+            <element signature="e#33533#33534#0" expanded="false" />
+            <element signature="e#33621#33622#0" expanded="false" />
+            <element signature="e#33642#33643#0" expanded="false" />
+            <element signature="e#33718#33719#0" expanded="false" />
+            <element signature="e#33737#33738#0" expanded="false" />
+            <element signature="method#is64Bit#0;class#IJ#0" expanded="false" />
+            <element signature="method#versionLessThan#0;class#IJ#0" expanded="false" />
+            <element signature="method#setupDialog#0;class#IJ#0" expanded="false" />
+            <element signature="method#makeRectangle#0;class#IJ#0" expanded="false" />
+            <element signature="method#makeRectangle#1;class#IJ#0" expanded="false" />
+            <element signature="method#makeOval#0;class#IJ#0" expanded="false" />
+            <element signature="method#makeOval#1;class#IJ#0" expanded="false" />
+            <element signature="e#37608#37609#0" expanded="false" />
+            <element signature="e#37658#37659#0" expanded="false" />
+            <element signature="method#makeLine#1;class#IJ#0" expanded="false" />
+            <element signature="method#makePoint#0;class#IJ#0" expanded="false" />
+            <element signature="method#makePoint#1;class#IJ#0" expanded="false" />
+            <element signature="e#39210#39211#0" expanded="false" />
+            <element signature="e#39254#39255#0" expanded="false" />
+            <element signature="e#39429#39430#0" expanded="false" />
+            <element signature="e#39466#39467#0" expanded="false" />
+            <element signature="e#39665#39666#0" expanded="false" />
+            <element signature="e#39716#39717#0" expanded="false" />
+            <element signature="method#setMinAndMax#3;class#IJ#0" expanded="false" />
+            <element signature="e#40212#40213#0" expanded="false" />
+            <element signature="e#40245#40246#0" expanded="false" />
+            <element signature="method#resetMinAndMax#1;class#IJ#0" expanded="false" />
+            <element signature="method#setThreshold#0;class#IJ#0" expanded="false" />
+            <element signature="method#setThreshold#1;class#IJ#0" expanded="false" />
+            <element signature="method#setThreshold#2;class#IJ#0" expanded="false" />
+            <element signature="method#setThreshold#3;class#IJ#0" expanded="false" />
+            <element signature="method#setRawThreshold#0;class#IJ#0" expanded="false" />
+            <element signature="method#setAutoThreshold#0;class#IJ#0" expanded="false" />
+            <element signature="method#setStackThreshold#0;class#IJ#0" expanded="false" />
+            <element signature="e#44907#44908#0" expanded="false" />
+            <element signature="e#44940#44941#0" expanded="false" />
+            <element signature="method#resetThreshold#1;class#IJ#0" expanded="false" />
+            <element signature="method#selectWindow#0;class#IJ#0" expanded="false" />
+            <element signature="method#selectWindow#1;class#IJ#0" expanded="false" />
+            <element signature="method#selectWindow#2;class#IJ#0" expanded="false" />
+            <element signature="e#47888#47889#0" expanded="false" />
+            <element signature="e#47927#47928#0" expanded="false" />
+            <element signature="e#48034#48035#0" expanded="false" />
+            <element signature="e#48074#48075#0" expanded="false" />
+            <element signature="method#setColor#0;class#IJ#0" expanded="false" />
+            <element signature="e#48680#48681#0" expanded="false" />
+            <element signature="e#48720#48721#0" expanded="false" />
+            <element signature="e#48909#48910#0" expanded="false" />
+            <element signature="e#48958#48959#0" expanded="false" />
+            <element signature="e#49043#49044#0" expanded="false" />
+            <element signature="e#49078#49079#0" expanded="false" />
+            <element signature="e#49255#49256#0" expanded="false" />
+            <element signature="e#49302#49303#0" expanded="false" />
+            <element signature="method#doWand#1;class#IJ#0" expanded="false" />
+            <element signature="method#doWand#2;class#IJ#0" expanded="false" />
+            <element signature="method#setPasteMode#0;class#IJ#0" expanded="false" />
+            <element signature="method#getImage#0;class#IJ#0" expanded="false" />
+            <element signature="method#getProcessor#0;class#IJ#0" expanded="false" />
+            <element signature="e#52798#52799#0" expanded="false" />
+            <element signature="e#52831#52832#0" expanded="false" />
+            <element signature="e#52924#52925#0" expanded="false" />
+            <element signature="e#52952#52953#0" expanded="false" />
+            <element signature="method#getFullVersion#0;class#IJ#0" expanded="false" />
+            <element signature="method#getDirectory#0;class#IJ#0" expanded="false" />
+            <element signature="e#55221#55222#0" expanded="false" />
+            <element signature="e#55254#55255#0" expanded="false" />
+            <element signature="method#getFilePath#0;class#IJ#0" expanded="false" />
+            <element signature="e#55804#55805#0" expanded="false" />
+            <element signature="e#55821#55822#0" expanded="false" />
+            <element signature="method#open#1;class#IJ#0" expanded="false" />
+            <element signature="method#open#2;class#IJ#0" expanded="false" />
+            <element signature="e#57098#57099#0" expanded="false" />
+            <element signature="e#57142#57143#0" expanded="false" />
+            <element signature="e#57257#57258#0" expanded="false" />
+            <element signature="e#57304#57305#0" expanded="false" />
+            <element signature="e#57415#57416#0" expanded="false" />
+            <element signature="e#57467#57468#0" expanded="false" />
+            <element signature="e#57594#57595#0" expanded="false" />
+            <element signature="e#57623#57624#0" expanded="false" />
+            <element signature="method#openUrlAsString#0;class#IJ#0" expanded="false" />
+            <element signature="e#60544#60545#0" expanded="false" />
+            <element signature="e#60567#60568#0" expanded="false" />
+            <element signature="method#save#1;class#IJ#0" expanded="false" />
+            <element signature="e#61991#61992#0" expanded="false" />
+            <element signature="e#62026#62027#0" expanded="false" />
+            <element signature="method#saveAs#1;class#IJ#0" expanded="false" />
+            <element signature="method#saveAsTiff#0;class#IJ#0" expanded="false" />
+            <element signature="method#updateExtension#0;class#IJ#0" expanded="false" />
+            <element signature="e#66104#66105#0" expanded="false" />
+            <element signature="e#66144#66145#0" expanded="false" />
+            <element signature="e#66416#66417#0" expanded="false" />
+            <element signature="e#66460#66461#0" expanded="false" />
+            <element signature="method#write#1;class#IJ#0" expanded="false" />
+            <element signature="method#openAsString#0;class#IJ#0" expanded="false" />
+            <element signature="method#createImage#0;class#IJ#0" expanded="false" />
+            <element signature="method#createImage#1;class#IJ#0" expanded="false" />
+            <element signature="method#createImage#2;class#IJ#0" expanded="false" />
+            <element signature="method#createHyperStack#0;class#IJ#0" expanded="false" />
+            <element signature="method#newImage#0;class#IJ#0" expanded="false" />
+            <element signature="e#72157#72158#0" expanded="false" />
+            <element signature="e#72184#72185#0" expanded="false" />
+            <element signature="e#72388#72389#0" expanded="false" />
+            <element signature="e#72416#72417#0" expanded="false" />
+            <element signature="method#redirectErrorMessages#0;class#IJ#0" expanded="false" />
+            <element signature="method#redirectErrorMessages#1;class#IJ#0" expanded="false" />
+            <element signature="e#72993#72994#0" expanded="false" />
+            <element signature="e#73028#73029#0" expanded="false" />
+            <element signature="e#73137#73138#0" expanded="false" />
+            <element signature="e#73178#73179#0" expanded="false" />
+            <element signature="method#getClassLoader#0;class#IJ#0" expanded="false" />
+            <element signature="method#getScreenSize#0;class#IJ#0" expanded="false" />
+            <element signature="method#getLuts#0;class#IJ#0" expanded="false" />
+            <element signature="method#abort#0;class#IJ#0" expanded="false" />
+            <element signature="e#75940#75941#0" expanded="false" />
+            <element signature="e#75967#75968#0" expanded="false" />
+            <element signature="e#76009#76010#0" expanded="false" />
+            <element signature="e#76036#76037#0" expanded="false" />
+            <element signature="method#handleException#0;class#IJ#0" expanded="false" />
+            <element signature="e#76790#76791#0" expanded="false" />
+            <element signature="e#76823#76824#0" expanded="false" />
+            <element signature="e#77009#77010#0" expanded="false" />
+            <element signature="e#77051#77052#0" expanded="false" />
+            <element signature="e#77121#77122#0" expanded="false" />
+            <element signature="e#77166#77167#0" expanded="false" />
+            <element signature="method#notifyEventListeners#0;class#IJ#0" expanded="false" />
+            <element signature="method#setProperty#0;class#IJ#0" expanded="false" />
+            <element signature="method#getProperty#0;class#IJ#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1430,30 +1891,157 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="191" column="16" selection-start-line="191" selection-start-column="16" selection-end-line="191" selection-end-column="16" />
           <folding>
-            <element signature="method#setPixels#0;class#ImageStack#0" expanded="true" />
-            <element signature="method#create#0;class#ImageStack#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#776#777#0" expanded="false" />
+            <element signature="e#808#809#0" expanded="false" />
+            <element signature="method#ImageStack#2;class#ImageStack#0" expanded="false" />
+            <element signature="method#ImageStack#3;class#ImageStack#0" expanded="false" />
+            <element signature="method#addSlice#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setType#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#2536#2537#0" expanded="false" />
+            <element signature="e#2571#2572#0" expanded="false" />
+            <element signature="e#2672#2673#0" expanded="false" />
+            <element signature="e#2697#2698#0" expanded="false" />
+            <element signature="method#addSlice#2;class#ImageStack#0" expanded="false" />
+            <element signature="method#addSlice#3;class#ImageStack#0" expanded="false" />
+            <element signature="method#deleteSlice#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#deleteLastSlice#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#4221#4222#0" expanded="false" />
+            <element signature="e#4246#4247#0" expanded="false" />
+            <element signature="e#4276#4277#0" expanded="false" />
+            <element signature="e#4302#4303#0" expanded="false" />
+            <element signature="e#4344#4345#0" expanded="false" />
+            <element signature="e#4365#4366#0" expanded="false" />
+            <element signature="method#getRoi#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#update#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getPixels#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setPixels#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#5510#5511#0" expanded="false" />
+            <element signature="e#5529#5530#0" expanded="false" />
+            <element signature="e#5607#5608#0" expanded="false" />
+            <element signature="e#5628#5629#0" expanded="false" />
+            <element signature="e#5702#5703#0" expanded="false" />
+            <element signature="e#5725#5726#0" expanded="false" />
+            <element signature="method#getSliceLabels#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getSliceLabel#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getShortSliceLabel#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setSliceLabel#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getProcessor#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setProcessor#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#8993#8994#0" expanded="false" />
+            <element signature="e#9012#9013#0" expanded="false" />
+            <element signature="e#9110#9111#0" expanded="false" />
+            <element signature="e#9126#9127#0" expanded="false" />
+            <element signature="method#isRGB#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#9414#9415#0" expanded="false" />
+            <element signature="e#9501#9502#0" expanded="false" />
+            <element signature="e#9573#9574#0" expanded="false" />
+            <element signature="e#9660#9661#0" expanded="false" />
+            <element signature="e#9815#9816#0" expanded="false" />
+            <element signature="e#9834#9835#0" expanded="false" />
+            <element signature="method#trim#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#toString#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getVoxel#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setVoxel#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getVoxels#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getVoxels#1;class#ImageStack#0" expanded="false" />
+            <element signature="method#setVoxels#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#setVoxels#1;class#ImageStack#0" expanded="false" />
+            <element signature="method#drawSphere#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getBitDepth#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#getType#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#create#0;class#ImageStack#0" expanded="false" />
+            <element signature="e#17999#18000#0" expanded="false" />
+            <element signature="e#18054#18055#0" expanded="false" />
+            <element signature="method#crop#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#convertToFloat#0;class#ImageStack#0" expanded="false" />
+            <element signature="method#viewers#0;class#ImageStack#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="143" column="4" selection-start-line="143" selection-start-column="4" selection-end-line="143" selection-end-column="4" />
+          <caret line="88" column="8" selection-start-line="88" selection-start-column="8" selection-end-line="88" selection-end-column="8" />
           <folding>
-            <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
-            <element signature="e#2785#2791#0" expanded="false" />
-            <element signature="e#3289#3296#0" expanded="false" />
-            <element signature="method#saveAsTiffXYZMaxProjection#0;class#SaveVSSFrame#0" expanded="true" />
-            <element signature="e#4924#4926#0" expanded="false" />
+            <element signature="e#0#49381#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="docComment;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#OpenerExtension#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#5096#5124#0" expanded="false" />
+            <element signature="e#8773#8820#0" expanded="false" />
+            <element signature="method#readDataCubeFromTiff#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#10749#10767#0" expanded="false" />
+            <element signature="e#11627#11657#0" expanded="false" />
+            <element signature="e#12031#12089#0" expanded="false" />
+            <element signature="method#hdf5InfoToString#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#13387#13389#0" expanded="false" />
+            <element signature="docComment;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="docComment;field#GRAY16_SIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="docComment;field#GRAY16_UNSIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#readCroppedPlaneFromTiffIntoImageStack#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#20055#20094#0" expanded="false" />
+            <element signature="e#22728#22730#0" expanded="false" />
+            <element signature="method#lzwUncompress#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#24566#24594#0" expanded="false" />
+            <element signature="e#25088#25121#0" expanded="false" />
+            <element signature="e#25882#25915#0" expanded="false" />
+            <element signature="e#26302#26351#0" expanded="false" />
+            <element signature="e#27272#27305#0" expanded="false" />
+            <element signature="method#setShortPixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#setBytePixelsCropXY#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#start#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#readCroppedPlaneFromTiff#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#32913#32927#0" expanded="false" />
+            <element signature="docComment;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#ByteVector#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#ByteVector#1;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#ByteVector#2;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#add#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#35757#35758#0" expanded="false" />
+            <element signature="e#35800#35801#0" expanded="false" />
+            <element signature="method#add#1;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="method#doubleCapacity#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#36373#36374#0" expanded="false" />
+            <element signature="e#36413#36414#0" expanded="false" />
+            <element signature="method#toByteArray#0;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="method#IJLazySwingLogger#0;class#IJLazySwingLogger#0" expanded="false" />
+            <element signature="e#304#305#0" expanded="false" />
+            <element signature="e#346#347#0" expanded="false" />
+            <element signature="e#400#401#0" expanded="false" />
+            <element signature="e#436#437#0" expanded="false" />
+            <element signature="e#490#491#0" expanded="false" />
+            <element signature="e#558#559#0" expanded="false" />
+            <element signature="e#1208#1209#0" expanded="false" />
+            <element signature="e#1278#1279#0" expanded="false" />
+            <element signature="e#1335#1336#0" expanded="false" />
+            <element signature="e#1407#1408#0" expanded="false" />
+            <element signature="method#debug#0;class#IJLazySwingLogger#0" expanded="false" />
+            <element signature="method#ijLazySwingLog#0;class#IJLazySwingLogger#0" expanded="false" />
+            <element signature="e#1733#1734#0" expanded="false" />
+            <element signature="e#1780#1781#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.111111">
-          <caret line="1140" column="24" selection-start-line="1130" selection-start-column="0" selection-end-line="1140" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
             <element signature="e#4369#4371#0" expanded="false" />
@@ -1488,68 +2076,56 @@
             <element signature="class#33043:33300" expanded="false" />
             <element signature="e#34146#34159#0" expanded="false" />
             <element signature="e#34587#34611#0" expanded="false" />
+            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#36177#36240#0" expanded="false" />
             <element signature="class#38631:38847" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="88" column="8" selection-start-line="88" selection-start-column="8" selection-end-line="88" selection-end-column="8" />
+          <caret line="143" column="4" selection-start-line="143" selection-start-column="4" selection-end-line="143" selection-end-column="4" />
           <folding>
-            <element signature="docComment;class#OpenerExtension#0" expanded="false" />
-            <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="e#5096#5124#0" expanded="false" />
-            <element signature="e#8773#8820#0" expanded="false" />
-            <element signature="e#10749#10767#0" expanded="false" />
-            <element signature="e#11627#11657#0" expanded="false" />
-            <element signature="e#12031#12089#0" expanded="false" />
-            <element signature="e#13387#13389#0" expanded="false" />
-            <element signature="docComment;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-            <element signature="docComment;field#GRAY16_SIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-            <element signature="docComment;field#GRAY16_UNSIGNED#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-            <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="e#20055#20094#0" expanded="false" />
-            <element signature="e#22728#22730#0" expanded="false" />
-            <element signature="e#24566#24594#0" expanded="false" />
-            <element signature="e#25088#25121#0" expanded="false" />
-            <element signature="e#25882#25915#0" expanded="false" />
-            <element signature="e#26302#26351#0" expanded="false" />
-            <element signature="e#27272#27305#0" expanded="false" />
-            <element signature="method#readCroppedPlaneFromTiff#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="e#32913#32927#0" expanded="false" />
-            <element signature="docComment;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-            <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
+            <element signature="e#2785#2791#0" expanded="false" />
+            <element signature="e#3289#3296#0" expanded="false" />
+            <element signature="e#4924#4926#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/process/ByteProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+          <caret line="58" column="11" selection-start-line="58" selection-start-column="11" selection-end-line="58" selection-end-column="11" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1779#1780#0" expanded="true" />
+            <element signature="e#1819#1820#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/gui/NewImage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="126" column="28" selection-start-line="126" selection-start-column="28" selection-end-line="126" selection-end-column="28" />
+          <folding>
+            <element signature="method#createByteImage#0;class#NewImage#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3519553">
-          <caret line="529" column="0" selection-start-line="529" selection-start-column="0" selection-end-line="529" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="375" column="12" selection-start-line="375" selection-start-column="12" selection-end-line="375" selection-end-column="12" />
           <folding>
             <element signature="docComment;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#4516#4517#0" expanded="true" />
-            <element signature="e#4566#4567#0" expanded="true" />
-            <element signature="e#4616#4617#0" expanded="true" />
-            <element signature="e#4645#4646#0" expanded="true" />
             <element signature="method#numberOfUnparsedFiles#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#setStackFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#setStackFromFile#0;class#VirtualStackOfStacks#0" expanded="true" />
@@ -1558,44 +2134,31 @@
             <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#addSlice#1;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="e#8084#8085#0" expanded="true" />
-            <element signature="e#8118#8119#0" expanded="true" />
             <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#getPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#setPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#setAndSavePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#12767#12768#0" expanded="true" />
-            <element signature="e#12815#12816#0" expanded="true" />
             <element signature="method#getCropOffset#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#getCropSize#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#getFullFrame#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="true" />
+            <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#computeMean16bit#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#resizeWidthAndHeight#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#21177#21178#0" expanded="true" />
-            <element signature="e#21207#21208#0" expanded="true" />
-            <element signature="e#21236#21237#0" expanded="true" />
-            <element signature="e#21261#21262#0" expanded="true" />
-            <element signature="e#21291#21292#0" expanded="true" />
-            <element signature="e#21316#21317#0" expanded="true" />
-            <element signature="e#21345#21346#0" expanded="true" />
-            <element signature="e#21370#21371#0" expanded="true" />
-            <element signature="e#21402#21403#0" expanded="true" />
-            <element signature="e#21427#21428#0" expanded="true" />
-            <element signature="e#21457#21458#0" expanded="true" />
-            <element signature="e#21482#21483#0" expanded="true" />
             <element signature="method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#21770#21771#0" expanded="true" />
-            <element signature="e#21797#21798#0" expanded="true" />
             <element signature="method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#21947#21948#0" expanded="true" />
-            <element signature="e#21994#21995#0" expanded="true" />
             <element signature="method#trim#0;class#VirtualStackOfStacks#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0671506">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

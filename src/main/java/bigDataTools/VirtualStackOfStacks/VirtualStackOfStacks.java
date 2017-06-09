@@ -41,12 +41,17 @@ import bigDataTools.utils.Utils;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.gui.NewImage;
 import ij.io.FileInfo;
 import ij.io.FileSaver;
+import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 // todo: replace all == with "equals"
 // TODO: extend VirtualStack rather than ImageStack ?
@@ -65,6 +70,7 @@ public class VirtualStackOfStacks extends ImageStack {
     String[] channelFolders;
     String[][][] fileList;
     String h5DataSet;
+    private ArrayList < String > lockedFiles = new  ArrayList<>();
 
     Logger logger = new IJLazySwingLogger();
 
@@ -288,60 +294,114 @@ public class VirtualStackOfStacks extends ImageStack {
     }
 
     /** Assigns and saves a pixel array to the specified slice,
-     were 1<=n<=nslices. */
-    public void setAndSavePixels(Object pixels, int n) {
-        n -= 1;
-        int c = (n % nC);
-        int z = ((n-c)%(nZ*nC))/nC;
-        int t = (n-c-z*nC)/(nZ*nC);
+     were 1<=n<=nslices.
+     The method is synchronized to avoid that two threads try to write
+     into the same file.
+     */
+    public void setAndSaveBytePixels(byte[] pixels, Region5D region5D) {
 
-        ImageStack stack = ImageStack.create(nX,nY,1,bitDepth);
-        stack.setPixels(pixels, 1);
-        ImagePlus imp = new ImagePlus("", stack);
+        int c = region5D.c;
+        int t = region5D.t;
+        int z = (int)region5D.offset.getZ();
 
-        FileSaver fileSaver = new FileSaver(imp);
         String sC = String.format("%1$02d", c);
         String sT = String.format("%1$05d", t);
         String sZ = String.format("%1$05d", z);
         String fileName = imageBaseName + "--C" + sC + "--T" + sT+ "--Z" + sZ + ".tif";
         String pathCTZ = directory + fileName;
-        fileSaver.saveAsTiff(pathCTZ);
 
-        fileList[c][t][z] = fileName;
+        while ( lockedFiles.contains( pathCTZ ) )
+        {
+            try
+            {
+                Thread.sleep(100);
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
 
-        FastTiffDecoder ftd = new FastTiffDecoder(directory, fileList[c][t][z]);
+        synchronized ( this ) { lockedFiles.add( pathCTZ ); }
 
-        FileInfoSer[] info = new FileInfoSer[0];
+        if ( infos[c][t]==null || infos[c][t][z].fileName==null )
+        {
+            // file does not exist yet => create it
+            ImagePlus imp = NewImage.createByteImage("title",nX,nY,1,NewImage.FILL_BLACK);
+            FileSaver fileSaver = new FileSaver(imp);
+            fileSaver.saveAsTiff( pathCTZ );
+
+            fileList[c][t][z] = fileName;
+
+            FastTiffDecoder ftd = new FastTiffDecoder(directory, fileList[c][t][z]);
+
+            FileInfoSer[] info = new FileInfoSer[0];
+            try
+            {
+                info = ftd.getTiffInfo();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            synchronized ( this )
+            {
+                if (infos[c][t] == null)
+                {
+                    infos[c][t] = new FileInfoSer[nZ];
+
+                    // fill with some info (this is necessary
+                    // because infos[0][0][0] is often accessed
+                    for (int iz = 0; iz < nZ; iz++)
+                    {
+                        infos[c][t][iz] = new FileInfoSer(info[0]);
+                        infos[c][t][iz].directory = ""; // relative path to main directory
+                        infos[c][t][iz].fileName = null;
+                        infos[c][t][iz].fileTypeString = fileType;
+                    }
+                }
+            }
+
+            infos[c][t][z].fileName = fileList[c][t][z];
+
+        }
+
+        // replace new pixels in existing file
         try
         {
-            info = ftd.getTiffInfo();
+            RandomAccessFile raf = new RandomAccessFile(directory+fileList[c][t][z], "rw");
+            long offsetToImageData = infos[c][t][z].offset;
+
+            int xs = (int) region5D.offset.getX();
+            int ys = (int) region5D.offset.getY();
+            int nx = (int) region5D.size.getX();
+            int ny = (int) region5D.size.getY();
+            int ye = ys + ny - 1;
+
+            for ( int y = ys; y <= ye; y ++ )
+            {
+                raf.seek(offsetToImageData + ys * nX + xs);
+                raf.write(pixels, (y - ys) * nx, nx);
+            }
+
+            raf.close();
+
+        }
+        catch (FileNotFoundException e)
+        {
+            IJ.log(e.toString());
+            e.printStackTrace();
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
 
-        if ( infos[c][t] == null )
-        {
-            infos[c][t] = new FileInfoSer[nZ];
-
-            // fill with some info (this is necessary
-            // because infos[0][0][0] is often accessed
-            for (int iz = 0; iz < nZ; iz++) {
-                infos[c][t][iz] = new FileInfoSer(info[0]);
-                infos[c][t][iz].directory = ""; // relative path to main directory
-                infos[c][t][iz].fileName = null;
-                infos[c][t][iz].fileTypeString = fileType;
-            }
-        }
-
-        infos[c][t][z].fileName = fileList[c][t][z];
+        synchronized (this ) { lockedFiles.remove( pathCTZ ); }
 
     }
 
-
-
-    /** Returns an ImageProcessor for the specified slice,
+        /** Returns an ImageProcessor for the specified slice,
      were 1<=n<=nslices. Returns null if the stack is empty.
     N is computed by IJ assuming the czt ordering, with
     n = ( channel + z*nC + t*nZ*nC ) + 1
