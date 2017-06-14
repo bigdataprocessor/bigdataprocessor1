@@ -109,7 +109,7 @@ public class DataStreamingTools {
             String directory,
             String channelTimePattern,
             String filterPattern,
-            String hdf5DataSet,
+            String h5DataSetName,
             String generalNamingPattern,
             ImageDataInfo imageDataInfo,
             int numIOThreads)
@@ -125,23 +125,21 @@ public class DataStreamingTools {
 
         if ( imageDataInfo != null )
         {
-            /*
             setAllInfosByGivenInformation(
                     imageDataInfo,
                     directory,
-                    generalNamingPattern,
-                    hdf5DataSet
-            );*/
+                    generalNamingPattern
+            );
         }
         else
         {
             imageDataInfo = new ImageDataInfo();
+            imageDataInfo.h5DataSetName = h5DataSetName;
 
             setAllInfosByParsingFilesAndFolders(
                     imageDataInfo,
                     directory,
                     channelTimePattern,
-                    hdf5DataSet,
                     filterPattern
             );
         }
@@ -165,7 +163,6 @@ public class DataStreamingTools {
 
         imp = new ImagePlus("stream", stack);
 
-
         // obtain file header informations for all c, t, z
         //
         try
@@ -176,7 +173,7 @@ public class DataStreamingTools {
             List<Future> futures = new ArrayList<>();
             for (t = 0; t < imageDataInfo.nT; t++)
             {
-                futures.add( es.submit(new ParseFilesIntoVirtualStack(imp, t)) );
+                futures.add( es.submit( new ParseFilesIntoVirtualStack(imp, t) ) );
             }
 
 
@@ -198,19 +195,18 @@ public class DataStreamingTools {
             logger.error(e.toString());
         }
 
-        return (imp);
+        return( imp );
 
     }
 
     public void setAllInfosByGivenInformation(
-            String[][][] ctzFileList,
-            String[] channelFolders,
             ImageDataInfo imageDataInfo,
             String directory,
-            String namingPattern,
-            String hdf5DataSet
+            String namingPattern
     )
     {
+
+        imageDataInfo.ctzFileList = new String[imageDataInfo.nC][imageDataInfo.nT][imageDataInfo.nZ];
 
         if ( namingPattern.contains("<z>") && namingPattern.contains(".tif") )
         {
@@ -218,7 +214,8 @@ public class DataStreamingTools {
         }
         else
         {
-            logger.error("FILETYPE CURRENTLY NOT SUPPORTED!");
+            logger.error("FILE-TYPE CURRENTLY NOT SUPPORTED!");
+            return;
         }
 
         boolean isObtainedImageDataInfo = false;
@@ -231,22 +228,22 @@ public class DataStreamingTools {
                 {
 
                     String fileName = namingPattern.replace("<c>",String.format("%1$02d", c));
-                    fileName.replace("<t>",String.format("%1$05d", t));
-                    fileName.replace("<z>",String.format("%1$05d", z));
-                    ctzFileList[c][t][z] = fileName;
+                    fileName = fileName.replace("<t>",String.format("%1$05d", t));
+                    fileName = fileName.replace("<z>",String.format("%1$05d", z));
+                    imageDataInfo.ctzFileList[c][t][z] = fileName;
 
                     if ( ! isObtainedImageDataInfo )
                     {
-                        File f = new File(directory + fileName);
+                        File f = new File(directory + imageDataInfo.channelFolders[0] + "/" + fileName);
 
-                        if (f.exists() && !f.isDirectory())
+                        if ( f.exists() && !f.isDirectory() )
                         {
-                            setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], ctzFileList[0][0][0]);
-                            //imageDataInfo.nZ = nZ;
+                            int nZ = imageDataInfo.nZ;
+                            setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileName);
+                            imageDataInfo.nZ = nZ;
                             //imageDataInfo.fileType = "tif stacks";
+                            isObtainedImageDataInfo = true;
                         }
-
-                        isObtainedImageDataInfo = true;
 
                     }
 
@@ -254,10 +251,6 @@ public class DataStreamingTools {
                 }
             }
         }
-
-
-
-
 
     }
 
@@ -267,7 +260,6 @@ public class DataStreamingTools {
             ImageDataInfo imageDataInfo,
             String directory,
             String channelTimePattern,
-            String hdf5DataSet,
             String filterPattern
     )
     {
@@ -353,8 +345,9 @@ public class DataStreamingTools {
         // generate a nC,nT,nZ fileList
         //
 
-        if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF))
+        if ( fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
         {
+            imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
 
             //
             // Do special stuff related to leica single files
@@ -526,10 +519,12 @@ public class DataStreamingTools {
             imageDataInfo.nC = nC;
             imageDataInfo.nT = nT;
 
-            imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
+
 
         }
+
         else // tif stacks or h5 stacks
+
         {
             boolean hasCTPattern = false;
 
@@ -614,7 +609,7 @@ public class DataStreamingTools {
             }
             else if (fileLists[0][0].endsWith(".h5"))
             {
-                setImageDataInfoFromH5(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0], hdf5DataSet);
+                setImageDataInfoFromH5(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0], imageDataInfo.h5DataSetName);
                 imageDataInfo.fileType = Utils.FileType.HDF5.toString();
             }
             else
@@ -688,8 +683,6 @@ public class DataStreamingTools {
             }
 
         }
-
-
 
     }
 
@@ -1026,13 +1019,10 @@ public class DataStreamingTools {
 
         for (int c = 0; c < nC; c++)
         {
-
             for (int t = tMin; t <= tMax; t++)
             {
-
                 for (int z = 0; z < nZ; z++)
                 {
-
                     croppedInfos[c][t - tMin][z] = new FileInfoSer(infos[c][t][z]);
                     if (croppedInfos[c][t - tMin][z].isCropped)
                     {
@@ -1056,8 +1046,8 @@ public class DataStreamingTools {
         }
 
         VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
-        VirtualStackOfStacks stack = new VirtualStackOfStacks(parentStack.getDirectory(), croppedInfos);
-        return (createImagePlusFromVSS(stack));
+        VirtualStackOfStacks stack = new VirtualStackOfStacks( parentStack.getDirectory(), croppedInfos );
+        return createImagePlusFromVSS( stack );
 
     }
 
@@ -1070,17 +1060,19 @@ public class DataStreamingTools {
         double min = Double.MAX_VALUE;
         double max = -Double.MAX_VALUE;
 
-        FileInfoSer[][][] infos = stack.getFileInfosSer();
-        FileInfoSer fi = infos[0][0][0];
+        // For an only partly existing stack we don't have this info
+        // TODO: maybe set up on reference FileInfoSer?
+        //FileInfoSer[][][] infos = stack.getFileInfosSer();
+        //FileInfoSer fi = infos[0][0][0];
 
         ImagePlus imp = new ImagePlus("", stack);
 
         // todo: what does this do?
-        if (imp.getType() == ImagePlus.GRAY16 || imp.getType() == ImagePlus.GRAY32)
-            imp.getProcessor().setMinAndMax(min, max);
+        //if (imp.getType() == ImagePlus.GRAY16 || imp.getType() == ImagePlus.GRAY32)
+        //    imp.getProcessor().setMinAndMax(min, max);
 
         // TODO: this needs be checked!
-        imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
+        //imp.setFileInfo(fi.getFileInfo()); // saves FileInfo of the first image
 
         if (logger.isShowDebug())
         {
@@ -1195,12 +1187,12 @@ public class DataStreamingTools {
 
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            for (int c = 0; c < vss.getChannels(); c++)
+            for ( int c = 0; c < vss.getChannels(); c++ )
             {
-                vss.setStackFromFile(t, c);
+                vss.setInfoFromFile(t, c, 0);
             }
 
-            if (t == 0)
+            if ( t == 0 )
             {
                 showImageAndInfo(vss);
             }
@@ -1227,28 +1219,29 @@ public class DataStreamingTools {
             // show compression info
             //
             FileInfoSer[][][] infos = vss.getFileInfosSer();
-
-            FileInfoSer fi0 = infos[0][0][0];
-            if (fi0.compression == 0)
-                logger.info("Compression = Unknown");
-            else if (fi0.compression == 1)
-                logger.info("Compression = None");
-            else if (fi0.compression == 2)
-                logger.info("Compression = LZW");
-            else if (fi0.compression == 6)
-                logger.info("Compression = ZIP");
-            else
-                logger.info("Compression = " + fi0.compression);
-
-            logger.info("Bit depth = " + (fi0.bytesPerPixel * 8));
-            logger.info("File type = " + (fi0.fileType));
-
-            if (fi0.stripLengths != null)
+            if ( infos != null && infos[0][0][0] != null )
             {
-                logger.info("Tiff: Number of strips  = " + (fi0.stripLengths.length));
-                logger.info("Tiff: Rows per strip  = " + (fi0.stripLengths[0]));
-            }
+                FileInfoSer fi0 = infos[0][0][0];
+                if (fi0.compression == 0)
+                    logger.info("Compression = Unknown");
+                else if (fi0.compression == 1)
+                    logger.info("Compression = None");
+                else if (fi0.compression == 2)
+                    logger.info("Compression = LZW");
+                else if (fi0.compression == 6)
+                    logger.info("Compression = ZIP");
+                else
+                    logger.info("Compression = " + fi0.compression);
 
+                logger.info("Bit depth = " + (fi0.bytesPerPixel * 8));
+                logger.info("File type = " + (fi0.fileType));
+
+                if (fi0.stripLengths != null)
+                {
+                    logger.info("Tiff: Number of strips  = " + (fi0.stripLengths.length));
+                    logger.info("Tiff: Rows per strip  = " + ( fi0.rowsPerStrip ));
+                }
+            }
         }
     }
 
@@ -1318,12 +1311,24 @@ public class DataStreamingTools {
         //ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
         //imp3.show();
 
+
+
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
                 int nIOthreads = 10;
-                dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", null, null, nIOthreads);
+                String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
+                String namingPattern = null; ImageDataInfo imageDataInfo = null;
+                /*
+                String namingPattern = "classified--C<c>--T<t>--Z<z>.tif";
+                ImageDataInfo imageDataInfo = new ImageDataInfo();
+                imageDataInfo.nZ = 900;
+                imageDataInfo.nC = 1;
+                imageDataInfo.nT = 1;
+                imageDataInfo.channelFolders = new String[] {""};
+                */
+                dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", namingPattern, imageDataInfo, nIOthreads);
             }
         });
         t1.start();

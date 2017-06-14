@@ -67,18 +67,17 @@ class OpenerExtension extends Opener {
             nz = (int) (1.0 * nz / dz + 0.5);
         }
 
-
         ImagePlus imp = null;
 
-        if(info[0].fileTypeString.equals(Utils.FileType.TIFF_STACKS.toString()))
+        if(info[zs].fileTypeString.equals(Utils.FileType.TIFF_STACKS.toString()))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+        else if(info[zs].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals(Utils.FileType.HDF5.toString()))
+        else if(info[zs].fileTypeString.equals(Utils.FileType.HDF5.toString()))
         {
             imp = readDataCubeFromHdf5(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
@@ -142,7 +141,7 @@ class OpenerExtension extends Opener {
 
         startTime = System.currentTimeMillis();
         IHDF5Reader reader = HDF5Factory.openForReading(directory + fi.directory + fi.fileName);
-        HDF5DataSetInformation dsInfo = reader.getDataSetInformation(fi.h5DataSet);
+        HDF5DataSetInformation dsInfo = reader.getDataSetInformation( fi.h5DataSet );
         String dsTypeString = hdf5InfoToString(dsInfo);
         //info("Data type: " + dsTypeString);
 
@@ -256,11 +255,11 @@ class OpenerExtension extends Opener {
         long readingTime = 0;
         long totalTime = 0;
         long threadInitTime = 0;
-        FileInfoSer fi;
+        //FileInfoSer fi;
         File file;
 
         if (info == null) return null;
-        FileInfoSer fi0 = info[0];
+        FileInfoSer fi = info[zs];
 
         int nx = xe - xs + 1;
         int ny = ye - ys + 1;
@@ -269,11 +268,11 @@ class OpenerExtension extends Opener {
               logger.info("# readDataCubeFromTiff");
               logger.info("root directory: " + directory);
               logger.info("info.length: " + info.length);
-              logger.info("fi0.directory: " + fi0.directory);
-              logger.info("fi0.filename: " + fi0.fileName);
-              logger.info("fi0.compression: " + fi0.compression);
-              logger.info("fi0.intelByteOrder: " + fi0.intelByteOrder);
-              logger.info("fi0.bytesPerPixel: " + fi0.bytesPerPixel);
+              logger.info("fi.directory: " + fi.directory);
+              logger.info("fi.filename: " + fi.fileName);
+              logger.info("fi.compression: " + fi.compression);
+              logger.info("fi.intelByteOrder: " + fi.intelByteOrder);
+              logger.info("fi.bytesPerPixel: " + fi.bytesPerPixel);
               logger.info("zs,dz,ze,nz,xs,xe,ys,ye: " + zs + "," + dz + "," + ze + "," + nz + "," + xs + "," + xe + "," + ys + "," + ye);
         }
 
@@ -281,9 +280,9 @@ class OpenerExtension extends Opener {
 
         // initialisation and allocation
         startTime = System.currentTimeMillis();
-        int imByteWidth = fi0.width*fi0.bytesPerPixel;
+        int imByteWidth = fi.width*fi.bytesPerPixel;
         // todo: this is not necessary to allocate new, but could be filled
-        ImageStack stack = ImageStack.create(nx, ny, nz, fi0.bytesPerPixel * 8);
+        ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
         byte[][] buffer = new byte[nz][1];
         ExecutorService es = Executors.newCachedThreadPool();
 
@@ -354,7 +353,7 @@ class OpenerExtension extends Opener {
 
         if( logger.isShowDebug() )
         {
-              int usefulBytesRead = nz*nx*ny*fi0.bytesPerPixel;
+              int usefulBytesRead = nz*nx*ny*fi.bytesPerPixel;
               logger.info("readingTime [ms]: " + readingTime);
               logger.info("effective reading speed [MB/s]: " + usefulBytesRead / ((readingTime + 0.001) * 1000));
               logger.info("threadInitTime [ms]: " + threadInitTime);
@@ -425,7 +424,7 @@ class OpenerExtension extends Opener {
         ImageStack stack;
         byte[][] buffer;
         FileInfoSer[] info;
-        FileInfoSer fi0, fi;
+        FileInfoSer fi;
         RandomAccessFile in;
         private String directory;
         int z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth;
@@ -459,7 +458,6 @@ class OpenerExtension extends Opener {
             //info("Running " +  threadName );
             RandomAccessFile inputStream = null;
 
-            this.fi0 = info[0];
             this.fi = info[z];
 
             File file = new File(directory + fi.directory + fi.fileName);
@@ -477,7 +475,7 @@ class OpenerExtension extends Opener {
                 }
 
                 //startTime = System.currentTimeMillis();
-                buffer[(z-zs)/dz] = readCroppedPlaneFromTiff(fi0, fi, inputStream, ys, ye);
+                buffer[(z-zs)/dz] = readCroppedPlaneFromTiff(fi, inputStream, ys, ye);
                 //readingTime += (System.currentTimeMillis() - startTime);
                 inputStream.close();
 
@@ -491,19 +489,21 @@ class OpenerExtension extends Opener {
                 hasStrips = true;
             }
 
-            // check what we have read
-            int rps = fi0.rowsPerStrip;
-            int ss = ys / rps; // the int is doing a floor()
-            int se = ye / rps;
+
 
             if(hasStrips) {
 
-                if( (fi0.compression == COMPRESSION_NONE) ||
-                        (fi0.compression == 0) )
+                // check what we have read
+                int rps = fi.rowsPerStrip;
+                int ss = ys / rps; // the int is doing a floor()
+                int se = ye / rps;
+
+                if( (fi.compression == COMPRESSION_NONE) ||
+                        (fi.compression == 0) )
                 {
                     // do nothing
                 }
-                else if (fi0.compression == LZW)
+                else if (fi.compression == LZW)
                 {
 
                     // init to hold all data present in the uncompressed strips
@@ -552,7 +552,7 @@ class OpenerExtension extends Opener {
 
                 } else {
 
-                    logger.error("Tiff compression not implemented: fi0.compression = " + fi0.compression);
+                    logger.error("Tiff compression not implemented: fi.compression = " + fi.compression);
                     return;
 
                 }
@@ -561,7 +561,7 @@ class OpenerExtension extends Opener {
 
             } else { // no strips
 
-                if (fi0.compression == ZIP) {
+                if (fi.compression == ZIP) {
 
                     /** TIFF Adobe ZIP support contributed by Jason Newton. */
                     ByteArrayOutputStream imageBuffer = new ByteArrayOutputStream();
@@ -608,11 +608,11 @@ class OpenerExtension extends Opener {
             // Copy (crop of) xy data from buffer into image stack
             //
 
-            if ( fi0.bytesPerPixel == 1 )
+            if ( fi.bytesPerPixel == 1 )
             {
                 setBytePixelsCropXY( (byte[])stack.getPixels((z - zs) / dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
             }
-            else if ( fi0.bytesPerPixel == 2 )
+            else if ( fi.bytesPerPixel == 2 )
             {
                 setShortPixelsCropXY( (short[])stack.getPixels((z - zs)/dz + 1), ys, ny, xs, nx, imByteWidth, buffer[(z - zs)/dz]);
             }
@@ -769,24 +769,24 @@ class OpenerExtension extends Opener {
         public void setShortPixelsCropXY(short[] pixels, int ys, int ny, int xs, int nx, int imByteWidth, byte[] buffer) {
             int ip = 0;
             int bs, be;
-            if(fi0.bytesPerPixel !=2 ) {
-                 logger.error("Unsupported bit depth: " + fi0.bytesPerPixel * 8);
+            if(fi.bytesPerPixel !=2 ) {
+                 logger.error("Unsupported bit depth: " + fi.bytesPerPixel * 8);
             }
 
             for (int y = ys; y < ys + ny; y++) {
 
-                bs = y * imByteWidth + xs * fi0.bytesPerPixel;
-                be = bs + nx * fi0.bytesPerPixel;
+                bs = y * imByteWidth + xs * fi.bytesPerPixel;
+                be = bs + nx * fi.bytesPerPixel;
 
-                if (fi0.intelByteOrder) {
-                    if (fi0.fileType == GRAY16_SIGNED)
+                if (fi.intelByteOrder) {
+                    if (fi.fileType == GRAY16_SIGNED)
                         for (int j = bs; j < be; j += 2)
                             pixels[ip++] = (short) ((((buffer[j + 1] & 0xff) << 8) | (buffer[j] & 0xff)) + 32768);
                     else
                         for (int j = bs; j < be; j += 2)
                             pixels[ip++] = (short) (((buffer[j + 1] & 0xff) << 8) | (buffer[j] & 0xff));
                 } else {
-                    if (fi0.fileType == GRAY16_SIGNED)
+                    if (fi.fileType == GRAY16_SIGNED)
                         for (int j = bs; j < be; j += 2)
                             pixels[ip++] = (short) ((((buffer[j] & 0xff) << 8) | (buffer[j + 1] & 0xff)) + 32768);
                     else
@@ -801,8 +801,8 @@ class OpenerExtension extends Opener {
             int bs, be;
 
             for (int y = ys; y < ys + ny; y++) {
-                bs = y * imByteWidth + xs * fi0.bytesPerPixel;
-                be = bs + nx * fi0.bytesPerPixel;
+                bs = y * imByteWidth + xs * fi.bytesPerPixel;
+                be = bs + nx * fi.bytesPerPixel;
                 for (int j = bs; j < be; j += 1)
                 {
                     pixels[ip++] = buffer[j];
@@ -819,7 +819,7 @@ class OpenerExtension extends Opener {
             }
         }
 
-        private byte[] readCroppedPlaneFromTiff(FileInfoSer fi0, FileInfoSer fi, RandomAccessFile in, int ys, int ye)
+        private byte[] readCroppedPlaneFromTiff(FileInfoSer fi, RandomAccessFile in, int ys, int ye)
         {
             boolean hasStrips = false;
             int readLength;
@@ -833,7 +833,7 @@ class OpenerExtension extends Opener {
 
             if (hasStrips) {
                 // convert rows to strips
-                int rps = fi0.rowsPerStrip;
+                int rps = fi.rowsPerStrip;
                 int ss = (int) (1.0*ys/rps);
                 int se = (int) (1.0*ye/rps);
                 readStart = fi.stripOffsets[ss];
@@ -849,15 +849,15 @@ class OpenerExtension extends Opener {
             }
             else
             {  // none or one strip
-                if(fi0.compression == ZIP) {
+                if(fi.compression == ZIP) {
                     // read all data
                     readStart = fi.offset;
                     readLength = (int)fi.stripLengths[0];
                 } else {
                     // read subset
                     // convert rows to bytes
-                    readStart = fi.offset + ys * fi0.width * fi0.bytesPerPixel;
-                    readLength = ((ye-ys)+1) * fi0.width * fi0.bytesPerPixel;
+                    readStart = fi.offset + ys * fi.width * fi.bytesPerPixel;
+                    readLength = ((ye-ys)+1) * fi.width * fi.bytesPerPixel;
                 }
             }
 
@@ -869,8 +869,8 @@ class OpenerExtension extends Opener {
                 logger.warning("read to [bytes]: "+ (readStart + readLength - 1) );
                 logger.warning("ys: " + ys);
                 logger.warning("ye: " + ye);
-                logger.warning("fileInfo.compression: " + fi0.compression);
-                logger.warning("fileInfo.height: " + fi0.height);
+                logger.warning("fileInfo.compression: " + fi.compression);
+                logger.warning("fileInfo.height: " + fi.height);
                 logger.error("Error during file reading. See log window for more information");
                 return(null);
             }
@@ -893,8 +893,8 @@ class OpenerExtension extends Opener {
                     logger.warning("attempt to read until [bytes]: "+ (readStart + readLength - 1) );
                     logger.warning("ys: " + ys);
                     logger.warning("ye: " + ye);
-                    logger.warning("fileInfo.compression: " + fi0.compression);
-                    logger.warning("fileInfo.height: " + fi0.height);
+                    logger.warning("fileInfo.compression: " + fi.compression);
+                    logger.warning("fileInfo.height: " + fi.height);
                 }
             }
             catch (Exception e)

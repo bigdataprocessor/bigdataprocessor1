@@ -42,12 +42,11 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.NewImage;
-import ij.io.FileInfo;
 import ij.io.FileSaver;
-import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -89,7 +88,7 @@ public class VirtualStackOfStacks extends ImageStack {
         this.fileType = fileType;
         this.channelFolders = channelFolders;
         this.fileList = fileList;
-        this.infos = new FileInfoSer[nC][nT][];
+        this.infos = new FileInfoSer[nC][nT][nZ];
         this.h5DataSet = h5DataSet;
 
         if( logger.isShowDebug() ) {
@@ -98,7 +97,8 @@ public class VirtualStackOfStacks extends ImageStack {
 
     }
 
-    public VirtualStackOfStacks(String directory, FileInfoSer[][][] infos) {
+    public VirtualStackOfStacks(String directory, FileInfoSer[][][] infos)
+    {
         super();
 
         this.infos = infos;
@@ -164,79 +164,81 @@ public class VirtualStackOfStacks extends ImageStack {
     }
 
     /** Adds an image stack from file infos */
-    public void setStackFromFile(int t, int c) {
+    public void setInfoFromFile(int t, int c, int z)
+    {
         FileInfoSer[] info = null;
-        FileInfoSer[] info2 = null;
+        FileInfoSer[] infoCT = null;
         FastTiffDecoder ftd;
 
         long startTime = System.currentTimeMillis();
 
-        try {
+        File f = new File(directory + channelFolders[c] + "/" + fileList[c][t][z]);
 
-
-            if ( fileType.equals( Utils.FileType.TIFF_STACKS.toString() ) ) {
-
-                ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][0]);
-                info = ftd.getTiffInfo();
-
-                // convert FileInfo[] to FileInfoSer[]
-                info2 = new FileInfoSer[nZ];
-                for (int z = 0; z < nZ; z++) {
-                    info2[z] = new FileInfoSer(info[z]);
-                    info2[z].fileName = fileList[c][t][z]; // relative path to main directory
-                    info2[z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    info2[z].fileTypeString = fileType;
-                }
-
-            } else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString() )) {
-
-                info2 = new FileInfoSer[nZ];
-
-                //
-                // open all IFDs from all files and convert to FileInfoSer
-                // (this is necessary if they are compressed in any way)
-                //
-                for (int z = 0; z < nZ; z++) {
-
-                    ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][z]);
+        if ( f.exists() )
+        {
+            try
+            {
+                if (fileType.equals(Utils.FileType.TIFF_STACKS.toString()))
+                {
+                    ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][0]);
                     info = ftd.getTiffInfo();
-                    info2[z] = new FileInfoSer(info[0]); // there is only one, but ftd returns an array
-                    info2[z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    info2[z].fileName = fileList[c][t][z];
-                    info2[z].fileTypeString = fileType;
+                    // add missing information to first IFD
+                    info[0].fileName = fileList[c][t][0];
+                    info[0].directory = channelFolders[c] + "/"; // relative path to main directory
+                    info[0].fileTypeString = fileType;
+
+                    infoCT = new FileInfoSer[nZ];
+                    for (z = 0; z < nZ; z++)
+                    {
+                        infoCT[z] = new FileInfoSer( info[0] ); // copy first IFD for general info
+                        // adapt information related to where the data is stored in this plane
+                        infoCT[z].offset = info[z].offset;
+                        infoCT[z].stripLengths = info[z].stripLengths;
+                        infoCT[z].stripOffsets = info[z].stripOffsets;
+                        //infoCT[z].rowsPerStrip = info[z].rowsPerStrip; // only read for first IFD!
+
+                    }
+
+                    infos[c][t] = infoCT;
 
                 }
+                else if (fileType.equals(Utils.FileType.HDF5.toString()))
+                {
+                    //
+                    // construct a FileInfoSer
+                    // todo: this could be much leaner
+                    // e.g. the nX, nY and bit depth
+                    //
+                    infoCT = new FileInfoSer[nZ];
+                    for (z = 0; z < nZ; z++)
+                    {
+                        infoCT[z] = new FileInfoSer();
+                        infoCT[z].fileName = fileList[c][t][z];
+                        infoCT[z].directory = channelFolders[c] + "/";
+                        infoCT[z].width = nX;
+                        infoCT[z].height = nY;
+                        infoCT[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
+                        infoCT[z].h5DataSet = h5DataSet;
+                        infoCT[z].fileTypeString = fileType;
+                    }
 
-
-            } else if (fileType.equals(Utils.FileType.HDF5.toString())) {
-
-                //
-                // construct a FileInfoSer
-                // todo: this could be much leaner
-                // e.g. the nX, nY and bit depth
-                //
-                info2 = new FileInfoSer[nZ];
-                for (int z = 0; z < nZ; z++) {
-                    info2[z] = new FileInfoSer();
-                    info2[z].fileName = fileList[c][t][z];
-                    info2[z].directory = channelFolders[c] + "/";
-                    info2[z].width = nX;
-                    info2[z].height = nY;
-                    info2[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
-                    info2[z].h5DataSet = h5DataSet;
-                    info2[z].fileTypeString = fileType;
+                    infos[c][t] = infoCT;
+                }
+                else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+                {
+                    ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][z]);
+                    infos[c][t][z] = ftd.getTiffInfo()[0];
+                    infos[c][t][z].directory = channelFolders[c] + "/"; // relative path to main directory
+                    infos[c][t][z].fileName = fileList[c][t][z];
+                    infos[c][t][z].fileTypeString = fileType;
                 }
 
             }
-
-        } catch(Exception e) {
-
-             logger.error("Error: " + e.toString());
-
+            catch (Exception e)
+            {
+                logger.error("Error: " + e.toString());
+            }
         }
-
-        this.infos[c][t] = info2;
-
     }
 
     /** Does nothing. */
@@ -424,23 +426,26 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("opening file: " + directory + infos[c][t][z].directory + infos[c][t][z].fileName);
         }
 
-        if ( fileList[c][t][z] == null )
+        if( infos[c][t][z] == null )
         {
-            // if there is no information how to load
-            // the image just create a black one
-            ImageStack stack = ImageStack.create(nX,nY,1,bitDepth);
-            return stack.getProcessor(1);
+            File f = new File(directory + channelFolders[c] + "/" + fileList[c][t][z]);
+            if ( !f.exists() )
+            {
+                ImageStack stack = ImageStack.create(nX, nY, 1, bitDepth);
+                return stack.getProcessor(1);
+            }
+            else
+            {
+                setInfoFromFile(t, c, z);
+            }
         }
+
+
+        FileInfoSer fi = infos[c][t][z];
+
 
         Point3D po, ps;
-        if(infos[c][t] == null) {
-            setStackFromFile(t, c);
-        }
-
-        FileInfoSer fi = infos[c][t][0];
-
         po = new Point3D(0,0,z);
-
         if(fi.isCropped) {
             // offset for cropping is added in  getDataCube
             ps = new Point3D(fi.pCropSize[0],fi.pCropSize[1],1);
@@ -448,7 +453,6 @@ public class VirtualStackOfStacks extends ImageStack {
             ps = new Point3D(fi.width,fi.height,1);
         }
 
-        // imp = new OpenerExtension().readDataCube(directory, infos[channel][t], dz, po, ps);
         Region5D region5D = new Region5D();
         region5D.t = t;
         region5D.c = c;
@@ -519,15 +523,16 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("channel: " + region5D.c);
         }
 
-        FileInfoSer fi = infos[region5D.c][region5D.t][0];
-
-        if (fi.isCropped) {
-            region5D.offset = region5D.offset.add(fi.getCropOffset());
-        }
-
         if (infos[region5D.c][region5D.t] == null) {
             // file info not yet loaded => get it!
-            setStackFromFile(region5D.t, region5D.c);
+            setInfoFromFile(region5D.t, region5D.c, 0);
+        }
+
+        FileInfoSer fi = infos[region5D.c][region5D.t][(int)region5D.offset.getZ()];
+
+        if (fi.isCropped)
+        {
+            region5D.offset = region5D.offset.add(fi.getCropOffset());
         }
 
         int dz = (int) region5D.subSampling.getZ();
@@ -799,7 +804,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         if(infos[channel][t] == null) {
             // file info not yet loaded => get it!
-            setStackFromFile(t, channel);
+            setInfoFromFile(t, channel);
         }
 
         ImagePlus imp = new OpenerExtension().openCroppedStackCenterRadii(directory, infos[channel][t], (int) psub.getZ(), pc, pr);

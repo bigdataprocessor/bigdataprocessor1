@@ -1020,7 +1020,7 @@ public class FastTiffDecoder {
         return fi;
     }
 
-    FileInfoSer onlyReadStripsFromIFD(long[] relativeStripInfoLocations) throws IOException {
+    FileInfoSer onlyReadStripsFromIFD(long[] relativeStripInfoLocations , Boolean fastParsingWorked ) throws IOException {
 
         FileInfoSer fi = new FileInfoSer();
         long startLoc = in.getLongFilePointer();
@@ -1035,8 +1035,8 @@ public class FastTiffDecoder {
 
         if ( tag != STRIP_OFFSETS )
         {
-            logger.warning("Fast IFD strip parsing failed. Falling back on full parsing.");
-            return(null);
+            fastParsingWorked = false;
+            return( null );
         }
 
         fieldType = getShort();
@@ -1153,6 +1153,8 @@ public class FastTiffDecoder {
 
         in.seek(startLoc+relativeStripInfoLocations[2]);
 
+        fastParsingWorked = true;
+
         return fi;
     }
 
@@ -1178,26 +1180,24 @@ public class FastTiffDecoder {
         }
         if (debugMode) dInfo = "\n  " + name + ": opening\n";
 
-        while (ifdOffset>0L) {
-
+        Boolean fastParsingWorked = true;
+        while (ifdOffset>0L)
+        {
             in.seek(ifdOffset);
-            //
-            // below is a hack that only works for some tiff formats!!!
-            //
-            if(listIFDs.size() < 3) {  // somehow the first ones are sometimes different...
+            if(listIFDs.size() < 3) // somehow the first ones are sometimes different...
+            {
                 fi = fullyReadIFD( relativeStripInfoLocations );
-                /*
-                logger.info("list.size() "+list.size());
-                logger.info("strip count " + stripInfos[0]);
-                logger.info("stripOffsetsRelativeLoc " + stripInfos[1]);
-                logger.info("stripLengthsRelativeLoc " + stripInfos[2]);
-                logger.info("stripLengthFieldType " + stripInfos[3]);
-                logger.info("ifdSize " + stripInfos[4]);
-                */
             }
             else
             {
-               fi = onlyReadStripsFromIFD( relativeStripInfoLocations );
+                fi = onlyReadStripsFromIFD( relativeStripInfoLocations, fastParsingWorked );
+                if ( ! fastParsingWorked )
+                {
+                    logger.warning(fi.fileName + ", IFD "+listIFDs.size()+
+                            ": Fast IFD strip parsing failed! " +
+                            "Maybe something wrong with this file?");
+                    fi = fullyReadIFD( relativeStripInfoLocations );
+                }
             }
             if( logger.isShowDebug() ) {
                   logger.info("IFD " + listIFDs.size() + " at " + ifdOffset);

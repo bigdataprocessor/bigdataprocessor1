@@ -37,10 +37,17 @@ public class IJLazySwingLogger implements Logger {
         SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
-                String[] logs = IJ.getLog().split("\n");
-                if (logs[logs.length - 1].contains(message))
+                if ( IJ.getLog() != null )
                 {
-                    IJ.log(String.format("\\Update:[PROGRESS]: %s %s", message, progress));
+                    String[] logs = IJ.getLog().split("\n");
+                    if (logs[logs.length - 1].contains(message))
+                    {
+                        IJ.log(String.format("\\Update:[PROGRESS]: %s %s", message, progress));
+                    }
+                    else
+                    {
+                        IJ.log(String.format("[PROGRESS]: %s %s", message, progress));
+                    }
                 }
                 else
                 {

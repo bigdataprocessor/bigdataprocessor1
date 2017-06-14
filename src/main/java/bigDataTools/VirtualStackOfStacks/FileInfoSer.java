@@ -108,7 +108,7 @@ public class FileInfoSer implements Cloneable, Serializable {
 
     }
 
-    public FileInfoSer(FileInfo info) {
+    public FileInfoSer( FileInfo info ) {
         this.fileFormat = info.fileFormat;
         this.fileName = info.fileName;
         this.directory = info.directory;
@@ -128,7 +128,7 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.bytesPerPixel = info.getBytesPerPixel();
     }
 
-    public FileInfoSer(FileInfoSer info) {
+    public FileInfoSer( FileInfoSer info ) {
         this.fileFormat = info.fileFormat;
         this.fileName = info.fileName;
         this.directory = info.directory;
@@ -159,6 +159,14 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.gapBetweenImages = info.gapBetweenImages;
         this.info = info.info;
         this.description = info.description;
+        this.bytesPerPixel = info.bytesPerPixel;
+        this.h5DataSet = info.h5DataSet;
+        this.fileTypeString = info.fileTypeString;
+        this.isCropped = info.isCropped;
+        this.pCropOffset = info.pCropOffset;
+        this.pCropSize = info.pCropSize;
+
+
     }
 
     public FileInfo getFileInfo() {
