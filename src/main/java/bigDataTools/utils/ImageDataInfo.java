@@ -13,5 +13,7 @@ public class ImageDataInfo {
     public int bitDepth;
     public String fileType;
     public String h5DataSetName;
+    public String[] channelFolders;
+    public String[][][] ctzFileList;
 
 }

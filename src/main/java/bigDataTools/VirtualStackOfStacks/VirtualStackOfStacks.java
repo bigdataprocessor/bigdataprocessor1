@@ -174,7 +174,7 @@ public class VirtualStackOfStacks extends ImageStack {
         try {
 
 
-            if ( fileType.equals(Utils.FileType.TIFF_STACKS) ) {
+            if ( fileType.equals( Utils.FileType.TIFF_STACKS.toString() ) ) {
 
                 ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][0]);
                 info = ftd.getTiffInfo();
@@ -188,7 +188,7 @@ public class VirtualStackOfStacks extends ImageStack {
                     info2[z].fileTypeString = fileType;
                 }
 
-            } else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF)) {
+            } else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString() )) {
 
                 info2 = new FileInfoSer[nZ];
 
@@ -208,7 +208,7 @@ public class VirtualStackOfStacks extends ImageStack {
                 }
 
 
-            } else if (fileType.equals(Utils.FileType.HDF5)) {
+            } else if (fileType.equals(Utils.FileType.HDF5.toString())) {
 
                 //
                 // construct a FileInfoSer

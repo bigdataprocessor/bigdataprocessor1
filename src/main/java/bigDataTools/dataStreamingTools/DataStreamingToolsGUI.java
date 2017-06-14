@@ -326,7 +326,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
-                    dataStreamingTools.openFromDirectory(directory, channelPattern, filterPattern, h5DataSet, nIOthreads);
+                    dataStreamingTools.openFromDirectory(directory, channelPattern, filterPattern, h5DataSet, null, null, nIOthreads);
                 }
             });
             t1.start();

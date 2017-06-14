@@ -114,8 +114,6 @@ public class DataStreamingTools {
             ImageDataInfo imageDataInfo,
             int numIOThreads)
     {
-        String[][] fileLists; // files in sub-folders
-        String[][][] ctzFileList = null;
         int t = 0, z = 0, c = 0;
         ImagePlus imp;
         String fileType = "not determined";
@@ -127,22 +125,19 @@ public class DataStreamingTools {
 
         if ( imageDataInfo != null )
         {
+            /*
             setAllInfosByGivenInformation(
-                    ctzFileList,
-                    channelFolders,
                     imageDataInfo,
                     directory,
                     generalNamingPattern,
                     hdf5DataSet
-            );
+            );*/
         }
         else
         {
             imageDataInfo = new ImageDataInfo();
 
             setAllInfosByParsingFilesAndFolders(
-                    ctzFileList,
-                    channelFolders,
                     imageDataInfo,
                     directory,
                     channelTimePattern,
@@ -157,8 +152,8 @@ public class DataStreamingTools {
         //
         VirtualStackOfStacks stack = new VirtualStackOfStacks(
                 directory,
-                channelFolders,
-                ctzFileList,
+                imageDataInfo.channelFolders,
+                imageDataInfo.ctzFileList,
                 imageDataInfo.nC,
                 imageDataInfo.nT,
                 imageDataInfo.nX,
@@ -269,8 +264,6 @@ public class DataStreamingTools {
 
 
     public void setAllInfosByParsingFilesAndFolders(
-            String[][][] ctzFileList,
-            String[] channelFolders,
             ImageDataInfo imageDataInfo,
             String directory,
             String channelTimePattern,
@@ -294,16 +287,16 @@ public class DataStreamingTools {
             // Check for sub-folders
             //
             logger.info("checking for sub-folders...");
-            channelFolders = getFoldersInFolder(directory);
-            if (channelFolders != null)
+            imageDataInfo.channelFolders = getFoldersInFolder(directory);
+            if (imageDataInfo.channelFolders != null)
             {
-                fileLists = new String[channelFolders.length][];
-                for (int i = 0; i < channelFolders.length; i++)
+                fileLists = new String[imageDataInfo.channelFolders.length][];
+                for (int i = 0; i < imageDataInfo.channelFolders.length; i++)
                 {
-                    fileLists[i] = getFilesInFolder(directory + channelFolders[i], filterPattern);
+                    fileLists[i] = getFilesInFolder(directory + imageDataInfo.channelFolders[i], filterPattern);
                     if (fileLists[i] == null)
                     {
-                        logger.info("no files found in folder: " + directory + channelFolders[i]);
+                        logger.info("no files found in folder: " + directory + imageDataInfo.channelFolders[i]);
                         return;
                     }
                 }
@@ -478,14 +471,14 @@ public class DataStreamingTools {
             // Create dummy channel folders, because no real ones exist
             //
 
-            channelFolders = new String[nC];
-            for (int ic = 0; ic < nC; ic++) channelFolders[ic] = "";
+            imageDataInfo.channelFolders = new String[nC];
+            for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
 
             //
             // sort into the final file list
             //
 
-            ctzFileList = new String[nC][nT][nZ];
+            imageDataInfo.ctzFileList = new String[nC][nT][nZ];
 
             for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
             {
@@ -522,14 +515,17 @@ public class DataStreamingTools {
                             c = 0;
                         }
 
-                        ctzFileList[c][t][z] = fileName;
+                        imageDataInfo.ctzFileList[c][t][z] = fileName;
 
                     }
                 }
             }
 
-            setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], ctzFileList[0][0][0]);
+            setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], imageDataInfo.ctzFileList[0][0][0]);
             imageDataInfo.nZ = nZ;
+            imageDataInfo.nC = nC;
+            imageDataInfo.nT = nT;
+
             imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
 
         }
@@ -540,7 +536,7 @@ public class DataStreamingTools {
             if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
             {
 
-                nC = channelFolders.length;
+                nC = imageDataInfo.channelFolders.length;
                 nT = fileLists[0].length;
 
             }
@@ -567,7 +563,7 @@ public class DataStreamingTools {
                 channelTimePattern = channelTimePattern.replace("<c>", "(?<C>.*)");
                 channelTimePattern = channelTimePattern.replace("<t>", "(?<T>.*)");
 
-                channelFolders = new String[]{""};
+                imageDataInfo.channelFolders = new String[]{""};
 
                 HashSet<String> channelsHS = new HashSet();
                 HashSet<String> timepointsHS = new HashSet();
@@ -603,8 +599,8 @@ public class DataStreamingTools {
             //
             if (!channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
             {
-                channelFolders = new String[nC];
-                for (int ic = 0; ic < nC; ic++) channelFolders[ic] = "";
+                imageDataInfo.channelFolders = new String[nC];
+                for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
             }
 
 
@@ -613,12 +609,12 @@ public class DataStreamingTools {
 
             if (fileLists[0][0].endsWith(".tif"))
             {
-                setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], fileLists[0][0]);
+                setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0]);
                 imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
             }
             else if (fileLists[0][0].endsWith(".h5"))
             {
-                setImageDataInfoFromH5(imageDataInfo, directory + channelFolders[0], fileLists[0][0], hdf5DataSet);
+                setImageDataInfoFromH5(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0], hdf5DataSet);
                 imageDataInfo.fileType = Utils.FileType.HDF5.toString();
             }
             else
@@ -627,13 +623,17 @@ public class DataStreamingTools {
                 return;
             }
 
+
+            imageDataInfo.nT = nT;
+            imageDataInfo.nC = nC;
+
             logger.info("File type: " + imageDataInfo.fileType );
 
             //
             // create the final file list
             //
 
-            ctzFileList = new String[nC][nT][nZ];
+            imageDataInfo.ctzFileList = new String[imageDataInfo.nC][imageDataInfo.nT][imageDataInfo.nZ];
 
             if (hasCTPattern)
             {
@@ -663,9 +663,9 @@ public class DataStreamingTools {
                         }
                     }
 
-                    for (z = 0; z < nZ; z++)
+                    for (z = 0; z < imageDataInfo.nZ; z++)
                     {
-                        ctzFileList[c][t][z] = fileName; // all z with same file-name, because it is stacks
+                        imageDataInfo.ctzFileList[c][t][z] = fileName; // all z with same file-name, because it is stacks
                     }
 
                 }
@@ -674,13 +674,13 @@ public class DataStreamingTools {
             else
             {
 
-                for (c = 0; c < channelFolders.length; c++)
+                for (c = 0; c < imageDataInfo.nC; c++)
                 {
-                    for (t = 0; t < fileLists[c].length; t++)
+                    for (t = 0; t < imageDataInfo.nT; t++)
                     {
-                        for (z = 0; z < nZ; z++)
+                        for (z = 0; z < imageDataInfo.nZ; z++)
                         {
-                            ctzFileList[c][t][z] = fileLists[c][t]; // all z with same file-name, because it is stacks
+                            imageDataInfo.ctzFileList[c][t][z] = fileLists[c][t]; // all z with same file-name, because it is stacks
                         }
                     }
                 }
@@ -688,6 +688,7 @@ public class DataStreamingTools {
             }
 
         }
+
 
 
     }
@@ -1285,8 +1286,8 @@ public class DataStreamingTools {
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files/";
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files 2channels/";
 
-        //final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
-        final String directory = "/Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF/";
+        final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
+        //final String directory = "/Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF/";
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
 
@@ -1322,7 +1323,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", nIOthreads);
+                dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", null, null, nIOthreads);
             }
         });
         t1.start();

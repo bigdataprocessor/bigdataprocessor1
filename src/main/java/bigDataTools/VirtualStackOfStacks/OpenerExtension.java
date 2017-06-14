@@ -70,15 +70,15 @@ class OpenerExtension extends Opener {
 
         ImagePlus imp = null;
 
-        if(info[0].fileTypeString.equals(Utils.FileType.TIFF_STACKS))
+        if(info[0].fileTypeString.equals(Utils.FileType.TIFF_STACKS.toString()))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF))
+        else if(info[0].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals(Utils.FileType.HDF5))
+        else if(info[0].fileTypeString.equals(Utils.FileType.HDF5.toString()))
         {
             imp = readDataCubeFromHdf5(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
