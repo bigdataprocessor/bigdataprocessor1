@@ -55,6 +55,7 @@ import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
+import bigDataTools.utils.ImageDataInfo;
 import bigDataTools.utils.MonitorThreadPoolStatus;
 import bigDataTools.utils.Utils;
 import ch.systemsx.cisd.hdf5.*;
@@ -104,12 +105,17 @@ public class DataStreamingTools {
     {
     }
 
-    // TODO: split up in simpler methods
-    public ImagePlus openFromDirectory(String directory, String channelTimePattern, String filterPattern, String hdf5DataSet, int numIOThreads)
-
+    public ImagePlus openFromDirectory(
+            String directory,
+            String channelTimePattern,
+            String filterPattern,
+            String hdf5DataSet,
+            String generalNamingPattern,
+            ImageDataInfo imageDataInfo,
+            int numIOThreads)
     {
         String[][] fileLists; // files in sub-folders
-        String[][][] ctzFileList;
+        String[][][] ctzFileList = null;
         int t = 0, z = 0, c = 0;
         ImagePlus imp;
         String fileType = "not determined";
@@ -117,15 +123,176 @@ public class DataStreamingTools {
         FileInfoSer fi0;
         String[] channelFolders = null;
         List<String> channels = null, timepoints = null;
+
+
+        if ( imageDataInfo != null )
+        {
+            setAllInfosByGivenInformation(
+                    ctzFileList,
+                    channelFolders,
+                    imageDataInfo,
+                    directory,
+                    generalNamingPattern,
+                    hdf5DataSet
+            );
+        }
+        else
+        {
+            imageDataInfo = new ImageDataInfo();
+
+            setAllInfosByParsingFilesAndFolders(
+                    ctzFileList,
+                    channelFolders,
+                    imageDataInfo,
+                    directory,
+                    channelTimePattern,
+                    hdf5DataSet,
+                    filterPattern
+            );
+        }
+
+
+        //
+        // init the virtual stack
+        //
+        VirtualStackOfStacks stack = new VirtualStackOfStacks(
+                directory,
+                channelFolders,
+                ctzFileList,
+                imageDataInfo.nC,
+                imageDataInfo.nT,
+                imageDataInfo.nX,
+                imageDataInfo.nY,
+                imageDataInfo.nZ,
+                imageDataInfo.bitDepth,
+                imageDataInfo.fileType,
+                imageDataInfo.h5DataSetName);
+
+        imp = new ImagePlus("stream", stack);
+
+
+        // obtain file header informations for all c, t, z
+        //
+        try
+        {
+            // Spawn the threads
+            //
+            ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
+            List<Future> futures = new ArrayList<>();
+            for (t = 0; t < imageDataInfo.nT; t++)
+            {
+                futures.add( es.submit(new ParseFilesIntoVirtualStack(imp, t)) );
+            }
+
+
+            // Monitor the progress
+            //
+            Thread thread = new Thread(new Runnable() {
+                public void run()
+                {
+                    MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                            futures,
+                            "Parsed files: ",
+                            2000);
+                }
+            });
+            thread.start();
+
+        } catch (Exception e)
+        {
+            logger.error(e.toString());
+        }
+
+        return (imp);
+
+    }
+
+    public void setAllInfosByGivenInformation(
+            String[][][] ctzFileList,
+            String[] channelFolders,
+            ImageDataInfo imageDataInfo,
+            String directory,
+            String namingPattern,
+            String hdf5DataSet
+    )
+    {
+
+        if ( namingPattern.contains("<z>") && namingPattern.contains(".tif") )
+        {
+            imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
+        }
+        else
+        {
+            logger.error("FILETYPE CURRENTLY NOT SUPPORTED!");
+        }
+
+        boolean isObtainedImageDataInfo = false;
+
+        for (int c = 0; c < imageDataInfo.nC; c++)
+        {
+            for (int t = 0; t < imageDataInfo.nT ; t++)
+            {
+                for (int z = 0; z < imageDataInfo.nZ ; z++)
+                {
+
+                    String fileName = namingPattern.replace("<c>",String.format("%1$02d", c));
+                    fileName.replace("<t>",String.format("%1$05d", t));
+                    fileName.replace("<z>",String.format("%1$05d", z));
+                    ctzFileList[c][t][z] = fileName;
+
+                    if ( ! isObtainedImageDataInfo )
+                    {
+                        File f = new File(directory + fileName);
+
+                        if (f.exists() && !f.isDirectory())
+                        {
+                            setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], ctzFileList[0][0][0]);
+                            //imageDataInfo.nZ = nZ;
+                            //imageDataInfo.fileType = "tif stacks";
+                        }
+
+                        isObtainedImageDataInfo = true;
+
+                    }
+
+
+                }
+            }
+        }
+
+
+
+
+
+    }
+
+
+
+    public void setAllInfosByParsingFilesAndFolders(
+            String[][][] ctzFileList,
+            String[] channelFolders,
+            ImageDataInfo imageDataInfo,
+            String directory,
+            String channelTimePattern,
+            String hdf5DataSet,
+            String filterPattern
+    )
+    {
+
+        String[][] fileLists; // files in sub-folders
+        int t = 0, z = 0, c = 0;
+        String fileType = "not determined";
+        FileInfoSer[] info;
+        FileInfoSer fi0;
+        List<String> channels = null, timepoints = null;
+
         int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
 
         if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
         {
-
             //
             // Check for sub-folders
             //
-
             logger.info("checking for sub-folders...");
             channelFolders = getFoldersInFolder(directory);
             if (channelFolders != null)
@@ -137,7 +304,7 @@ public class DataStreamingTools {
                     if (fileLists[i] == null)
                     {
                         logger.info("no files found in folder: " + directory + channelFolders[i]);
-                        return (null);
+                        return;
                     }
                 }
                 logger.info("found sub-folders => interpreting as channel folders.");
@@ -147,7 +314,7 @@ public class DataStreamingTools {
                 logger.info("no sub-folders found.");
                 IJ.showMessage("No sub-folders found; please specify a different options for loading " +
                         "the channels");
-                return (null);
+                return;
             }
 
         }
@@ -174,7 +341,7 @@ public class DataStreamingTools {
                 {
                     if (patternLeica.matcher(fileName).matches())
                     {
-                        fileType = "leica single tif";
+                        fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
                         logger.info("detected fileType: " + fileType);
                         break;
                     }
@@ -184,7 +351,7 @@ public class DataStreamingTools {
             if (fileLists[0] == null || fileLists[0].length == 0)
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
-                return null;
+                return;
             }
 
         }
@@ -193,7 +360,7 @@ public class DataStreamingTools {
         // generate a nC,nT,nZ fileList
         //
 
-        if (fileType.equals("leica single tif"))
+        if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF))
         {
 
             //
@@ -210,7 +377,7 @@ public class DataStreamingTools {
             if (fileLists[0].length == 0)
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
-                return null;
+                return;
             }
 
             // check which different fileIDs there are
@@ -361,28 +528,13 @@ public class DataStreamingTools {
                 }
             }
 
-            try
-            {
-                FastTiffDecoder ftd = new FastTiffDecoder(directory, ctzFileList[0][0][0]);
-                info = ftd.getTiffInfo();
-            } catch (Exception e)
-            {
-                info = null;
-                IJ.showMessage("Error: " + e.toString());
-            }
-
-            fi0 = info[0];
-            nX = fi0.width;
-            nY = fi0.height;
+            setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], ctzFileList[0][0][0]);
+            imageDataInfo.nZ = nZ;
+            imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
 
         }
-        else
+        else // tif stacks or h5 stacks
         {
-
-            //
-            // either tif stacks or h5 stacks
-            //
-
             boolean hasCTPattern = false;
 
             if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
@@ -408,7 +560,7 @@ public class DataStreamingTools {
                 {
                     IJ.showMessage("The pattern for multi-channel loading must" +
                             "contain <c> and <t> to match channels and time in the filenames.");
-                    return (null);
+                    return;
                 }
 
                 // replace shortcuts by actual regexp
@@ -455,79 +607,27 @@ public class DataStreamingTools {
                 for (int ic = 0; ic < nC; ic++) channelFolders[ic] = "";
             }
 
-            //
-            // Get nX,nY,nZ from first file
-            //
 
+            // read nX,nY,nZ and bitdepth from first stack
+            //
 
             if (fileLists[0][0].endsWith(".tif"))
             {
-
-                fileType = "tif stacks";
-
-                try
-                {
-                    FastTiffDecoder ftd = new FastTiffDecoder(directory + channelFolders[0], fileLists[0][0]);
-                    info = ftd.getTiffInfo();
-                }
-                catch (Exception e)
-                {
-                    info = null;
-                    IJ.showMessage("Error: " + e.toString());
-                }
-
-                fi0 = info[0];
-                if (fi0.nImages > 1)
-                {
-                    nZ = fi0.nImages;
-                    fi0.nImages = 1;
-                }
-                else
-                {
-                    nZ = info.length;
-                }
-                nX = fi0.width;
-                nY = fi0.height;
-                bitDepth = fi0.bytesPerPixel * 8;
-
+                setImageDataInfoFromTiff(imageDataInfo, directory + channelFolders[0], fileLists[0][0]);
+                imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
             }
             else if (fileLists[0][0].endsWith(".h5"))
             {
-
-                fileType = "h5";
-
-                IHDF5Reader reader = HDF5Factory.openForReading(directory + channelFolders[c] + "/" + fileLists[0][0]);
-
-                if (!hdf5DataSetExists(reader, hdf5DataSet)) return null;
-
-                HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/" + hdf5DataSet);
-
-                if ( dsInfo.getDimensions().length == 3 )
-                {
-                    nZ = (int) dsInfo.getDimensions()[0];
-                    nY = (int) dsInfo.getDimensions()[1];
-                    nX = (int) dsInfo.getDimensions()[2];
-                }
-                else if ( dsInfo.getDimensions().length == 2 )
-                {
-                    nZ = 1;
-                    nY = (int) dsInfo.getDimensions()[0];
-                    nX = (int) dsInfo.getDimensions()[1];
-                }
-
-                bitDepth = assignHDF5TypeToImagePlusBitdepth(dsInfo);
-
+                setImageDataInfoFromH5(imageDataInfo, directory + channelFolders[0], fileLists[0][0], hdf5DataSet);
+                imageDataInfo.fileType = Utils.FileType.HDF5.toString();
             }
             else
             {
-
                 IJ.showMessage("Unsupported file type: " + fileLists[0][0]);
-                return (null);
-
+                return;
             }
 
-            logger.info("File type: " + fileType);
-
+            logger.info("File type: " + imageDataInfo.fileType );
 
             //
             // create the final file list
@@ -559,7 +659,7 @@ public class DataStreamingTools {
                                     "Please change the pattern.\n\n" +
                                     "The Java error message was:\n" +
                                     e.toString());
-                            return (null);
+                            return;
                         }
                     }
 
@@ -590,46 +690,71 @@ public class DataStreamingTools {
         }
 
 
-        //
-        // init the virtual stack
-        //
-        VirtualStackOfStacks stack = new VirtualStackOfStacks(directory, channelFolders, ctzFileList, nC, nT, nX, nY, nZ, bitDepth, fileType, hdf5DataSet);
-        imp = new ImagePlus("stream", stack);
+    }
 
-        //
-        // obtain file information for each channel, t, z
-        //
-        try
+
+    public void setImageDataInfoFromH5(
+            ImageDataInfo imageDataInfo,
+            String directory,
+            String fileName,
+            String hdf5DataSet)
+    {
+
+        IHDF5Reader reader = HDF5Factory.openForReading(directory + "/" + fileName);
+
+        if (!hdf5DataSetExists(reader, hdf5DataSet)) return;
+
+        HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/" + hdf5DataSet);
+
+        if ( dsInfo.getDimensions().length == 3 )
         {
-            // Spawn the threads
-            //
-            ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
-            List<Future> futures = new ArrayList<>();
-            for (t = 0; t < nT; t++)
-            {
-                futures.add(es.submit(new ParseFilesIntoVirtualStack(imp, t)));
-            }
-
-
-            // Monitor the progress
-            //
-            Thread thread = new Thread(new Runnable() {
-                public void run()
-                {
-                    MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                            futures,
-                            "Parsed files: ",
-                            2000);
-                }
-            });
-            thread.start();
-
-        } catch (Exception e)
+            imageDataInfo.nZ = (int) dsInfo.getDimensions()[0];
+            imageDataInfo.nY = (int) dsInfo.getDimensions()[1];
+            imageDataInfo.nX = (int) dsInfo.getDimensions()[2];
+        }
+        else if ( dsInfo.getDimensions().length == 2 )
         {
-            logger.error(e.toString());
+            imageDataInfo.nZ = 1;
+            imageDataInfo.nY = (int) dsInfo.getDimensions()[0];
+            imageDataInfo.nX = (int) dsInfo.getDimensions()[1];
         }
 
-        return (imp);
+        imageDataInfo.bitDepth = assignHDF5TypeToImagePlusBitdepth(dsInfo);
+
+
+    }
+
+    public void setImageDataInfoFromTiff(
+            ImageDataInfo imageDataInfo,
+            String directory,
+            String fileName)
+    {
+        FileInfoSer[] info;
+
+        try
+        {
+            FastTiffDecoder ftd = new FastTiffDecoder(directory, fileName);
+            info = ftd.getTiffInfo();
+        }
+        catch (Exception e)
+        {
+            info = null;
+            IJ.showMessage("Error: " + e.toString());
+        }
+
+        if (info[0].nImages > 1)
+        {
+            imageDataInfo.nZ = info[0].nImages;
+            info[0].nImages = 1;
+        }
+        else
+        {
+            imageDataInfo.nZ = info.length;
+        }
+
+        imageDataInfo.nX = info[0].width;
+        imageDataInfo.nY = info[0].height;
+        imageDataInfo.bitDepth = info[0].bytesPerPixel * 8;
 
     }
 

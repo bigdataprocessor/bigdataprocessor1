@@ -14,6 +14,7 @@ package bigDataTools.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.MonitorThreadPoolStatus;
+import bigDataTools.utils.Utils;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.*;
 import ij.IJ;
@@ -69,19 +70,15 @@ class OpenerExtension extends Opener {
 
         ImagePlus imp = null;
 
-        if(info[0].fileTypeString.equals("tif stacks"))
+        if(info[0].fileTypeString.equals(Utils.FileType.TIFF_STACKS))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals("leica single tif"))
+        else if(info[0].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF))
         {
             imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }
-        else if(info[0].fileTypeString.equals("single tif"))
-        {
-            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
-        }
-        else if(info[0].fileTypeString.equals("h5"))
+        else if(info[0].fileTypeString.equals(Utils.FileType.HDF5))
         {
             imp = readDataCubeFromHdf5(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
         }

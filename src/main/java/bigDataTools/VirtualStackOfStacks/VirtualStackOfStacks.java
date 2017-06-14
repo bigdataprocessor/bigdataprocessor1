@@ -64,7 +64,7 @@ public class VirtualStackOfStacks extends ImageStack {
     private int nX, nY, nZ, nC, nT;
     int bitDepth = 0;
     FileInfoSer[][][] infos;  // channel, t, z
-    String fileType = "tif"; // h5 // TODO: make constants
+    String fileType = Utils.FileType.TIFF_STACKS.toString();
     String directory = "";
     String imageBaseName = "";
     String[] channelFolders;
@@ -120,9 +120,9 @@ public class VirtualStackOfStacks extends ImageStack {
         nSlices = nC*nT*nZ;
 
         if(infos[0][0][0].fileName.endsWith(".h5"))
-            this.fileType = "h5";
+            this.fileType = Utils.FileType.HDF5.toString();
         if(infos[0][0][0].fileName.endsWith(".tif"))
-            this.fileType = "tif";
+            this.fileType = Utils.FileType.TIFF_STACKS.toString(); // TODO: could be sinlge tif?!
 
         if( logger.isShowDebug() ) {
             logStatus();
@@ -174,7 +174,7 @@ public class VirtualStackOfStacks extends ImageStack {
         try {
 
 
-            if ( fileType.equals("tif stacks") ) {
+            if ( fileType.equals(Utils.FileType.TIFF_STACKS) ) {
 
                 ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][0]);
                 info = ftd.getTiffInfo();
@@ -188,7 +188,7 @@ public class VirtualStackOfStacks extends ImageStack {
                     info2[z].fileTypeString = fileType;
                 }
 
-            } else if (fileType.equals("leica single tif")) {
+            } else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF)) {
 
                 info2 = new FileInfoSer[nZ];
 
@@ -208,7 +208,7 @@ public class VirtualStackOfStacks extends ImageStack {
                 }
 
 
-            } else if (fileType.equals("h5")) {
+            } else if (fileType.equals(Utils.FileType.HDF5)) {
 
                 //
                 // construct a FileInfoSer
@@ -380,7 +380,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
             for ( int y = ys; y <= ye; y ++ )
             {
-                raf.seek(offsetToImageData + ys * nX + xs);
+                raf.seek(offsetToImageData + y * nX + xs);
                 raf.write(pixels, (y - ys) * nx, nx);
             }
 

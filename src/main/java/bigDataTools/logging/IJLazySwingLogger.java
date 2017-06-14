@@ -1,9 +1,9 @@
 package bigDataTools.logging;
 
-import bigDataTools.logging.Logger;
 import ij.IJ;
 
 import javax.swing.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class IJLazySwingLogger implements Logger {
@@ -38,7 +38,7 @@ public class IJLazySwingLogger implements Logger {
             public void run()
             {
                 String[] logs = IJ.getLog().split("\n");
-                if ( logs[logs.length-1].contains(message) )
+                if (logs[logs.length - 1].contains(message))
                 {
                     IJ.log(String.format("\\Update:[PROGRESS]: %s %s", message, progress));
                 }
@@ -49,6 +49,67 @@ public class IJLazySwingLogger implements Logger {
             }
         });
     }
+
+    private String[] wheelChars = new String[]{
+            "|", "/", "-", "\\", "|", "/", "-", "\\"
+    };
+
+    private String[] bouncingChars = new String[]{
+
+            "(*---------)", // moving -->
+            "(-*--------)", // moving -->
+            "(--*-------)", // moving -->
+            "(---*------)", // moving -->
+            "(----*-----)", // moving -->
+            "(-----*----)", // moving -->
+            "(------*---)", // moving -->
+            "(-------*--)", // moving -->
+            "(--------*-)", // moving -->
+            "(---------*)", // moving -->
+            "(--------*-)", // moving -->
+            "(-------*--)", // moving -->
+            "(------*---)", // moving -->
+            "(-----*----)", // moving -->
+            "(----*-----)", // moving -->
+            "(---*------)", // moving -->
+            "(--*-------)", // moving -->
+            "(-*--------)", // moving -->
+
+    };
+
+    AtomicInteger progressPos =  new AtomicInteger(0);
+
+    @Override
+    public void progressWheel( String message )
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                String[] logs = IJ.getLog().split("\n");
+                String lastLog = logs[logs.length-1];
+
+                int currentPos = progressPos.getAndIncrement();
+                if ( currentPos == bouncingChars.length )
+                {
+                    currentPos = 0;
+                    progressPos.set(0);
+                }
+
+                String wheel = bouncingChars[currentPos];
+
+                if ( lastLog.contains(message) )
+                {
+                    IJ.log( String.format("\\Update:[PROGRESS]: %s %s", message, wheel) );
+                }
+                else
+                {
+                    IJ.log( String.format("[PROGRESS]: %s %s", message, wheel ) );
+                }
+            }
+        });
+    }
+
+
 
     @Override
     public void error(String _message){

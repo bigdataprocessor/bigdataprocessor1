@@ -65,6 +65,8 @@ public class Utils {
     public enum FileType {
         TIFF("Tiff"),
         HDF5("Hdf5"),
+        TIFF_STACKS("Tiff stacks"),
+        SINGLE_PLANE_TIFF("single tif"),
         SERIALIZED_HEADERS("Serialized headers");
         private final String text;
         private FileType(String s) {

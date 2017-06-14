@@ -53,5 +53,11 @@ public interface Logger {
      */
     void debug(String message);
 
+    /**
+     * displays a progress wheel
+     *
+     * @param message
+     */
+    void progressWheel( String message );
 
 }
