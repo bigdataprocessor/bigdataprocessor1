@@ -107,28 +107,20 @@ public class DataStreamingTools {
 
     public ImagePlus openFromDirectory(
             String directory,
-            String channelTimePattern,
+            String namingScheme,
             String filterPattern,
             String h5DataSetName,
-            String generalNamingPattern,
             ImageDataInfo imageDataInfo,
-            int numIOThreads)
+            int numIOThreads,
+            boolean isShowImage)
     {
-        int t = 0, z = 0, c = 0;
-        ImagePlus imp;
-        String fileType = "not determined";
-        FileInfoSer[] info;
-        FileInfoSer fi0;
-        String[] channelFolders = null;
-        List<String> channels = null, timepoints = null;
 
-
-        if ( imageDataInfo != null )
+        if ( namingScheme.contains("<C") )
         {
-            setAllInfosByGivenInformation(
+            setMissingInfos(
                     imageDataInfo,
                     directory,
-                    generalNamingPattern
+                    namingScheme
             );
         }
         else
@@ -139,7 +131,7 @@ public class DataStreamingTools {
             setAllInfosByParsingFilesAndFolders(
                     imageDataInfo,
                     directory,
-                    channelTimePattern,
+                    namingScheme,
                     filterPattern
             );
         }
@@ -161,7 +153,7 @@ public class DataStreamingTools {
                 imageDataInfo.fileType,
                 imageDataInfo.h5DataSetName);
 
-        imp = new ImagePlus("stream", stack);
+        ImagePlus imp = new ImagePlus("stream", stack);
 
         // obtain file header informations for all c, t, z
         //
@@ -171,9 +163,9 @@ public class DataStreamingTools {
             //
             ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
             List<Future> futures = new ArrayList<>();
-            for (t = 0; t < imageDataInfo.nT; t++)
+            for (int t = 0; t < imageDataInfo.nT; t++)
             {
-                futures.add( es.submit( new ParseFilesIntoVirtualStack(imp, t) ) );
+                futures.add( es.submit( new ParseFilesIntoVirtualStack(imp, t, isShowImage) ) );
             }
 
 
@@ -199,49 +191,120 @@ public class DataStreamingTools {
 
     }
 
-    public void setAllInfosByGivenInformation(
+    public void setMissingInfos(
             ImageDataInfo imageDataInfo,
             String directory,
             String namingPattern
     )
     {
+        int[] ctzMin = new int[3];
+        int[] ctzMax = new int[3];
+        int[] ctzPad = new int[3];
+        int[] ctzSize = new int[3];
 
-        imageDataInfo.ctzFileList = new String[imageDataInfo.nC][imageDataInfo.nT][imageDataInfo.nZ];
+        Matcher matcher;
 
-        if ( namingPattern.contains("<z>") && namingPattern.contains(".tif") )
+        // channels
+        matcher = Pattern.compile(".*<C(\\d+)-(\\d+)>.*").matcher( namingPattern );
+        if ( matcher.matches() )
+        {
+            ctzMin[0] = Integer.parseInt( matcher.group(1) );
+            ctzMax[0] = Integer.parseInt( matcher.group(2) );
+            ctzPad[0] = matcher.group(1).length();
+            imageDataInfo.channelFolders = new String[]{""};
+        }
+        else
+        {
+            // TODO
+        }
+
+        // frames
+        matcher = Pattern.compile(".*<T(\\d+)-(\\d+)>.*").matcher( namingPattern );
+        if ( matcher.matches() )
+        {
+            ctzMin[1] = Integer.parseInt( matcher.group(1) );
+            ctzMax[1] = Integer.parseInt( matcher.group(2) );
+            ctzPad[1] = matcher.group(1).length();
+        }
+
+        // slices
+        matcher = Pattern.compile(".*<Z(\\d+)-(\\d+)>.*").matcher( namingPattern );
+        if ( matcher.matches() )
+        {
+            ctzMin[2] = Integer.parseInt( matcher.group(1) );
+            ctzMax[2] = Integer.parseInt( matcher.group(2) );
+            ctzPad[2] = matcher.group(1).length();
+        }
+        else
+        {
+            // determine number of slices from a file...
+            logger.error("Please provide a z range as well.");
+            return;
+        }
+
+        for ( int i = 0; i < 3; ++i ) ctzSize[i] = ctzMax[i] - ctzMin[i] + 1;
+
+        imageDataInfo.nC = ctzSize[0];
+        imageDataInfo.nT = ctzSize[1];
+        imageDataInfo.nZ = ctzSize[2];
+
+        imageDataInfo.ctzFileList = new String[ctzSize[0]][ctzSize[1]][ctzSize[2]];
+
+        if ( namingPattern.contains("<Z") && namingPattern.contains(".tif") )
         {
             imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
         }
         else
         {
-            logger.error("FILE-TYPE CURRENTLY NOT SUPPORTED!");
+            logger.error("Sorry, currently only single tiff planes supported");
             return;
         }
 
         boolean isObtainedImageDataInfo = false;
 
-        for (int c = 0; c < imageDataInfo.nC; c++)
+        for (int c = ctzMin[0]; c <= ctzMax[0]; c++)
         {
-            for (int t = 0; t < imageDataInfo.nT ; t++)
+            for (int t = ctzMin[1]; t <= ctzMax[1] ; t++)
             {
-                for (int z = 0; z < imageDataInfo.nZ ; z++)
+                for (int z = ctzMin[2]; z <= ctzMax[2] ; z++)
                 {
 
-                    String fileName = namingPattern.replace("<c>",String.format("%1$02d", c));
-                    fileName = fileName.replace("<t>",String.format("%1$05d", t));
-                    fileName = fileName.replace("<z>",String.format("%1$05d", z));
-                    imageDataInfo.ctzFileList[c][t][z] = fileName;
+                    String fileName;
+
+                    fileName = namingPattern.replaceFirst(
+                            "<C(\\d+)-(\\d+)>",
+                            String.format("%1$0" + ctzPad[0] + "d", c));
+
+                    fileName = fileName.replaceFirst(
+                            "<T(\\d+)-(\\d+)>",
+                            String.format("%1$0" + ctzPad[1] + "d", t));
+
+                    if ( imageDataInfo.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ))
+                        fileName = fileName.replaceFirst(
+                                "<Z(\\d+)-(\\d+)>",
+                                String.format("%1$0" + ctzPad[2] + "d", z));
+
+                    imageDataInfo.ctzFileList[c-ctzMin[0]][t-ctzMin[1]][z-ctzMin[2]] = fileName;
 
                     if ( ! isObtainedImageDataInfo )
                     {
-                        File f = new File(directory + imageDataInfo.channelFolders[0] + "/" + fileName);
+                        File f = new File(directory + imageDataInfo.channelFolders[c-ctzMin[0]] + "/" + fileName);
 
                         if ( f.exists() && !f.isDirectory() )
                         {
-                            int nZ = imageDataInfo.nZ;
-                            setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileName);
-                            imageDataInfo.nZ = nZ;
-                            //imageDataInfo.fileType = "tif stacks";
+                            setImageDataInfoFromTiff(
+                                    imageDataInfo,
+                                    directory + imageDataInfo.channelFolders[c-ctzMin[0]],
+                                    fileName);
+
+                            if ( imageDataInfo.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ))
+                                imageDataInfo.nZ = ctzSize[2];
+
+                            logger.info(
+                                    "Found one file; setting nx,ny,nz and bit-depth from this file: "
+                                    + fileName
+                            );
+
                             isObtainedImageDataInfo = true;
                         }
 
@@ -310,7 +373,7 @@ public class DataStreamingTools {
             // Get files in main directory
             //
 
-            logger.info("checking for files in folder: " + directory);
+            logger.info("Searching files in folder: " + directory);
             fileLists = new String[1][];
             fileLists[0] = getFilesInFolder(directory, filterPattern);
 
@@ -1175,11 +1238,13 @@ public class DataStreamingTools {
     class ParseFilesIntoVirtualStack implements Runnable {
         ImagePlus imp;
         private int t;
+        private boolean isShowImage;
 
-        ParseFilesIntoVirtualStack(ImagePlus imp, int t)
+        ParseFilesIntoVirtualStack(ImagePlus imp, int t, boolean isShowImage)
         {
             this.imp = imp;
             this.t = t;
+            this.isShowImage = isShowImage;
         }
 
         public void run()
@@ -1192,7 +1257,7 @@ public class DataStreamingTools {
                 vss.setInfoFromFile(t, c, 0);
             }
 
-            if ( t == 0 )
+            if ( t == 0 && isShowImage )
             {
                 showImageAndInfo(vss);
             }
@@ -1328,7 +1393,14 @@ public class DataStreamingTools {
                 imageDataInfo.nT = 1;
                 imageDataInfo.channelFolders = new String[] {""};
                 */
-                dataStreamingTools.openFromDirectory(directory, "None", ".*", "data", namingPattern, imageDataInfo, nIOthreads);
+                dataStreamingTools.openFromDirectory(
+                        directory,
+                        "None",
+                        ".*",
+                        "data",
+                        imageDataInfo,
+                        nIOthreads,
+                        true);
             }
         });
         t1.start();

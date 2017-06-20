@@ -65,9 +65,8 @@ public class VirtualStackOfStacks extends ImageStack {
     FileInfoSer[][][] infos;  // channel, t, z
     String fileType = Utils.FileType.TIFF_STACKS.toString();
     String directory = "";
-    String imageBaseName = "";
     String[] channelFolders;
-    String[][][] fileList;
+    String[][][] ctzFileList;
     String h5DataSet;
     private ArrayList < String > lockedFiles = new  ArrayList<>();
 
@@ -87,7 +86,7 @@ public class VirtualStackOfStacks extends ImageStack {
         this.nSlices = nC*nT*nZ;
         this.fileType = fileType;
         this.channelFolders = channelFolders;
-        this.fileList = fileList;
+        this.ctzFileList = fileList;
         this.infos = new FileInfoSer[nC][nT][nZ];
         this.h5DataSet = h5DataSet;
 
@@ -140,11 +139,6 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("t: " + nT);
     }
 
-    public void setImageBaseName(String imageBaseName)
-    {
-        this.imageBaseName = imageBaseName;
-    }
-
     public FileInfoSer[][][] getFileInfosSer() {
         return(infos);
     }
@@ -172,7 +166,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         long startTime = System.currentTimeMillis();
 
-        File f = new File(directory + channelFolders[c] + "/" + fileList[c][t][z]);
+        File f = new File(directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
 
         if ( f.exists() )
         {
@@ -180,10 +174,10 @@ public class VirtualStackOfStacks extends ImageStack {
             {
                 if (fileType.equals(Utils.FileType.TIFF_STACKS.toString()))
                 {
-                    ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][0]);
+                    ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][0]);
                     info = ftd.getTiffInfo();
                     // add missing information to first IFD
-                    info[0].fileName = fileList[c][t][0];
+                    info[0].fileName = ctzFileList[c][t][0];
                     info[0].directory = channelFolders[c] + "/"; // relative path to main directory
                     info[0].fileTypeString = fileType;
 
@@ -213,7 +207,7 @@ public class VirtualStackOfStacks extends ImageStack {
                     for (z = 0; z < nZ; z++)
                     {
                         infoCT[z] = new FileInfoSer();
-                        infoCT[z].fileName = fileList[c][t][z];
+                        infoCT[z].fileName = ctzFileList[c][t][z];
                         infoCT[z].directory = channelFolders[c] + "/";
                         infoCT[z].width = nX;
                         infoCT[z].height = nY;
@@ -226,10 +220,10 @@ public class VirtualStackOfStacks extends ImageStack {
                 }
                 else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
                 {
-                    ftd = new FastTiffDecoder(directory + channelFolders[c], fileList[c][t][z]);
+                    ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][z]);
                     infos[c][t][z] = ftd.getTiffInfo()[0];
                     infos[c][t][z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    infos[c][t][z].fileName = fileList[c][t][z];
+                    infos[c][t][z].fileName = ctzFileList[c][t][z];
                     infos[c][t][z].fileTypeString = fileType;
                 }
 
@@ -306,11 +300,8 @@ public class VirtualStackOfStacks extends ImageStack {
         int t = region5D.t;
         int z = (int)region5D.offset.getZ();
 
-        String sC = String.format("%1$02d", c);
-        String sT = String.format("%1$05d", t);
-        String sZ = String.format("%1$05d", z);
-        String fileName = imageBaseName + "--C" + sC + "--T" + sT+ "--Z" + sZ + ".tif";
-        String pathCTZ = directory + fileName;
+
+        String pathCTZ = directory + channelFolders[c] + "/" + ctzFileList[c][t][z];
 
         while ( lockedFiles.contains( pathCTZ ) )
         {
@@ -325,53 +316,19 @@ public class VirtualStackOfStacks extends ImageStack {
 
         synchronized ( this ) { lockedFiles.add( pathCTZ ); }
 
-        if ( infos[c][t]==null || infos[c][t][z].fileName==null )
+        if ( infos[c][t][z] == null )
         {
             // file does not exist yet => create it
             ImagePlus imp = NewImage.createByteImage("title",nX,nY,1,NewImage.FILL_BLACK);
             FileSaver fileSaver = new FileSaver(imp);
             fileSaver.saveAsTiff( pathCTZ );
-
-            fileList[c][t][z] = fileName;
-
-            FastTiffDecoder ftd = new FastTiffDecoder(directory, fileList[c][t][z]);
-
-            FileInfoSer[] info = new FileInfoSer[0];
-            try
-            {
-                info = ftd.getTiffInfo();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-            synchronized ( this )
-            {
-                if (infos[c][t] == null)
-                {
-                    infos[c][t] = new FileInfoSer[nZ];
-
-                    // fill with some info (this is necessary
-                    // because infos[0][0][0] is often accessed
-                    for (int iz = 0; iz < nZ; iz++)
-                    {
-                        infos[c][t][iz] = new FileInfoSer(info[0]);
-                        infos[c][t][iz].directory = ""; // relative path to main directory
-                        infos[c][t][iz].fileName = null;
-                        infos[c][t][iz].fileTypeString = fileType;
-                    }
-                }
-            }
-
-            infos[c][t][z].fileName = fileList[c][t][z];
-
+            setInfoFromFile( t, c, z );
         }
 
         // replace new pixels in existing file
         try
         {
-            RandomAccessFile raf = new RandomAccessFile(directory+fileList[c][t][z], "rw");
+            RandomAccessFile raf = new RandomAccessFile(pathCTZ, "rw");
             long offsetToImageData = infos[c][t][z].offset;
 
             int xs = (int) region5D.offset.getX();
@@ -428,7 +385,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
         if( infos[c][t][z] == null )
         {
-            File f = new File(directory + channelFolders[c] + "/" + fileList[c][t][z]);
+            File f = new File(directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
             if ( !f.exists() )
             {
                 ImageStack stack = ImageStack.create(nX, nY, 1, bitDepth);

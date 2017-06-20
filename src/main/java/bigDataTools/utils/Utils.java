@@ -58,7 +58,7 @@ import java.util.Map;
 public class Utils {
 
     public static boolean verbose = false;
-    public static String LOAD_CHANNELS_FROM_FOLDERS = "from sub-folders";
+    public static String LOAD_CHANNELS_FROM_FOLDERS = "channels from sub-folders";
 
     static Logger logger = new IJLazySwingLogger();
 

@@ -2,6 +2,7 @@ package bigDataTools.dataStreamingTools;
 
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
+import bigDataTools.utils.ImageDataInfo;
 import bigDataTools.utils.Utils;
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import ij.IJ;
@@ -40,9 +41,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfMapTo0 = new JTextField("0",5);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
-    JComboBox channelTimePatternComboBox = new JComboBox(new String[] {
+    JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
+            "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif",
             ".*_C<c>_T<t>.tif",
             "Cam_<c>_<t>.h5",
     });
@@ -70,8 +72,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     final String CROPasNewStream = "Crop as new stream";
     JButton cropAsNewStream =  new JButton(CROPasNewStream);
 
-    final String REPORTissue = "Report an issue";
-    JButton reportIssue =  new JButton(REPORTissue);
+    final String REPORT_ISSUE = "Report an issue";
+    JButton reportIssue =  new JButton(REPORT_ISSUE);
 
     Logger logger = new IJLazySwingLogger();
 
@@ -119,9 +121,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        panels.get(j).add(new JLabel("Load multiple channels:"));
-        channelTimePatternComboBox.setEditable(true);
-        panels.get(j).add(channelTimePatternComboBox);
+        panels.get(j).add(new JLabel("File naming scheme:"));
+        namingSchemeComboBox.setEditable(true);
+        panels.get(j).add(namingSchemeComboBox);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
@@ -258,7 +260,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
-        reportIssue.setActionCommand(REPORTissue);
+        reportIssue.setActionCommand(REPORT_ISSUE);
         reportIssue.addActionListener(this);
         panels.get(j).add(reportIssue);
         mainPanels.get(k).add(panels.get(j++));
@@ -315,7 +317,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         final int nIOthreads = new Integer(tfIOThreads.getText());
         final int rowsPerStrip = new Integer(tfRowsPerStrip.getText());
         final String filterPattern = (String)filterPatternComboBox.getSelectedItem();
-        final String channelPattern = (String) channelTimePatternComboBox.getSelectedItem();
+        final String channelPattern = (String) namingSchemeComboBox.getSelectedItem();
 
         if (e.getActionCommand().equals(STREAMfromFolder)) {
 
@@ -326,7 +328,14 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
-                    dataStreamingTools.openFromDirectory(directory, channelPattern, filterPattern, h5DataSet, null, null, nIOthreads);
+                    dataStreamingTools.openFromDirectory(
+                            directory,
+                            channelPattern,
+                            filterPattern,
+                            h5DataSet,
+                            new ImageDataInfo(),
+                            nIOthreads,
+                            true);
                 }
             });
             t1.start();
@@ -513,7 +522,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             }
 
 
-        }  else if (e.getActionCommand().equals(REPORTissue)) {
+        }  else if (e.getActionCommand().equals(REPORT_ISSUE)) {
 
             //
             // Report issue
