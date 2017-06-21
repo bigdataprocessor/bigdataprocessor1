@@ -204,6 +204,10 @@ public class DataStreamingTools {
 
         Matcher matcher;
 
+        logger.info(
+                "Importing/creating file information from pre-defined naming scheme."
+        );
+
         // channels
         matcher = Pattern.compile(".*<C(\\d+)-(\\d+)>.*").matcher( namingPattern );
         if ( matcher.matches() )
