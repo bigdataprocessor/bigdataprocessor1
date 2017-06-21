@@ -1383,7 +1383,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
+                String directory = "/Users/tischi/Desktop/example-data/luxendo/"; // Gustavo
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
                 String namingPattern = "classified--C<c>--T<t>--Z<z>.tif";
@@ -1397,7 +1397,7 @@ public class DataStreamingTools {
                         directory,
                         "None",
                         ".*",
-                        "data",
+                        "Data",
                         imageDataInfo,
                         nIOthreads,
                         true);

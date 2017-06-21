@@ -271,7 +271,7 @@ public class SaveVSSFrame implements Runnable {
 
                     // Save as Byte Array
                     //
-                    MDByteArray arr = new MDByteArray( saveBlockDimensions);
+                    MDByteArray arr = new MDByteArray( saveBlockDimensions );
                     // copy data
                     //
                     ImageStack stack = imp.getStack();

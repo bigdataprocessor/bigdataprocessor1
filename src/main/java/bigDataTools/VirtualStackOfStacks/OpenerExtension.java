@@ -15,8 +15,12 @@ import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.MonitorThreadPoolStatus;
 import bigDataTools.utils.Utils;
+import ch.systemsx.cisd.base.mdarray.MDIntArray;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.*;
+import ch.systemsx.cisd.hdf5.cleanup.ICallableWithCleanUp;
+import ch.systemsx.cisd.hdf5.cleanup.ICleanUpRegistry;
+import ch.systemsx.cisd.hdf5.hdf5lib.HDF5Constants;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
@@ -94,11 +98,13 @@ class OpenerExtension extends Opener {
                                           int zs, int ze, int nz, int dz,
                                           int xs, int xe, int ys, int ye)
     {
-        long startTime;
-        long readingTime = 0;
-        long totalTime = 0;
-        long threadInitTime = 0;
-        long allocationTime = 0;
+        long settingTime = 0, readingPixelsTime = 0, readingInitTime = 0, totalTime = 0, allocationTime = 0;
+
+        totalTime = System.currentTimeMillis();
+
+
+        allocationTime = System.currentTimeMillis();
+
         short[] asFlatArray = null, pixels;
         MDShortArray block;
         ImagePlus imp;
@@ -125,8 +131,6 @@ class OpenerExtension extends Opener {
                       xe + "," + ys + "," + ye);
         }
 
-        totalTime = System.currentTimeMillis();
-
         // Allocate the stack
         ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
         imp = new ImagePlus("cropped", stack);
@@ -138,12 +142,15 @@ class OpenerExtension extends Opener {
             logger.info("H5 Loader: nPixels > 2^31 => reading plane wise (=> slower!).");
             readInOneGo = false;
         }
+        allocationTime = System.currentTimeMillis() - allocationTime;
 
-        startTime = System.currentTimeMillis();
+
+        readingInitTime = System.currentTimeMillis();
         IHDF5Reader reader = HDF5Factory.openForReading(directory + fi.directory + fi.fileName);
         HDF5DataSetInformation dsInfo = reader.getDataSetInformation( fi.h5DataSet );
         String dsTypeString = hdf5InfoToString(dsInfo);
-        //info("Data type: " + dsTypeString);
+        readingInitTime = System.currentTimeMillis() - readingInitTime;
+
 
         if (dz == 1 && readInOneGo) {
 
@@ -156,6 +163,9 @@ class OpenerExtension extends Opener {
             int nFrames = 1;
             int nChannels = 1;
             */
+
+            readingPixelsTime = System.currentTimeMillis();
+
             if ( dsTypeString.equals("int16") )
             {
                 try
@@ -173,6 +183,33 @@ class OpenerExtension extends Opener {
                 try
                 {
                     block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{nz, ny, nx}, new long[]{zs, ys, xs});
+                    /*
+                    ExecutorService es = Executors.newCachedThreadPool();
+                    String filePath = directory + fi.directory + fi.fileName;
+                    int z = zs;
+                    for (int iz=1; iz<=nz; iz++, z+=dz)
+                    {
+                        es.execute(
+                                new readCroppedPlaneFromHdf5IntoImageStack(
+                                        filePath,
+                                        reader,
+                                        fi.h5DataSet,
+                                        new int[]{1, ny, nx},
+                                        new long[]{z, ys, xs},
+                                        stack, iz
+                                )
+                        );
+                    }
+
+                    try {
+                        es.shutdown();
+                        while(!es.awaitTermination(1, TimeUnit.MINUTES));
+                    }
+                    catch (InterruptedException e) {
+                        System.err.println("tasks interrupted");
+                    }*/
+
+
                 }
                 catch (Exception e)
                 {
@@ -185,16 +222,19 @@ class OpenerExtension extends Opener {
                 logger.error("Data type " + dsTypeString + " is currently not supported");
                 return ( null );
             }
+            readingPixelsTime = System.currentTimeMillis() - readingPixelsTime;
 
+            // copy pixels plane-wise into stack
+            settingTime = System.currentTimeMillis();
             asFlatArray = block.getAsFlatArray();
-
-            // put plane-wise into stack
             for (int z = zs; z <= ze; z++) {
                 pixels = (short[]) imp.getStack().getPixels(z - zs + 1);
                 System.arraycopy(asFlatArray, (z - zs) * imShortSize, pixels, 0, imShortSize);
             }
+            settingTime = System.currentTimeMillis() - settingTime;
 
         }
+
         // todo: make a fast version for too large data sets
         /*else if ( dz==1 && !readInOneGo )
         {
@@ -221,27 +261,28 @@ class OpenerExtension extends Opener {
             int z = zs;
             for (int iz=1; iz<=nz; iz++, z+=dz)
             {
-                block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{1, ny, nx}, new long[]{z, ys, xs});
+                block = reader.uint16().readMDArrayBlockWithOffset(fi.h5DataSet, new int[]{1, ny, nx}, new long[]{z,
+                        ys, xs});
                 asFlatArray = block.getAsFlatArray();
-                pixels = (short[]) imp.getStack().getPixels(iz);
-                System.arraycopy(asFlatArray, 0, pixels, 0, imShortSize);
+                imp.getStack().setPixels(asFlatArray, iz);
+                //pixels = (short[]) imp.getStack().getPixels(iz);
+                //System.arraycopy(asFlatArray, 0, pixels, 0, imShortSize);
 
             }
         }
 
-        readingTime += (System.currentTimeMillis() - startTime);
         totalTime = (System.currentTimeMillis() - totalTime);
 
         if( logger.isShowDebug() ) {
-              logger.info("readingTime [ms]: " + readingTime);
-              logger.info("pixels read: " + asFlatArray.length);
-              logger.info("effective reading speed [MB/s]: " + (double) nz * nx * ny * fi.bytesPerPixel / (
-                      (readingTime + 0.001) * 1000));
-              logger.info("allocationTime [ms]: " + allocationTime);
-            //info("threadInitTime [ms]: "+threadInitTime);
-            //info("additional threadRunningTime [ms]: "+threadRunningTime);
-              logger.info("totalTime [ms]: " + totalTime);
-            //info("Processing [ms]: " + processTime);
+            logger.info("h5 allocationTime [ms]: " + allocationTime);
+            logger.info("h5 readingInitTime [ms]: " + readingInitTime);
+            logger.info("h5 readingPixelsTime [ms]: " + readingPixelsTime);
+            logger.info("h5 settingPixelsIntoImageStackTime [ms]: " + settingTime);
+            logger.info("h5 totalTime [ms]: " + totalTime);
+            logger.info("pixels read: " + asFlatArray.length);
+            logger.info("effective reading speed [MB/s]: " + (double) nz * nx * ny * fi.bytesPerPixel / (
+                      (totalTime + 0.001) * 1000));
+
         }
 
         return(imp);
@@ -389,6 +430,7 @@ class OpenerExtension extends Opener {
         }
         return typeText;
     }
+
 
     /** Decompresses and sorts data into an ImageStack **/
     class readCroppedPlaneFromTiffIntoImageStack implements Runnable

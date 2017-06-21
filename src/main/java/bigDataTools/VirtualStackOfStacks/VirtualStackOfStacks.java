@@ -470,7 +470,7 @@ public class VirtualStackOfStacks extends ImageStack {
 
     }
 
-    public ImagePlus getDataCube(Region5D region5D, int background, int nThreads) {
+    public ImagePlus getDataCube(Region5D region5D, int background, int nThreads)   {
 
         ImagePlus impLoaded = null;
 
@@ -485,7 +485,15 @@ public class VirtualStackOfStacks extends ImageStack {
             setInfoFromFile(region5D.t, region5D.c, 0);
         }
 
-        FileInfoSer fi = infos[region5D.c][region5D.t][(int)region5D.offset.getZ()];
+        FileInfoSer fi;
+        if ( (int)region5D.offset.getZ() >= 0 )
+        {
+            fi = infos[region5D.c][region5D.t][(int) region5D.offset.getZ()];
+        }
+        else // can happen during object tracking
+        {
+            fi = infos[region5D.c][region5D.t][0];
+        }
 
         if (fi.isCropped)
         {
@@ -547,8 +555,10 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
+            long duration = System.currentTimeMillis();
             impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2,
                     nThreads);
+            duration = System.currentTimeMillis() - duration;
 
             if (impLoaded == null)
             {
