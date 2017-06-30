@@ -480,9 +480,21 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("channel: " + region5D.c);
         }
 
+        // make sure we have all the file-info data
         if (infos[region5D.c][region5D.t] == null) {
-            // file info not yet loaded => get it!
+            // stack info not yet loaded => get it!
             setInfoFromFile(region5D.t, region5D.c, 0);
+        }
+
+        // make sure we have all the file-info data
+        for ( int z = (int)region5D.offset.getZ() ;
+              z < (int)region5D.offset.getZ() + (int)region5D.size.getZ();
+              ++z )
+        {
+            if (infos[region5D.c][region5D.t][z] == null) {
+                // file info not yet loaded => get it!
+                setInfoFromFile(region5D.t, region5D.c, z);
+            }
         }
 
         FileInfoSer fi;

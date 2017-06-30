@@ -241,7 +241,6 @@ public class BigDataTracker {
 
     }
 
-
     public synchronized void addLocationToOverlay(final Track track, int t) {
 
         int rx = (int) track.getObjectSize().getX()/2;

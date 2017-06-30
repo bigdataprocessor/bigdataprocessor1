@@ -117,11 +117,13 @@ public class DataStreamingTools {
 
         if ( namingScheme.contains("<C") )
         {
-            setMissingInfos(
+            if ( ! setMissingInfos(
                     imageDataInfo,
                     directory,
-                    namingScheme
-            );
+                    namingScheme))
+            {
+                return null;
+            }
         }
         else
         {
@@ -191,7 +193,7 @@ public class DataStreamingTools {
 
     }
 
-    public void setMissingInfos(
+    public boolean setMissingInfos(
             ImageDataInfo imageDataInfo,
             String directory,
             String namingPattern
@@ -243,7 +245,7 @@ public class DataStreamingTools {
         {
             // determine number of slices from a file...
             logger.error("Please provide a z range as well.");
-            return;
+            return false;
         }
 
         for ( int i = 0; i < 3; ++i ) ctzSize[i] = ctzMax[i] - ctzMin[i] + 1;
@@ -261,7 +263,7 @@ public class DataStreamingTools {
         else
         {
             logger.error("Sorry, currently only single tiff planes supported");
-            return;
+            return false;
         }
 
         boolean isObtainedImageDataInfo = false;
@@ -311,14 +313,17 @@ public class DataStreamingTools {
 
                             isObtainedImageDataInfo = true;
                         }
-
                     }
-
-
                 }
             }
         }
 
+        if ( ! isObtainedImageDataInfo )
+        {
+            logger.error("Could not open data set. There needs to be at least one file.");
+        }
+
+        return isObtainedImageDataInfo;
     }
 
 

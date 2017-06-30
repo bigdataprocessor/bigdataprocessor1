@@ -497,10 +497,16 @@ class OpenerExtension extends Opener {
         }
 
         public void run() {
-            //info("Running " +  threadName );
+
             RandomAccessFile inputStream = null;
 
             this.fi = info[z];
+
+            if ( fi == null )
+            {
+                logger.info("Missing file; providing pixels with zeros.");
+                return; // leave pixels in the stack black
+            }
 
             File file = new File(directory + fi.directory + fi.fileName);
             try {
