@@ -321,7 +321,6 @@ class OpenerExtension extends Opener {
         totalTime = System.currentTimeMillis();
 
         // initialisation and allocation
-        startTime = System.currentTimeMillis();
         int imByteWidth = fi.width*fi.bytesPerPixel;
         // todo: this is not necessary to allocate new, but could be filled
         ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
@@ -331,46 +330,50 @@ class OpenerExtension extends Opener {
 
         try {
 
-            // read plane wise
-            //
+            if ( nz > 1 )
+            {
+                // read plane wise, multi-threaded
+                //
+                ExecutorService es = Executors.newFixedThreadPool(numThreads);
+                List<Future> futures = new ArrayList<>();
 
-            // TODO: look for IO threads !
+                for (int iz = 0, z = zs; iz < nz; iz++, z += dz)
+                {
 
-            ExecutorService es = Executors.newFixedThreadPool( numThreads );
-            List<Future> futures = new ArrayList<>();
+                    if (z < 0 || z >= info.length)
+                    {
+                        logger.error("z = " + z + " is out of range.");
+                        return null;
+                    }
 
-            for (int iz=0, z=zs; iz<nz; iz++, z+=dz) {
-
-                if (z < 0 || z >= info.length) {
-                    logger.error("z = " + z + " is out of range.");
-                    return null;
+                    // Read, decompress, rearrange, crop X, and put into stack
+                    //
+                    futures.add(
+                            es.submit(
+                                    new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
+                                            z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth)
+                            )
+                    );
                 }
 
-                // Read, decompress, rearrange, crop X, and put into stack
-                //
-                futures.add(
-                        es.submit(
-                                new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
-                                        z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth)
-                        )
-                );
-
+                // wait until all z-planes are read
+                for (Future future : futures)
+                {
+                    future.get();
+                }
             }
-
-            // wait until all z-planes are read
-            for (Future future:futures){
-                future.get();
+            else // don't invoke a thread for just reading a single plane
+            {
+                int z = zs;
+                new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
+                        z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth).run();
             }
 
         } catch (Exception e) {
             IJ.handleException(e);
         }
 
-
         ImagePlus imp = new ImagePlus("One stream", stack);
-        //imp.show();
-
-        totalTime = (System.currentTimeMillis() - totalTime);
 
         if( logger.isShowDebug() )
         {
