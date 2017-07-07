@@ -300,7 +300,6 @@ public class VirtualStackOfStacks extends ImageStack {
         int t = region5D.t;
         int z = (int)region5D.offset.getZ();
 
-
         String pathCTZ = directory + channelFolders[c] + "/" + ctzFileList[c][t][z];
 
         while ( lockedFiles.contains( pathCTZ ) )
@@ -318,17 +317,27 @@ public class VirtualStackOfStacks extends ImageStack {
 
         if ( infos[c][t][z] == null )
         {
-            // file does not exist yet => create it
-            ImagePlus imp = NewImage.createByteImage("title",nX,nY,1,NewImage.FILL_BLACK);
-            FileSaver fileSaver = new FileSaver(imp);
-            fileSaver.saveAsTiff( pathCTZ );
-            setInfoFromFile( t, c, z );
+
+            File f = new File(directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
+            if ( !f.exists() )
+            {
+                // file does not exist yet => create a black one
+                ImagePlus imp = NewImage.createByteImage("title", nX ,nY, 1, NewImage.FILL_BLACK);
+                FileSaver fileSaver = new FileSaver(imp);
+                fileSaver.saveAsTiff( pathCTZ );
+                setInfoFromFile( t, c, z );
+            }
+            else
+            {
+                setInfoFromFile(t, c, z);
+            }
+
         }
 
         // replace new pixels in existing file
         try
         {
-            RandomAccessFile raf = new RandomAccessFile(pathCTZ, "rw");
+            RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
             long offsetToImageData = infos[c][t][z].offset;
 
             int xs = (int) region5D.offset.getX();
@@ -353,6 +362,7 @@ public class VirtualStackOfStacks extends ImageStack {
         }
         catch (IOException e)
         {
+            IJ.log(e.toString());
             e.printStackTrace();
         }
 
