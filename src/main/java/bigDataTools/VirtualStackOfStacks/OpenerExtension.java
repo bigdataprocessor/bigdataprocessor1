@@ -75,11 +75,11 @@ class OpenerExtension extends Opener {
 
         if(info[zs].fileTypeString.equals(Utils.FileType.TIFF_STACKS.toString()))
         {
-            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+            imp = readDataCubeFromTiff(directory, info, nThreads, zs, ze, nz, dz, xs, xe, ys, ye);
         }
         else if(info[zs].fileTypeString.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
         {
-            imp = readDataCubeFromTiff(directory, info, zs, ze, nz, dz, xs, xe, ys, ye);
+            imp = readDataCubeFromTiff(directory, info, nThreads, zs, ze, nz, dz, xs, xe, ys, ye);
         }
         else if(info[zs].fileTypeString.equals(Utils.FileType.HDF5.toString()))
         {
@@ -289,6 +289,7 @@ class OpenerExtension extends Opener {
     }
 
     public ImagePlus readDataCubeFromTiff(String directory, FileInfoSer[] info,
+                                          int numThreads,
                                           int zs, int ze, int nz, int dz,
                                           int xs, int xe, int ys, int ye)
     {
@@ -325,40 +326,18 @@ class OpenerExtension extends Opener {
         // todo: this is not necessary to allocate new, but could be filled
         ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
         byte[][] buffer = new byte[nz][1];
-        ExecutorService es = Executors.newCachedThreadPool();
+
+        //ExecutorService es = Executors.newCachedThreadPool();
 
         try {
 
             // read plane wise
             //
 
-            /*
-            ExecutorService es = Executors.newFixedThreadPool(threads);
-            List<Future> futures = new ArrayList<>();
-            for (int i = 0; i < imp.getNFrames(); i++)
-            {
-                futures.add(es.submit(new SaveVSSFrame(this, imp, i, bin, saveVolume, saveProjection,
-                        filePath, fileType, compression, rowsPerStrip)));
-            }
-
-            // Monitor the progress
-            //
-            Thread thread = new Thread(new Runnable() {
-                public void run()
-                {
-                    MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                            futures,
-                            "Saved to disk: ",
-                            2000);
-                }
-            });
-            thread.start();
-            */
-
             // TODO: look for IO threads !
 
-            //ExecutorService es = Executors.newFixedThreadPool(threads);
-            //List<Future> futures = new ArrayList<>();
+            ExecutorService es = Executors.newFixedThreadPool( numThreads );
+            List<Future> futures = new ArrayList<>();
 
             for (int iz=0, z=zs; iz<nz; iz++, z+=dz) {
 
@@ -369,17 +348,18 @@ class OpenerExtension extends Opener {
 
                 // Read, decompress, rearrange, crop X, and put into stack
                 //
-                es.execute(new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer, z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth));
+                futures.add(
+                        es.submit(
+                                new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
+                                        z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth)
+                        )
+                );
 
             }
 
             // wait until all z-planes are read
-            try {
-                es.shutdown();
-                while(!es.awaitTermination(1, TimeUnit.MINUTES));
-            }
-            catch (InterruptedException e) {
-                System.err.println("tasks interrupted");
+            for (Future future:futures){
+                future.get();
             }
 
         } catch (Exception e) {
