@@ -361,6 +361,8 @@ class OpenerExtension extends Opener {
                 {
                     future.get();
                 }
+                es.shutdown();
+
             }
             else // don't invoke a thread for just reading a single plane
             {
