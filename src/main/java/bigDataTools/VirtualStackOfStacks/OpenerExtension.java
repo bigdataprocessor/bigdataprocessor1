@@ -370,7 +370,7 @@ class OpenerExtension extends Opener {
                 }
                 else
                 {
-                    // read with single thread (invoking no thread at all)
+                    // read with single thread (invoking no threads at all)
                     for (int iz = 0, z = zs; iz < nz; iz++, z += dz)
                     {
 
