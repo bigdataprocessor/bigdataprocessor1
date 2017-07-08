@@ -578,8 +578,11 @@ public class VirtualStackOfStacks extends ImageStack {
             Point3D po2 = new Point3D(ox2, oy2, oz2);
             Point3D ps2 = new Point3D(sx2, sy2, sz2);
             long duration = System.currentTimeMillis();
-            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2,
-                    nThreads);
+
+            impLoaded = new OpenerExtension().readDataCube(directory,
+                    infos[region5D.c][region5D.t],
+                    dz, po2, ps2, nThreads);
+
             duration = System.currentTimeMillis() - duration;
 
             if (impLoaded == null)

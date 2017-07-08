@@ -147,7 +147,7 @@ class OpenerExtension extends Opener {
 
         readingInitTime = System.currentTimeMillis();
         IHDF5Reader reader = HDF5Factory.openForReading(directory + fi.directory + fi.fileName);
-        HDF5DataSetInformation dsInfo = reader.getDataSetInformation( fi.h5DataSet );
+        HDF5DataSetInformation dsInfo = reader.getDataSetInformation(fi.h5DataSet);
         String dsTypeString = hdf5InfoToString(dsInfo);
         readingInitTime = System.currentTimeMillis() - readingInitTime;
 
@@ -326,42 +326,65 @@ class OpenerExtension extends Opener {
         ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
         byte[][] buffer = new byte[nz][1];
 
-        //ExecutorService es = Executors.newCachedThreadPool();
 
         try {
 
             if ( nz > 1 )
             {
-                // read plane wise, multi-threaded
-                //
-                ExecutorService es = Executors.newFixedThreadPool(numThreads);
-                List<Future> futures = new ArrayList<>();
 
-                for (int iz = 0, z = zs; iz < nz; iz++, z += dz)
+                if ( numThreads > 1 )
                 {
+                    // read plane wise, multi-threaded
+                    //
+                    ExecutorService es = Executors.newFixedThreadPool( numThreads );
+                    List<Future> futures = new ArrayList<>();
 
-                    if (z < 0 || z >= info.length)
+                    for (int iz = 0, z = zs; iz < nz; iz++, z += dz)
                     {
-                        logger.error("z = " + z + " is out of range.");
-                        return null;
+
+                        if (z < 0 || z >= info.length)
+                        {
+                            logger.error("z = " + z + " is out of range.");
+                            return null;
+                        }
+
+                        // Read, decompress, rearrange, crop X, and put into stack
+                        //
+                        futures.add(
+                                es.submit(
+                                        new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
+                                                z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth)
+                                )
+                        );
                     }
 
-                    // Read, decompress, rearrange, crop X, and put into stack
-                    //
-                    futures.add(
-                            es.submit(
-                                    new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
-                                            z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth)
-                            )
-                    );
-                }
+                    // wait until all z-planes are read
+                    for (Future future : futures)
+                    {
+                        future.get();
+                    }
+                    futures = null;
+                    es.shutdown();
 
-                // wait until all z-planes are read
-                for (Future future : futures)
-                {
-                    future.get();
+
                 }
-                es.shutdown();
+                else
+                {
+                    // read with single thread (invoking no thread at all)
+                    for (int iz = 0, z = zs; iz < nz; iz++, z += dz)
+                    {
+
+                        if (z < 0 || z >= info.length)
+                        {
+                            logger.error("z = " + z + " is out of range.");
+                            return null;
+                        }
+
+                        new readCroppedPlaneFromTiffIntoImageStack(directory, info, stack, buffer,
+                                                z, zs, ze, dz, ys, ye, ny, xs, xe, nx, imByteWidth).run();
+
+                    }
+                }
 
             }
             else // don't invoke a thread for just reading a single plane
