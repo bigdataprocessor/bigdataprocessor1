@@ -153,18 +153,17 @@ public class FileInfoSer implements Cloneable, Serializable {
         this.isCropped = info.isCropped;
         this.pCropOffset = info.pCropOffset.clone();
         this.pCropSize = info.pCropSize.clone();
+        //for ( int i = 0; i < 3; i++)
+        //{
+        //    this.pCropOffset[i] = info.pCropOffset[i];
+        //    this.pCropSize[i] = info.pCropSize[i];
+        //}
         this.whiteIsZero = info.whiteIsZero;
         this.samplesPerPixel = info.samplesPerPixel;
         this.unit = info.unit;
         this.gapBetweenImages = info.gapBetweenImages;
         this.info = info.info;
         this.description = info.description;
-        this.bytesPerPixel = info.bytesPerPixel;
-        this.h5DataSet = info.h5DataSet;
-        this.fileTypeString = info.fileTypeString;
-        this.isCropped = info.isCropped;
-        this.pCropOffset = info.pCropOffset;
-        this.pCropSize = info.pCropSize;
 
 
     }

@@ -1095,17 +1095,20 @@ public class DataStreamingTools {
             {
                 for (int z = 0; z < nZ; z++)
                 {
-                    croppedInfos[c][t - tMin][z] = new FileInfoSer(infos[c][t][z]);
-                    if (croppedInfos[c][t - tMin][z].isCropped)
+                    croppedInfos[c][t-tMin][z] = new FileInfoSer( infos[c][t][z] );
+                    if (croppedInfos[c][t-tMin][z].isCropped)
                     {
-                        croppedInfos[c][t - tMin][z].setCropOffset(po[t].add(croppedInfos[c][t - tMin][z].getCropOffset()));
+                        Point3D originalCropOffset = croppedInfos[c][t-tMin][z].getCropOffset();
+                        Point3D additionalOffset = po[t-tMin];
+                        Point3D adaptedCropOffset = originalCropOffset.add( additionalOffset );
+                        croppedInfos[c][t-tMin][z].setCropOffset( adaptedCropOffset );
                     }
                     else
                     {
-                        croppedInfos[c][t - tMin][z].isCropped = true;
-                        croppedInfos[c][t - tMin][z].setCropOffset(po[t - tMin]);
+                        croppedInfos[c][t-tMin][z].isCropped = true;
+                        croppedInfos[c][t-tMin][z].setCropOffset(po[t-tMin]);
                     }
-                    croppedInfos[c][t - tMin][z].setCropSize(ps);
+                    croppedInfos[c][t-tMin][z].setCropSize(ps);
                     //info("channel "+channel);
                     //info("t "+t);
                     //info("z "+z);
@@ -1392,7 +1395,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                String directory = "/Users/tischi/Desktop/example-data/luxendo/"; // Gustavo
+                String directory = "/Users/tischi/Desktop/example-data/3d-embryo/"; // Gustavo
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
                 String namingPattern = "classified--C<c>--T<t>--Z<z>.tif";

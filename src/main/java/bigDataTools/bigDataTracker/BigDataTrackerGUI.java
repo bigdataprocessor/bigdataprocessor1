@@ -333,7 +333,8 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // check roi
             //
             Roi roi = imp.getRoi();
-            if (roi == null || ! (roi.getTypeAsString().equals("Point") || roi.getTypeAsString().equals("Rectangle")) ) {
+            if ( roi == null || !(roi.getTypeAsString().equals("Point")) )
+            {
                 logger.error("Please use ImageJ's Point selection tool on image: '"
                         + imp.getTitle() + "'");
                 return;

@@ -131,8 +131,7 @@ public class BigDataTracker {
                 for( Point3D position : locations.values() )
                 {
                     Point3D correctedImageCenter = position.subtract(offsetToImageCenter);
-                    trackOffsets.add(Utils.computeOffsetFromCenterSize(correctedImageCenter,
-                            pImageSize));
+                    trackOffsets.add( Utils.computeOffsetFromCenterSize(correctedImageCenter, pImageSize) );
                 }
 
                 pCropSize = pImageSize;
@@ -167,11 +166,15 @@ public class BigDataTracker {
 
             // TODO: convert to Region5D[] for more consistency ?
 
+            // get a new view on the tracked data
             if ( track.getImp().getStack() instanceof VirtualStackOfStacks )
             {
-                impCroppedAlongObject = DataStreamingTools.getCroppedVSS(track.getImp(),
+                impCroppedAlongObject = DataStreamingTools.getCroppedVSS(
+                        track.getImp(),
                         trackOffsets.toArray(new Point3D[trackOffsets.size()]),
-                        pCropSize, track.getTmin(), track.getTmax());
+                        pCropSize,
+                        track.getTmin(),
+                        track.getTmax());
             }
             else
             {

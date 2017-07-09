@@ -140,7 +140,7 @@ public class VirtualStackOfStacks extends ImageStack {
     }
 
     public FileInfoSer[][][] getFileInfosSer() {
-        return(infos);
+        return( infos );
     }
 
     public String getDirectory() {
