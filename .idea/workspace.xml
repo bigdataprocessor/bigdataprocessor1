@@ -3,13 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/ObjectTracker.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/ObjectTracker.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/utils/Utils.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/utils/Utils.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
@@ -36,27 +34,19 @@
       <file leaf-file-name="OpenerExtension.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.703704">
+            <state vertical-scroll-proportion="0.0">
               <caret line="398" column="9" selection-start-line="398" selection-start-column="9" selection-end-line="398" selection-end-column="9" />
               <folding>
-                <element signature="e#0#51558#0" expanded="true" />
-                <element signature="imports" expanded="true" />
                 <element signature="docComment;class#OpenerExtension#0" expanded="false" />
-                <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
-                <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="true" />
                 <element signature="e#5393#5421#0" expanded="false" />
                 <element signature="e#15485#15487#0" expanded="false" />
-                <element signature="method#readCroppedPlaneFromTiffIntoImageStack#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
-                <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
                 <element signature="e#22273#22312#0" expanded="false" />
                 <element signature="e#24943#24945#0" expanded="false" />
-                <element signature="method#lzwUncompress#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
                 <element signature="e#26779#26807#0" expanded="false" />
                 <element signature="e#27301#27334#0" expanded="false" />
                 <element signature="e#28095#28128#0" expanded="false" />
                 <element signature="e#28515#28564#0" expanded="false" />
                 <element signature="e#29485#29518#0" expanded="false" />
-                <element signature="method#start#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
                 <element signature="e#35098#35112#0" expanded="false" />
                 <element signature="docComment;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
                 <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
@@ -68,7 +58,7 @@
       <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.148148">
+            <state vertical-scroll-proportion="0.0">
               <caret line="1103" column="0" selection-start-line="1103" selection-start-column="0" selection-end-line="1103" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
@@ -77,8 +67,6 @@
                 <element signature="e#5288#5308#0" expanded="false" />
                 <element signature="e#5649#5672#0" expanded="false" />
                 <element signature="class#5731:6019" expanded="false" />
-                <element signature="method#setMissingInfos#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#11439#11441#0" expanded="false" />
                 <element signature="e#12961#12963#0" expanded="false" />
                 <element signature="e#13750#13752#0" expanded="false" />
@@ -92,26 +80,21 @@
                 <element signature="e#23775#23777#0" expanded="false" />
                 <element signature="e#24004#24021#0" expanded="false" />
                 <element signature="class#32187:32388" expanded="false" />
-                <element signature="method#getCroppedVSS#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#34477#34484#0" expanded="false" />
                 <element signature="e#36286#36313#0" expanded="false" />
-                <element signature="method#createImagePlusFromVSS#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#37091#37151#0" expanded="false" />
                 <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
                 <element signature="e#38183#38206#0" expanded="false" />
                 <element signature="e#38548#38622#0" expanded="false" />
                 <element signature="class#38960:39219" expanded="false" />
-                <element signature="method#saveVSSAsStacks#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#39607#39621#0" expanded="false" />
                 <element signature="e#39941#39964#0" expanded="false" />
                 <element signature="class#40015:40272" expanded="false" />
                 <element signature="e#41241#41254#0" expanded="false" />
                 <element signature="e#41682#41706#0" expanded="false" />
-                <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="e#43428#43491#0" expanded="false" />
                 <element signature="e#43929#43994#0" expanded="false" />
                 <element signature="e#44379#44477#0" expanded="false" />
-                <element signature="method#run#0;class#45884:46828" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -122,12 +105,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
-              <folding>
-                <element signature="method#FileInfoSer#1;class#FileInfoSer#0" expanded="true" />
-                <element signature="method#setCropOffset#0;class#FileInfoSer#0" expanded="true" />
-                <element signature="e#7011#7012#0" expanded="true" />
-                <element signature="e#7094#7095#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -135,7 +113,7 @@
       <file leaf-file-name="DataStreamingToolsGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.148148">
+            <state vertical-scroll-proportion="0.0">
               <caret line="519" column="0" selection-start-line="519" selection-start-column="0" selection-end-line="519" selection-end-column="0" />
               <folding />
             </state>
@@ -156,9 +134,11 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+              <caret line="312" column="0" selection-start-line="312" selection-start-column="0" selection-end-line="312" selection-end-column="0" />
               <folding>
+                <element signature="method#checkRange#0;class#Utils#0" expanded="true" />
                 <element signature="method#checkMemoryRequirements#2;class#Utils#0" expanded="true" />
+                <element signature="method#getDataCube#0;class#Utils#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -167,8 +147,8 @@
       <file leaf-file-name="BigDataTracker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.148148">
-              <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
               <folding>
                 <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
               </folding>
@@ -176,11 +156,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33333334">
-              <caret line="414" column="0" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="417" column="59" selection-start-line="417" selection-start-column="59" selection-end-line="417" selection-end-column="59" />
               <folding>
                 <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="e#3955#3957#0" expanded="false" />
@@ -213,29 +193,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjectTracker.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ObjectTracker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2962963">
-              <caret line="29" column="11" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="178" column="1" selection-start-line="178" selection-start-column="1" selection-end-line="178" selection-end-column="1" />
               <folding>
                 <element signature="e#1187#1246#0" expanded="false" />
                 <element signature="e#1333#1348#0" expanded="false" />
-                <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
                 <element signature="e#1769#1799#0" expanded="false" />
                 <element signature="e#2907#2919#0" expanded="false" />
-                <element signature="e#3373#3413#0" expanded="false" />
-                <element signature="e#3475#3571#0" expanded="false" />
-                <element signature="e#3942#3969#0" expanded="false" />
-                <element signature="e#4771#4805#0" expanded="false" />
-                <element signature="e#5112#5162#0" expanded="false" />
-                <element signature="e#5367#5458#0" expanded="false" />
-                <element signature="e#5948#6035#0" expanded="false" />
-                <element signature="e#6495#6510#0" expanded="false" />
-                <element signature="e#7829#7875#0" expanded="false" />
-                <element signature="e#8785#8878#0" expanded="false" />
+                <element signature="e#3379#3419#0" expanded="false" />
+                <element signature="e#3481#3577#0" expanded="false" />
+                <element signature="e#3948#3975#0" expanded="false" />
+                <element signature="e#4777#4811#0" expanded="false" />
+                <element signature="e#5118#5168#0" expanded="false" />
+                <element signature="e#5373#5464#0" expanded="false" />
+                <element signature="e#5954#6041#0" expanded="false" />
+                <element signature="e#6507#6522#0" expanded="false" />
+                <element signature="e#7841#7887#0" expanded="false" />
+                <element signature="e#8797#8890#0" expanded="false" />
                 <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
-                <element signature="method#getDataCube#0;class#ObjectTracker#0" expanded="true" />
                 <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="true" />
               </folding>
             </state>
@@ -245,46 +223,28 @@
       <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.148148">
+            <state vertical-scroll-proportion="0.0">
               <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
               <folding>
-                <element signature="e#0#25737#0" expanded="true" />
-                <element signature="imports" expanded="true" />
-                <element signature="method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="e#4795#4796#0" expanded="true" />
                 <element signature="docComment;method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="e#6898#6900#0" expanded="false" />
                 <element signature="docComment;method#addSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#addSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#addSlice#2;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#getPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#setPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getCropSize#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getFullFrame#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="e#17300#17360#0" expanded="false" />
                 <element signature="e#17731#17733#0" expanded="false" />
                 <element signature="e#18112#18114#0" expanded="false" />
                 <element signature="e#18385#18387#0" expanded="false" />
                 <element signature="e#19606#19638#0" expanded="false" />
                 <element signature="e#20407#20450#0" expanded="false" />
-                <element signature="method#computeMean16bit#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#resizeWidthAndHeight#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="e#23796#23808#0" expanded="false" />
                 <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
@@ -346,7 +306,6 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Region5D.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerPlugIn_.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackTablePanel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/SavingSettings.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/LoadFrameFromVSSIntoRAM.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java" />
@@ -354,7 +313,6 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/tests/CreateEmptyVSS.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/TestStuff.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/ReadCroppedPlaneFromHdf5IntoImageStack.java" />
@@ -368,6 +326,8 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
       </list>
     </option>
   </component>
@@ -418,6 +378,9 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -528,6 +491,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="dataStreamingTools" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -578,9 +571,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -829,7 +819,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -837,23 +827,23 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4313253" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12947068" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17108434" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27753934" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17108434" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2084942" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4313253" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1211,7 +1201,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1219,7 +1208,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="379" column="60" selection-start-line="379" selection-start-column="60" selection-end-line="379" selection-end-column="60" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1227,13 +1215,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="50" column="13" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#4061#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="method#OpenHdf5Test#0;class#OpenHdf5Test#0" expanded="false" />
-            <element signature="method#openOneFileAsImp#0;class#OpenHdf5Test#0" expanded="false" />
-            <element signature="method#browse#0;class#OpenHdf5Test#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1241,7 +1222,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="299" column="22" selection-start-line="299" selection-start-column="22" selection-end-line="299" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1249,7 +1229,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="247" column="60" selection-start-line="247" selection-start-column="20" selection-end-line="247" selection-end-column="60" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1257,44 +1236,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#createFile#0;class#H5Balint#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/util/concurrent/ExecutorService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="155" column="9" selection-start-line="155" selection-start-column="9" selection-end-line="155" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.703704">
+        <state vertical-scroll-proportion="0.0">
           <caret line="398" column="9" selection-start-line="398" selection-start-column="9" selection-end-line="398" selection-end-column="9" />
           <folding>
-            <element signature="e#0#51558#0" expanded="true" />
-            <element signature="imports" expanded="true" />
             <element signature="docComment;class#OpenerExtension#0" expanded="false" />
-            <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="method#readDataCubeFromHdf5#0;class#OpenerExtension#0" expanded="true" />
             <element signature="e#5393#5421#0" expanded="false" />
             <element signature="e#15485#15487#0" expanded="false" />
-            <element signature="method#readCroppedPlaneFromTiffIntoImageStack#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="method#run#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
             <element signature="e#22273#22312#0" expanded="false" />
             <element signature="e#24943#24945#0" expanded="false" />
-            <element signature="method#lzwUncompress#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
             <element signature="e#26779#26807#0" expanded="false" />
             <element signature="e#27301#27334#0" expanded="false" />
             <element signature="e#28095#28128#0" expanded="false" />
             <element signature="e#28515#28564#0" expanded="false" />
             <element signature="e#29485#29518#0" expanded="false" />
-            <element signature="method#start#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="true" />
             <element signature="e#35098#35112#0" expanded="false" />
             <element signature="docComment;class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
             <element signature="class#ByteVector#0;class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
@@ -1302,119 +1261,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2962963">
-          <caret line="29" column="11" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
-          <folding>
-            <element signature="e#1187#1246#0" expanded="false" />
-            <element signature="e#1333#1348#0" expanded="false" />
-            <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="e#1769#1799#0" expanded="false" />
-            <element signature="e#2907#2919#0" expanded="false" />
-            <element signature="e#3373#3413#0" expanded="false" />
-            <element signature="e#3475#3571#0" expanded="false" />
-            <element signature="e#3942#3969#0" expanded="false" />
-            <element signature="e#4771#4805#0" expanded="false" />
-            <element signature="e#5112#5162#0" expanded="false" />
-            <element signature="e#5367#5458#0" expanded="false" />
-            <element signature="e#5948#6035#0" expanded="false" />
-            <element signature="e#6495#6510#0" expanded="false" />
-            <element signature="e#7829#7875#0" expanded="false" />
-            <element signature="e#8785#8878#0" expanded="false" />
-            <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="method#getDataCube#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.148148">
-          <caret line="519" column="0" selection-start-line="519" selection-start-column="0" selection-end-line="519" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.148148">
-          <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#25737#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="method#VirtualStackOfStacks#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#4795#4796#0" expanded="true" />
-            <element signature="docComment;method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="e#6898#6900#0" expanded="false" />
-            <element signature="docComment;method#addSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#addSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#addSlice#2;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#getPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#setPixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getCropSize#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getFullFrame#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="e#17300#17360#0" expanded="false" />
-            <element signature="e#17731#17733#0" expanded="false" />
-            <element signature="e#18112#18114#0" expanded="false" />
-            <element signature="e#18385#18387#0" expanded="false" />
-            <element signature="e#19606#19638#0" expanded="false" />
-            <element signature="e#20407#20450#0" expanded="false" />
-            <element signature="method#computeMean16bit#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#resizeWidthAndHeight#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="e#23796#23808#0" expanded="false" />
-            <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.148148">
-          <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
-          <folding>
-            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
-          <folding>
-            <element signature="method#FileInfoSer#1;class#FileInfoSer#0" expanded="true" />
-            <element signature="method#setCropOffset#0;class#FileInfoSer#0" expanded="true" />
-            <element signature="e#7011#7012#0" expanded="true" />
-            <element signature="e#7094#7095#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.148148">
+        <state vertical-scroll-proportion="0.0">
           <caret line="1103" column="0" selection-start-line="1103" selection-start-column="0" selection-end-line="1103" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
@@ -1423,8 +1272,6 @@
             <element signature="e#5288#5308#0" expanded="false" />
             <element signature="e#5649#5672#0" expanded="false" />
             <element signature="class#5731:6019" expanded="false" />
-            <element signature="method#setMissingInfos#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#11439#11441#0" expanded="false" />
             <element signature="e#12961#12963#0" expanded="false" />
             <element signature="e#13750#13752#0" expanded="false" />
@@ -1438,44 +1285,75 @@
             <element signature="e#23775#23777#0" expanded="false" />
             <element signature="e#24004#24021#0" expanded="false" />
             <element signature="class#32187:32388" expanded="false" />
-            <element signature="method#getCroppedVSS#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#34477#34484#0" expanded="false" />
             <element signature="e#36286#36313#0" expanded="false" />
-            <element signature="method#createImagePlusFromVSS#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#37091#37151#0" expanded="false" />
             <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
             <element signature="e#38183#38206#0" expanded="false" />
             <element signature="e#38548#38622#0" expanded="false" />
             <element signature="class#38960:39219" expanded="false" />
-            <element signature="method#saveVSSAsStacks#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#39607#39621#0" expanded="false" />
             <element signature="e#39941#39964#0" expanded="false" />
             <element signature="class#40015:40272" expanded="false" />
             <element signature="e#41241#41254#0" expanded="false" />
             <element signature="e#41682#41706#0" expanded="false" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
             <element signature="e#43428#43491#0" expanded="false" />
             <element signature="e#43929#43994#0" expanded="false" />
             <element signature="e#44379#44477#0" expanded="false" />
-            <element signature="method#run#0;class#45884:46828" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FileInfoSer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="519" column="0" selection-start-line="519" selection-start-column="0" selection-end-line="519" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/util/concurrent/ExecutorService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="155" column="9" selection-start-line="155" selection-start-column="9" selection-end-line="155" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="259" column="0" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <caret line="312" column="0" selection-start-line="312" selection-start-column="0" selection-end-line="312" selection-end-column="0" />
           <folding>
+            <element signature="method#checkRange#0;class#Utils#0" expanded="true" />
             <element signature="method#checkMemoryRequirements#2;class#Utils#0" expanded="true" />
+            <element signature="method#getDataCube#0;class#Utils#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="180" column="75" selection-start-line="180" selection-start-column="75" selection-end-line="180" selection-end-column="75" />
+          <folding>
+            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="414" column="0" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="417" column="59" selection-start-line="417" selection-start-column="59" selection-end-line="417" selection-end-column="59" />
           <folding>
             <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
             <element signature="e#3955#3957#0" expanded="false" />
@@ -1503,6 +1381,65 @@
             <element signature="e#16546#16548#0" expanded="false" />
             <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
             <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="178" column="1" selection-start-line="178" selection-start-column="1" selection-end-line="178" selection-end-column="1" />
+          <folding>
+            <element signature="e#1187#1246#0" expanded="false" />
+            <element signature="e#1333#1348#0" expanded="false" />
+            <element signature="e#1769#1799#0" expanded="false" />
+            <element signature="e#2907#2919#0" expanded="false" />
+            <element signature="e#3379#3419#0" expanded="false" />
+            <element signature="e#3481#3577#0" expanded="false" />
+            <element signature="e#3948#3975#0" expanded="false" />
+            <element signature="e#4777#4811#0" expanded="false" />
+            <element signature="e#5118#5168#0" expanded="false" />
+            <element signature="e#5373#5464#0" expanded="false" />
+            <element signature="e#5954#6041#0" expanded="false" />
+            <element signature="e#6507#6522#0" expanded="false" />
+            <element signature="e#7841#7887#0" expanded="false" />
+            <element signature="e#8797#8890#0" expanded="false" />
+            <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
+            <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+          <folding>
+            <element signature="e#4795#4796#0" expanded="true" />
+            <element signature="docComment;method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="e#6898#6900#0" expanded="false" />
+            <element signature="docComment;method#addSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="e#17300#17360#0" expanded="false" />
+            <element signature="e#17731#17733#0" expanded="false" />
+            <element signature="e#18112#18114#0" expanded="false" />
+            <element signature="e#18385#18387#0" expanded="false" />
+            <element signature="e#19606#19638#0" expanded="false" />
+            <element signature="e#20407#20450#0" expanded="false" />
+            <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="e#23796#23808#0" expanded="false" />
+            <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
           </folding>
         </state>
       </provider>

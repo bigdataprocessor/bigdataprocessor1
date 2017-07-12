@@ -95,7 +95,7 @@ class ObjectTracker implements Runnable
         region5D.offset = p0offset;
         region5D.size = pSize;
         region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = getDataCube(imp, region5D, trackingSettings.background, nThreads);
+        imp0 = Utils.getDataCube(imp, region5D, trackingSettings.background, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
         // filter the image to ease the tracking
@@ -171,7 +171,7 @@ class ObjectTracker implements Runnable
             region5D.offset = p1offset;
             region5D.size = pSize;
             region5D.subSampling = trackingSettings.subSamplingXYZ;
-            imp1 = getDataCube(imp, region5D, trackingSettings.background, nThreads);
+            imp1 = Utils.getDataCube(imp, region5D, trackingSettings.background, nThreads);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
             // filter image
@@ -301,24 +301,6 @@ class ObjectTracker implements Runnable
     }
 
 
-    private ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int background, int nThreads)
-    {
-        ImagePlus dataCube = null;
-
-        if(imp.getStack() instanceof VirtualStackOfStacks)
-        {
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            dataCube = vss.getDataCube(region5D, background, nThreads);
-        }
-        else
-        {
-            dataCube = Utils.getDataCubeFromImagePlus(imp, region5D);
-        }
-
-        //dataCube.show();
-
-        return(dataCube);
-    };
 
     private Point3D compute16bitShiftUsingIterativeCenterOfMass(ImageStack stack,
                                                                 double trackingFactor,

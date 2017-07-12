@@ -181,8 +181,8 @@ public class Utils {
             }
         }
         ImagePlus imp2 = imp.createImagePlus();
-        imp2.setStack("DUP_"+imp.getTitle(), stack2);
-        imp2.setDimensions(lastC-firstC+1, lastZ-firstZ+1, lastT-firstT+1);
+        imp2.setStack("DUP_" + imp.getTitle(), stack2);
+        imp2.setDimensions(lastC - firstC + 1, lastZ - firstZ + 1, lastT - firstT + 1);
         imp2.setOpenAsHyperStack(true);
 
         return imp2;
@@ -310,6 +310,25 @@ public class Utils {
 
     }
 
+
+    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int background, int nThreads)
+    {
+        ImagePlus dataCube = null;
+
+        if(imp.getStack() instanceof VirtualStackOfStacks)
+        {
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            dataCube = vss.getDataCube(region5D, background, nThreads);
+        }
+        else
+        {
+            dataCube = getDataCubeFromImagePlus(imp, region5D);
+        }
+
+        //dataCube.show();
+
+        return(dataCube);
+    };
 
 
 }
