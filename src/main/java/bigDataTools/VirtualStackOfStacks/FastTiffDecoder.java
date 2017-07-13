@@ -1020,6 +1020,7 @@ public class FastTiffDecoder {
         return fi;
     }
 
+
     FileInfoSer onlyReadStripsFromIFD(long[] relativeStripInfoLocations , Boolean fastParsingWorked ) throws IOException {
 
         FileInfoSer fi = new FileInfoSer();
@@ -1085,7 +1086,7 @@ public class FastTiffDecoder {
         // TODO: I don't understand below line
         if (count > 1 && ( fi.stripOffsets[(int) count - 1] < fi.stripOffsets[0] )) {
             fi.offset = fi.stripOffsets[(int) count - 1];
-            logger.info("Weird line...");
+            logger.warning("Weird line... " + fi.fileName);
         }
 
         //
