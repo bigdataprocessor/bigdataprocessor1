@@ -184,9 +184,10 @@ public class DataStreamingTools {
             });
             thread.start();
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            logger.error(e.toString());
+            logger.error("DataStreamingTools:openFromDirectory:ParseFilesIntoVirtualStack: "+e.toString());
         }
 
         return( imp );
@@ -1095,6 +1096,10 @@ public class DataStreamingTools {
             {
                 for (int z = 0; z < nZ; z++)
                 {
+                    if ( infos[c][t][z] == null )
+                    {
+                        int a = 1;
+                    }
                     croppedInfos[c][t-tMin][z] = new FileInfoSer( infos[c][t][z] );
                     if (croppedInfos[c][t-tMin][z].isCropped)
                     {

@@ -170,69 +170,86 @@ public class VirtualStackOfStacks extends ImageStack {
 
         if ( f.exists() )
         {
-            try
+            if (fileType.equals(Utils.FileType.TIFF_STACKS.toString()))
             {
-                if (fileType.equals(Utils.FileType.TIFF_STACKS.toString()))
+                ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][0]);
+                try
                 {
-                    ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][0]);
                     info = ftd.getTiffInfo();
-                    // add missing information to first IFD
-                    info[0].fileName = ctzFileList[c][t][0];
-                    info[0].directory = channelFolders[c] + "/"; // relative path to main directory
-                    info[0].fileTypeString = fileType;
-
-                    infoCT = new FileInfoSer[nZ];
-                    for (z = 0; z < nZ; z++)
-                    {
-                        infoCT[z] = new FileInfoSer( info[0] ); // copy first IFD for general info
-                        // adapt information related to where the data is stored in this plane
-                        infoCT[z].offset = info[z].offset;
-                        infoCT[z].stripLengths = info[z].stripLengths;
-                        infoCT[z].stripOffsets = info[z].stripOffsets;
-                        //infoCT[z].rowsPerStrip = info[z].rowsPerStrip; // only read for first IFD!
-
-                    }
-
-                    infos[c][t] = infoCT;
-
                 }
-                else if (fileType.equals(Utils.FileType.HDF5.toString()))
+                catch (Exception e)
                 {
-                    //
-                    // construct a FileInfoSer
-                    // todo: this could be much leaner
-                    // e.g. the nX, nY and bit depth
-                    //
-                    infoCT = new FileInfoSer[nZ];
-                    for (z = 0; z < nZ; z++)
-                    {
-                        infoCT[z] = new FileInfoSer();
-                        infoCT[z].fileName = ctzFileList[c][t][z];
-                        infoCT[z].directory = channelFolders[c] + "/";
-                        infoCT[z].width = nX;
-                        infoCT[z].height = nY;
-                        infoCT[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
-                        infoCT[z].h5DataSet = h5DataSet;
-                        infoCT[z].fileTypeString = fileType;
-                    }
+                    logger.error("Error parsing: "+ directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
+                    logger.warning("setInfoFromFile: " + e.toString());
+                }
 
-                    infos[c][t] = infoCT;
-                }
-                else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+                if( info.length != nZ )
                 {
-                    ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][z]);
-                    infos[c][t][z] = ftd.getTiffInfo()[0];
-                    infos[c][t][z].directory = channelFolders[c] + "/"; // relative path to main directory
-                    infos[c][t][z].fileName = ctzFileList[c][t][z];
-                    infos[c][t][z].fileTypeString = fileType;
+                    logger.error("Inconsistent number of z-planes in: "+ directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
                 }
+
+                // add missing information to first IFD
+                info[0].fileName = ctzFileList[c][t][0];
+                info[0].directory = channelFolders[c] + "/"; // relative path to main directory
+                info[0].fileTypeString = fileType;
+
+                infoCT = new FileInfoSer[nZ];
+                for (z = 0; z < nZ; z++)
+                {
+                    infoCT[z] = new FileInfoSer( info[0] ); // copy first IFD for general info
+                    // adapt information related to where the data is stored in this plane
+                    infoCT[z].offset = info[z].offset;
+                    infoCT[z].stripLengths = info[z].stripLengths;
+                    infoCT[z].stripOffsets = info[z].stripOffsets;
+                    //infoCT[z].rowsPerStrip = info[z].rowsPerStrip; // only read for first IFD!
+                }
+
+                infos[c][t] = infoCT;
 
             }
-            catch (Exception e)
+            else if (fileType.equals(Utils.FileType.HDF5.toString()))
             {
-                logger.error("Error: " + e.toString());
+                //
+                // construct a FileInfoSer
+                // todo: this could be much leaner
+                // e.g. the nX, nY and bit depth
+                //
+                infoCT = new FileInfoSer[nZ];
+                for (z = 0; z < nZ; z++)
+                {
+                    infoCT[z] = new FileInfoSer();
+                    infoCT[z].fileName = ctzFileList[c][t][z];
+                    infoCT[z].directory = channelFolders[c] + "/";
+                    infoCT[z].width = nX;
+                    infoCT[z].height = nY;
+                    infoCT[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
+                    infoCT[z].h5DataSet = h5DataSet;
+                    infoCT[z].fileTypeString = fileType;
+                }
+
+                infos[c][t] = infoCT;
             }
+            else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+            {
+                ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][z]);
+                try
+                {
+                    infos[c][t][z] = ftd.getTiffInfo()[0];
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                infos[c][t][z].directory = channelFolders[c] + "/"; // relative path to main directory
+                infos[c][t][z].fileName = ctzFileList[c][t][z];
+                infos[c][t][z].fileTypeString = fileType;
+            }
+
         }
+        else
+        {
+            logger.error("Error opening: " + directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
+        }
+
     }
 
     /** Does nothing. */
@@ -294,7 +311,8 @@ public class VirtualStackOfStacks extends ImageStack {
      The method is synchronized to avoid that two threads try to write
      into the same file.
      */
-    public void setAndSaveBytePixels(byte[] pixels, Region5D region5D) {
+    public void setAndSaveBytePixels(byte[] pixels, Region5D region5D) throws IOException
+    {
 
         int c = region5D.c;
         int t = region5D.t;
