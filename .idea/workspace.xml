@@ -4,9 +4,6 @@
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/FastTiffDecoder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -204,8 +201,8 @@
       <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38972163">
-              <caret line="187" column="46" selection-start-line="187" selection-start-column="46" selection-end-line="187" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.6072664">
+              <caret line="511" column="6" selection-start-line="511" selection-start-column="6" selection-end-line="511" selection-end-column="6" />
               <folding>
                 <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
@@ -215,6 +212,7 @@
                 <element signature="e#4863#4864#0" expanded="true" />
                 <element signature="method#numberOfUnparsedFiles#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="e#7304#7306#0" expanded="false" />
                 <element signature="method#addSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
@@ -229,7 +227,6 @@
                 <element signature="method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
                 <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
                 <element signature="e#17794#17854#0" expanded="false" />
                 <element signature="e#18225#18227#0" expanded="false" />
                 <element signature="e#18606#18608#0" expanded="false" />
@@ -530,7 +527,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dataStreamingTools" />
+              <option name="myItemId" value="VirtualStackOfStacks" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -798,7 +795,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -810,13 +807,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27753934" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37108433" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15662651" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1463,8 +1460,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38972163">
-          <caret line="187" column="46" selection-start-line="187" selection-start-column="46" selection-end-line="187" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.6072664">
+          <caret line="511" column="6" selection-start-line="511" selection-start-column="6" selection-end-line="511" selection-end-column="6" />
           <folding>
             <element signature="method#VirtualStackOfStacks#1;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="method#logStatus#0;class#VirtualStackOfStacks#0" expanded="true" />
@@ -1474,6 +1471,7 @@
             <element signature="e#4863#4864#0" expanded="true" />
             <element signature="method#numberOfUnparsedFiles#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="method#setInfoFromFile#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="e#7304#7306#0" expanded="false" />
             <element signature="method#addSlice#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
@@ -1488,7 +1486,6 @@
             <element signature="method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
             <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-            <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
             <element signature="e#17794#17854#0" expanded="false" />
             <element signature="e#18225#18227#0" expanded="false" />
             <element signature="e#18606#18608#0" expanded="false" />
