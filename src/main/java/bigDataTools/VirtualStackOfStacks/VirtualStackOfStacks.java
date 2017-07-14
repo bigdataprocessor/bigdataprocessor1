@@ -508,8 +508,16 @@ public class VirtualStackOfStacks extends ImageStack {
               logger.info("channel: " + region5D.c);
         }
 
+        // check stuff
+        if ( region5D.c < 0 )
+            logger.error("Selected channel is negative: " + region5D.c);
+
+        if ( region5D.t < 0 )
+            logger.error("Selected time-point is negative: " + region5D.t);
+
+
         // make sure we have all the file-info data
-        if (infos[region5D.c][region5D.t] == null) {
+        if ( infos[region5D.c][region5D.t] == null ) {
             // stack info not yet loaded => get it!
             setInfoFromFile(region5D.t, region5D.c, 0);
         }
@@ -519,9 +527,13 @@ public class VirtualStackOfStacks extends ImageStack {
               z < (int)region5D.offset.getZ() + (int)region5D.size.getZ();
               ++z )
         {
-            if (infos[region5D.c][region5D.t][z] == null) {
-                // file info not yet loaded => get it!
-                setInfoFromFile(region5D.t, region5D.c, z);
+            if ( (z > -1) && (z < nZ ) ) // because during tracking one could ask for out-of-bounds z-planes
+            {
+                if (infos[region5D.c][region5D.t][z] == null)
+                {
+                    // file info not yet loaded => get it!
+                    setInfoFromFile(region5D.t, region5D.c, z);
+                }
             }
         }
 
