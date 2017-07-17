@@ -67,7 +67,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     final String STREAMfromInfoFile = "Stream from info file";
     JButton streamFromInfoFile =  new JButton(STREAMfromInfoFile);
 
-    final String LOAD_FULLY_INTO_RAM = "Load current stream fully into RAM";
+    final String LOAD_FULLY_INTO_RAM = "Load into RAM";
     JButton duplicateToRAM =  new JButton(LOAD_FULLY_INTO_RAM);
 
     final String CROPasNewStream = "Crop as new stream";
@@ -152,7 +152,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         mainPanels.get(k).add(new JSeparator(SwingConstants.HORIZONTAL));
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
-        panels.get(j).add(new JLabel("LOAD FULLY"));
+        panels.get(j).add(new JLabel("LOAD INTO RAM"));
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
