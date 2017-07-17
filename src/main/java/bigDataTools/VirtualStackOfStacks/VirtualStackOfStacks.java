@@ -542,7 +542,7 @@ public class VirtualStackOfStacks extends ImageStack {
         {
             fi = infos[region5D.c][region5D.t][(int) region5D.offset.getZ()];
         }
-        else // can happen during object tracking
+        else // requesting negative z can happen during object tracking
         {
             fi = infos[region5D.c][region5D.t][0];
         }

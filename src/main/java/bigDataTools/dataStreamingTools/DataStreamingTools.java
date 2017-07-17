@@ -115,7 +115,7 @@ public class DataStreamingTools {
             boolean isShowImage)
     {
 
-        if ( namingScheme.contains("<C") )
+        if ( namingScheme.contains("<Z") )
         {
             if ( ! setMissingInfos(
                     imageDataInfo,
@@ -204,6 +204,10 @@ public class DataStreamingTools {
         int[] ctzMax = new int[3];
         int[] ctzPad = new int[3];
         int[] ctzSize = new int[3];
+        boolean hasC = false;
+        boolean hasT = false;
+        boolean hasZ = false;
+
 
         Matcher matcher;
 
@@ -215,29 +219,36 @@ public class DataStreamingTools {
         matcher = Pattern.compile(".*<C(\\d+)-(\\d+)>.*").matcher( namingPattern );
         if ( matcher.matches() )
         {
+            hasC = true;
             ctzMin[0] = Integer.parseInt( matcher.group(1) );
-            ctzMax[0] = Integer.parseInt( matcher.group(2) );
+            ctzMax[0] = Integer.parseInt(matcher.group(2));
             ctzPad[0] = matcher.group(1).length();
-            imageDataInfo.channelFolders = new String[]{""};
         }
         else
         {
-            // TODO
+            ctzMin[0] = ctzMax[0] = ctzPad[0] = 0;
         }
+        imageDataInfo.channelFolders = new String[]{""};
 
         // frames
         matcher = Pattern.compile(".*<T(\\d+)-(\\d+)>.*").matcher( namingPattern );
         if ( matcher.matches() )
         {
+            hasT = true;
             ctzMin[1] = Integer.parseInt( matcher.group(1) );
             ctzMax[1] = Integer.parseInt( matcher.group(2) );
             ctzPad[1] = matcher.group(1).length();
+        }
+        else
+        {
+            ctzMin[1] = ctzMax[1] = ctzPad[1] = 0;
         }
 
         // slices
         matcher = Pattern.compile(".*<Z(\\d+)-(\\d+)>.*").matcher( namingPattern );
         if ( matcher.matches() )
         {
+            hasZ = true;
             ctzMin[2] = Integer.parseInt( matcher.group(1) );
             ctzMax[2] = Integer.parseInt( matcher.group(2) );
             ctzPad[2] = matcher.group(1).length();
@@ -276,20 +287,35 @@ public class DataStreamingTools {
                 for (int z = ctzMin[2]; z <= ctzMax[2] ; z++)
                 {
 
-                    String fileName;
+                    String fileName = "";
 
-                    fileName = namingPattern.replaceFirst(
-                            "<C(\\d+)-(\\d+)>",
-                            String.format("%1$0" + ctzPad[0] + "d", c));
-
-                    fileName = fileName.replaceFirst(
-                            "<T(\\d+)-(\\d+)>",
-                            String.format("%1$0" + ctzPad[1] + "d", t));
-
-                    if ( imageDataInfo.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ))
-                        fileName = fileName.replaceFirst(
+                    if (imageDataInfo.fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+                    {
+                        fileName = namingPattern.replaceFirst(
                                 "<Z(\\d+)-(\\d+)>",
                                 String.format("%1$0" + ctzPad[2] + "d", z));
+                    }
+                    else
+                    {
+                        logger.error("DataStreamingTools:setMissingInfos:unsupported file type");
+                    }
+
+
+                    if ( hasC )
+                    {
+                        fileName = fileName.replaceFirst(
+                                "<C(\\d+)-(\\d+)>",
+                                String.format("%1$0" + ctzPad[0] + "d", c));
+                    }
+
+                    if ( hasT )
+                    {
+                        fileName = fileName.replaceFirst(
+                                "<T(\\d+)-(\\d+)>",
+                                String.format("%1$0" + ctzPad[1] + "d", t));
+                    }
+
+
 
                     imageDataInfo.ctzFileList[c-ctzMin[0]][t-ctzMin[1]][z-ctzMin[2]] = fileName;
 
@@ -321,7 +347,7 @@ public class DataStreamingTools {
 
         if ( ! isObtainedImageDataInfo )
         {
-            logger.error("Could not open data set. There needs to be at least one file.");
+            logger.error("Could not open data set. There needs to be at least one file matching the naming scheme.");
         }
 
         return isObtainedImageDataInfo;
@@ -1098,7 +1124,9 @@ public class DataStreamingTools {
                 {
                     if ( infos[c][t][z] == null )
                     {
-                        int a = 1;
+                        // for streaming from single tiffs it can be
+                        // that some planes are not parsed yet
+                        vss.setInfoFromFile(c, t, z);
                     }
                     croppedInfos[c][t-tMin][z] = new FileInfoSer( infos[c][t][z] );
                     if (croppedInfos[c][t-tMin][z].isCropped)
@@ -1226,7 +1254,7 @@ public class DataStreamingTools {
         List<Future> futures = new ArrayList<>();
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
-            futures.add(es.submit(new SaveVSSFrame(this, t, savingSettings)));
+            futures.add( es.submit( new SaveVSSFrame(this, t, savingSettings) ) );
         }
 
         // Monitor the progress

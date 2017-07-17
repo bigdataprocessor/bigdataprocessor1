@@ -44,6 +44,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
+            "<Z0000-0009>.tif",
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif",
             ".*_C<c>_T<t>.tif",
             "Cam_<c>_<t>.h5",

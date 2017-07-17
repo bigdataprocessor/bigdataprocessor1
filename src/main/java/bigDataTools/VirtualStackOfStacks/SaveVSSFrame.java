@@ -48,18 +48,21 @@ public class SaveVSSFrame implements Runnable {
         this.savingSettings = savingSettings;
     }
 
-
     public void run()
     {
 
-
         for (int c = 0; c < savingSettings.imp.getNChannels(); c++) {
+
+            if ( dataStreamingTools.interruptSavingThreads )
+            {
+                logger.info("Stopping saving thread.");
+                return;
+            }
 
             // Load
             //
             VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
             ImagePlus impChannelTime = vss.getFullFrame(t, c, savingSettings.nThreads);
-
 
             // Convert
             //
@@ -77,7 +80,7 @@ public class SaveVSSFrame implements Runnable {
 
                 if ( dataStreamingTools.interruptSavingThreads )
                 {
-                    logger.info("Interrupted saving thread.");
+                    logger.info("Stopping saving thread.");
                     return;
                 }
 
@@ -338,7 +341,14 @@ public class SaveVSSFrame implements Runnable {
                 omexml.setPixelsID("Pixels:0", 0);
                 omexml.setPixelsBinDataBigEndian(Boolean.TRUE, 0, 0);
                 omexml.setPixelsDimensionOrder(DimensionOrder.XYZCT, 0);
-                omexml.setPixelsType(PixelType.UINT16, 0);
+                if ( imp.getBytesPerPixel() == 2)
+                {
+                    omexml.setPixelsType(PixelType.UINT16, 0);
+                }
+                else if ( imp.getBytesPerPixel() == 1 )
+                {
+                    omexml.setPixelsType(PixelType.UINT8, 0);
+                }
                 omexml.setPixelsSizeX(new PositiveInteger(imp.getWidth()), 0);
                 omexml.setPixelsSizeY(new PositiveInteger(imp.getHeight()), 0);
                 omexml.setPixelsSizeZ(new PositiveInteger(imp.getNSlices()), 0);

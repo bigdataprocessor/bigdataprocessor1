@@ -162,11 +162,11 @@ public class BigDataTracker {
 
             }
 
-            ImagePlus impCroppedAlongObject = null;
 
             // TODO: convert to Region5D[] for more consistency ?
 
             // get a new view on the tracked data
+            ImagePlus impCroppedAlongObject = null;
             if ( track.getImp().getStack() instanceof VirtualStackOfStacks )
             {
                 impCroppedAlongObject = DataStreamingTools.getCroppedVSS(
@@ -178,13 +178,13 @@ public class BigDataTracker {
             }
             else
             {
-                impCroppedAlongObject = getCroppedImagePlus(track.getImp(),
+                logger.error("Your image is RAM resident...not sure this works yet...");
+                impCroppedAlongObject = getCroppedImagePlus(
+                        track.getImp(),
                         trackOffsets.toArray(new Point3D[trackOffsets.size()]),
-                        pCropSize, track.getTmin(), track.getTmax());
-
-                logger.error("Currently not supported for non VSS.");
-                return null;
-                // construct cropped view from "normal" ImagePlus
+                        pCropSize,
+                        track.getTmin(),
+                        track.getTmax());
             }
 
 
@@ -214,7 +214,7 @@ public class BigDataTracker {
                 Region5D region5D = new Region5D();
                 region5D.t = t;
                 region5D.c = c;
-                region5D.offset = po[t-tMax];
+                region5D.offset = po[t-tMin];
                 region5D.size = ps;
                 region5D.subSampling = new Point3D(1,1,1);
 
