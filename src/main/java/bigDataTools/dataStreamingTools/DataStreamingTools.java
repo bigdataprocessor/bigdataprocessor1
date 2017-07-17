@@ -178,7 +178,7 @@ public class DataStreamingTools {
                 {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
-                            "Parsed files: ",
+                            "Parsed stacks: ",
                             2000);
                 }
             });
@@ -1127,6 +1127,7 @@ public class DataStreamingTools {
                         // for streaming from single tiffs it can be
                         // that some planes are not parsed yet
                         vss.setInfoFromFile(c, t, z);
+                        logger.progress("Parsing file header: ", "c"+c+" t"+t+" z"+z);
                     }
                     croppedInfos[c][t-tMin][z] = new FileInfoSer( infos[c][t][z] );
                     if (croppedInfos[c][t-tMin][z].isCropped)
@@ -1206,7 +1207,8 @@ public class DataStreamingTools {
         // Initialize RAM image
         //
         ImageStack stack = imp.getStack();
-        ImageStack stackRAM = ImageStack.create(stack.getWidth(), stack.getHeight(), stack.getSize(), stack.getBitDepth());
+        ImageStack stackRAM = ImageStack.create(stack.getWidth(), stack.getHeight(), stack.getSize(), stack
+                .getBitDepth());
         ImagePlus impRAM = new ImagePlus("RAM", stackRAM);
         int[] dim = imp.getDimensions();
         impRAM.setDimensions(dim[2], dim[3], dim[4]);
@@ -1243,6 +1245,43 @@ public class DataStreamingTools {
 
     }
 
+    public void saveVSSAsPlanes(SavingSettings savingSettings)
+    {
+
+        interruptSavingThreads = false;
+
+        // Do the jobs
+        //
+        ExecutorService es = Executors.newFixedThreadPool(savingSettings.nThreads);
+        List<Future> futures = new ArrayList<>();
+        for ( int c = 0; c < savingSettings.imp.getNChannels(); c++)
+        {
+            for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
+            {
+                for (int z = 0; z < savingSettings.imp.getNSlices(); z++)
+                {
+                    futures.add( es.submit( new SaveVSSPlane(this, c, t, z, savingSettings) ) );
+                }
+            }
+        }
+
+        // Monitor the progress
+        //
+        Thread thread = new Thread(new Runnable() {
+            public void run()
+            {
+                MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
+                        futures,
+                        "Saved to disk: ",
+                        2000);
+            }
+        });
+        thread.start();
+
+
+    }
+
+
     public void saveVSSAsStacks(SavingSettings savingSettings)
     {
 
@@ -1252,6 +1291,7 @@ public class DataStreamingTools {
         //
         ExecutorService es = Executors.newFixedThreadPool(savingSettings.nThreads);
         List<Future> futures = new ArrayList<>();
+
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
             futures.add( es.submit( new SaveVSSFrame(this, t, savingSettings) ) );
@@ -1272,7 +1312,6 @@ public class DataStreamingTools {
 
 
     }
-
 
     public void cancelSaving()
     {

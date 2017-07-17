@@ -55,10 +55,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     final String BDV = "Big Data Viewer";
     JButton viewInBigDataViewer =  new JButton(BDV);
 
-    final String SAVE = "Save";
+    final String SAVE = "Save as stacks";
     JButton save = new JButton(SAVE);
 
-    final String STOP_SAVING = "Stop Saving";
+    final String SAVE_PLANES = "Save as planes";
+    JButton savePlanes = new JButton(SAVE_PLANES);
+
+    final String STOP_SAVING = "Stop saving";
     JButton stopSaving =  new JButton(STOP_SAVING);
 
     final String STREAMfromFolder = "Stream from folder";
@@ -226,6 +229,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         save.setActionCommand(SAVE);
         save.addActionListener(this);
         panels.get(j).add(save);
+        savePlanes.setActionCommand(SAVE_PLANES);
+        savePlanes.addActionListener(this);
+        panels.get(j).add(savePlanes);
         stopSaving.setActionCommand(STOP_SAVING);
         stopSaving.addActionListener(this);
         panels.get(j).add(stopSaving);
@@ -235,6 +241,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         // Viewing
         //
+        /*
         mainPanels.add( new JPanel() );
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
@@ -244,7 +251,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         panels.get(j).add(viewInBigDataViewer);
         mainPanels.get(k).add(panels.get(j++));
 
+
         jtp.add("Viewing", mainPanels.get(k++));
+        */
 
         // Misc
         //
@@ -447,6 +456,71 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     dataStreamingToolsSavingThreads.saveVSSAsStacks(savingSettings);
 
                 }
+
+            }
+
+        }
+        else if ( e.getActionCommand().equals(SAVE_PLANES) )
+        {
+
+            ImagePlus imp = IJ.getImage();
+            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+
+            Utils.FileType fileType = (Utils.FileType) comboFileTypeForSaving.getSelectedItem();
+
+
+            // Check that all image files have been parsed
+            //
+            if (vss.numberOfUnparsedFiles() > 0)
+            {
+                logger.error("There are still " + vss.numberOfUnparsedFiles() +
+                        " files in the folder that have not been parsed yet.\n" +
+                        "Please try again later (check ImageJ's status bar).");
+                return;
+            }
+
+            if ( fileType.equals(Utils.FileType.SERIALIZED_HEADERS) ||  fileType.equals(Utils.FileType.HDF5) )
+            {
+
+                logger.error("Only saving as Tiff files is supported for single planes; " +
+                        "please change your file-type selection.");
+            }
+
+
+            fc = new JFileChooser(vss.getDirectory());
+            int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
+            if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                final File file = fc.getSelectedFile();
+
+
+                final int ioThreads = new Integer(tfIOThreads.getText());
+
+                // Check that there is enough memory to hold the data in RAM while saving
+                //
+                //if( ! Utils.checkMemoryRequirements(imp, Math.min(ioThreads, imp.getNFrames())) ) return;
+
+                String compression = "";
+                if(cbLZW.isSelected())
+                    compression="LZW";
+
+                SavingSettings savingSettings = new SavingSettings();
+                savingSettings.imp = imp;
+                savingSettings.bin = tfBinning.getText();
+                savingSettings.saveVolume = cbSaveVolume.isSelected();
+                savingSettings.saveProjection = cbSaveProjection.isSelected();
+                savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
+                savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
+                savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
+                savingSettings.filePath = file.getAbsolutePath();
+                savingSettings.fileType = fileType;
+                savingSettings.compression = compression;
+                savingSettings.rowsPerStrip = rowsPerStrip;
+                savingSettings.nThreads = ioThreads;
+
+                dataStreamingToolsSavingThreads = new DataStreamingTools();
+                dataStreamingToolsSavingThreads.saveVSSAsPlanes(savingSettings);
 
             }
 
