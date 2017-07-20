@@ -170,7 +170,6 @@ public class DataStreamingTools {
                 futures.add( es.submit( new ParseFilesIntoVirtualStack(imp, t, isShowImage) ) );
             }
 
-
             // Monitor the progress
             //
             Thread thread = new Thread(new Runnable() {
@@ -314,8 +313,6 @@ public class DataStreamingTools {
                                 "<T(\\d+)-(\\d+)>",
                                 String.format("%1$0" + ctzPad[1] + "d", t));
                     }
-
-
 
                     imageDataInfo.ctzFileList[c-ctzMin[0]][t-ctzMin[1]][z-ctzMin[2]] = fileName;
 
@@ -617,13 +614,8 @@ public class DataStreamingTools {
             imageDataInfo.nZ = nZ;
             imageDataInfo.nC = nC;
             imageDataInfo.nT = nT;
-
-
-
         }
-
         else // tif stacks or h5 stacks
-
         {
             boolean hasCTPattern = false;
 
@@ -1344,6 +1336,20 @@ public class DataStreamingTools {
             if ( t == 0 && isShowImage )
             {
                 showImageAndInfo(vss);
+            }
+
+            // single plane parsing
+            FileInfoSer[][][] infos = vss.getFileInfosSer();
+            if ( infos[0][0][0].fileTypeString.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
+            {
+                for ( int c = 0; c < vss.getChannels(); c++ )
+                {
+                    for (int z = 0; z < infos[t][c].length; z++)
+                    {
+                        logger.progress("Parsing plane:", " t: " + t + " c: " + c + " z: " + z  );
+                        vss.setInfoFromFile(t, c, z, false);
+                    }
+                }
             }
 
         }

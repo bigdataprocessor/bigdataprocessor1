@@ -157,8 +157,13 @@ public class VirtualStackOfStacks extends ImageStack {
         return numberOfUnparsedFiles;
     }
 
-    /** Adds an image stack from file infos */
     public void setInfoFromFile(int t, int c, int z)
+    {
+        setInfoFromFile( t, c, z, true);
+    }
+
+    /** Adds an image stack from file infos */
+    public void setInfoFromFile(int t, int c, int z, boolean throwError)
     {
         FileInfoSer[] info = null;
         FileInfoSer[] infoCT = null;
@@ -247,7 +252,10 @@ public class VirtualStackOfStacks extends ImageStack {
         }
         else
         {
-            logger.error("Error opening: " + directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
+            if( throwError )
+            {
+                logger.error("Error opening: " + directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
+            }
         }
 
     }
@@ -347,7 +355,7 @@ public class VirtualStackOfStacks extends ImageStack {
             }
             else
             {
-                setInfoFromFile(t, c, z);
+                setInfoFromFile( t, c, z );
             }
 
         }
