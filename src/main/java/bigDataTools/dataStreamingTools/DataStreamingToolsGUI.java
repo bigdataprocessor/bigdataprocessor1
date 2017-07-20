@@ -345,7 +345,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                             h5DataSet,
                             new ImageDataInfo(),
                             nIOthreads,
-                            true);
+                            true,
+                            false);
                 }
             });
             t1.start();

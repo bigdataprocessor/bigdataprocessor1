@@ -112,11 +112,15 @@ public class DataStreamingTools {
             String h5DataSetName,
             ImageDataInfo imageDataInfo,
             int numIOThreads,
-            boolean isShowImage)
+            boolean showImage,
+            boolean partialDataSet)
     {
 
         if ( namingScheme.contains("<Z") )
         {
+            // TODO: change below logic somehow (maybe via GUI?)
+            partialDataSet = true;
+
             if ( ! setMissingInfos(
                     imageDataInfo,
                     directory,
@@ -157,17 +161,39 @@ public class DataStreamingTools {
 
         ImagePlus imp = new ImagePlus("stream", stack);
 
+
         // obtain file header informations for all c, t, z
         //
         try
         {
+            boolean throwFileNotExistsError = partialDataSet ? false : true;
+
             // Spawn the threads
             //
             ExecutorService es = Executors.newFixedThreadPool(numIOThreads);
             List<Future> futures = new ArrayList<>();
             for (int t = 0; t < imageDataInfo.nT; t++)
             {
-                futures.add( es.submit( new ParseFilesIntoVirtualStack(imp, t, isShowImage) ) );
+                if ( imageDataInfo.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
+                {
+                    for (int z = 0; z < imageDataInfo.nZ; z++)
+                    {
+                        futures.add(
+                                es.submit(
+                                        new ParseFilesIntoVirtualStack(imp, t, z, showImage, throwFileNotExistsError)
+                                )
+                        );
+                    }
+                }
+                else
+                {
+                    // z = 0 will parse the whole stack file
+                    futures.add(
+                            es.submit(
+                                    new ParseFilesIntoVirtualStack(imp, t, 0, showImage, throwFileNotExistsError)
+                            )
+                    );
+                }
             }
 
             // Monitor the progress
@@ -177,7 +203,7 @@ public class DataStreamingTools {
                 {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
-                            "Parsed stacks: ",
+                            "Parsed files: ",
                             2000);
                 }
             });
@@ -188,6 +214,9 @@ public class DataStreamingTools {
         {
             logger.error("DataStreamingTools:openFromDirectory:ParseFilesIntoVirtualStack: "+e.toString());
         }
+
+
+
 
         return( imp );
 
@@ -1311,16 +1340,25 @@ public class DataStreamingTools {
          interruptSavingThreads = true;
     }
 
+    /**
+     * for stack-based files this will parse the information
+     * of all z-planes even if only z = 0 is specified
+      */
     class ParseFilesIntoVirtualStack implements Runnable {
         ImagePlus imp;
-        private int t;
-        private boolean isShowImage;
+        private int t, z;
+        private boolean showImage;
+        private boolean throwFileNotExistsError;
 
-        ParseFilesIntoVirtualStack(ImagePlus imp, int t, boolean isShowImage)
+        ParseFilesIntoVirtualStack(ImagePlus imp, int t, int z,
+                                   boolean isShowImage, boolean throwFileNotExistsError)
         {
             this.imp = imp;
             this.t = t;
-            this.isShowImage = isShowImage;
+            this.z = z;
+            this.showImage = isShowImage;
+            this.throwFileNotExistsError = throwFileNotExistsError;
+
         }
 
         public void run()
@@ -1330,26 +1368,12 @@ public class DataStreamingTools {
 
             for ( int c = 0; c < vss.getChannels(); c++ )
             {
-                vss.setInfoFromFile(t, c, 0);
+                vss.setInfoFromFile(t, c, z, throwFileNotExistsError);
             }
 
-            if ( t == 0 && isShowImage )
+            if ( t == 0 && z == 0 && showImage)
             {
                 showImageAndInfo(vss);
-            }
-
-            // single plane parsing
-            FileInfoSer[][][] infos = vss.getFileInfosSer();
-            if ( infos[0][0][0].fileTypeString.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
-            {
-                for ( int c = 0; c < vss.getChannels(); c++ )
-                {
-                    for (int z = 0; z < infos[t][c].length; z++)
-                    {
-                        logger.progress("Parsing plane:", " t: " + t + " c: " + c + " z: " + z  );
-                        vss.setInfoFromFile(t, c, z, false);
-                    }
-                }
             }
 
         }
@@ -1474,6 +1498,7 @@ public class DataStreamingTools {
             {
                 int nIOthreads = 10;
                 String directory = "/Users/tischi/Desktop/example-data/3d-embryo/"; // Gustavo
+                ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
                 String namingPattern = "classified--C<c>--T<t>--Z<z>.tif";
@@ -1490,7 +1515,8 @@ public class DataStreamingTools {
                         "Data",
                         imageDataInfo,
                         nIOthreads,
-                        true);
+                        true,
+                        false);
             }
         });
         t1.start();

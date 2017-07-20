@@ -24,7 +24,7 @@ public class TestStuff {
         String namingPattern = "classified--C<C00-00>--T<T00000-00000>--Z<Z00000-00900>.tif";
         bigDataTools.utils.ImageDataInfo imageDataInfo = new ImageDataInfo();
         String directory = "/Users/tischi/Desktop/vss-test/";
-        ImagePlus classifiedImage = dst.openFromDirectory(directory, namingPattern, "None", "data", imageDataInfo, 10, false);
+        ImagePlus classifiedImage = dst.openFromDirectory(directory, namingPattern, "None", "data", imageDataInfo, 10, false, true);
         new ij.ImageJ();
         classifiedImage.show();
     }
