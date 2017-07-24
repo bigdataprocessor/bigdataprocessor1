@@ -422,7 +422,7 @@ public class VirtualStackOfStacks extends ImageStack {
         if( infos[c][t][z] == null )
         {
             File f = new File(directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
-            if ( !f.exists() )
+            if ( ! f.exists() )
             {
                 ImageStack stack = ImageStack.create(nX, nY, 1, bitDepth);
                 return stack.getProcessor(1);
@@ -433,9 +433,7 @@ public class VirtualStackOfStacks extends ImageStack {
             }
         }
 
-
         FileInfoSer fi = infos[c][t][z];
-
 
         Point3D po, ps;
         po = new Point3D(0,0,z);

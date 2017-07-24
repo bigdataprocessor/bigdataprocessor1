@@ -256,7 +256,9 @@ public class DataStreamingTools {
         {
             ctzMin[0] = ctzMax[0] = ctzPad[0] = 0;
         }
-        imageDataInfo.channelFolders = new String[]{""};
+
+        imageDataInfo.channelFolders = new String[ctzMax[0] - ctzMin[0] +1];
+        Arrays.fill(imageDataInfo.channelFolders, "");
 
         // frames
         matcher = Pattern.compile(".*<T(\\d+)-(\\d+)>.*").matcher( namingPattern );
@@ -317,7 +319,7 @@ public class DataStreamingTools {
 
                     String fileName = "";
 
-                    if (imageDataInfo.fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+                    if (imageDataInfo.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString()) )
                     {
                         fileName = namingPattern.replaceFirst(
                                 "<Z(\\d+)-(\\d+)>",
