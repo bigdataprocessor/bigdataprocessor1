@@ -8,12 +8,6 @@ data duplication.
 
 Currently we support data saved as Tiff or HDF5 stacks, the latter is for instance produced by Luxendo light sheet microscopes.
 
-## Relation to the Bio-Formats plugin 
-
-- Fiji's Bio-Formats plugin does currently not support streaming from Hdf5 stacks; this is possible using the Data Streaming Tools (DST).
-- Bio-Formats does support streaming from Tiff stacks, however the DST improve this functionality by "lazy" and faster Tiff header parsing. For example, opening a folder with 500 Tiff stacks comprising 1918x1916x157 voxels each (~ 0.5TB in total) takes less than 5 seconds. 
-- Data streamed via the Bio-Formats plugin cannot be cropped; this is possible using the DST.
-
 ## Use cases
 
 - Drift correction of a 2.4 TB data set in 10-30 minutes.
