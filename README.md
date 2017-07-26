@@ -10,7 +10,7 @@ Currently we support data saved as Tiff or HDF5 stacks, the latter is for instan
 
 ## Use cases
 
-- Drift correction of a 2.4 TB data set in 10-30 minutes.
+- Computing the drift correction of a 2.4 TB data set in 10-30 minutes (that is excluding resaving the corrected data).
 
 ## Installation
 
