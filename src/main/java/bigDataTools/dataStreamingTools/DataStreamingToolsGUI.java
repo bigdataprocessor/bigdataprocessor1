@@ -31,6 +31,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JCheckBox cbSaveVolume = new JCheckBox("Save volume data");
     JCheckBox cbSaveProjection = new JCheckBox("Save projections");
     JCheckBox cbConvertTo8Bit = new JCheckBox("8-bit conversion");
+    JCheckBox cbConvertTo16Bit = new JCheckBox("16-bit conversion");
+    JCheckBox cbGating = new JCheckBox("Gate");
 
     JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
@@ -39,6 +41,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfRowsPerStrip = new JTextField("10", 3);
     JTextField tfMapTo255 = new JTextField("65535",5);
     JTextField tfMapTo0 = new JTextField("0",5);
+    JTextField tfGateMin = new JTextField("0",5);
+    JTextField tfGateMax = new JTextField("255",5);
+
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
@@ -223,6 +228,18 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         panels.get(j).add(new JLabel("0 ="));
         panels.get(j).add(tfMapTo0);
         panels.get(j).add(cbConvertTo8Bit);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        panels.get(j).add(cbConvertTo16Bit);
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        panels.get(j).add(new JLabel("Min ="));
+        panels.get(j).add(tfGateMin);
+        panels.get(j).add(new JLabel("Max ="));
+        panels.get(j).add(tfGateMax);
+        panels.get(j).add(cbGating);
         mainPanels.get(k).add(panels.get(j++));
 
         panels.add(new JPanel());
@@ -445,6 +462,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     savingSettings.saveVolume = cbSaveVolume.isSelected();
                     savingSettings.saveProjection = cbSaveProjection.isSelected();
                     savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
+                    savingSettings.convertTo16Bit = cbConvertTo16Bit.isSelected();
+                    savingSettings.gate = cbGating.isSelected();
+                    savingSettings.gateMin = Integer.parseInt(tfGateMin.getText());
+                    savingSettings.gateMax = Integer.parseInt(tfGateMax.getText());
                     savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
                     savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
                     savingSettings.filePath = file.getAbsolutePath();
@@ -454,7 +475,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     savingSettings.nThreads = ioThreads;
 
                     dataStreamingToolsSavingThreads = new DataStreamingTools();
-                    dataStreamingToolsSavingThreads.saveVSSAsStacks(savingSettings);
+                    dataStreamingToolsSavingThreads.saveVSSAsStacks( savingSettings );
 
                 }
 
@@ -495,7 +516,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             {
                 final File file = fc.getSelectedFile();
 
-
                 final int ioThreads = new Integer(tfIOThreads.getText());
 
                 // Check that there is enough memory to hold the data in RAM while saving
@@ -514,6 +534,14 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
                 savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
                 savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
+
+                /*
+                // TODO: implement below for planes
+                savingSettings.convertTo16Bit = cbConvertTo16Bit.isSelected();
+                savingSettings.gate = cbGating.isSelected();
+                savingSettings.gateMin = Integer.parseInt(tfGateMin.getText());
+                savingSettings.gateMax = Integer.parseInt(tfGateMax.getText());
+                */
                 savingSettings.filePath = file.getAbsolutePath();
                 savingSettings.fileType = fileType;
                 savingSettings.compression = compression;

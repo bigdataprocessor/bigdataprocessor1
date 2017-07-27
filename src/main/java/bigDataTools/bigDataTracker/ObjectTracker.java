@@ -118,7 +118,6 @@ class ObjectTracker implements Runnable
         if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
 
 
-
         // add track location for first image
         //
         Point3D pUpdate = Utils.computeCenterFromOffsetSize(p0offset.add(pShift), pSize);

@@ -15,6 +15,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.FileSaver;
+import ij.process.ImageProcessor;
 import loci.common.services.ServiceFactory;
 import loci.formats.ImageWriter;
 import loci.formats.meta.IMetadata;
@@ -51,7 +52,8 @@ public class SaveVSSFrame implements Runnable {
     public void run()
     {
 
-        for (int c = 0; c < savingSettings.imp.getNChannels(); c++) {
+        for (int c = 0; c < savingSettings.imp.getNChannels(); c++)
+        {
 
             if ( dataStreamingTools.interruptSavingThreads )
             {
@@ -61,15 +63,38 @@ public class SaveVSSFrame implements Runnable {
 
             // Load
             //
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
-            ImagePlus impChannelTime = vss.getFullFrame(t, c, savingSettings.nThreads);
 
+            ImagePlus impChannelTime = null;
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
+            if ( vss.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString()) )
+            {
+                // load all frames individually
+                // "duplicate()" will also handle missing frames by returning black images
+                impChannelTime = savingSettings.imp.duplicate();
+            }
+            else
+            {
+                impChannelTime = vss.getFullFrame(t, c, savingSettings.nThreads);
+            }
+
+            // Gate
+            //
+            if ( savingSettings.gate )
+            {
+                gate( impChannelTime, savingSettings.gateMin, savingSettings.gateMax );
+            }
+            
             // Convert
             //
             if ( savingSettings.convertTo8Bit )
             {
                 IJ.setMinAndMax(impChannelTime, savingSettings.mapTo0, savingSettings.mapTo255);
                 IJ.run(impChannelTime, "8-bit", "");
+            }
+
+            if ( savingSettings.convertTo16Bit )
+            {
+                IJ.run(impChannelTime, "16-bit", "");
             }
 
             // Bin, project and save
@@ -373,13 +398,22 @@ public class SaveVSSFrame implements Runnable {
                     IFD ifd = new IFD();
                     ifd.put(IFD.ROWS_PER_STRIP, rowsPerStripArray);
                     //tiffWriter.saveBytes(z, Bytes.fromShorts((short[])imp.getStack().getProcessor(z+1).getPixels(), false), ifd);
-                    tiffWriter.saveBytes(z, ShortToByteBigEndian((short[]) imp.getStack().getProcessor(z + 1).getPixels()), ifd);
+                    if ( imp.getBytesPerPixel() == 2 )
+                    {
+                        tiffWriter.saveBytes(z, ShortToByteBigEndian((short[]) imp.getStack().getProcessor(z + 1).getPixels()), ifd);
+                    }
+                    else if ( imp.getBytesPerPixel() == 1 )
+                    {
+                        tiffWriter.saveBytes(z, (byte[])(imp.getStack().getProcessor(z + 1).getPixels()), ifd);
 
+                    }
                 }
 
                 writer.close();
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 logger.error(e.toString());
             }
         }
@@ -413,6 +447,36 @@ public class SaveVSSFrame implements Runnable {
         }
 
         return buffer;
+    }
+
+    public void gate( ImagePlus imp, int min, int max )
+    {
+        ImageStack stack = imp.getStack();
+
+        for ( int i = 1; i < stack.size(); ++i )
+        {
+            if ( imp.getBitDepth() == 8 )
+            {
+                byte[] pixels = (byte[]) stack.getPixels( i );
+                for ( int j = 0; j < pixels.length; j++ )
+                {
+                    int v = pixels[j] & 0xff;
+                    pixels[j] = ( (v < min) || (v > max) ) ? 0 : pixels[j];
+                }
+            }
+
+            if ( imp.getBitDepth() == 16 )
+            {
+                short[] pixels = (short[]) stack.getPixels( i );
+                for ( int j = 0; j < pixels.length; j++ )
+                {
+                    int v = pixels[j] & 0xffff;
+                    pixels[j] = ( (v < min) || (v > max) ) ? 0 : pixels[j];
+                }
+            }
+
+        }
+
     }
 
 }

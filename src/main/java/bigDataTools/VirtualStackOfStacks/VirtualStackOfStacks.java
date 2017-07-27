@@ -504,6 +504,9 @@ public class VirtualStackOfStacks extends ImageStack {
 
     }
 
+    /*
+    Currenly only works if all files exist...
+     */
     public ImagePlus getDataCube(Region5D region5D, int background, int nThreads)   {
 
         ImagePlus impLoaded = null;
@@ -537,6 +540,7 @@ public class VirtualStackOfStacks extends ImageStack {
             {
                 if (infos[region5D.c][region5D.t][z] == null)
                 {
+                    File f = new File(directory + channelFolders[region5D.c] + "/" + ctzFileList[region5D.c][region5D.t][z]);
                     // file info not yet loaded => get it!
                     setInfoFromFile(region5D.t, region5D.c, z);
                 }

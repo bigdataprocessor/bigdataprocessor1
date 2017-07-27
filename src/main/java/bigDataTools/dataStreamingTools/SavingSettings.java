@@ -14,6 +14,9 @@ public class SavingSettings {
     public boolean saveProjection;
     public boolean convertTo8Bit;
     public int mapTo0, mapTo255;
+    public boolean convertTo16Bit;
+    public boolean gate;
+    public int gateMin, gateMax;
     public String filePath;
     public Utils.FileType fileType;
     public String compression;

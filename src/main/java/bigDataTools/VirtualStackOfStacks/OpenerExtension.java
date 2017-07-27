@@ -512,7 +512,7 @@ class OpenerExtension extends Opener {
 
             if ( fi == null )
             {
-                logger.info("Missing file; providing pixels with zeros.");
+                //logger.info("Missing file; providing pixels with zeros.");
                 return; // leave pixels in the stack black
             }
 
