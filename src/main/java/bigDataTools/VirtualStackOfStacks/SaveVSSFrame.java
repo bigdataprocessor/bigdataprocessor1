@@ -15,6 +15,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.FileSaver;
+import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
 import loci.common.services.ServiceFactory;
 import loci.formats.ImageWriter;
@@ -68,9 +69,10 @@ public class SaveVSSFrame implements Runnable {
             VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
             if ( vss.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString()) )
             {
-                // load all frames individually
-                // "duplicate()" will also handle missing frames by returning black images
-                impChannelTime = savingSettings.imp.duplicate();
+                // load all frames individually, the Duplicator
+                // will also handle missing frames by returning black images
+                Duplicator duplicator = new Duplicator();
+                impChannelTime = duplicator.run( savingSettings.imp, c+1, c+1, 1, savingSettings.imp.getNSlices(), t+1, t+1 );
             }
             else
             {
@@ -83,7 +85,7 @@ public class SaveVSSFrame implements Runnable {
             {
                 gate( impChannelTime, savingSettings.gateMin, savingSettings.gateMax );
             }
-            
+
             // Convert
             //
             if ( savingSettings.convertTo8Bit )
