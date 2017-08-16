@@ -45,14 +45,17 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfGateMax = new JTextField("255",5);
 
 
-    JComboBox filterPatternComboBox = new JComboBox(new String[] {".*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+    JComboBox filterPatternComboBox = new JComboBox(new String[] {
+            ".*",".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
             "<Z0000-0009>.tif",
-            "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif",
+            ".*--C<c>--T<t>.tif",
             ".*_C<c>_T<t>.tif",
             "Cam_<c>_<t>.h5",
+            "classified--C<C01-01>--T<T00001-00001>--Z<Z00001-01162>.tif",
+            "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
     JComboBox comboFileTypeForSaving = new JComboBox(Utils.FileType.values());
@@ -590,7 +593,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            //
+            //settings.folderElastix + "bin/elastix",
             // Check that all image files have been parsed
             //
 

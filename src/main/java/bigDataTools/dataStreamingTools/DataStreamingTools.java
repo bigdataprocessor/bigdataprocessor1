@@ -1230,8 +1230,8 @@ public class DataStreamingTools {
         // Initialize RAM image
         //
         ImageStack stack = imp.getStack();
-        ImageStack stackRAM = ImageStack.create(stack.getWidth(), stack.getHeight(), stack.getSize(), stack
-                .getBitDepth());
+        ImageStack stackRAM = ImageStack.create(stack.getWidth(), stack.getHeight(), stack.getSize(),
+                stack.getBitDepth());
         ImagePlus impRAM = new ImagePlus("RAM", stackRAM);
         int[] dim = imp.getDimensions();
         impRAM.setDimensions(dim[2], dim[3], dim[4]);

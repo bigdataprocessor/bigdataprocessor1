@@ -80,7 +80,6 @@ public class Utils {
 
 
     public static boolean checkRange(ImagePlus imp, int min, int max, String dimension)
-
     {
         // setup
         //
