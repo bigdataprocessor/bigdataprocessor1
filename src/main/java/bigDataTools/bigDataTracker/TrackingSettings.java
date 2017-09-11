@@ -19,6 +19,7 @@ public class TrackingSettings {
     public int nt;
     public int channel;
     public double trackingFactor;
-    public int background;
+    public int[] intensityGate;
+    public boolean viewRegion;
 
 }

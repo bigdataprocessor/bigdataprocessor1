@@ -450,7 +450,8 @@ public class VirtualStackOfStacks extends ImageStack {
         region5D.offset = po;
         region5D.size = ps;
         region5D.subSampling = new Point3D(1, 1, 1);
-        imp = getDataCube(region5D, 0, 1);
+        int[] intensityGate = new int[]{-1,-1};
+        imp = getDataCube(region5D, intensityGate, 1);
 
         return imp.getProcessor();
 
@@ -490,8 +491,9 @@ public class VirtualStackOfStacks extends ImageStack {
         region5D.offset = po;
         region5D.size = ps;
         region5D.subSampling = pSubSample;
+        int[] intensityGate = new int[]{-1,-1};
 
-        ImagePlus imp = getDataCube(region5D, 0, nThreads);
+        ImagePlus imp = getDataCube(region5D, intensityGate, nThreads);
 
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1)
         {
@@ -507,7 +509,7 @@ public class VirtualStackOfStacks extends ImageStack {
     /*
     Currenly only works if all files exist...
      */
-    public ImagePlus getDataCube(Region5D region5D, int background, int nThreads)   {
+    public ImagePlus getDataCube(Region5D region5D, int[] intensityGate, int nThreads)   {
 
         ImagePlus impLoaded = null;
 
@@ -646,24 +648,19 @@ public class VirtualStackOfStacks extends ImageStack {
 
         ImageStack finalStack = ImageStack.create(sx, sy, sz, fi.bytesPerPixel*8);
 
-        if( sx2>0 && sy2>0 && sz2>0 )
-        { // something was actually loaded
-
-            // subtract an image background
-            // this helps both the center of mass and the correlation
-            if( background > 0 )
+        if( sx2>0 && sy2>0 && sz2>0 ) // something was actually loaded
+        {
+            //
+            // apply intensityGate
+            // - this helps both the center of mass and the correlation
+            if( (intensityGate[0] != -1) || (intensityGate[1] != -1) )
             {
-                // an alternative here is to automatically determine the background, options are
-                // - subtract mean intensity (if the cropping region around the object is not much larger
-                // than the object itself this will highlight the bright regions in the object)
-                // int mean = computeMean16bit(impLoaded.getStack());
-                // logger.info("subtracting mean: " + mean);
-                // - compute some lower percentile of the region
-                IJ.run(impLoaded, "Subtract...", "value=" + background + " stack");
+                Utils.applyIntensityGate(impLoaded, intensityGate );
             }
 
-            // put the loaded stack into a larger stack
-            // this deals with out-of-bounds issues
+            //
+            // put the loaded stack into larger requested stack
+            // - this can be necessary when requested stack was at image boundary
             ImageStack loadedStack = impLoaded.getStack();
             for ( int z = 1; z <= loadedStack.size(); z++ ) // getProcessor is one-based
             {

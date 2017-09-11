@@ -62,7 +62,7 @@ public class H5Balint {
         //
         int quantStep = 1000;
 
-        // background offset of the camera, it's usually 100, unless bg is already subtracted
+        // intensityGate offset of the camera, it's usually 100, unless bg is already subtracted
         //
         // unsigned int bgLevel = 0;
         // unsigned int tiles = 64;

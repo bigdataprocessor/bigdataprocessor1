@@ -1,15 +1,12 @@
 package bigDataTools.bigDataTracker;
 
 import bigDataTools.Region5D;
-import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.imageFilter.DoNotFilter;
-import bigDataTools.imageFilter.FFTBandPass;
 import bigDataTools.imageFilter.ImageFilter;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
-import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
@@ -74,13 +71,7 @@ class ObjectTracker implements Runnable
         TrackTable trackTable = bigDataTracker.getTrackTable();
         ImagePlus imp =  trackingSettings.imp;
 
-        //
-        // track first time-point by center of mass
-        //
-
-        // get selected track coordinates
-        // load more data than the user selected
-        pSize = track.getObjectSize().multiply(trackingSettings.trackingFactor);
+        pSize = track.getObjectSize().multiply( trackingSettings.trackingFactor );
         // only one slice
         if ( imp.getNSlices() == 1 ) pSize = new Point3D( pSize.getX(), pSize.getY(), 1);
 
@@ -95,48 +86,62 @@ class ObjectTracker implements Runnable
         region5D.offset = p0offset;
         region5D.size = pSize;
         region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube(imp, region5D, trackingSettings.background, nThreads);
+        imp0 = Utils.getDataCube(imp, region5D, trackingSettings.intensityGate, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
-        // filter the image to ease the tracking
+        if( trackingSettings.viewRegion )
+        {
+            imp0.show();
+        }
+
+        //
+        // filter image to ease tracking
         //
         imp0 = imageFilter.filter(imp0);
 
-        // iteratively compute the shift of the center of mass relative to the center of the image stack
-        // using only half the image size for iteration
-        /*
-        startTime = System.currentTimeMillis();
-        pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(),
-                trackingSettings.trackingFactor,
-                trackingSettings.iterationsCenterOfMass);
-        elapsedProcessingTime = System.currentTimeMillis() - startTime;
-
-        // correct for sub-sampling
         //
-        pShift = Utils.multiplyPoint3dComponents(pShift,
-                trackingSettings.subSamplingXYZ);
-        // no z-shift if only one slice
-        if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
-        */
+        // Correct selected point (only for center of mass tracking)
+        //
+        if (trackingSettings.trackingMethod.equals("center of mass"))
+        {
+            startTime = System.currentTimeMillis();
+            // iteratively compute the shift of the center of mass relative to the center of the image stack
+            // using only half the image size for iteration
+            pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(),
+                    trackingSettings.trackingFactor,
+                    trackingSettings.iterationsCenterOfMass);
+            elapsedProcessingTime = System.currentTimeMillis() - startTime;
 
-        elapsedProcessingTime = 0;
-        pShift = new Point3D(0.0,0.0,0.0);
+            // correct for sub-sampling
+            //
+            pShift = Utils.multiplyPoint3dComponents(pShift,
+                    trackingSettings.subSamplingXYZ);
+            // no z-shift if only one slice
+            if (imp.getNSlices() == 1) pShift = new Point3D(pShift.getX(), pShift.getY(), 0);
+        }
+        else
+        {
+            elapsedProcessingTime = 0;
+            pShift = new Point3D(0.0, 0.0, 0.0);
+        }
 
 
-        // add track location for first image
+        //
+        // store track location for first image
         //
         Point3D pUpdate = Utils.computeCenterFromOffsetSize(p0offset.add(pShift), pSize);
 
 
+        //
         // store results
         //
         publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt,
                 elapsedReadingTime, elapsedProcessingTime);
 
+
         //
         // compute shifts for following time-points
         //
-
         boolean finish = false;
         int tMax = tStart + nt - 1;
         int tPrevious = tStart;
@@ -175,7 +180,7 @@ class ObjectTracker implements Runnable
             region5D.offset = p1offset;
             region5D.size = pSize;
             region5D.subSampling = trackingSettings.subSamplingXYZ;
-            imp1 = Utils.getDataCube(imp, region5D, trackingSettings.background, nThreads);
+            imp1 = Utils.getDataCube(imp, region5D, trackingSettings.intensityGate, nThreads);
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
             // filter image

@@ -1,6 +1,5 @@
 package bigDataTools.bigDataTracker;
 
-import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
@@ -30,20 +29,13 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     Point3D subSamplingXYZ = new Point3D(1,1,1);
     int subSamplingT = 1;
     private String resizeFactor = "1.0";
-    private int background = 0;
+    private int[] intensityGate = new int[]{-1,-1};
     String trackingMethod = "center of mass";
     BigDataTracker bigDataTracker;
     TrackTablePanel trackTablePanel;
     String TRACKING_LENGTH = "Length [frames]";
     Integer TRACKING_LENGTH_ID = 3;
-    String[] defaults = {
-            String.valueOf((int) objectSize.getX()) + "," + (int) objectSize.getY() + "," +String.valueOf((int) objectSize.getZ()),
-            String.valueOf(trackingFactor),
-            String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
-            String.valueOf(nt),
-            String.valueOf(background),
-            String.valueOf(resizeFactor)
-    };
+    String[] defaults;
 
     Logger logger = new IJLazySwingLogger();
 
@@ -52,7 +44,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             "Tracking window size [factor]",
             "dx, dy, dz, dt [pixels, frames]",
             TRACKING_LENGTH,
-            "Background value [gray values]",
+            "Intensity gating [min, max]",
             "Resize objects by [factor]"
     };
 
@@ -70,16 +62,20 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
 
     String[] comboNames = {
-            "Method"
+            "Enhance image features",
+            "Tracking method"
     };
 
     String[][] comboChoices = {
+            {"None"},
             {"center of mass","correlation"}
     };
 
     JTextField[] textFields = new JTextField[texts.length];
 
     JLabel[] labels = new JLabel[texts.length];
+
+    JCheckBox checkBoxViewRegion = new JCheckBox();
 
     int previouslySelectedZ = -1;
 
@@ -89,7 +85,6 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         if ( imp != null )
         {
             nt = imp.getNFrames();
-            background = (int) imp.getProcessor().getMin();
         }
         this.bigDataTracker = new BigDataTracker();
         trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(),
@@ -105,7 +100,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 String.valueOf(trackingFactor),
                 String.valueOf((int) subSamplingXYZ.getX() + "," + (int) subSamplingXYZ.getY() + "," + (int) subSamplingXYZ.getZ() + "," + subSamplingT),
                 String.valueOf(nt),
-                String.valueOf(background),
+                String.valueOf(intensityGate[0])+","+String.valueOf(intensityGate[1]),
                 String.valueOf(resizeFactor)
         };
 
@@ -175,6 +170,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         int iPanel = 0;
         int k = 0;
         int iComboBox = 0;
+
         //
         // TRACKING
         //
@@ -203,15 +199,25 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         panels.get(iPanel).add(labels[k]);
         panels.get(iPanel).add(textFields[k++]);
         c.add(panels.get(iPanel++));
-        // Method
+        // Intensity gating
+        panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
+        panels.get(iPanel).add(labels[k]);
+        panels.get(iPanel).add(textFields[k++]);
+        c.add(panels.get(iPanel++));
+        // Enhance features
         panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
         panels.get(iPanel).add(comboLabels[iComboBox]);
         panels.get(iPanel).add(comboBoxes[iComboBox++]);
         c.add(panels.get(iPanel++));
-        // Background value (this will be subtracted from the image)
+        // View processed tracked region
         panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
-        panels.get(iPanel).add(labels[k]);
-        panels.get(iPanel).add(textFields[k++]);
+        panels.get(iPanel).add(new JLabel("Show processed tracking image"));
+        panels.get(iPanel).add(checkBoxViewRegion);
+        c.add(panels.get(iPanel++));
+        // Tracking Method
+        panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
+        panels.get(iPanel).add(comboLabels[iComboBox]);
+        panels.get(iPanel).add(comboBoxes[iComboBox++]);
         c.add(panels.get(iPanel++));
         // ObjectTracker button
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
@@ -235,6 +241,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         panels.get(iPanel).add(buttons[i++]);
         panels.get(iPanel).add(buttons[i++]);
         c.add(panels.get(iPanel++));
+
         //
         // CROPPING
         //
@@ -248,6 +255,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         panels.get(iPanel).add(textFields[k++]);
         panels.get(iPanel).add(buttons[i++]);
         c.add(panels.get(iPanel++));
+
         //
         // MISCELLANEOUS
         //
@@ -291,7 +299,8 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
         ImagePlus imp = IJ.getImage();
 
-        if (e.getActionCommand().equals(buttonActions[i++])) {
+        if (e.getActionCommand().equals(buttonActions[i++]))
+        {
 
             //
             // Set nx, ny
@@ -308,7 +317,10 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             changeTextField(0, "" + (int) objectSize.getX() + "," + (int) objectSize.getY() + "," +
                     (int) objectSize.getZ());
 
-        } else if (e.getActionCommand().equals(buttonActions[i++])) {
+        }
+        else if (e.getActionCommand().equals(buttonActions[i++]))
+        {
+
             //
             //  Set nz
             //
@@ -324,7 +336,9 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             }
             previouslySelectedZ = z;
 
-        } else if (e.getActionCommand().equals(buttonActions[i++])) {
+        }
+        else if (e.getActionCommand().equals(buttonActions[i++]))
+        {
 
             //
             // track selected object
@@ -340,9 +354,9 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
                 return;
             }
 
-            // configure the tracking
             //
-
+            // configure tracking
+            //
             TrackingSettings trackingSettings = new TrackingSettings();
             trackingSettings.imp = imp;
             trackingSettings.trackingMethod = trackingMethod;
@@ -353,10 +367,11 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             trackingSettings.subSamplingXYZ = subSamplingXYZ;
             trackingSettings.subSamplingT = subSamplingT;
             trackingSettings.trackingFactor = trackingFactor;
-            trackingSettings.background = background;
-            trackingSettings.nt = (((imp.getT()-1) + nt) > imp.getNFrames()) ?
-                    imp.getNFrames() - (imp.getT()-1) : nt;
+            trackingSettings.intensityGate = intensityGate;
+            trackingSettings.nt = (((imp.getT()-1) + nt) > imp.getNFrames()) ? imp.getNFrames() - (imp.getT()-1) : nt;
+            trackingSettings.viewRegion = checkBoxViewRegion.isSelected();
 
+            //
             // give feedback
             //
             if ( trackingSettings.nt  != nt )
@@ -366,7 +381,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
             // do it
             //
-            bigDataTracker.trackObject(trackingSettings);
+            bigDataTracker.trackObject( trackingSettings );
 
         }
         else if ( e.getActionCommand().equals(buttonActions[i++]) )
@@ -478,10 +493,10 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         else if ( e.getActionCommand().equals(texts[k++]) )
         {
             //
-            // Image background value
+            // Image intensityGate value
             //
             JTextField source = (JTextField) e.getSource();
-            background = new Integer(source.getText());
+            intensityGate = Utils.delimitedStringToIntegerArray( source.getText(), ",");
         }
         else if (e.getActionCommand().equals(texts[k++]))
         {

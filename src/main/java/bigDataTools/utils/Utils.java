@@ -216,7 +216,7 @@ public class Utils {
         int[] nums = new int[sA.length];
         for (int i = 0; i < nums.length; i++)
         {
-            nums[i] = Integer.parseInt(sA[i].trim());
+            nums[i] = Integer.parseInt( sA[i].trim() );
         }
 
         return nums;
@@ -309,15 +309,14 @@ public class Utils {
 
     }
 
-
-    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int background, int nThreads)
+    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int[] intensityGate, int nThreads)
     {
         ImagePlus dataCube = null;
 
         if(imp.getStack() instanceof VirtualStackOfStacks)
         {
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            dataCube = vss.getDataCube(region5D, background, nThreads);
+            dataCube = vss.getDataCube(region5D, intensityGate, nThreads);
         }
         else
         {
@@ -328,6 +327,215 @@ public class Utils {
 
         return(dataCube);
     };
+
+    public static void applyIntensityGate( ImagePlus imp, int[] gate )
+    {
+        ImageStack stack = imp.getStack();
+        int nx = imp.getWidth();
+        int ny = imp.getHeight();
+        long nPixels = nx*ny;
+        int nz = imp.getNSlices();
+        int min = gate[0];
+        int max = gate[1];
+
+        if ( stack.getBitDepth() == 8 )
+        {
+            if ( max == -1 )
+            {
+                max = 255;
+            }
+
+            for (int z = 1; z <= nz; z++)
+            {
+                ImageProcessor ip = stack.getProcessor(z);
+
+                byte[] pixels = (byte[]) ip.getPixels();
+
+                for ( int i = 0; i < nPixels; i++ )
+                {
+                    if ( (pixels[i] > max) ||  pixels[i] < min )
+                    {
+                        pixels[i] = 0;
+                    }
+                    else
+                    {
+                        pixels[i] -= min;
+                    }
+                }
+            }
+        }
+
+
+        if ( stack.getBitDepth() == 16 )
+        {
+
+            if ( max == -1 )
+            {
+                max = 65535;
+            }
+
+            for (int z = 1; z <= nz; z++)
+            {
+                ImageProcessor ip = stack.getProcessor(z);
+
+                short[] pixels = (short[]) ip.getPixels();
+
+                for ( int i = 0; i < nPixels; i++ )
+                {
+                    if ( (pixels[i] > max) ||  pixels[i] < min )
+                    {
+                        pixels[i] = 0;
+                    }
+                    else
+                    {
+                        pixels[i] -= min;
+                    }
+                }
+            }
+        }
+
+
+
+
+    }
+
+    private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
+    {
+
+        final String centeringMethod = "center of mass";
+
+        //long startTime = System.currentTimeMillis();
+        double sum = 0.0, xsum = 0.0, ysum = 0.0, zsum = 0.0;
+        int i, v;
+        int width = stack.getWidth();
+        int height = stack.getHeight();
+        int depth = stack.getSize();
+        int xmin = 0 > (int) pMin.getX() ? 0 : (int) pMin.getX();
+        int xmax = (width-1) < (int) pMax.getX() ? (width-1) : (int) pMax.getX();
+        int ymin = 0 > (int) pMin.getY() ? 0 : (int) pMin.getY();
+        int ymax = (height-1) < (int) pMax.getY() ? (height-1) : (int) pMax.getY();
+        int zmin = 0 > (int) pMin.getZ() ? 0 : (int) pMin.getZ();
+        int zmax = (depth-1) < (int) pMax.getZ() ? (depth-1) : (int) pMax.getZ();
+
+        // compute one-based, otherwise the numbers at x=0,y=0,z=0 are lost for the center of mass
+
+        if (centeringMethod.equals("center of mass")) {
+            for (int z = zmin + 1; z <= zmax + 1; z++) {
+                ImageProcessor ip = stack.getProcessor(z);
+                short[] pixels = (short[]) ip.getPixels();
+                for (int y = ymin + 1; y <= ymax + 1; y++) {
+                    i = (y - 1) * width + xmin; // zero-based location in pixel array
+                    for (int x = xmin + 1; x <= xmax + 1; x++) {
+                        v = pixels[i] & 0xffff;
+                        // v=0 is ignored automatically in below formulas
+                        sum += v;
+                        xsum += x * v;
+                        ysum += y * v;
+                        zsum += z * v;
+                        i++;
+                    }
+                }
+            }
+        }
+
+        if (centeringMethod.equals("centroid")) {
+            for (int z = zmin + 1; z <= zmax + 1; z++) {
+                ImageProcessor ip = stack.getProcessor(z);
+                short[] pixels = (short[]) ip.getPixels();
+                for (int y = ymin + 1; y <= ymax + 1; y++) {
+                    i = (y - 1) * width + xmin; // zero-based location in pixel array
+                    for (int x = xmin + 1; x <= xmax + 1; x++) {
+                        v = pixels[i] & 0xffff;
+                        if (v > 0) {
+                            sum += 1;
+                            xsum += x;
+                            ysum += y;
+                            zsum += z;
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+
+        // computation is one-based; result should be zero-based
+        double xCenter = (xsum / sum) - 1;
+        double yCenter = (ysum / sum) - 1;
+        double zCenter = (zsum / sum) - 1;
+
+        //long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime;  logger.info("center of mass in [ms]: " + elapsedTime);
+
+        return(new Point3D(xCenter,yCenter,zCenter));
+    }
+
+    private Point3D compute8bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
+    {
+
+        final String centeringMethod = "center of mass";
+
+        //long startTime = System.currentTimeMillis();
+        double sum = 0.0, xsum = 0.0, ysum = 0.0, zsum = 0.0;
+        int i, v;
+        int width = stack.getWidth();
+        int height = stack.getHeight();
+        int depth = stack.getSize();
+        int xmin = 0 > (int) pMin.getX() ? 0 : (int) pMin.getX();
+        int xmax = (width-1) < (int) pMax.getX() ? (width-1) : (int) pMax.getX();
+        int ymin = 0 > (int) pMin.getY() ? 0 : (int) pMin.getY();
+        int ymax = (height-1) < (int) pMax.getY() ? (height-1) : (int) pMax.getY();
+        int zmin = 0 > (int) pMin.getZ() ? 0 : (int) pMin.getZ();
+        int zmax = (depth-1) < (int) pMax.getZ() ? (depth-1) : (int) pMax.getZ();
+
+        // compute one-based, otherwise the numbers at x=0,y=0,z=0 are lost for the center of mass
+
+        if (centeringMethod.equals("center of mass")) {
+            for (int z = zmin + 1; z <= zmax + 1; z++) {
+                ImageProcessor ip = stack.getProcessor(z);
+                byte[] pixels = (byte[]) ip.getPixels();
+                for (int y = ymin + 1; y <= ymax + 1; y++) {
+                    i = (y - 1) * width + xmin; // zero-based location in pixel array
+                    for (int x = xmin + 1; x <= xmax + 1; x++) {
+                        v = pixels[i] & 0xff;
+                        // v=0 is ignored automatically in below formulas
+                        sum += v;
+                        xsum += x * v;
+                        ysum += y * v;
+                        zsum += z * v;
+                        i++;
+                    }
+                }
+            }
+        }
+
+        if (centeringMethod.equals("centroid")) {
+            for (int z = zmin + 1; z <= zmax + 1; z++) {
+                ImageProcessor ip = stack.getProcessor(z);
+                byte[] pixels = (byte[]) ip.getPixels();
+                for (int y = ymin + 1; y <= ymax + 1; y++) {
+                    i = (y - 1) * width + xmin; // zero-based location in pixel array
+                    for (int x = xmin + 1; x <= xmax + 1; x++) {
+                        v = pixels[i] & 0xff;
+                        if (v > 0) {
+                            sum += 1;
+                            xsum += x;
+                            ysum += y;
+                            zsum += z;
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+
+        // computation is one-based; result should be zero-based
+        double xCenter = (xsum / sum) - 1;
+        double yCenter = (ysum / sum) - 1;
+        double zCenter = (zsum / sum) - 1;
+
+        //long stopTime = System.currentTimeMillis(); long elapsedTime = stopTime - startTime;  logger.info("center of mass in [ms]: " + elapsedTime);
+
+        return(new Point3D(xCenter,yCenter,zCenter));
+    }
 
 
 }
