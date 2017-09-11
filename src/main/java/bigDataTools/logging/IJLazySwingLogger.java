@@ -28,7 +28,7 @@ public class IJLazySwingLogger implements Logger {
 
     @Override
     public void info(String message){
-        ijLazySwingLog(String.format("[INFO]: %s", message));
+        ijLazySwingLog(String.format("%s", message));
     }
 
     @Override
@@ -120,12 +120,12 @@ public class IJLazySwingLogger implements Logger {
 
     @Override
     public void error(String _message){
-        IJ.showMessage(String.format("[ERROR]: %s", _message));
+        IJ.showMessage(String.format("Error: %s", _message));
     }
 
     @Override
     public void warning(String _message){
-        ijLazySwingLog(String.format("[WARNING]: %s", _message));
+        ijLazySwingLog(String.format("WARNING: %s", _message));
     }
 
     @Override

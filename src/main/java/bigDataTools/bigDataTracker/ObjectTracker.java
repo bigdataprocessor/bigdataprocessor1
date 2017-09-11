@@ -104,6 +104,7 @@ class ObjectTracker implements Runnable
 
         // iteratively compute the shift of the center of mass relative to the center of the image stack
         // using only half the image size for iteration
+        /*
         startTime = System.currentTimeMillis();
         pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(),
                 trackingSettings.trackingFactor,
@@ -116,6 +117,10 @@ class ObjectTracker implements Runnable
                 trackingSettings.subSamplingXYZ);
         // no z-shift if only one slice
         if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
+        */
+
+        elapsedProcessingTime = 0;
+        pShift = new Point3D(0.0,0.0,0.0);
 
 
         // add track location for first image
