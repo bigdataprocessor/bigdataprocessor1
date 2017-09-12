@@ -44,9 +44,13 @@
 <html>
 <h3>Intensity gate</h3>
 <p width=400>
-    Use ImageJ's measurement tools to determine the average gray values in the background around you object.
-    The value you enter here will be subtracted before the center-of-mass or the correlation are computed.
-    A correct background subtraction can have a big influence on the accuracy of the tracking.
+    The tracking might be distracted by background noise and/or spurious bright regions (dirt).
+    Use the intensity gate to only select gray values that are well above the background noise and well below too bright image features.
+    Using values of -1 for either the minimum or maximum [min, max] will deactivate the respective gate. <br>
+    Please note that the lower gate is subtracted from the whole image, and pixels above the upper gate are set to zero.
+    Examples: <br>
+    100,-1 will subtract a value of 100 from all pixels in the image. <br>
+    -1,3800 will set all pixels >3800 to zero.<br>
 </p>
 </html>
 ###
