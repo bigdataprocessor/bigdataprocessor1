@@ -4,6 +4,9 @@
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,26 +29,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="NumberFormatException.java" pinned="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/lang/NumberFormatException.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Integer.java" pinned="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/src.zip!/java/lang/Integer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="579" column="0" selection-start-line="579" selection-start-column="0" selection-end-line="579" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -55,19 +38,6 @@
                 <element signature="class#FileType#0;class#Utils#0" expanded="false" />
                 <element signature="method#delimitedStringToDoubleArray#0;class#Utils#0" expanded="true" />
                 <element signature="method#getDataCube#0;class#Utils#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataStreamingToolsGUI.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.111111">
-              <caret line="29" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
-              <folding>
-                <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="true" />
-                <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -109,11 +79,12 @@
       <file leaf-file-name="ObjectTracker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.2962964">
-              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+            <state vertical-scroll-proportion="-7.6296296">
+              <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
               <folding>
                 <element signature="e#1050#1109#0" expanded="false" />
                 <element signature="e#1196#1211#0" expanded="false" />
+                <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
                 <element signature="e#1632#1662#0" expanded="false" />
                 <element signature="e#2606#2618#0" expanded="false" />
                 <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
@@ -125,35 +96,85 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BigDataTracker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="282" column="22" selection-start-line="282" selection-start-column="22" selection-end-line="282" selection-end-column="22" />
+              <folding>
+                <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.0">
-              <caret line="68" column="31" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.30449826">
+              <caret line="363" column="0" selection-start-line="363" selection-start-column="0" selection-end-line="363" selection-end-column="0" />
               <folding>
                 <element signature="method#BigDataTrackerGUI#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
-                <element signature="e#5263#5271#0" expanded="true" />
-                <element signature="e#9563#9564#0" expanded="true" />
-                <element signature="e#9606#9607#0" expanded="true" />
+                <element signature="e#5308#5316#0" expanded="true" />
+                <element signature="e#9608#9609#0" expanded="true" />
+                <element signature="e#9651#9652#0" expanded="true" />
                 <element signature="method#focusGained#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="method#focusLost#0;class#BigDataTrackerGUI#0" expanded="true" />
-                <element signature="method#actionPerformed#0;class#BigDataTrackerGUI#0" expanded="true" />
                 <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
-                <element signature="e#17101#17109#0" expanded="true" />
-                <element signature="e#17831#17832#0" expanded="true" />
-                <element signature="e#17874#17875#0" expanded="true" />
+                <element signature="e#17512#17520#0" expanded="true" />
+                <element signature="e#18242#18243#0" expanded="true" />
+                <element signature="e#18285#18286#0" expanded="true" />
                 <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrackAndCropHelp.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TrackingSettings.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HDF5Writer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="245" column="27" selection-start-line="245" selection-start-column="27" selection-end-line="245" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#HDF5Writer#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#saveAsImaris#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#setImarisResolutionLevelsAndChunking#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#writeBdvMasterH5#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#setH5IntegerAttribute#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#setH5StringAttribute#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="method#logArrayList#0;class#HDF5Writer#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="H5Balint.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="105" column="105" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="105" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrackAndCropHelp.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49569708">
+            <state vertical-scroll-proportion="-12.0">
               <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
               <folding />
             </state>
@@ -168,16 +189,6 @@
               <folding>
                 <element signature="e#489#490#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TrackingSettings.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -245,15 +256,15 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/IntensityGate.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
         <option value="$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
       </list>
     </option>
   </component>
@@ -409,6 +420,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="testing" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -762,17 +803,17 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20843373" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3626506" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36626506" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23734939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24892704" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3192771" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23390558" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21204819" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -874,8 +915,20 @@
           <properties />
           <option name="timeStamp" value="461" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java</url>
+          <line>125</line>
+          <properties />
+          <option name="timeStamp" value="470" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java</url>
+          <line>106</line>
+          <properties />
+          <option name="timeStamp" value="471" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="470" />
+      <option name="time" value="474" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -884,13 +937,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ch/systemsx/cisd/hdf5/HDF5ShortReader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59574467">
-          <caret line="379" column="62" selection-start-line="379" selection-start-column="62" selection-end-line="379" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ch/systemsx/cisd/hdf5/HDF5.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-10.555555">
@@ -1489,42 +1535,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="126" selection-start-line="24" selection-start-column="45" selection-end-line="24" selection-end-column="126" />
-          <folding>
-            <element signature="method#main#0;class#H5Balint#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/ImageFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="368" column="0" selection-start-line="368" selection-start-column="0" selection-end-line="368" selection-end-column="0" />
-          <folding>
-            <element signature="method#HDF5Writer#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#saveAsImaris#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#logArrayList#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#writeImarisMasterH5#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#writeBdvMasterH5#0;class#HDF5Writer#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="286" column="46" selection-start-line="286" selection-start-column="46" selection-end-line="286" selection-end-column="46" />
           <folding />
         </state>
       </provider>
@@ -1534,17 +1548,9 @@
         <state vertical-scroll-proportion="-6.111111">
           <caret line="29" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
           <folding>
-            <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="true" />
-            <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="true" />
+            <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1561,23 +1567,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="579" column="0" selection-start-line="579" selection-start-column="0" selection-end-line="579" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.2962964">
-          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-          <folding>
-            <element signature="e#1050#1109#0" expanded="false" />
-            <element signature="e#1196#1211#0" expanded="false" />
-            <element signature="e#1632#1662#0" expanded="false" />
-            <element signature="e#2606#2618#0" expanded="false" />
-            <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="method#compute16bitShiftUsingIterativeCenterOfMass#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="true" />
-            <element signature="method#computeCenterOfMass#0;class#ObjectTracker#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1642,34 +1631,102 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.0">
-          <caret line="68" column="31" selection-start-line="68" selection-start-column="31" selection-end-line="68" selection-end-column="31" />
+        <state vertical-scroll-proportion="-12.0">
+          <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ncsa/hdf/hdf5lib/HDF5Constants.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25935483">
+          <caret line="361" column="32" selection-start-line="361" selection-start-column="32" selection-end-line="361" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="105" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="105" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="245" column="27" selection-start-line="245" selection-start-column="27" selection-end-line="245" selection-end-column="27" />
           <folding>
-            <element signature="method#BigDataTrackerGUI#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="e#5263#5271#0" expanded="true" />
-            <element signature="e#9563#9564#0" expanded="true" />
-            <element signature="e#9606#9607#0" expanded="true" />
-            <element signature="method#focusGained#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#focusLost#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#actionPerformed#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
-            <element signature="e#17101#17109#0" expanded="true" />
-            <element signature="e#17831#17832#0" expanded="true" />
-            <element signature="e#17874#17875#0" expanded="true" />
-            <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#HDF5Writer#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#saveAsImaris#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#setImarisResolutionLevelsAndChunking#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#writeBdvMasterH5#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#setH5IntegerAttribute#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#setH5StringAttribute#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="method#logArrayList#0;class#HDF5Writer#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49569708">
-          <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
+        <state vertical-scroll-proportion="-7.6296296">
+          <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
+          <folding>
+            <element signature="e#1050#1109#0" expanded="false" />
+            <element signature="e#1196#1211#0" expanded="false" />
+            <element signature="method#run#0;class#ObjectTracker#0" expanded="true" />
+            <element signature="e#1632#1662#0" expanded="false" />
+            <element signature="e#2606#2618#0" expanded="false" />
+            <element signature="method#publishResult#0;class#ObjectTracker#0" expanded="true" />
+            <element signature="method#compute16bitShiftUsingIterativeCenterOfMass#0;class#ObjectTracker#0" expanded="true" />
+            <element signature="method#computeShiftUsingPhaseCorrelation#0;class#ObjectTracker#0" expanded="true" />
+            <element signature="method#computeCenterOfMass#0;class#ObjectTracker#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="282" column="22" selection-start-line="282" selection-start-column="22" selection-end-line="282" selection-end-column="22" />
+          <folding>
+            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30449826">
+          <caret line="363" column="0" selection-start-line="363" selection-start-column="0" selection-end-line="363" selection-end-column="0" />
+          <folding>
+            <element signature="method#BigDataTrackerGUI#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="e#5308#5316#0" expanded="true" />
+            <element signature="e#9608#9609#0" expanded="true" />
+            <element signature="e#9651#9652#0" expanded="true" />
+            <element signature="method#focusGained#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="method#focusLost#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="method#getToolTipFile#0;class#BigDataTrackerGUI#0" expanded="true" />
+            <element signature="e#17512#17520#0" expanded="true" />
+            <element signature="e#18242#18243#0" expanded="true" />
+            <element signature="e#18285#18286#0" expanded="true" />
+            <element signature="method#showTrackedObjects#0;class#BigDataTrackerGUI#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

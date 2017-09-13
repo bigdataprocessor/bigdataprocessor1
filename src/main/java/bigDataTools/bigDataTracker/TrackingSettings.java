@@ -21,5 +21,6 @@ public class TrackingSettings {
     public double trackingFactor;
     public int[] intensityGate;
     public boolean viewRegion;
+    public String imageFeatureEnhancement;
 
 }

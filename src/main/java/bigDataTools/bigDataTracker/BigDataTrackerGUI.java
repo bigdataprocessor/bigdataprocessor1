@@ -31,6 +31,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
     private String resizeFactor = "1.0";
     private int[] intensityGate = new int[]{-1,-1};
     String trackingMethod = "center of mass";
+    String imageFeatureEnhancement = "None";
     BigDataTracker bigDataTracker;
     TrackTablePanel trackTablePanel;
     String TRACKING_LENGTH = "Length [frames]";
@@ -370,6 +371,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             trackingSettings.intensityGate = intensityGate;
             trackingSettings.nt = (((imp.getT()-1) + nt) > imp.getNFrames()) ? imp.getNFrames() - (imp.getT()-1) : nt;
             trackingSettings.viewRegion = checkBoxViewRegion.isSelected();
+            trackingSettings.imageFeatureEnhancement = imageFeatureEnhancement;
 
             //
             // give feedback
@@ -506,7 +508,15 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             JTextField source = (JTextField) e.getSource();
             resizeFactor = source.getText();
         }
-        else if (e.getActionCommand().equals(comboNames[j++]))
+        else if ( e.getActionCommand().equals( comboNames[0]) )
+        {
+            //
+            // Image feature enhancement method
+            //
+            JComboBox cb = (JComboBox)e.getSource();
+            imageFeatureEnhancement = (String)cb.getSelectedItem();
+        }
+        else if ( e.getActionCommand().equals( comboNames[1]) )
         {
             //
             // ObjectTracker method
@@ -514,6 +524,8 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             JComboBox cb = (JComboBox)e.getSource();
             trackingMethod = (String)cb.getSelectedItem();
         }
+
+
     }
 
     private String[] getToolTipFile(String fileName) {
