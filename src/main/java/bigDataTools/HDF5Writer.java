@@ -6,7 +6,6 @@ import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +25,9 @@ public class HDF5Writer {
         ArrayList<int[]> chunks = new ArrayList<>();
         ArrayList<String> datasets = null;
 
+
+        creatingExternalHdf5LinkTest();
+
         //
         // Determine resolution levels to be compatible with Imaris
         //
@@ -44,7 +46,7 @@ public class HDF5Writer {
         // Save master files
         //
         String directory = "/Users/tischi/Desktop/example-data/imaris-out/";
-        String fileName = "aaa.h5";
+        String fileName = "aaa";
         writeImarisMasterFile(imp, sizes, fileName, directory);
 
 
@@ -116,7 +118,6 @@ public class HDF5Writer {
     }
 
 
-
     /**
      * Write *.xml and *.h5 master files for BigDataViewer
      */
@@ -141,38 +142,42 @@ public class HDF5Writer {
         // Create master file
         //
         String filePathMaster = directory + File.separator + fileName + "--master.h5";
-        File fileMaster = new File(filePathMaster);
+        File fileMaster = new File( filePathMaster );
         if (fileMaster.exists()) fileMaster.delete();
 
         int file_id = H5.H5Fcreate(filePathMaster, HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT);
 
+        int dataset_group_id = H5.H5Gcreate(file_id, "/DataSet",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
-        for (int t = 0; t < imp.getNFrames(); t++)
+        String group;
+
+        for (int r = 0; r < sizes.size(); r++)
         {
-            for (int c = 0; c < imp.getNFrames(); c++)
+            group = "/DataSet" + "/ResolutionLevel" + r;
+            int resolution_group_id = H5.H5Gcreate(dataset_group_id, group,
+                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+            for (int t = 0; t < imp.getNFrames(); t++)
             {
-                for (int r = 0; r < sizes.size(); r++)
+                group += "/TimePoint " + t;
+                int resolution_time_group_id = H5.H5Gcreate(resolution_group_id, group ,
+                        HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+                for (int c = 0; c < imp.getNFrames(); c++)
                 {
-
-                    //
-                    // Create group for Data
-                    //
-                    String group = "DataSet" +
-                            "/ResolutionLevel " + r +
-                            "/TimePoint " + t +
-                            "/Channel " + c;
-
-                    int group_id = H5.H5Gcreate(file_id, group,
+                    group += "/Channel " + c;
+                    int resolution_time_channel_group_id = H5.H5Gcreate(resolution_time_group_id, group ,
                             HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
                     //
-                    // Create Data, linking to Data in external data file
+                    // Create link for the actual Data to an external data file
                     //
                     String fileNameData = fileName + "--C" + c + "--T" + t + ".h5";
                     H5.H5Lcreate_external(
-                            fileNameData, "/ResolutionLevel " + r  + "/Data",
-                            file_id, group + "/Data",
+                            fileNameData, "/ResolutionLevel " + r + "/Data",
+                            resolution_time_channel_group_id, "Data",
                             HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
                     //
@@ -189,8 +194,7 @@ public class HDF5Writer {
                     and as the corresponding file type: H5T_STD_I64LE
                     - https://support.hdfgroup.org/HDF5/release/dttable.html
                     */
-
-                    int histo_dataset_id = H5.H5Dcreate(file_id, group + "/Histogram",
+                    int histo_dataset_id = H5.H5Dcreate(resolution_time_channel_group_id, "Histogram",
                             HDF5Constants.H5T_STD_I64LE, histo_dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT,
@@ -198,20 +202,69 @@ public class HDF5Writer {
                     H5.H5Dwrite(histo_dataset_id, HDF5Constants.H5T_NATIVE_ULLONG, HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
                             HDF5Constants.H5P_DEFAULT, histo_data);
 
+                    H5.H5Dclose(histo_dataset_id);
+                    H5.H5Sclose(histo_dataspace_id);
+
 
                     //
-                    // Set group attributes
+                    // Set data set group attributes
                     //
-                    setH5IntegerAttribute(group_id, "ImageSizeX", sizes.get(r)[0]);
+                    //setH5IntegerAttribute(group_id, "ImageSizeX", new int[]{sizes.get(r)[0]});
+                    /*
                     setH5IntegerAttribute(group_id, "ImageSizeY", sizes.get(r)[1]);
                     setH5IntegerAttribute(group_id, "ImageSizeZ", sizes.get(r)[2]);
                     setH5IntegerAttribute(group_id, "HistogramMin", 0);
                     setH5IntegerAttribute(group_id, "HistogramMax", 255);
+                    */
 
-
+                    H5.H5Gclose(resolution_time_channel_group_id);
                 }
+                H5.H5Gclose(resolution_time_group_id);
             }
+            H5.H5Gclose(resolution_group_id);
         }
+        H5.H5Gclose(dataset_group_id);
+
+        /*
+        //
+        // Configure group: DataSetInfo
+        //
+
+        int dataSetInfo_group_id = H5.H5Gcreate(file_id, "/DataSetInfo",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        //
+        // Configure group: DataSetInfo/Image
+        //
+
+        H5.H5Gcreate(dataSetInfo_group_id, "/Image",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+
+        //
+        // Configure group: DataSetInfo/Channel
+        //
+
+        H5.H5Gcreate(dataSetInfo_group_id, "/Channel",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+
+        //
+        // Configure group: DataSetInfo/TimeInfo
+        //
+
+        H5.H5Gcreate(dataSetInfo_group_id, "/TimeInfo",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        */
+
+        //
+        // Finish up
+        //
+
+        H5.H5Fclose(file_id);
+
+
     }
 
 
@@ -259,7 +312,7 @@ public class HDF5Writer {
 
     }
 
-    private void setH5IntegerAttribute( int dataset_id, String attrName, int attrValue )
+    private void setH5IntegerAttribute( int dataset_id, String attrName, int[] attrValue )
     {
 
         long[] attrDims = { 1 };
@@ -310,6 +363,57 @@ public class HDF5Writer {
         }
     }
 
+
+    private void creatingExternalHdf5LinkTest()
+    {
+        String SOURCE_FILE = "/Users/tischi/Desktop/example-data/imaris-out/master-test.h5";
+        String TARGET_FILE = "/Users/tischi/Desktop/example-data/imaris-out/data-test.h5";
+
+        /* Create source file */
+        int source_file_id = H5.H5Fcreate(SOURCE_FILE, HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        /* Create an external link in the source file pointing to the target group. */
+        H5.H5Lcreate_external(TARGET_FILE, "target_group", source_file_id, "ext_link",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        /* Create target file */
+        int targ_file_id = H5.H5Fcreate(TARGET_FILE, HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        /* Create a group in the target file for the external link to point to. */
+        int group_id = H5.H5Gcreate(targ_file_id, "target_group",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        /* Close the group and the target file */
+        H5.H5Gclose(group_id);
+
+
+        /* Now we can use the external link to create a new group inside the
+        * target group (even though the target file is closed!).  The external
+        * link works just like a soft link.
+        */
+        group_id = H5.H5Gcreate(source_file_id, "ext_link/new_group",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
+        /* The group is inside the target file and we can access it normally.
+         * Here, group_id and group2_id point to the same group inside the
+         * target file.
+         */
+        int group2_id = H5.H5Gopen(targ_file_id, "target_group/new_group",
+                HDF5Constants.H5P_DEFAULT);
+
+        /* Don't forget to close the IDs we opened. */
+        H5.H5Gclose(group2_id);
+        H5.H5Gclose(group_id);
+
+        H5.H5Fclose(targ_file_id);
+        H5.H5Fclose(source_file_id);
+
+        /* The link from the source file to the target file will work as long as
+         * the target file can be found.  If the target file is moved, renamed,
+         * or deleted in the filesystem, HDF5 won't be able to find it and the
+         * external link will "dangle."
+         */
+    }
 
 }
 
