@@ -7,7 +7,10 @@ import ij.process.ImageProcessor;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -52,12 +55,9 @@ public class HDF5Writer {
         //
         writeImarisMasterFile(imp, sizes, calibration, baseFileName, directory);
 
-
         // Write imaris master file
         //
         writeBdvMasterFiles(imp, sizes, chunks, calibration, baseFileName, directory);
-
-
 
         //
         // Write data files, one per channel and time-point
@@ -162,12 +162,13 @@ public class HDF5Writer {
         for ( int c = 0; c < imp.getNChannels(); c++ )
         {
             String group = String.format("s%02d", c);
-            int group_id = H5.H5Gcreate(file_id, group,
-                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
-            h5WriteLongArrayListAsDoubleArray(group_id, sizes, "resolutions");
+            int group_id = H5.H5Gcreate( file_id, group,
+                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT );
 
-            h5WriteLongArrayListAs32IntArray(group_id, chunks, "subdivisions");
+            h5WriteLongArrayListAs32IntArray( group_id, chunks, "subdivisions" );
+
+            h5WriteLongArrayListAsDoubleArray( group_id, sizes, "resolutions" );
 
             H5.H5Gclose( group_id );
 
@@ -176,7 +177,8 @@ public class HDF5Writer {
         for ( int t = 0; t < imp.getNFrames(); t++ )
         {
             String time_group = String.format("t%05d", t);
-            int time_group_id = H5.H5Gcreate(file_id, time_group,
+
+            int time_group_id = H5.H5Gcreate( file_id, time_group,
                     HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
             for (int c = 0; c < imp.getNChannels(); c++)
@@ -192,7 +194,13 @@ public class HDF5Writer {
                     int resolution_group_id = H5.H5Gcreate(channel_group_id, resolution_group,
                             HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
-                    // create external link, called "cells" to data
+                    // create link, called "cells", to Data in external file
+                    String fileNameData = fileName + getChannelTimeString( c , t ) + ".h5";
+                    H5.H5Lcreate_external(
+                            fileNameData, "/ResolutionLevel " + r + "/Data",
+                            resolution_group_id, "cells",
+                            HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
 
                     H5.H5Gclose( resolution_group_id );
                 }
@@ -201,89 +209,244 @@ public class HDF5Writer {
             H5.H5Gclose( time_group_id );
         }
 
+        H5.H5Fclose( file_id );
 
+        //
         // write xml master file
         //
 
+        // prepare file
+        //
         String filePathXML = directory + File.separator + fileName + "--bdv.xml";
         File fileMasterXML = new File( filePathXML );
         if (fileMasterXML.exists()) fileMasterXML.delete();
 
-        StringBuilder sb = new StringBuilder();
+        String viewSetups = "";
+        String angleAttributes = "";
+        String registrationString = "";
+        String channelAttributes = "";
+
+        for (int c = 0; c < imp.getNChannels(); c++)
+        {
+            String viewID = ""+c;
+            String spacing = String.format("%s %s %s", calibration[0], calibration[1], calibration[2] );
+            String size = String.format("%s %s %s", sizes.get(0)[0], sizes.get(0)[1], sizes.get(0)[2] );
+
+            String registrationParameters = String.format(
+                    "%s 0 0 0 " + "0 %s 0 0 " + "0 0 %s 0",
+                    calibration[0], calibration[1], calibration[2]);
+
+            String channel = ""+c;
+            String channelID = ""+c;
+            String channelName = ""+c;
+
+            String angle = "0";
+            String angleID = "0";
+            String angleName = "0";
+
+            viewSetups += createViewSetupString( viewID, size, spacing, channel, angle );
+            angleAttributes += createSingleAttributeString("Angle", angleID, angleName );
+            channelAttributes += createSingleAttributeString("Channel", channelID, channelName);
+
+            for ( int t = 0; t < imp.getNFrames(); t++ )
+            {
+                String time = ""+t; // this could be an actual formatted time
+                String setup = ""+0;
+                registrationString += createRegistrationString( time, setup, registrationParameters );
+            }
+
+        }
+
+        String firstT = "" + 0;
+        String lastT = "" + ( imp.getNFrames() - 1 );
+
+        // put everything into one string
+        //
+        String completeXmlString = createBdvXMLString( fileName + "--bdv.h5", viewSetups, channelAttributes, angleAttributes,
+                firstT, lastT, registrationString );
+
+        // write file
+        //
+        try {
+            BufferedWriter out = new BufferedWriter( new FileWriter( filePathXML ) );
+            out.write( completeXmlString );
+            out.close();
+        }
+        catch (IOException e)
+        {
+            IJ.showMessage( "Exception " + e );
+        }
 
     }
-
 
     private void h5WriteLongArrayListAs32IntArray( int group_id, ArrayList < long[] > list, String name )
     {
 
-        double[][] data = new double[list.size()][list.get(0).length];
+        int[][] data = new int[ list.size() ][ list.get(0).length ];
+
         for (int i = 0; i < list.size(); i++)
         {
             for (int j = 0; j < list.get(i).length; j++)
             {
-                data[i][j] = list.get(i)[j];
+                data[i][j] = (int) list.get(i)[j];
             }
         }
 
         long[] data_dims = { data.length, data[0].length };
-        int dataspace_id = H5.H5Screate_simple(data_dims.length, data_dims, null);
-        int dataset_id = H5.H5Dcreate(group_id, name,
-                HDF5Constants.H5T_STD_I32BE, dataspace_id,
+
+        int dataspace_id = H5.H5Screate_simple( data_dims.length, data_dims, null );
+
+        int dataset_id = H5.H5Dcreate( group_id, name,
+                HDF5Constants.H5T_STD_I32LE, dataspace_id,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT);
-        H5.H5Dwrite(dataspace_id, HDF5Constants.H5T_NATIVE_INT32,
-                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data);
+
+        H5.H5Dwrite( dataset_id, HDF5Constants.H5T_NATIVE_INT,
+                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data );
 
         H5.H5Dclose(dataset_id);
+
         H5.H5Sclose(dataspace_id);
+
     }
 
     private void h5WriteLongArrayListAsDoubleArray( int group_id, ArrayList < long[] > list, String name )
     {
 
-        double[][] data = new double[list.size()][list.get(0).length];
+        double[] data = new double[list.size() * list.get(0).length];
+
+        int p = 0;
         for (int i = 0; i < list.size(); i++)
         {
             for (int j = 0; j < list.get(i).length; j++)
             {
-                data[i][j] = list.get(i)[j];
+                data[ p++ ] = list.get(i)[j];
             }
         }
 
-        long[] data_dims = {data.length, data[0].length};
-        int dataspace_id = H5.H5Screate_simple(data_dims.length, data_dims, null);
-        int dataset_id = H5.H5Dcreate(group_id, name,
-                HDF5Constants.H5T_STD_I64LE, dataspace_id,
+        long[] data_dims = { list.size(), list.get(0).length };
+
+        int dataspace_id = H5.H5Screate_simple( data_dims.length, data_dims, null );
+
+        int dataset_id = H5.H5Dcreate( group_id, name,
+                HDF5Constants.H5T_IEEE_F64BE, dataspace_id,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT);
-        H5.H5Dwrite(dataspace_id, HDF5Constants.H5T_NATIVE_DOUBLE,
-                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data);
+
+        H5.H5Dwrite( dataset_id, HDF5Constants.H5T_NATIVE_DOUBLE,
+                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data );
 
         H5.H5Dclose(dataset_id);
+
         H5.H5Sclose(dataspace_id);
+
     }
 
-    private String createViewSetupString ( String viewID, String spacing, String channel, String angle )
+    private String createViewSetupString ( String viewID, String size, String spacing, String channel, String angle )
     {
-        String s = String.format("<ViewSetup>\n"
-                        + "<id>%s</id>\n"
-                        + "<size>%s</size>\n"
-                        + "<voxelSize>\n"
-                        + "<unit>um</unit>"
-                        + "<size>%s</size>\n"
-                        + "</voxelSize>\n"
-                        + "<illumination>0</illumination>\n"
-                        + "<channel>%s</channel>\n"
-                        + "<angle>%s</angle>\n"
-                        + "</attributes>\n"
+        String s = String.format("\n<ViewSetup>\n"
+                        + " <id>%s</id>\n"
+                        + " <size>%s</size>\n"
+                        + " <voxelSize>\n"
+                        + "  <unit>um</unit>\n"
+                        + "  <size>%s</size>\n"
+                        + " </voxelSize>\n"
+                        + " <attributes>\n"
+                        + "  <illumination>0</illumination>\n"
+                        + "  <channel>%s</channel>\n"
+                        + "  <angle>%s</angle>\n"
+                        + " </attributes>\n"
                         + "</ViewSetup>\n",
                         viewID,
+                        size,
                         spacing,
                         channel,
                         angle);
+
+        return ( s );
+    }
+
+    private String createSingleAttributeString ( String attrName, String id, String name )
+    {
+        String s = String.format("\n <%s>\n"
+                        + "  <id>%s</id>\n"
+                        + "  <name>%s</name>\n"
+                        + " </%s>\n",
+                attrName,
+                id,
+                name,
+                attrName);
+
+        return ( s );
+    }
+
+    private String createRegistrationString ( String time, String id, String parameters )
+    {
+        String s = String.format("\n<ViewRegistration timepoint=\"%s\" setup=\"%s\">\n"
+                        + " <ViewTransform type=\"affine\">\n"
+                        + "  <Name>calibration</Name>\n"
+                        + "  <affine>%s</affine>\n"
+                        + " </ViewTransform>\n"
+                        + "</ViewRegistration>\n",
+                time,
+                id,
+                parameters);
+
+        return ( s );
+    }
+
+    private String createBdvXMLString (
+            String outFileH5,
+            String viewSetups,
+            String channels,
+            String angles,
+            String firstT,
+            String lastT,
+            String registrations
+    )
+    {
+        String s = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<SpimData version=\"0.2\"> \n"
+            + "<BasePath type=\"relative\">.</BasePath> \n"
+            + "<SequenceDescription> \n"
+            + " <ImageLoader format=\"bdv.hdf5\"> \n"
+            + "  <hdf5 type=\"relative\">%s</hdf5> \n"
+            + " </ImageLoader> \n"
+            + "<ViewSetups> \n"
+            + " %s \n"
+            + " <Attributes name=\"illumination\"> \n"
+            + "  <Illumination> \n"
+            + "   <id>0</id> \n"
+            + "   <name>0</name> \n"
+            + "  </Illumination> \n"
+            + " </Attributes> \n"
+            + " <Attributes name=\"channel\"> \n"
+            + "   %s \n"
+            + " </Attributes> \n"
+            + " <Attributes name=\"angle\"> \n"
+            + "   %s \n"
+            + " </Attributes> \n"
+            + "</ViewSetups> \n"
+            + "<Timepoints type=\"range\"> \n"
+            + " <first>%s</first> \n"
+            + " <last>%s</last> \n"
+            + "</Timepoints> \n"
+            + "</SequenceDescription> \n"
+            + "<ViewRegistrations> \n"
+            + " %s \n"
+            + "</ViewRegistrations> \n"
+            + "<ViewInterestPoints /> \n"
+            + "</SpimData> \n",
+             outFileH5,
+             viewSetups,
+             channels,
+             angles,
+             firstT,
+             lastT,
+             registrations
+        );
 
         return ( s );
     }
@@ -343,7 +506,8 @@ public class HDF5Writer {
                     //
                     // Create link for the actual Data to an external data file
                     //
-                    String fileNameData = fileName + "--C" + c + "--T" + t + ".h5";
+                    String fileNameData = fileName + getChannelTimeString( c , t ) + ".h5";
+
                     H5.H5Lcreate_external(
                             fileNameData, "/ResolutionLevel " + r + "/Data",
                             resolution_time_channel_group_id, "Data",
@@ -533,7 +697,7 @@ public class HDF5Writer {
         //
         // Prepare file
         //
-        String fileName = baseFileName + "--C" + c + "--T" + t + ".h5";
+        String fileName = baseFileName + getChannelTimeString( c , t ) + ".h5";
         String filePath = directory + File.separator + fileName;
         File file = new File(filePath);
         if (file.exists()) file.delete();
@@ -605,6 +769,12 @@ public class HDF5Writer {
 
         H5.H5Fclose( file_id );
 
+    }
+
+    private String getChannelTimeString( int c, int t )
+    {
+        String s = String.format("--C%02d--T%05d", c, t);
+        return ( s );
     }
 
     private short[] getShortData(ImagePlus imp, int c, int t)

@@ -13,8 +13,8 @@ public class WriteImarisAndBdv {
 
         new ij.ImageJ();
 
-        //IJ.open("/Users/tischi/Desktop/example-data/embryo-1ch-2tp.tif");
-        IJ.open("/Users/tischi/Desktop/example-data/3d-embryo/15-08-19_H2BLuVeLuE65-2views_1_G1_Average_E1_ch0_t000.tif");
+        IJ.open("/Users/tischi/Desktop/example-data/embryo-1ch-2tp.tif");
+        //IJ.open("/Users/tischi/Desktop/example-data/3d-embryo/15-08-19_H2BLuVeLuE65-2views_1_G1_Average_E1_ch0_t000.tif");
         ImagePlus imp = IJ.getImage();
         createImarisOutput(imp);
 

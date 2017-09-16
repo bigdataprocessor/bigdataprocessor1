@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/HDF5Writer.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/testing/WriteImarisAndBdv.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/devel/marvin-imaris-bdv.py" afterPath="$PROJECT_DIR$/devel/marvin-imaris-bdv.py" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -126,35 +128,39 @@
       <file leaf-file-name="HDF5Writer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.26770294">
-              <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.54113346">
+              <caret line="392" column="21" selection-start-line="392" selection-start-column="21" selection-end-line="392" selection-end-column="21" />
               <folding>
                 <element signature="docComment;class#HDF5Writer#0" expanded="false" />
-                <element signature="e#785#787#0" expanded="false" />
-                <element signature="e#1113#1140#0" expanded="false" />
-                <element signature="e#1243#1270#0" expanded="false" />
-                <element signature="e#1380#1382#0" expanded="false" />
+                <element signature="method#saveAsImarisAndBdv#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="e#871#873#0" expanded="false" />
+                <element signature="e#1199#1226#0" expanded="false" />
+                <element signature="e#1328#1355#0" expanded="false" />
                 <element signature="docComment;method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="false" />
                 <element signature="method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="true" />
-                <element signature="e#4201#4224#0" expanded="false" />
-                <element signature="e#6306#6330#0" expanded="false" />
+                <element signature="e#4284#4307#0" expanded="false" />
+                <element signature="e#6793#6795#0" expanded="false" />
+                <element signature="e#8622#8655#0" expanded="false" />
+                <element signature="e#8855#8868#0" expanded="false" />
+                <element signature="method#createBdvXMLString#0;class#HDF5Writer#0" expanded="true" />
                 <element signature="docComment;method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="false" />
-                <element signature="e#9966#9968#0" expanded="false" />
-                <element signature="e#11950#11952#0" expanded="false" />
-                <element signature="e#12434#12436#0" expanded="false" />
-                <element signature="e#13782#13784#0" expanded="false" />
-                <element signature="e#15338#15340#0" expanded="false" />
-                <element signature="e#15569#15571#0" expanded="false" />
-                <element signature="e#16964#16966#0" expanded="false" />
-                <element signature="e#17673#17675#0" expanded="false" />
-                <element signature="e#18306#18308#0" expanded="false" />
+                <element signature="method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="e#15375#15377#0" expanded="false" />
+                <element signature="e#17359#17361#0" expanded="false" />
+                <element signature="e#17852#17854#0" expanded="false" />
+                <element signature="e#20756#20758#0" expanded="false" />
+                <element signature="e#20987#20989#0" expanded="false" />
+                <element signature="e#22382#22384#0" expanded="false" />
+                <element signature="e#23091#23093#0" expanded="false" />
+                <element signature="e#23724#23726#0" expanded="false" />
                 <element signature="docComment;method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="false" />
-                <element signature="e#19320#19322#0" expanded="false" />
-                <element signature="e#20012#20014#0" expanded="false" />
-                <element signature="e#20493#20495#0" expanded="false" />
-                <element signature="e#20744#20746#0" expanded="false" />
-                <element signature="e#21320#21322#0" expanded="false" />
-                <element signature="e#24643#24686#0" expanded="false" />
+                <element signature="method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="e#24738#24740#0" expanded="false" />
+                <element signature="e#25430#25432#0" expanded="false" />
+                <element signature="e#25919#25921#0" expanded="false" />
+                <element signature="e#26170#26172#0" expanded="false" />
+                <element signature="method#getChannelTimeString#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="e#30218#30261#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -164,9 +170,10 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+              <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding>
                 <element signature="method#main#0;class#WriteImarisAndBdv#0" expanded="true" />
+                <element signature="method#createImarisOutput#0;class#WriteImarisAndBdv#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -847,13 +854,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23614457" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23614457" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1702432" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2746988" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2746988" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -970,12 +977,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java</url>
-          <line>580</line>
+          <line>180</line>
           <properties />
-          <option name="timeStamp" value="481" />
+          <option name="timeStamp" value="488" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="483" />
+      <option name="time" value="489" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1697,14 +1704,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="0" selection-start-line="36" selection-start-column="8" selection-end-line="42" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.851852">
@@ -1719,47 +1718,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="0" selection-start-line="36" selection-start-column="8" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+          <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
           <folding>
             <element signature="method#main#0;class#WriteImarisAndBdv#0" expanded="true" />
+            <element signature="method#createImarisOutput#0;class#WriteImarisAndBdv#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26770294">
-          <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.54113346">
+          <caret line="392" column="21" selection-start-line="392" selection-start-column="21" selection-end-line="392" selection-end-column="21" />
           <folding>
             <element signature="docComment;class#HDF5Writer#0" expanded="false" />
-            <element signature="e#785#787#0" expanded="false" />
-            <element signature="e#1113#1140#0" expanded="false" />
-            <element signature="e#1243#1270#0" expanded="false" />
-            <element signature="e#1380#1382#0" expanded="false" />
+            <element signature="method#saveAsImarisAndBdv#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="e#871#873#0" expanded="false" />
+            <element signature="e#1199#1226#0" expanded="false" />
+            <element signature="e#1328#1355#0" expanded="false" />
             <element signature="docComment;method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="false" />
             <element signature="method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="e#4201#4224#0" expanded="false" />
-            <element signature="e#6306#6330#0" expanded="false" />
+            <element signature="e#4284#4307#0" expanded="false" />
+            <element signature="e#6793#6795#0" expanded="false" />
+            <element signature="e#8622#8655#0" expanded="false" />
+            <element signature="e#8855#8868#0" expanded="false" />
+            <element signature="method#createBdvXMLString#0;class#HDF5Writer#0" expanded="true" />
             <element signature="docComment;method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="false" />
-            <element signature="e#9966#9968#0" expanded="false" />
-            <element signature="e#11950#11952#0" expanded="false" />
-            <element signature="e#12434#12436#0" expanded="false" />
-            <element signature="e#13782#13784#0" expanded="false" />
-            <element signature="e#15338#15340#0" expanded="false" />
-            <element signature="e#15569#15571#0" expanded="false" />
-            <element signature="e#16964#16966#0" expanded="false" />
-            <element signature="e#17673#17675#0" expanded="false" />
-            <element signature="e#18306#18308#0" expanded="false" />
+            <element signature="method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="e#15375#15377#0" expanded="false" />
+            <element signature="e#17359#17361#0" expanded="false" />
+            <element signature="e#17852#17854#0" expanded="false" />
+            <element signature="e#20756#20758#0" expanded="false" />
+            <element signature="e#20987#20989#0" expanded="false" />
+            <element signature="e#22382#22384#0" expanded="false" />
+            <element signature="e#23091#23093#0" expanded="false" />
+            <element signature="e#23724#23726#0" expanded="false" />
             <element signature="docComment;method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="false" />
-            <element signature="e#19320#19322#0" expanded="false" />
-            <element signature="e#20012#20014#0" expanded="false" />
-            <element signature="e#20493#20495#0" expanded="false" />
-            <element signature="e#20744#20746#0" expanded="false" />
-            <element signature="e#21320#21322#0" expanded="false" />
-            <element signature="e#24643#24686#0" expanded="false" />
+            <element signature="method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="e#24738#24740#0" expanded="false" />
+            <element signature="e#25430#25432#0" expanded="false" />
+            <element signature="e#25919#25921#0" expanded="false" />
+            <element signature="e#26170#26172#0" expanded="false" />
+            <element signature="method#getChannelTimeString#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="e#30218#30261#0" expanded="false" />
           </folding>
         </state>
       </provider>

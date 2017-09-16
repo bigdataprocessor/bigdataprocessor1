@@ -305,7 +305,10 @@ def produceXMLAndMasterH5(format_config,parameterDict=None,createResolutions=Fal
     tmpFile.write(xml)
     tmpFile.close()
 
+
+	#
     # produce hdf5
+    #
     tmpFile = h5py.File(outFileH5)
     # for iview in range(len(images)):
     for iview in range(len(format_config['channels'])):
@@ -340,3 +343,78 @@ def produceXMLAndMasterH5(format_config,parameterDict=None,createResolutions=Fal
                 # pdb.set_trace()
     tmpFile.close()
     return
+
+
+    #id,size,spacing,angle
+viewSetupStringTemplate = """      <ViewSetup>
+        <id>%(viewId)s</id>
+        <size>%(size)s</size>
+        <voxelSize>
+          <unit>um</unit>
+          <size>%(spacing)s</size>
+        </voxelSize>
+        <attributes>
+          <illumination>0</illumination>
+          <channel>%(channel)s</channel>
+          <angle>%(angle)s</angle>
+        </attributes>
+      </ViewSetup>
+"""
+
+#id,name
+angleAttributeStringTemplate = """        <Angle>
+          <id>%(angleId)s</id>
+          <name>%(angleName)s</name>
+        </Angle>
+"""
+
+channelAttributeStringTemplate = """        <Channel>
+          <id>%(channelId)s</id>
+          <name>%(channelName)s</name>
+        </Channel>
+"""
+
+#parameters
+viewRegistrationStringTemplate = """    <ViewRegistration timepoint="%(time)s" setup="%(viewId)s">
+      <ViewTransform type="affine">
+        <Name>calibration</Name>
+        <affine>%(parameters)s</affine>
+      </ViewTransform>
+    </ViewRegistration>
+"""
+
+xmlStringTemplateBDV = """<?xml version="1.0" encoding="UTF-8"?>
+<SpimData version="0.2">
+  <BasePath type="relative">.</BasePath>
+  <SequenceDescription>
+
+    <ImageLoader format="bdv.hdf5">
+    <hdf5 type="relative">%(outFileH5)s</hdf5>
+    </ImageLoader>
+
+    <ViewSetups>
+%(viewSetups)s
+      <Attributes name="illumination">
+        <Illumination>
+          <id>0</id>
+          <name>0</name>
+        </Illumination>
+      </Attributes>
+      <Attributes name="channel">
+        %(channels)s
+      </Attributes>
+      <Attributes name="angle">
+%(angles)s
+      </Attributes>
+    </ViewSetups>
+    <Timepoints type="range">
+        <first>%(firstTP)s</first>
+        <last>%(lastTP)s</last>
+    </Timepoints>
+  </SequenceDescription>
+  <ViewRegistrations>
+%(registrations)s
+  </ViewRegistrations>
+  <ViewInterestPoints />
+</SpimData>
+"""
