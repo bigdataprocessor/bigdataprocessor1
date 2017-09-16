@@ -5,7 +5,8 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,45 +32,14 @@
       <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="396" column="0" selection-start-line="396" selection-start-column="0" selection-end-line="396" selection-end-column="0" />
+            <state vertical-scroll-proportion="-7.851852">
+              <caret line="169" column="8" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="8" />
               <folding>
                 <element signature="class#FileType#0;class#Utils#0" expanded="false" />
-                <element signature="method#delimitedStringToDoubleArray#0;class#Utils#0" expanded="true" />
-                <element signature="method#getDataCube#0;class#Utils#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="660" column="14" selection-start-line="660" selection-start-column="14" selection-end-line="660" selection-end-column="14" />
-              <folding>
-                <element signature="e#7431#7433#0" expanded="false" />
-                <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="true" />
-                <element signature="e#18723#18783#0" expanded="false" />
-                <element signature="e#19154#19156#0" expanded="false" />
-                <element signature="e#19535#19537#0" expanded="false" />
-                <element signature="e#19808#19810#0" expanded="false" />
-                <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="e#24807#24819#0" expanded="false" />
-                <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
-                <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="method#checkRange#0;class#Utils#0" expanded="true" />
+                <element signature="method#delimitedStringToIntegerArray#0;class#Utils#0" expanded="true" />
+                <element signature="method#applyIntensityGate#0;class#Utils#0" expanded="true" />
+                <element signature="method#compute16bitCenterOfMass#0;class#Utils#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -101,7 +71,21 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="282" column="22" selection-start-line="282" selection-start-column="22" selection-end-line="282" selection-end-column="22" />
               <folding>
-                <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
+                <element signature="e#0#10816#0" expanded="false" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#2615#2622#0" expanded="false" />
+                <element signature="e#2814#2815#0" expanded="false" />
+                <element signature="e#2864#2865#0" expanded="false" />
+                <element signature="e#2909#2910#0" expanded="false" />
+                <element signature="e#2942#2943#0" expanded="false" />
+                <element signature="e#2989#2990#0" expanded="false" />
+                <element signature="e#3018#3019#0" expanded="false" />
+                <element signature="method#clearAllTracks#0;class#BigDataTracker#0" expanded="false" />
+                <element signature="method#getViewsOnTrackedObjects#0;class#BigDataTracker#0" expanded="false" />
+                <element signature="method#getCroppedImagePlus#0;class#BigDataTracker#0" expanded="false" />
+                <element signature="method#addLocationToOverlay#0;class#BigDataTracker#0" expanded="false" />
+                <element signature="method#addNewTrack#0;class#BigDataTracker#0" expanded="false" />
+                <element signature="method#cancelTracking#0;class#BigDataTracker#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,7 +116,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -140,13 +126,47 @@
       <file leaf-file-name="HDF5Writer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.0060241">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.26770294">
+              <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#HDF5Writer#0;class#HDF5Writer#0" expanded="true" />
-                <element signature="method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="true" />
-                <element signature="method#creatingExternalHdf5LinkTest#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="docComment;class#HDF5Writer#0" expanded="false" />
+                <element signature="e#785#787#0" expanded="false" />
+                <element signature="e#1113#1140#0" expanded="false" />
+                <element signature="e#1243#1270#0" expanded="false" />
+                <element signature="e#1380#1382#0" expanded="false" />
+                <element signature="docComment;method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="false" />
+                <element signature="method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="true" />
+                <element signature="e#4201#4224#0" expanded="false" />
+                <element signature="e#6306#6330#0" expanded="false" />
+                <element signature="docComment;method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="false" />
+                <element signature="e#9966#9968#0" expanded="false" />
+                <element signature="e#11950#11952#0" expanded="false" />
+                <element signature="e#12434#12436#0" expanded="false" />
+                <element signature="e#13782#13784#0" expanded="false" />
+                <element signature="e#15338#15340#0" expanded="false" />
+                <element signature="e#15569#15571#0" expanded="false" />
+                <element signature="e#16964#16966#0" expanded="false" />
+                <element signature="e#17673#17675#0" expanded="false" />
+                <element signature="e#18306#18308#0" expanded="false" />
+                <element signature="docComment;method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="false" />
+                <element signature="e#19320#19322#0" expanded="false" />
+                <element signature="e#20012#20014#0" expanded="false" />
+                <element signature="e#20493#20495#0" expanded="false" />
+                <element signature="e#20744#20746#0" expanded="false" />
+                <element signature="e#21320#21322#0" expanded="false" />
+                <element signature="e#24643#24686#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WriteImarisAndBdv.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+              <folding>
+                <element signature="method#main#0;class#WriteImarisAndBdv#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,7 +176,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="105" column="105" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="105" />
+              <caret line="42" column="0" selection-start-line="36" selection-start-column="8" selection-end-line="42" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -178,7 +198,7 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
-                <element signature="e#489#490#0" expanded="true" />
+                <element signature="imports" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -246,15 +266,15 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/IntensityGate.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
         <option value="$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java" />
       </list>
     </option>
@@ -409,6 +429,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fiji-plugin-bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bigDataTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -793,16 +843,16 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36626506" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32048193" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23614457" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23614457" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15665236" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1702432" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2746988" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -902,7 +952,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java</url>
-          <line>357</line>
+          <line>359</line>
           <properties />
           <option name="timeStamp" value="461" />
         </line-breakpoint>
@@ -918,8 +968,14 @@
           <properties />
           <option name="timeStamp" value="471" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java</url>
+          <line>580</line>
+          <properties />
+          <option name="timeStamp" value="481" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="481" />
+      <option name="time" value="483" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1058,6 +1114,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="155" column="9" selection-start-line="155" selection-start-column="9" selection-end-line="155" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#14929#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1091,6 +1151,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.47933885">
           <caret line="612" column="30" selection-start-line="612" selection-start-column="30" selection-end-line="612" selection-end-column="30" />
+          <folding>
+            <element signature="method#create#0;class#ImageStack#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1105,6 +1168,259 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="774" column="26" selection-start-line="774" selection-start-column="26" selection-end-line="774" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="method#ImagePlus#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#ImagePlus#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#ImagePlus#2;class#ImagePlus#0" expanded="false" />
+            <element signature="method#ImagePlus#3;class#ImagePlus#0" expanded="false" />
+            <element signature="method#ImagePlus#4;class#ImagePlus#0" expanded="false" />
+            <element signature="method#lock#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#lockSilently#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#unlock#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#waitForImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#showProgress#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#draw#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#draw#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#updateAndDraw#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setDisplayMode#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getDisplayMode#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setActiveChannels#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#9128#9129#0" expanded="false" />
+            <element signature="e#9150#9151#0" expanded="false" />
+            <element signature="e#9369#9370#0" expanded="false" />
+            <element signature="e#9397#9398#0" expanded="false" />
+            <element signature="method#getLuts#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#repaintWindow#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#updateAndRepaintWindow#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#updateImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#hide#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#close#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#11496#11497#0" expanded="false" />
+            <element signature="e#11511#11512#0" expanded="false" />
+            <element signature="method#show#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#invertLookupTable#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#13549#13550#0" expanded="false" />
+            <element signature="e#13572#13573#0" expanded="false" />
+            <element signature="method#getImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getBufferedImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#14093#14094#0" expanded="false" />
+            <element signature="e#14109#14110#0" expanded="false" />
+            <element signature="method#setImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setImage#1;class#ImagePlus#0" expanded="false" />
+            <element signature="e#16468#16469#0" expanded="false" />
+            <element signature="e#16497#16498#0" expanded="false" />
+            <element signature="method#setProcessor#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setProcessor2#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#18641#18642#0" expanded="false" />
+            <element signature="e#18675#18676#0" expanded="false" />
+            <element signature="method#setStack#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setStack#2;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setFileInfo#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#22133#22134#0" expanded="false" />
+            <element signature="e#22150#22151#0" expanded="false" />
+            <element signature="e#22259#22260#0" expanded="false" />
+            <element signature="e#22301#22302#0" expanded="false" />
+            <element signature="method#setWindow#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#22609#22610#0" expanded="false" />
+            <element signature="e#22665#22666#0" expanded="false" />
+            <element signature="method#setColor#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setupProcessor#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#23144#23145#0" expanded="false" />
+            <element signature="e#23166#23167#0" expanded="false" />
+            <element signature="method#trimProcessor#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getMask#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#25416#25417#0" expanded="false" />
+            <element signature="e#25487#25488#0" expanded="false" />
+            <element signature="method#getRawStatistics#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#26054#26055#0" expanded="false" />
+            <element signature="e#26106#26107#0" expanded="false" />
+            <element signature="e#26375#26376#0" expanded="false" />
+            <element signature="e#26429#26430#0" expanded="false" />
+            <element signature="method#getStatistics#3;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getTitle#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getShortTitle#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setTitle#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#28585#28586#0" expanded="false" />
+            <element signature="e#28610#28611#0" expanded="false" />
+            <element signature="e#28640#28641#0" expanded="false" />
+            <element signature="e#28666#28667#0" expanded="false" />
+            <element signature="method#getStackSize#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getImageStackSize#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setDimensions#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#30656#30657#0" expanded="false" />
+            <element signature="e#30735#30736#0" expanded="false" />
+            <element signature="method#getNDimensions#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#isDisplayedHyperStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getNChannels#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getNSlices#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getNFrames#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#31801#31802#0" expanded="false" />
+            <element signature="e#31834#31835#0" expanded="false" />
+            <element signature="method#getDimensions#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#verifyDimensions#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#32562#32563#0" expanded="false" />
+            <element signature="e#32591#32592#0" expanded="false" />
+            <element signature="method#getBitDepth#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getBytesPerPixel#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setType#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getStringProperty#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#isDicomTag#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#35078#35079#0" expanded="false" />
+            <element signature="e#35133#35134#0" expanded="false" />
+            <element signature="e#35224#35225#0" expanded="false" />
+            <element signature="e#35260#35261#0" expanded="false" />
+            <element signature="method#getStringProperty#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#findKey#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getInfoProperty#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getProperty#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setProperty#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#37199#37200#0" expanded="false" />
+            <element signature="e#37224#37225#0" expanded="false" />
+            <element signature="method#createLut#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#isInvertedLut#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getPixel#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#createEmptyStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getImageStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getCurrentSlice#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setCurrentSlice#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#41303#41304#0" expanded="false" />
+            <element signature="e#41328#41329#0" expanded="false" />
+            <element signature="e#41355#41356#0" expanded="false" />
+            <element signature="e#41380#41381#0" expanded="false" />
+            <element signature="e#41406#41407#0" expanded="false" />
+            <element signature="e#41431#41432#0" expanded="false" />
+            <element signature="method#killStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setPosition#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setPositionWithoutUpdate#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#42804#42805#0" expanded="false" />
+            <element signature="e#42847#42848#0" expanded="false" />
+            <element signature="e#42936#42937#0" expanded="false" />
+            <element signature="e#42977#42978#0" expanded="false" />
+            <element signature="e#43065#43066#0" expanded="false" />
+            <element signature="e#43106#43107#0" expanded="false" />
+            <element signature="e#43185#43186#0" expanded="false" />
+            <element signature="e#43210#43211#0" expanded="false" />
+            <element signature="e#43288#43289#0" expanded="false" />
+            <element signature="e#43313#43314#0" expanded="false" />
+            <element signature="e#43390#43391#0" expanded="false" />
+            <element signature="e#43415#43416#0" expanded="false" />
+            <element signature="method#getStackIndex#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#resetStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setPosition#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#convertIndexToPosition#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setSlice#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setSliceWithoutUpdate#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#47083#47084#0" expanded="false" />
+            <element signature="e#47100#47101#0" expanded="false" />
+            <element signature="e#47291#47292#0" expanded="false" />
+            <element signature="e#47318#47319#0" expanded="false" />
+            <element signature="method#setRoi#1;class#ImagePlus#0" expanded="false" />
+            <element signature="e#48421#48422#0" expanded="false" />
+            <element signature="e#48470#48471#0" expanded="false" />
+            <element signature="e#48547#48548#0" expanded="false" />
+            <element signature="e#48598#48599#0" expanded="false" />
+            <element signature="method#createNewRoi#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#deleteRoi#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#51367#51368#0" expanded="false" />
+            <element signature="e#51385#51386#0" expanded="false" />
+            <element signature="method#saveRoi#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#restoreRoi#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#isSmaller#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#revert#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#revertStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getFileInfo#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#addLut#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getOriginalFileInfo#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#imageUpdate#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#flush#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#58865#58866#0" expanded="false" />
+            <element signature="e#58902#58903#0" expanded="false" />
+            <element signature="e#59060#59061#0" expanded="false" />
+            <element signature="e#59102#59103#0" expanded="false" />
+            <element signature="e#59262#59263#0" expanded="false" />
+            <element signature="e#59305#59306#0" expanded="false" />
+            <element signature="method#createImagePlus#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#createHyperStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#copyScale#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#copyAttributes#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#61719#61720#0" expanded="false" />
+            <element signature="e#61767#61768#0" expanded="false" />
+            <element signature="e#61884#61885#0" expanded="false" />
+            <element signature="e#61910#61911#0" expanded="false" />
+            <element signature="method#getCalibration#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setCalibration#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setGlobalCalibration#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#62884#62885#0" expanded="false" />
+            <element signature="e#62919#62920#0" expanded="false" />
+            <element signature="e#63078#63079#0" expanded="false" />
+            <element signature="e#63113#63114#0" expanded="false" />
+            <element signature="method#getLocalCalibration#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setIgnoreGlobalCalibration#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#mouseMoved#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#64094#64095#0" expanded="false" />
+            <element signature="e#64180#64181#0" expanded="false" />
+            <element signature="method#getFFTLocation#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getLocationAsString#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#65534#65535#0" expanded="false" />
+            <element signature="e#65592#65593#0" expanded="false" />
+            <element signature="method#getValueAsString#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#66798#66799#0" expanded="false" />
+            <element signature="e#66816#66817#0" expanded="false" />
+            <element signature="method#copy#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#paste#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#70402#70403#0" expanded="false" />
+            <element signature="e#70425#70426#0" expanded="false" />
+            <element signature="e#70505#70506#0" expanded="false" />
+            <element signature="e#70528#70529#0" expanded="false" />
+            <element signature="method#notifyListeners#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#71010#71011#0" expanded="false" />
+            <element signature="e#71047#71048#0" expanded="false" />
+            <element signature="e#71115#71116#0" expanded="false" />
+            <element signature="e#71155#71156#0" expanded="false" />
+            <element signature="e#71234#71235#0" expanded="false" />
+            <element signature="e#71254#71255#0" expanded="false" />
+            <element signature="e#71317#71318#0" expanded="false" />
+            <element signature="e#71364#71365#0" expanded="false" />
+            <element signature="e#71406#71407#0" expanded="false" />
+            <element signature="e#71436#71437#0" expanded="false" />
+            <element signature="method#isComposite#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getCompositeMode#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setDisplayRange#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#72150#72151#0" expanded="false" />
+            <element signature="e#72175#72176#0" expanded="false" />
+            <element signature="e#72214#72215#0" expanded="false" />
+            <element signature="e#72239#72240#0" expanded="false" />
+            <element signature="method#setDisplayRange#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#resetDisplayRange#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#73053#73054#0" expanded="false" />
+            <element signature="e#73128#73129#0" expanded="false" />
+            <element signature="method#setDefault16bitRange#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#73688#73689#0" expanded="false" />
+            <element signature="e#73732#73733#0" expanded="false" />
+            <element signature="method#updatePosition#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#flatten#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#flattenStack#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#flattenImage#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#flattenImage#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setLut#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setOverlay#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setOverlay#1;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setOverlay#2;class#ImagePlus#0" expanded="false" />
+            <element signature="method#getOverlay#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#setHideOverlay#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#80460#80461#0" expanded="false" />
+            <element signature="e#80485#80486#0" expanded="false" />
+            <element signature="e#80621#80622#0" expanded="false" />
+            <element signature="e#80672#80673#0" expanded="false" />
+            <element signature="method#clone#0;class#ImagePlus#0" expanded="false" />
+            <element signature="method#toString#0;class#ImagePlus#0" expanded="false" />
+            <element signature="e#81113#81114#0" expanded="false" />
+            <element signature="e#81142#81143#0" expanded="false" />
+            <element signature="e#81183#81184#0" expanded="false" />
+            <element signature="e#81237#81238#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1112,6 +1428,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1211,17 +1528,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="52" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#createImarisOutput#0;class#WriteImarisAndBdv#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/ImageFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1233,6 +1539,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.111111">
           <caret line="29" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding>
+            <element signature="method#showDialog#0;class#DataStreamingToolsGUI#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1291,24 +1601,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="396" column="0" selection-start-line="396" selection-start-column="0" selection-end-line="396" selection-end-column="0" />
-          <folding>
-            <element signature="class#FileType#0;class#Utils#0" expanded="false" />
-            <element signature="method#delimitedStringToDoubleArray#0;class#Utils#0" expanded="true" />
-            <element signature="method#getDataCube#0;class#Utils#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerPlugIn_.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
-            <element signature="e#489#490#0" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1325,14 +1623,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.25935483">
           <caret line="361" column="32" selection-start-line="361" selection-start-column="32" selection-end-line="361" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="105" selection-start-line="105" selection-start-column="12" selection-end-line="105" selection-end-column="105" />
           <folding />
         </state>
       </provider>
@@ -1360,7 +1650,21 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="282" column="22" selection-start-line="282" selection-start-column="22" selection-end-line="282" selection-end-column="22" />
           <folding>
-            <element signature="method#trackObject#0;class#BigDataTracker#0" expanded="true" />
+            <element signature="e#0#10816#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#2615#2622#0" expanded="false" />
+            <element signature="e#2814#2815#0" expanded="false" />
+            <element signature="e#2864#2865#0" expanded="false" />
+            <element signature="e#2909#2910#0" expanded="false" />
+            <element signature="e#2942#2943#0" expanded="false" />
+            <element signature="e#2989#2990#0" expanded="false" />
+            <element signature="e#3018#3019#0" expanded="false" />
+            <element signature="method#clearAllTracks#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#getViewsOnTrackedObjects#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#getCroppedImagePlus#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#addLocationToOverlay#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#addNewTrack#0;class#BigDataTracker#0" expanded="false" />
+            <element signature="method#cancelTracking#0;class#BigDataTracker#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1369,7 +1673,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1391,15 +1697,69 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/H5Balint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="0" selection-start-line="36" selection-start-column="8" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.851852">
+          <caret line="169" column="8" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="8" />
+          <folding>
+            <element signature="class#FileType#0;class#Utils#0" expanded="false" />
+            <element signature="method#checkRange#0;class#Utils#0" expanded="true" />
+            <element signature="method#delimitedStringToIntegerArray#0;class#Utils#0" expanded="true" />
+            <element signature="method#applyIntensityGate#0;class#Utils#0" expanded="true" />
+            <element signature="method#compute16bitCenterOfMass#0;class#Utils#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+          <folding>
+            <element signature="method#main#0;class#WriteImarisAndBdv#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/HDF5Writer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.0060241">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.26770294">
+          <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#HDF5Writer#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="true" />
-            <element signature="method#creatingExternalHdf5LinkTest#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="docComment;class#HDF5Writer#0" expanded="false" />
+            <element signature="e#785#787#0" expanded="false" />
+            <element signature="e#1113#1140#0" expanded="false" />
+            <element signature="e#1243#1270#0" expanded="false" />
+            <element signature="e#1380#1382#0" expanded="false" />
+            <element signature="docComment;method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="false" />
+            <element signature="method#writeBdvMasterFiles#0;class#HDF5Writer#0" expanded="true" />
+            <element signature="e#4201#4224#0" expanded="false" />
+            <element signature="e#6306#6330#0" expanded="false" />
+            <element signature="docComment;method#writeImarisMasterFile#0;class#HDF5Writer#0" expanded="false" />
+            <element signature="e#9966#9968#0" expanded="false" />
+            <element signature="e#11950#11952#0" expanded="false" />
+            <element signature="e#12434#12436#0" expanded="false" />
+            <element signature="e#13782#13784#0" expanded="false" />
+            <element signature="e#15338#15340#0" expanded="false" />
+            <element signature="e#15569#15571#0" expanded="false" />
+            <element signature="e#16964#16966#0" expanded="false" />
+            <element signature="e#17673#17675#0" expanded="false" />
+            <element signature="e#18306#18308#0" expanded="false" />
+            <element signature="docComment;method#writeChannelTimeH5File#0;class#HDF5Writer#0" expanded="false" />
+            <element signature="e#19320#19322#0" expanded="false" />
+            <element signature="e#20012#20014#0" expanded="false" />
+            <element signature="e#20493#20495#0" expanded="false" />
+            <element signature="e#20744#20746#0" expanded="false" />
+            <element signature="e#21320#21322#0" expanded="false" />
+            <element signature="e#24643#24686#0" expanded="false" />
           </folding>
         </state>
       </provider>

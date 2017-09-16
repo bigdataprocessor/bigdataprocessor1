@@ -41,6 +41,7 @@ import ij.ImageStack;
 import ij.gui.Overlay;
 import ij.gui.Roi;
 import ij.measure.Calibration;
+import ij.plugin.Binner;
 import ij.plugin.Duplicator;
 import ij.plugin.frame.Recorder;
 import ij.process.ImageProcessor;
@@ -50,6 +51,7 @@ import javafx.geometry.Point3D;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Created by tischi on 06/11/16.
@@ -216,7 +218,7 @@ public class Utils {
         int[] nums = new int[sA.length];
         for (int i = 0; i < nums.length; i++)
         {
-            nums[i] = Integer.parseInt( sA[i].trim() );
+            nums[i] = Integer.parseInt(sA[i].trim());
         }
 
         return nums;
@@ -393,10 +395,61 @@ public class Utils {
                 }
             }
         }
+    }
 
+    public Callable<ImagePlus> bin(ImagePlus imp_, int[] binning_, String binningTitle, String method)
+    {
+        return () -> {
 
+            ImagePlus imp = imp_;
+            int[] binning = binning_;
+            String title = new String(imp.getTitle());
+            Binner binner = new Binner();
 
+            Calibration saveCalibration = imp.getCalibration().copy(); // this is due to a bug in the binner
 
+            ImagePlus impBinned = null;
+
+            switch( method )
+            {
+                case "OPEN":
+                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
+                    //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                    //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
+                    //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
+                    impBinned.setTitle("Open_" + title);
+                    break;
+                case "CLOSE":
+                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
+                    //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                    //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
+                    //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
+                    impBinned.setTitle("Close_" + title);
+                    break;
+                case "AVERAGE":
+                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                    impBinned.setTitle(binningTitle + "_" + title);
+                    break;
+                case "MIN":
+                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
+                    impBinned.setTitle(binningTitle + "_Min_" + title);
+                    break;
+                case "MAX":
+                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
+                    impBinned.setTitle(binningTitle + "_Max_" + title);
+                    break;
+                default:
+                    IJ.showMessage("Error while binning; method not supported :"+method);
+                    break;
+            }
+
+            // reset calibration of input image
+            // necessary due to a bug in the binner
+            imp.setCalibration( saveCalibration );
+
+            return ( impBinned );
+
+        };
     }
 
     private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)

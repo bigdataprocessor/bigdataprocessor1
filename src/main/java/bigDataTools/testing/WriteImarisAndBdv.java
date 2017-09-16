@@ -23,7 +23,7 @@ public class WriteImarisAndBdv {
     public static void createImarisOutput(ImagePlus imp)
     {
         HDF5Writer hdf5Writer = new HDF5Writer();
-        hdf5Writer.saveAsImaris( imp );
+        hdf5Writer.saveAsImarisAndBdv( imp );
     }
 
 }
