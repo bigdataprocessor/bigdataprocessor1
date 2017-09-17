@@ -18,6 +18,8 @@ public class SavingSettings {
     public boolean gate;
     public int gateMin, gateMax;
     public String filePath;
+    public String fileBaseName;
+    public String directory;
     public Utils.FileType fileType;
     public String compression;
     public int rowsPerStrip;

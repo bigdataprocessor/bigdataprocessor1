@@ -271,13 +271,11 @@ def produceXMLAndMasterH5(format_config,parameterDict=None,createResolutions=Fal
         # viewDict['name'] = iview+1
         # viewDict['name'] = 0
         viewDict['parameters'] = "%s %s %s %s %s %s %s %s %s %s %s %s" %tuple(spacingParams[[0,1,2,9,3,4,5,10,6,7,8,11]])
-
         viewDict['channel'] = iview
         viewDict['channelId'] = iview
         viewDict['channelName'] = iview
         viewDict['angleId'] = iview
         viewDict['angleName'] = iview
-
 
         # if not itime:
         viewSetupsString += viewSetupStringTemplate %viewDict

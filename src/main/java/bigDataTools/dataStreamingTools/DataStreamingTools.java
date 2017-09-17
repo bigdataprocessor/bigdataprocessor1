@@ -51,6 +51,7 @@ package bigDataTools.dataStreamingTools;
 //import org.scijava.util.Bytes;
 
 
+import bigDataTools.Hdf55ImarisBdvWriter;
 import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -1304,20 +1305,53 @@ public class DataStreamingTools {
 
     }
 
-
     public void saveVSSAsStacks(SavingSettings savingSettings)
     {
 
         interruptSavingThreads = false;
 
-        // Do the jobs
+        int nSavingThreads = savingSettings.nThreads;
+
+        if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) )
+        {
+            nSavingThreads = 1; // H5 is not multi-threaded anyway.
+        }
+
+
+        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings = null;
+
+        if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
+        {
+            nSavingThreads = 1; // H5 is not multi-threaded anyway.
+
+            Hdf55ImarisBdvWriter writer = new Hdf55ImarisBdvWriter();
+
+            imarisH5Settings = new Hdf55ImarisBdvWriter.ImarisH5Settings();
+
+            writer.saveImarisAndBdvMasterFiles(
+                    savingSettings.imp,
+                    savingSettings.directory,
+                    savingSettings.fileBaseName,
+                    imarisH5Settings);
+
+            logger.info("Image sizes at different resolutions:");
+            Utils.logArrayList(imarisH5Settings.sizes);
+
+            logger.info("Image chunking:");
+            Utils.logArrayList(imarisH5Settings.chunks);
+
+
+        }
+
+        // Save individual files for each channel and time-point
         //
-        ExecutorService es = Executors.newFixedThreadPool(savingSettings.nThreads);
+        ExecutorService es = Executors.newFixedThreadPool( nSavingThreads );
         List<Future> futures = new ArrayList<>();
 
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
-            futures.add( es.submit( new SaveVSSFrame(this, t, savingSettings) ) );
+            futures.add( es.submit( new SaveVSSFrame( this, t,
+                    savingSettings, imarisH5Settings ) ) );
         }
 
         // Monitor the progress
@@ -1332,7 +1366,6 @@ public class DataStreamingTools {
             }
         });
         thread.start();
-
 
     }
 

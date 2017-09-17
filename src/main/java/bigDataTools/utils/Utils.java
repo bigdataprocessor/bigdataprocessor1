@@ -49,6 +49,7 @@ import ij.process.LUT;
 import javafx.geometry.Point3D;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -67,6 +68,7 @@ public class Utils {
     public enum FileType {
         TIFF("Tiff"),
         HDF5("Hdf5"),
+        HDF5_IMARIS_BDV("Hdf5_Imaris_Bdv"),
         TIFF_STACKS("Tiff stacks"),
         SINGLE_PLANE_TIFF("single tif"),
         SERIALIZED_HEADERS("Serialized headers");
@@ -80,6 +82,13 @@ public class Utils {
         }
     }
 
+    public static void logArrayList( ArrayList<long[]> arrayList )
+    {
+        for ( long[] entry : arrayList )
+        {
+            logger.info( "" + entry[0] + "," + entry[1] + "," + entry[2]);
+        }
+    }
 
     public static boolean checkRange(ImagePlus imp, int min, int max, String dimension)
     {
@@ -397,60 +406,56 @@ public class Utils {
         }
     }
 
-    public Callable<ImagePlus> bin(ImagePlus imp_, int[] binning_, String binningTitle, String method)
+    public static ImagePlus bin( ImagePlus imp_, int[] binning_, String binningTitle, String method )
     {
-        return () -> {
+        ImagePlus imp = imp_;
+        int[] binning = binning_;
+        String title = new String(imp.getTitle());
+        Binner binner = new Binner();
 
-            ImagePlus imp = imp_;
-            int[] binning = binning_;
-            String title = new String(imp.getTitle());
-            Binner binner = new Binner();
+        Calibration saveCalibration = imp.getCalibration().copy(); // this is due to a bug in the binner
 
-            Calibration saveCalibration = imp.getCalibration().copy(); // this is due to a bug in the binner
+        ImagePlus impBinned = null;
 
-            ImagePlus impBinned = null;
+        switch( method )
+        {
+            case "OPEN":
+                impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
+                //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
+                //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
+                impBinned.setTitle("Open_" + title);
+                break;
+            case "CLOSE":
+                impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
+                //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
+                //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
+                impBinned.setTitle("Close_" + title);
+                break;
+            case "AVERAGE":
+                impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
+                impBinned.setTitle(binningTitle + "_" + title);
+                break;
+            case "MIN":
+                impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
+                impBinned.setTitle(binningTitle + "_Min_" + title);
+                break;
+            case "MAX":
+                impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
+                impBinned.setTitle(binningTitle + "_Max_" + title);
+                break;
+            default:
+                IJ.showMessage("Error while binning; method not supported :"+method);
+                break;
+        }
 
-            switch( method )
-            {
-                case "OPEN":
-                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
-                    //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
-                    //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
-                    //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
-                    impBinned.setTitle("Open_" + title);
-                    break;
-                case "CLOSE":
-                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
-                    //impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
-                    //IJ.run(impBinned, "Maximum 3D...", "x=1 y=1 z=1");
-                    //IJ.run(impBinned, "Minimum 3D...", "x=1 y=1 z=1");
-                    impBinned.setTitle("Close_" + title);
-                    break;
-                case "AVERAGE":
-                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.AVERAGE);
-                    impBinned.setTitle(binningTitle + "_" + title);
-                    break;
-                case "MIN":
-                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MIN);
-                    impBinned.setTitle(binningTitle + "_Min_" + title);
-                    break;
-                case "MAX":
-                    impBinned = binner.shrink(imp, binning[0], binning[1], binning[2], binner.MAX);
-                    impBinned.setTitle(binningTitle + "_Max_" + title);
-                    break;
-                default:
-                    IJ.showMessage("Error while binning; method not supported :"+method);
-                    break;
-            }
+        // reset calibration of input image
+        // necessary due to a bug in the binner
+        imp.setCalibration( saveCalibration );
 
-            // reset calibration of input image
-            // necessary due to a bug in the binner
-            imp.setCalibration( saveCalibration );
-
-            return ( impBinned );
-
-        };
-    }
+        return ( impBinned );
+}
 
     private Point3D compute16bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
     {

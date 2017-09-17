@@ -44,7 +44,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfGateMin = new JTextField("0",5);
     JTextField tfGateMax = new JTextField("255",5);
 
-
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
             ".*",".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
@@ -425,13 +424,14 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             fc = new JFileChooser(vss.getDirectory());
             int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
+
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 final File file = fc.getSelectedFile();
 
                 Utils.FileType fileType = (Utils.FileType) comboFileTypeForSaving.getSelectedItem();
 
-                if ( fileType.equals(Utils.FileType.SERIALIZED_HEADERS) )
+                if ( fileType.equals( Utils.FileType.SERIALIZED_HEADERS ) )
                 {
 
                     // Save the info file
@@ -445,8 +445,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     }); t1.start();
 
                 }
-                else if ( fileType.equals(Utils.FileType.TIFF)
-                        || fileType.equals(Utils.FileType.HDF5) )
+                else if ( fileType.equals( Utils.FileType.TIFF )
+                        || fileType.equals( Utils.FileType.HDF5 )
+                        || fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                 {
 
                     final int ioThreads = new Integer(tfIOThreads.getText());
@@ -471,6 +472,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     savingSettings.gateMax = Integer.parseInt(tfGateMax.getText());
                     savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
                     savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
+                    savingSettings.directory = file.getParent();
+                    savingSettings.fileBaseName = file.getName();
                     savingSettings.filePath = file.getAbsolutePath();
                     savingSettings.fileType = fileType;
                     savingSettings.compression = compression;

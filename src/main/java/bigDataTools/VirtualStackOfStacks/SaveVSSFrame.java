@@ -1,5 +1,6 @@
 package bigDataTools.VirtualStackOfStacks;
 
+import bigDataTools.Hdf55ImarisBdvWriter;
 import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.dataStreamingTools.SavingSettings;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -16,19 +17,23 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.FileSaver;
 import ij.plugin.Duplicator;
-import ij.process.ImageProcessor;
 import loci.common.services.ServiceFactory;
 import loci.formats.ImageWriter;
 import loci.formats.meta.IMetadata;
 import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
 import loci.formats.tiff.IFD;
+import ncsa.hdf.hdf5lib.H5;
+import ncsa.hdf.hdf5lib.HDF5Constants;
 import ncsa.hdf.hdf5lib.exceptions.HDF5Exception;
 import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 
 import ij.plugin.Binner;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by tischi on 11/04/17.
@@ -38,16 +43,19 @@ public class SaveVSSFrame implements Runnable {
     int t;
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
+    Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings;
 
     Logger logger = new IJLazySwingLogger();
 
     public SaveVSSFrame(DataStreamingTools dataStreamingTools,
                         int t,
-                        SavingSettings savingSettings)
+                        SavingSettings savingSettings,
+                        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings)
     {
         this.dataStreamingTools = dataStreamingTools;
         this.t = t;
         this.savingSettings = savingSettings;
+        this.imarisH5Settings = imarisH5Settings;
     }
 
     public void run()
@@ -102,6 +110,7 @@ public class SaveVSSFrame implements Runnable {
             // Bin, project and save
             //
             String[] binnings = savingSettings.bin.split(";");
+
             for ( String binning : binnings )
             {
 
@@ -112,38 +121,55 @@ public class SaveVSSFrame implements Runnable {
                 }
 
                 String newPath = savingSettings.filePath;
-                ImagePlus impBinned = impChannelTime; // in case binning is 1,1,1 just keep the original
 
-                int[] binningA = Utils.delimitedStringToIntegerArray(binning,",");
-
-                // Bin
+                // Binning
+                // - not for imarisH5 saving format as there will be a resolution pyramid anyway
                 //
-                if (binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1)
+                ImagePlus impBinned = impChannelTime;
+
+                if ( ! savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                 {
-                    Binner binner = new Binner();
-                    impBinned = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
-                    newPath = savingSettings.filePath + "--bin-"+binningA[0]+"-"+binningA[1]+"-"+binningA[2];
+                    int[] binningA = Utils.delimitedStringToIntegerArray(binning, ",");
+
+                    if ( binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1 )
+                    {
+                        Binner binner = new Binner();
+                        impBinned = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
+                        newPath = savingSettings.filePath + "--bin-" + binningA[0] + "-" + binningA[1] + "-" + binningA[2];
+                    }
+
                 }
 
-
+                // Save volume
+                //
                 if ( savingSettings.saveVolume )
                 {
                     // Save
                     //
-                    if ( savingSettings.fileType.equals(Utils.FileType.TIFF) )
+                    if ( savingSettings.fileType.equals( Utils.FileType.TIFF ) )
                     {
-                        saveAsTiff(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath);
+                        saveAsTiff(impBinned, c, t, savingSettings.compression,
+                                savingSettings.rowsPerStrip, newPath);
                     }
-                    else if ( savingSettings.fileType.equals(Utils.FileType.HDF5) )
+                    else if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) )
                     {
                         int compressionLevel = 0;
-                        saveAsHDF5(impBinned, c, t, compressionLevel, newPath);
+                        saveAsHDF5( impBinned, c, t, compressionLevel, newPath );
+                    }
+                    else if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
+                    {
+                        Hdf55ImarisBdvWriter writer = new Hdf55ImarisBdvWriter();
+
+                        writer.writeChannelTimeH5File( impBinned, imarisH5Settings,
+                                c, t, savingSettings.fileBaseName, savingSettings.directory );
                     }
 
                     logger.debug("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
 
                 }
 
+                // Save projections
+                // TODO: save into one single file
                 if ( savingSettings.saveProjection )
                 {
                     saveAsTiffXYZMaxProjection(impBinned, c, t, newPath);
@@ -180,20 +206,12 @@ public class SaveVSSFrame implements Runnable {
         //  Open output file
         //
 
-        /*
-        if (! (imp.getType() == ImagePlus.GRAY16) )
-        {
-            logger.error("Sorry, only 16bit images are currently supported.");
-            return;
-        }
-        */
 
         try
         {
             String sC = String.format("%1$02d", c);
             String sT = String.format("%1$05d", t);
             String pathCT = path + "--C" + sC + "--T" + sT + ".h5";
-
 
             IHDF5Writer writer;
             writer = HDF5Factory.configure(pathCT).useSimpleDataSpaceForAttributes().overwrite().writer();
