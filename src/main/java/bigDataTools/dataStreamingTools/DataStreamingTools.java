@@ -1493,7 +1493,6 @@ public class DataStreamingTools {
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files/";
         //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files 2channels/";
 
-        final String directory = "/Users/tischi/Desktop/example-data/Gustavo/";
         //final String directory = "/Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF/";
 
         //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
@@ -1532,7 +1531,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                String directory = "/Users/tischi/Desktop/example-data/3d-embryo/"; // Gustavo
+                final String directory = "/Users/tischi/Downloads/BDTracker_test_data/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*

@@ -57,7 +57,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
-    JComboBox comboFileTypeForSaving = new JComboBox(Utils.FileType.values());
+    JComboBox comboFileTypeForSaving = new JComboBox( Utils.FileType.values() );
 
     final String BDV = "Big Data Viewer";
     JButton viewInBigDataViewer =  new JButton(BDV);

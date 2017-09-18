@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface ImageFilter {
 
-    ImagePlus filter(ImagePlus imp);
+    ImagePlus filter( ImagePlus imp );
 
 }

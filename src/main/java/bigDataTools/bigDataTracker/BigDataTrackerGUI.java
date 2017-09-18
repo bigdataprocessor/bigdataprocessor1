@@ -67,10 +67,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             "Tracking method"
     };
 
-    String[][] comboChoices = {
-            {"None"},
-            {"center of mass","correlation"}
-    };
+    String[][] comboChoices = new String[2][];
 
     JTextField[] textFields = new JTextField[texts.length];
 
@@ -90,6 +87,15 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         this.bigDataTracker = new BigDataTracker();
         trackTablePanel = new TrackTablePanel(bigDataTracker.getTrackTable(),
                 bigDataTracker.getTracks());
+
+        String[] imageFilters = new String[Utils.ImageFilterTypes.values().length];
+        for ( int i = 0; i < imageFilters.length; i++ )
+        {
+            imageFilters[i] = Utils.ImageFilterTypes.values()[i].toString();
+        }
+        comboChoices[0] = imageFilters;
+        comboChoices[1] = new String[]{"center of mass", "correlation"};
+
         setDefaults();
     }
 

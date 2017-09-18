@@ -49,9 +49,7 @@ import ij.process.LUT;
 import javafx.geometry.Point3D;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -82,7 +80,27 @@ public class Utils {
         }
     }
 
-    public static void logArrayList( ArrayList<long[]> arrayList )
+
+    public enum ImageFilterTypes {
+        NONE("None"),
+        VARIANCE("Variance");
+        private final String text;
+        private ImageFilterTypes(String s) {
+            text = s;
+        }
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
+
+    public static String[] getNames(Class<? extends Enum<?>> e) {
+        return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
+    }
+
+
+    public static void logArrayList(ArrayList<long[]> arrayList )
     {
         for ( long[] entry : arrayList )
         {
@@ -327,16 +345,16 @@ public class Utils {
         if(imp.getStack() instanceof VirtualStackOfStacks)
         {
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            dataCube = vss.getDataCube(region5D, intensityGate, nThreads);
+            dataCube = vss.getDataCube( region5D, intensityGate, nThreads );
         }
         else
         {
-            dataCube = getDataCubeFromImagePlus(imp, region5D);
+            dataCube = getDataCubeFromImagePlus( imp, region5D );
         }
 
         //dataCube.show();
 
-        return(dataCube);
+        return( dataCube );
     };
 
     public static void applyIntensityGate( ImagePlus imp, int[] gate )

@@ -315,41 +315,40 @@ public class Hdf55ImarisBdvWriter {
         setH5StringAttribute(file_id, "ThumbnailDirectoryName", "Thumbnail");
 
         int dataset_group_id = H5.H5Gcreate(file_id, "/DataSet",
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-        String group;
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
+                HDF5Constants.H5P_DEFAULT);
 
         for (int r = 0; r < sizes.size(); r++)
         {
-            String resolution_group = "/DataSet" + "/ResolutionLevel " + r;
-
-            int resolution_group_id = H5.H5Gcreate(dataset_group_id, resolution_group,
-                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+            int r_group_id = H5.H5Gcreate(dataset_group_id,
+                    "/DataSet" + "/ResolutionLevel " + r,
+                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
+                    HDF5Constants.H5P_DEFAULT);
 
             for (int t = 0; t < imp.getNFrames(); t++)
             {
-                int resolution_time_group_id = H5.H5Gcreate(resolution_group_id,
+                int r_t_group_id = H5.H5Gcreate(r_group_id,
                         "TimePoint " + t ,
                         HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
                         HDF5Constants.H5P_DEFAULT);
 
                 for (int c = 0; c < imp.getNChannels(); c++)
                 {
-
-                    int resolution_time_channel_group_id = H5.H5Gcreate(resolution_time_group_id,
+                    int r_t_c_group_id = H5.H5Gcreate(r_t_group_id,
                             "Channel " + c ,
                             HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT);
 
                     //
-                    // Create link for the actual Data to an external data file
+                    // Create link to the actual data in an external data file
                     //
                     String relativePath = "./";
-                    String pathNameData = relativePath + fileName + getChannelTimeString( c , t ) + ".h5";
+                    String pathNameData = relativePath + fileName
+                            + getChannelTimeString( c , t ) + ".h5";
 
                     H5.H5Lcreate_external(
                             pathNameData, getExternalH5DataPath( r ),
-                            resolution_time_channel_group_id, "Data",
+                            r_t_c_group_id, "Data",
                             HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
                     //
@@ -357,7 +356,8 @@ public class Hdf55ImarisBdvWriter {
                     //
                     int[] histo_data = { 1,1,1 };
                     long[] histo_dims = { histo_data.length };
-                    int histo_dataspace_id = H5.H5Screate_simple(histo_dims.length, histo_dims, null);
+                    int histo_dataspace_id = H5.H5Screate_simple(
+                            histo_dims.length, histo_dims, null);
 
                     /*
                     imaris expects 64bit unsigned int values:
@@ -366,49 +366,44 @@ public class Hdf55ImarisBdvWriter {
                     and as the corresponding file type: H5T_STD_I64LE
                     - https://support.hdfgroup.org/HDF5/release/dttable.html
                     */
-                    int histo_dataset_id = H5.H5Dcreate(resolution_time_channel_group_id, "Histogram",
+                    int histo_dataset_id = H5.H5Dcreate(r_t_c_group_id, "Histogram",
                             HDF5Constants.H5T_STD_I64LE, histo_dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT);
-                    H5.H5Dwrite(histo_dataset_id, HDF5Constants.H5T_NATIVE_ULLONG, HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
+
+                    H5.H5Dwrite(histo_dataset_id, HDF5Constants.H5T_NATIVE_ULLONG,
+                            HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
                             HDF5Constants.H5P_DEFAULT, histo_data);
 
                     H5.H5Dclose(histo_dataset_id);
                     H5.H5Sclose(histo_dataspace_id);
 
+                    // Set channel group attributes
                     //
-                    // Set data set group attributes
-                    //
+                    setH5StringAttribute(r_t_c_group_id, "ImageSizeX",
+                            String.valueOf(sizes.get(r)[0]) );
 
-                    /*
-                    setH5IntegerAttribute(resolution_time_channel_group_id, "ImageSizeX", new int[]{sizes.get(r)[0]});
-                    setH5IntegerAttribute(resolution_time_channel_group_id, "ImageSizeY", new int[]{sizes.get(r)[1]});
-                    setH5IntegerAttribute(resolution_time_channel_group_id, "ImageSizeZ", new int[]{sizes.get(r)[2]});
-                    setH5IntegerAttribute(resolution_time_channel_group_id, "HistogramMin", new int[]{0});
-                    setH5IntegerAttribute(resolution_time_channel_group_id, "HistogramMax", new int[]{255});
-                    */
+                    setH5StringAttribute(r_t_c_group_id, "ImageSizeY",
+                            String.valueOf(sizes.get(r)[1]) );
 
-                    H5.H5Gclose(resolution_time_channel_group_id);
+                    setH5StringAttribute(r_t_c_group_id, "ImageSizeZ",
+                            String.valueOf(sizes.get(r)[2]) );
+
+                    setH5StringAttribute(r_t_c_group_id, "HistogramMin",
+                            String.valueOf( 0.0 ) );
+
+                    setH5StringAttribute(r_t_c_group_id, "HistogramMax",
+                            String.valueOf( 65535.0 ) );
+
+                    H5.H5Gclose(r_t_c_group_id);
                 }
-                H5.H5Gclose(resolution_time_group_id);
+                H5.H5Gclose(r_t_group_id);
             }
-            H5.H5Gclose(resolution_group_id);
+            H5.H5Gclose(r_group_id);
         }
         H5.H5Gclose(dataset_group_id);
 
-
-        /*
-        tmpHierarchy = '.'
-
-        setAttribute(outFile,tmpHierarchy,'DataSetDirectoryName','DataSet')
-        setAttribute(outFile,tmpHierarchy,'DataSetInfoDirectoryName','DataSetInfo')
-        setAttribute(outFile,tmpHierarchy,'ImarisDataSet','ImarisDataSet')
-        # setAttribute(outFile,tmpHierarchy,'ImarisVersion','8.4.0') # renders file unrecognizable
-        setAttribute(outFile,tmpHierarchy,'ImarisVersion','5.5.0')
-        setAttribute(outFile,tmpHierarchy,'NumberOfDataSets',1)
-        setAttribute(outFile,tmpHierarchy,'ThumbnailDirectoryName','Thumbnail')
-        */
 
 
         //
@@ -418,30 +413,44 @@ public class Hdf55ImarisBdvWriter {
         int dataSetInfo_group_id = H5.H5Gcreate(file_id, "/DataSetInfo",
                 HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
-        //
+
         // Create DataSetInfo/Image group and add attributes
         //
-
         int dataSetInfo_image_group_id = H5.H5Gcreate(dataSetInfo_group_id, "Image",
                 HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
 
+        // set attributes
+        //
         setH5StringAttribute(dataSetInfo_image_group_id, "Description", "description");
-        /*
-        TODO: finish this
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMax1", new double[]{sizes.get(0)[0] * calibration[0]});
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMax0", new double[]{sizes.get(0)[1] * calibration[1]});
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMax2", new double[]{sizes.get(0)[2] * calibration[2]});
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMin1", new double[]{0.0});
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMin0", new double[]{0.0});
-        setH5DoubleAttribute(dataSetInfo_image_group_id, "ExtMin2", new double[]{0.0});
-        setH5StringAttribute(dataSetInfo_image_group_id, "Unit", "um");
-        setH5IntegerAttribute(dataSetInfo_image_group_id, "X", new int[]{sizes.get(0)[0]});
-        setH5IntegerAttribute(dataSetInfo_image_group_id, "Y", new int[]{sizes.get(0)[1]});
-        setH5IntegerAttribute(dataSetInfo_image_group_id, "Z", new int[]{sizes.get(0)[2]});
-        */
-        H5.H5Gclose( dataSetInfo_image_group_id );
 
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax0",
+                String.valueOf(1.0 * sizes.get(0)[0] * calibration[0]));
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax1",
+                String.valueOf(1.0 * sizes.get(0)[1] * calibration[1]));
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax2",
+                String.valueOf( 1.0 * sizes.get(0)[2] * calibration[2] ) );
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMin0", "0.0");
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMin1", "0.0");
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "ExtMin2", "0.0");
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "Unit", "um");
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "X",
+                String.valueOf(sizes.get(0)[0]) );
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "Y",
+                String.valueOf(sizes.get(0)[1]) );
+
+        setH5StringAttribute(dataSetInfo_image_group_id, "Z",
+                String.valueOf(sizes.get(0)[2]) );
+
+        H5.H5Gclose( dataSetInfo_image_group_id );
 
         //
         // Create DataSetInfo/Channel groups and add attributes
@@ -452,23 +461,37 @@ public class Hdf55ImarisBdvWriter {
             int dataSetInfo_channel_group_id = H5.H5Gcreate(dataSetInfo_group_id, "Channel " + c,
                     HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
 
-            setH5StringAttribute(dataSetInfo_channel_group_id, "ColorMode", "BaseColor");
-            setH5DoubleAttribute(dataSetInfo_channel_group_id, "ColorOpacity", new double[]{1.0});
-            setH5DoubleAttribute(dataSetInfo_channel_group_id, "Color", new double[]{1.0, 0.0, 0.0});
+            setH5StringAttribute(dataSetInfo_channel_group_id,
+                    "ColorMode", "BaseColor");
+
+            setH5StringAttribute(dataSetInfo_channel_group_id,
+                    "ColorOpacity", "1");
+
+            setH5StringAttribute(dataSetInfo_channel_group_id,
+                    "Color", "'[1 0 0]'");
 
             H5.H5Gclose(dataSetInfo_channel_group_id);
         }
 
         //
-        // Create group DataSetInfo/TimeInfo and add attributes
+        // Create group DataSetInfo/TimeInfo and set attributes
         //
 
-        int dataSetInfo_time_group_id = H5.H5Gcreate(dataSetInfo_group_id, "TimeInfo",
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+        int dataSetInfo_time_group_id = H5.H5Gcreate(dataSetInfo_group_id,
+                "TimeInfo",
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
+                HDF5Constants.H5P_DEFAULT);
 
-        setH5IntegerAttribute(dataSetInfo_time_group_id, "DataSetTimePoints", new int[]{imp.getNFrames()});
-        setH5IntegerAttribute(dataSetInfo_time_group_id, "FileTimePoints", new int[]{imp.getNFrames()});
-        setH5StringAttribute(dataSetInfo_time_group_id, "TimePoint1", "2000-01-01 00:00:00");
+        // Set attributes
+        //
+        setH5StringAttribute(dataSetInfo_time_group_id, "DataSetTimePoints",
+                String.valueOf(imp.getNFrames()) );
+
+        setH5StringAttribute(dataSetInfo_time_group_id, "FileTimePoints",
+                String.valueOf(imp.getNFrames()) );
+
+        setH5StringAttribute(dataSetInfo_time_group_id, "TimePoint1",
+                "2000-01-01 00:00:00");
 
         H5.H5Gclose( dataSetInfo_time_group_id );
 
@@ -614,7 +637,7 @@ public class Hdf55ImarisBdvWriter {
             }
             else if ( imp.getBitDepth() == 32)
             {
-                float[] data = getFloatData( impBinned, c, t );
+                float[] data = getFloatData(impBinned, c, t);
 
                 H5.H5Dwrite( dataset_id,
                         imageData_type_id,

@@ -23,4 +23,6 @@ public class TrackingSettings {
     public boolean viewRegion;
     public String imageFeatureEnhancement;
 
+
+
 }
