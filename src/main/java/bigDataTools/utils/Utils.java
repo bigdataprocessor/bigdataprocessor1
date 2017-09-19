@@ -83,6 +83,7 @@ public class Utils {
 
     public enum ImageFilterTypes {
         NONE("None"),
+        THRESHOLD("Threshold"),
         VARIANCE("Variance");
         private final String text;
         private ImageFilterTypes(String s) {

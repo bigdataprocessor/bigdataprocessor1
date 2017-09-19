@@ -13,14 +13,17 @@ public class TrackingSettings {
     public String trackingMethod;
     public Roi trackStartROI;
     public Point3D objectSize;
+    public Point3D maxDisplacement;
+
     public Point3D subSamplingXYZ;
     public int subSamplingT;
     public int iterationsCenterOfMass;
     public int nt;
     public int channel;
-    public double trackingFactor;
+    public double trackingFactor; // not used
+
     public int[] intensityGate;
-    public boolean viewRegion;
+    public int viewFirstNProcessedRegions;
     public String imageFeatureEnhancement;
 
 

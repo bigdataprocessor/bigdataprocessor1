@@ -3,6 +3,7 @@ package bigDataTools.bigDataTracker;
 import bigDataTools.Region5D;
 import bigDataTools.imageFilter.DoNotFilter;
 import bigDataTools.imageFilter.ImageFilter;
+import bigDataTools.imageFilter.ThresholdFilter;
 import bigDataTools.imageFilter.VarianceFilter;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
@@ -37,14 +38,23 @@ class ObjectTracker implements Runnable
         // filter image (hopefully good for improving the correlation)
         //
 
-        if ( trackingSettings.imageFeatureEnhancement.equals( Utils.ImageFilterTypes.NONE.toString() ) )
+        if ( trackingSettings.imageFeatureEnhancement.
+                equals(Utils.ImageFilterTypes.NONE.toString()) )
         {
             imageFilter = new DoNotFilter();
         }
-        else if ( trackingSettings.imageFeatureEnhancement.equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
+        else if ( trackingSettings.imageFeatureEnhancement.
+                equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
         {
             imageFilter = new VarianceFilter( 2.0F );
             logger.info("Image will be variance filtered.");
+        }
+        else if ( trackingSettings.imageFeatureEnhancement.
+                equals(Utils.ImageFilterTypes.THRESHOLD.toString()) )
+        {
+            String method = "Default";
+            imageFilter = new ThresholdFilter( method );
+            logger.info("Images will be tresholded using method : " + method);
         }
 
     }
@@ -98,10 +108,6 @@ class ObjectTracker implements Runnable
         imp0 = Utils.getDataCube(imp, region5D, trackingSettings.intensityGate, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
-        if( trackingSettings.viewRegion )
-        {
-            imp0.show();
-        }
 
         //
         // filter image to ease tracking
@@ -156,6 +162,7 @@ class ObjectTracker implements Runnable
         int tPrevious = tStart;
         int tNow;
         int tMaxUpdate;
+        int iProcessed = 0;
 
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
@@ -205,7 +212,7 @@ class ObjectTracker implements Runnable
             region5D1.c = channel;
 
             // large size
-            region5D1.size = pSize.multiply( trackingSettings.trackingFactor );
+            region5D1.size = pSize.add(trackingSettings.maxDisplacement);
             p1offset = Utils.computeOffsetFromCenterSize(
                     p1center, region5D1.size);
             region5D1.offset = p1offset;
@@ -222,24 +229,17 @@ class ObjectTracker implements Runnable
 
             if ( trackingSettings.trackingMethod.equals( "correlation" ) ) {
 
-                // filter image (this one does not need to be
-                // filtered for center of mass tracking)
+                // filter image
+                // - only necessary for correlation tracking
                 //
                 imp0 = imageFilter.filter( imp0 );
 
-                /*
-                if ( t == tStart + dt )
+
+                if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
                 {
-                    ImagePlus imp0show = imp0.duplicate();
-                    imp0show.setTitle("imp0");
-                    imp0show.show();
-                    logger.info( "0: " + p0offset.toString() );
-                    ImagePlus imp1show = imp1.duplicate();
-                    imp1show.setTitle("imp1");
-                    imp1show.show();
-                    logger.info( "1: " + p1offset.toString() );
+                    imp0.setTitle("t"+t+"-previous"); imp0.show();
+                    imp1.setTitle("t"+t+"-next"); imp1.show();
                 }
-                */
 
                 logger.debug("measuring drift using correlation...");
 
@@ -391,8 +391,8 @@ class ObjectTracker implements Runnable
     private Point3D computeShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0)
     {
         if( logger.isShowDebug() )   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
-        PhaseCorrelation phc = new PhaseCorrelation( ImagePlusAdapter.wrap(imp1),
-                ImagePlusAdapter.wrap(imp0), 5, true);
+        PhaseCorrelation phc = new PhaseCorrelation( ImagePlusAdapter.wrap( imp1 ),
+                ImagePlusAdapter.wrap( imp0 ), 5, true);
         if( logger.isShowDebug() )   logger.info("phc.process()... ");
         phc.process();
         // get the first peak that is not a clean 1.0,
