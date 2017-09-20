@@ -82,7 +82,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             imageFilters[i] = Utils.ImageFilterTypes.values()[i].toString();
         }
         comboChoices[0] = imageFilters;
-        comboChoices[1] = new String[]{"center of mass", "correlation"};
+        comboChoices[1] = new String[]{"correlation","center of mass"};
 
         trackingSettings.trackingMethod = "correlation";
         trackingSettings.objectSize = new Point3D( 200, 200, 30);
@@ -91,7 +91,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         trackingSettings.subSamplingT = 1;
         trackingSettings.nt = imp.getNFrames();
         trackingSettings.intensityGate = new int[]{-1,-1};
-        trackingSettings.viewFirstNProcessedRegions = 2;
+        trackingSettings.viewFirstNProcessedRegions = 1;
 
         setDefaults();
     }

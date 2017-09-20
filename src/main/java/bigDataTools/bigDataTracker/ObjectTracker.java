@@ -7,6 +7,7 @@ import bigDataTools.imageFilter.ThresholdFilter;
 import bigDataTools.imageFilter.VarianceFilter;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
@@ -52,6 +53,8 @@ class ObjectTracker implements Runnable
         else if ( trackingSettings.imageFeatureEnhancement.
                 equals(Utils.ImageFilterTypes.THRESHOLD.toString()) )
         {
+            // TODO:
+            // - :probably some auto-local threshold works better?
             String method = "Default";
             imageFilter = new ThresholdFilter( method );
             logger.info("Images will be tresholded using method : " + method);
@@ -237,8 +240,13 @@ class ObjectTracker implements Runnable
 
                 if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
                 {
-                    imp0.setTitle("t"+t+"-previous"); imp0.show();
-                    imp1.setTitle("t"+t+"-next"); imp1.show();
+                    imp0.setTitle("t"+t+"-previous");
+                    imp0.show();
+                    IJ.run(imp0, "Invert LUT", "");
+
+                    imp1.setTitle("t"+t+"-next");
+                    imp1.show(); 
+                    IJ.run(imp1, "Invert LUT", "");
                 }
 
                 logger.debug("measuring drift using correlation...");

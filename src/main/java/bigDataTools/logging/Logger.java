@@ -1,5 +1,7 @@
 package bigDataTools.logging;
 
+import java.io.IOException;
+
 public interface Logger {
 
     /**
@@ -44,14 +46,14 @@ public interface Logger {
      *
      * @param message
      */
-    void warning(String message);
+    void warning( String message );
 
     /**
      * shows messages that contain information for debugging
      *
      * @param message
      */
-    void debug(String message);
+    void debug( String message );
 
     /**
      * displays a progress wheel
