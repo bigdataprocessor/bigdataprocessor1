@@ -139,13 +139,13 @@ public class IJLazySwingLogger implements Logger {
                     List<String> logs = readSmallTextFile( logFilePath );
                     int i = logs.size() - 1;
 
-                    if ( logs.get(i).contains(message) )
+                    if ( logs.get(i).contains( message ) )
                     {
-                        logs.set(i, String.format("\\Update:[PROGRESS]: %s %s", message, progress));
+                        logs.set(i, String.format("[PROGRESS]: %s %s", message, progress));
                     }
                     else
                     {
-                        logs.set(i, String.format("[PROGRESS]: %s %s", message, progress));
+                        logs.add( String.format("[PROGRESS]: %s %s", message, progress) );
                     }
 
                     writeSmallTextFile(logs, logFilePath);

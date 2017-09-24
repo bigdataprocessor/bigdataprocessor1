@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/BigDataTools_MyLocalFiji_jar.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/bigDataTools_jar.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/HDF5Writer.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/tests/CreateEmptyVSS.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/BigDataTrackerGUI.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/BigDataTrackerGUI.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$1.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$2.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$3.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/logging/IJLazySwingLogger.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/ObjectTracker.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/bigDataTracker/ObjectTracker.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/utils/Utils.class" afterPath="$PROJECT_DIR$/target/classes/bigDataTools/utils/Utils.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
@@ -39,12 +34,58 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0017271157">
+              <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+              <folding>
+                <element signature="docComment;class#Utils#0" expanded="false" />
+                <element signature="class#FileType#0;class#Utils#0" expanded="false" />
+                <element signature="class#ImageFilterTypes#0;class#Utils#0" expanded="false" />
+                <element signature="e#3539#3547#0" expanded="false" />
+                <element signature="e#3833#3841#0" expanded="false" />
+                <element signature="e#4488#4527#0" expanded="false" />
+                <element signature="e#5830#5838#0" expanded="false" />
+                <element signature="e#9255#9257#0" expanded="false" />
+                <element signature="e#9560#9653#0" expanded="false" />
+                <element signature="e#9841#9843#0" expanded="false" />
+                <element signature="e#13747#13832#0" expanded="false" />
+                <element signature="e#14185#14270#0" expanded="false" />
+                <element signature="e#15272#15307#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VirtualStackOfStacks.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
+          <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="107" column="23" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
-              <folding />
+              <caret line="511" column="21" selection-start-line="511" selection-start-column="21" selection-end-line="511" selection-end-column="21" />
+              <folding>
+                <element signature="e#7431#7433#0" expanded="false" />
+                <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
+                <element signature="e#18723#18783#0" expanded="false" />
+                <element signature="e#19154#19156#0" expanded="false" />
+                <element signature="e#19535#19537#0" expanded="false" />
+                <element signature="e#19808#19810#0" expanded="false" />
+                <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="e#24807#24819#0" expanded="false" />
+                <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
+                <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -71,11 +112,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IJLazySwingLogger.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IJLazySwingLogger.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.71947193">
-              <caret line="202" column="4" selection-start-line="202" selection-start-column="4" selection-end-line="202" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="116" column="0" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
               <folding>
                 <element signature="method#IJLazySwingLogger#0;class#IJLazySwingLogger#0" expanded="true" />
                 <element signature="method#setLogFileNameAndDirectory#0;class#IJLazySwingLogger#0" expanded="true" />
@@ -87,14 +128,13 @@
                 <element signature="e#2514#2515#0" expanded="true" />
                 <element signature="e#2587#2588#0" expanded="true" />
                 <element signature="e#2649#2650#0" expanded="true" />
-                <element signature="method#progress#0;class#IJLazySwingLogger#0" expanded="true" />
-                <element signature="method#run#0;class#2784:4263" expanded="true" />
                 <element signature="method#progressWheel#0;class#IJLazySwingLogger#0" expanded="true" />
                 <element signature="method#error#0;class#IJLazySwingLogger#0" expanded="true" />
-                <element signature="e#5651#5652#0" expanded="true" />
+                <element signature="e#5571#5572#0" expanded="true" />
+                <element signature="e#5643#5644#0" expanded="true" />
                 <element signature="method#debug#0;class#IJLazySwingLogger#0" expanded="true" />
                 <element signature="method#ijLazySwingLog#0;class#IJLazySwingLogger#0" expanded="true" />
-                <element signature="method#run#0;class#5941:6387" expanded="true" />
+                <element signature="method#run#0;class#5933:6379" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -163,18 +203,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="25" column="27" selection-start-line="25" selection-start-column="27" selection-end-line="25" selection-end-column="27" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BigDataTrackerPlugIn_.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerPlugIn_.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="false" />
               </folding>
@@ -256,7 +284,6 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/VarianceFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/Threshold.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/imageFilter/ThresholdFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/TrackingSettings.java" />
         <option value="$PROJECT_DIR$/src/main/resources/TrackAndCropHelp.html" />
@@ -264,6 +291,7 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
       </list>
     </option>
   </component>
@@ -342,125 +370,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="out" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logging" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fiji-plugin-bigDataTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
+              <option name="myItemId" value="artifacts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -595,7 +509,7 @@
     </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="JAR_PATH" value="$PROJECT_DIR$/lib/jhdf5-14.12.0.jar" />
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/fiji--bigDataTools_.jar" />
       <envs />
       <method />
     </configuration>
@@ -844,7 +758,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java</url>
-          <line>387</line>
+          <line>390</line>
           <properties />
           <option name="timeStamp" value="461" />
         </line-breakpoint>
@@ -941,6 +855,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1304,37 +1219,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="660" column="14" selection-start-line="660" selection-start-column="14" selection-end-line="660" selection-end-column="14" />
-          <folding>
-            <element signature="e#7431#7433#0" expanded="false" />
-            <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="method#getFullFrame#1;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="e#18723#18783#0" expanded="false" />
-            <element signature="e#19154#19156#0" expanded="false" />
-            <element signature="e#19535#19537#0" expanded="false" />
-            <element signature="e#19808#19810#0" expanded="false" />
-            <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="e#24807#24819#0" expanded="false" />
-            <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
-            <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ncsa/hdf/hdf5lib/HDF5Constants.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16453382">
@@ -1454,6 +1338,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="620" column="17" selection-start-line="620" selection-start-column="17" selection-end-line="620" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1502,6 +1387,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="1141" column="0" selection-start-line="1141" selection-start-column="0" selection-end-line="1141" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1636,14 +1522,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="107" column="23" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/Logger.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7293729">
@@ -1662,8 +1540,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71947193">
-          <caret line="202" column="4" selection-start-line="202" selection-start-column="4" selection-end-line="202" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="116" column="0" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
           <folding>
             <element signature="method#IJLazySwingLogger#0;class#IJLazySwingLogger#0" expanded="true" />
             <element signature="method#setLogFileNameAndDirectory#0;class#IJLazySwingLogger#0" expanded="true" />
@@ -1675,14 +1553,65 @@
             <element signature="e#2514#2515#0" expanded="true" />
             <element signature="e#2587#2588#0" expanded="true" />
             <element signature="e#2649#2650#0" expanded="true" />
-            <element signature="method#progress#0;class#IJLazySwingLogger#0" expanded="true" />
-            <element signature="method#run#0;class#2784:4263" expanded="true" />
             <element signature="method#progressWheel#0;class#IJLazySwingLogger#0" expanded="true" />
             <element signature="method#error#0;class#IJLazySwingLogger#0" expanded="true" />
-            <element signature="e#5651#5652#0" expanded="true" />
+            <element signature="e#5571#5572#0" expanded="true" />
+            <element signature="e#5643#5644#0" expanded="true" />
             <element signature="method#debug#0;class#IJLazySwingLogger#0" expanded="true" />
             <element signature="method#ijLazySwingLog#0;class#IJLazySwingLogger#0" expanded="true" />
-            <element signature="method#run#0;class#5941:6387" expanded="true" />
+            <element signature="method#run#0;class#5933:6379" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="511" column="21" selection-start-line="511" selection-start-column="21" selection-end-line="511" selection-end-column="21" />
+          <folding>
+            <element signature="e#7431#7433#0" expanded="false" />
+            <element signature="docComment;method#addSlice#1;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#addSlice#2;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getBitDepth#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#deleteSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#deleteLastSlice#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setPixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setAndSaveBytePixels#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#getProcessor#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="method#getDataCube#0;class#VirtualStackOfStacks#0" expanded="true" />
+            <element signature="e#18723#18783#0" expanded="false" />
+            <element signature="e#19154#19156#0" expanded="false" />
+            <element signature="e#19535#19537#0" expanded="false" />
+            <element signature="e#19808#19810#0" expanded="false" />
+            <element signature="docComment;method#getSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="e#24807#24819#0" expanded="false" />
+            <element signature="docComment;method#getImageArray#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#setSliceLabel#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#isVirtual#0;class#VirtualStackOfStacks#0" expanded="false" />
+            <element signature="docComment;method#trim#0;class#VirtualStackOfStacks#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0017271157">
+          <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#Utils#0" expanded="false" />
+            <element signature="class#FileType#0;class#Utils#0" expanded="false" />
+            <element signature="class#ImageFilterTypes#0;class#Utils#0" expanded="false" />
+            <element signature="e#3539#3547#0" expanded="false" />
+            <element signature="e#3833#3841#0" expanded="false" />
+            <element signature="e#4488#4527#0" expanded="false" />
+            <element signature="e#5830#5838#0" expanded="false" />
+            <element signature="e#9255#9257#0" expanded="false" />
+            <element signature="e#9560#9653#0" expanded="false" />
+            <element signature="e#9841#9843#0" expanded="false" />
+            <element signature="e#13747#13832#0" expanded="false" />
+            <element signature="e#14185#14270#0" expanded="false" />
+            <element signature="e#15272#15307#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1693,7 +1622,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>bigDataTools:jar</last-edited>
+          <last-edited>local-fiji:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

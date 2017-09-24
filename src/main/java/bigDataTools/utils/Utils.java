@@ -176,6 +176,7 @@ public class Utils {
         imp.updateAndDraw();
     }
 
+    // TODO: out-of-bounds strategy?
     public static ImagePlus getDataCubeFromImagePlus(ImagePlus imp, Region5D region5D)
     {
 
@@ -194,6 +195,9 @@ public class Utils {
         int lastC = region5D.c + 1;
         int firstZ = (int)region5D.offset.getZ() + 1;
         int lastZ = (int)region5D.offset.getZ() + (int)region5D.size.getZ();
+
+        // TODO:
+        // copy code from VSS to include an out-of-bounds strategy
 
         for (int t=firstT; t<=lastT; t++) {
             for (int z=firstZ; z<=lastZ; z++) {
@@ -216,7 +220,6 @@ public class Utils {
 
         return imp2;
     }
-
 
     public static VirtualStackOfStacks getVirtualStackOfStacks(ImagePlus imp) {
         VirtualStackOfStacks vss = null;
@@ -356,7 +359,7 @@ public class Utils {
         //dataCube.show();
 
         return( dataCube );
-    };
+    }
 
     public static void applyIntensityGate( ImagePlus imp, int[] gate )
     {
