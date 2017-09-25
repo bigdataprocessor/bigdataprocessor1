@@ -41,6 +41,7 @@ import bigDataTools.utils.Utils;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.VirtualStack;
 import ij.gui.NewImage;
 import ij.io.FileSaver;
 import ij.process.ImageProcessor;
@@ -58,7 +59,7 @@ import java.util.ArrayList;
 /**
  This class represents an array of disk-resident image stacks.
  */
-public class VirtualStackOfStacks extends ImageStack {
+public class VirtualStackOfStacks extends VirtualStack {
     int nSlices;
     private int nX, nY, nZ, nC, nT;
     int bitDepth = 0;
