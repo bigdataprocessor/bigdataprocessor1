@@ -405,7 +405,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             imp.updateAndDraw();
             imp.resetDisplayRange();
         }
-        else if ( e.getActionCommand().equals(SAVE) )
+        else if ( e.getActionCommand().equals( SAVE ) )
         {
 
             ImagePlus imp = IJ.getImage();
@@ -454,7 +454,9 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
                     // Check that there is enough memory to hold the data in RAM while saving
                     //
-                    if( ! Utils.checkMemoryRequirements(imp, Math.min(ioThreads, imp.getNFrames())) ) return;
+                    int safetyMargin = 3;
+                    if( ! Utils.checkMemoryRequirements( imp, safetyMargin,
+                            Math.min(ioThreads, imp.getNFrames())) ) return;
 
                     String compression = "";
                     if(cbLZW.isSelected())

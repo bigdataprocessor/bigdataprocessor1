@@ -61,12 +61,31 @@ public class SaveVSSFrame implements Runnable {
     public void run()
     {
 
+        // TODO:
+        // - check whether enough RAM is available to execute current thread
+        // - if not, run GC and wait until there is enough
+        // - estimate 3x more RAM then actually necessary
+        // - if waiting takes to long somehoe terminate in a nice way
+
+        long freeMemoryInBytes = IJ.maxMemory() - IJ.currentMemory();
+        ImagePlus imp = savingSettings.imp;
+        long numBytesOfImage = (long) imp.getWidth() *
+                imp.getHeight() *
+                imp.getNSlices() *
+                imp.getNChannels() *
+                imp.getBitDepth() / 8;
+
+        if ( numBytesOfImage > 1.5 * freeMemoryInBytes )
+        {
+            // TODO: do something...
+        }
+
         for (int c = 0; c < savingSettings.imp.getNChannels(); c++)
         {
 
             if ( dataStreamingTools.interruptSavingThreads )
             {
-                logger.info("Stopping saving thread.");
+                logger.progress("Stopped saving thread: ", "" + t);
                 return;
             }
 
@@ -116,7 +135,7 @@ public class SaveVSSFrame implements Runnable {
 
                 if ( dataStreamingTools.interruptSavingThreads )
                 {
-                    logger.info("Stopping saving thread.");
+                    logger.progress("Stopped saving thread: ", "" + t);
                     return;
                 }
 
@@ -164,20 +183,23 @@ public class SaveVSSFrame implements Runnable {
                                 c, t, savingSettings.fileBaseName, savingSettings.directory );
                     }
 
-                    logger.debug("Saved time point " + t + ", channel " + c + "; memory: " + IJ.freeMemory());
-
                 }
 
                 // Save projections
                 // TODO: save into one single file
                 if ( savingSettings.saveProjection )
                 {
-                    saveAsTiffXYZMaxProjection(impBinned, c, t, newPath);
+                    saveAsTiffXYZMaxProjection( impBinned, c, t, newPath );
                 }
 
             }
 
 
+            logger.progress("Saved time point",
+                    "" + dataStreamingTools.counter.addAndGet(1)
+                    + "/" + imp.getNFrames()
+                    + "; free memory [bytes]: "
+                    + IJ.freeMemory());
 
         }
 
@@ -185,11 +207,11 @@ public class SaveVSSFrame implements Runnable {
 
     public void saveAsTiffXYZMaxProjection(ImagePlus imp, int c, int t, String path)
     {
-        ProjectionXYZ projectionXYZ = new ProjectionXYZ(imp);
-        projectionXYZ.setDoscale(false);
+        ProjectionXYZ projectionXYZ = new ProjectionXYZ( imp );
+        projectionXYZ.setDoscale( false );
         ImagePlus impProjection = projectionXYZ.getXYZProject();
 
-        FileSaver fileSaver = new FileSaver(impProjection);
+        FileSaver fileSaver = new FileSaver( impProjection );
         String sC = String.format("%1$02d", c);
         String sT = String.format("%1$05d", t);
         String pathCT = path + "--xyz-max-projection" + "--C" + sC + "--T" + sT + ".tif";

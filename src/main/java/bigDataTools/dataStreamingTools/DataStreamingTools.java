@@ -72,6 +72,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,6 +102,7 @@ public class DataStreamingTools {
 
     private static Logger logger = new IJLazySwingLogger();
     public boolean interruptSavingThreads = false;
+    public AtomicInteger counter;
 
     public DataStreamingTools()
     {
@@ -204,7 +206,7 @@ public class DataStreamingTools {
                 {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
-                            "Parsed files: ",
+                            "Parsed time-points: ",
                             2000);
                 }
             });
@@ -1047,7 +1049,6 @@ public class DataStreamingTools {
 
     public boolean writeFileInfosSer(FileInfoSer[][][] infos, String path)
     {
-
         try
         {
             FileOutputStream fout = new FileOutputStream(path, true);
@@ -1058,7 +1059,8 @@ public class DataStreamingTools {
             fout.close();
             logger.info("Wrote: " + path);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             ex.printStackTrace();
             logger.error("Writing failed: " + path);
@@ -1348,24 +1350,12 @@ public class DataStreamingTools {
         ExecutorService es = Executors.newFixedThreadPool( nSavingThreads );
         List<Future> futures = new ArrayList<>();
 
+        counter = new AtomicInteger(0);
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
             futures.add( es.submit( new SaveVSSFrame( this, t,
                     savingSettings, imarisH5Settings ) ) );
         }
-
-        // Monitor the progress
-        //
-        Thread thread = new Thread(new Runnable() {
-            public void run()
-            {
-                MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
-                        futures,
-                        "Saved to disk: ",
-                        2000);
-            }
-        });
-        thread.start();
 
     }
 

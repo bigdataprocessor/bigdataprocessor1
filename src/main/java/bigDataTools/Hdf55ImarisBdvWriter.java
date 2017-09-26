@@ -93,6 +93,7 @@ public class Hdf55ImarisBdvWriter {
         size[0] = imp.getWidth();
         size[1] = imp.getHeight();
         size[2] = imp.getNSlices();
+        int impByteDepth = imp.getBitDepth() / 8;
 
         sizes.add( size );
 
@@ -135,13 +136,21 @@ public class Hdf55ImarisBdvWriter {
 
             sizes.add( newSize );
             binnings.add( newBinning );
-            chunks.add( new long[]{ 16, 16, 16 } );
+
+            long[] newChunk = new long[] {16, 16, 16};
+            for ( int i = 0; i < 3; i++ )
+            {
+                if( newChunk[i] > newSize[i] )
+                    newChunk = newSize;
+
+            }
+            chunks.add( newChunk );
 
             voxelVolume = newSize[0] * newSize[1] * newSize[2];
 
             iResolution++;
 
-        } while ( 2 * voxelVolume > minVoxelVolume );
+        } while ( impByteDepth * voxelVolume > minVoxelVolume );
 
     }
 
@@ -310,8 +319,8 @@ public class Hdf55ImarisBdvWriter {
         setH5StringAttribute(file_id, "DataSetDirectoryName", "DataSet");
         setH5StringAttribute(file_id, "DataSetInfoDirectoryName", "DataSetInfo");
         setH5StringAttribute(file_id, "ImarisDataSet", "ImarisDataSet");
-        setH5StringAttribute(file_id, "ImarisVersion", "9.0.0");
-        setH5StringAttribute(file_id, "NumberOfDataSets", "9.0.0");
+        setH5StringAttribute(file_id, "ImarisVersion", "5.5.0");  // file-format version
+        setH5StringAttribute(file_id, "NumberOfDataSets", "1");
         setH5StringAttribute(file_id, "ThumbnailDirectoryName", "Thumbnail");
 
         int dataset_group_id = H5.H5Gcreate(file_id, "/DataSet",
@@ -363,7 +372,7 @@ public class Hdf55ImarisBdvWriter {
                     imaris expects 64bit unsigned int values:
                     - http://open.bitplane.com/Default.aspx?tabid=268
                     thus, we are using as memory type: H5T_NATIVE_ULLONG
-                    and as the corresponding file type: H5T_STD_I64LE
+                    and as the corresponding dataset type: H5T_STD_I64LE
                     - https://support.hdfgroup.org/HDF5/release/dttable.html
                     */
                     int histo_dataset_id = H5.H5Dcreate(r_t_c_group_id, "Histogram",
@@ -372,7 +381,8 @@ public class Hdf55ImarisBdvWriter {
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT);
 
-                    H5.H5Dwrite(histo_dataset_id, HDF5Constants.H5T_NATIVE_ULLONG,
+                    H5.H5Dwrite(histo_dataset_id,
+                            HDF5Constants.H5T_NATIVE_ULLONG,
                             HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
                             HDF5Constants.H5P_DEFAULT, histo_data);
 
@@ -515,7 +525,7 @@ public class Hdf55ImarisBdvWriter {
      * HDF5 Data type	    Imaris Image Data type
      * H5T_NATIVE_UCHAR	    8 bit unsigned integer (char)
      * H5T_NATIVE_USHORT    16 bit unsigned integer (short)
-     * H5T_NATIVE_UINT32    32 bit unsigned integer
+     * H5T_NATIVE_UINT32    32 bit unsigned integer (NOT SUPPORTED BY IMAGEJ)
      * H5T_NATIVE_FLOAT	    32 bit floating point
      *
      *
@@ -535,19 +545,24 @@ public class Hdf55ImarisBdvWriter {
         // determine data type
         //
 
-        int imageData_type_id = 0;
+        int image_memory_type = 0;
+        int image_file_type = 0;
 
         if ( imp.getBitDepth() == 8)
         {
-            imageData_type_id = H5.H5Tcopy( HDF5Constants.H5T_NATIVE_UCHAR );
+            image_memory_type = HDF5Constants.H5T_NATIVE_UCHAR ;
+            image_file_type = HDF5Constants.H5T_STD_U8BE;
         }
         else if ( imp.getBitDepth() == 16)
         {
-            imageData_type_id = H5.H5Tcopy( HDF5Constants.H5T_NATIVE_USHORT );
+            image_memory_type = H5.H5Tcopy( HDF5Constants.H5T_NATIVE_USHORT );
+            image_file_type = H5.H5Tcopy( HDF5Constants.H5T_STD_U16BE );
         }
         else if ( imp.getBitDepth() == 32)
         {
-            imageData_type_id = H5.H5Tcopy( HDF5Constants.H5T_NATIVE_FLOAT );
+            image_memory_type = H5.H5Tcopy( HDF5Constants.H5T_NATIVE_FLOAT );
+            image_file_type = H5.H5Tcopy( HDF5Constants.H5T_IEEE_F32BE );
+
         }
         else
         {
@@ -561,12 +576,13 @@ public class Hdf55ImarisBdvWriter {
         //
         String fileName = baseFileName + getChannelTimeString( c , t ) + ".h5";
         String filePath = directory + File.separator + fileName;
-        File file = new File(filePath);
+        File file = new File( filePath );
         if (file.exists()) file.delete();
 
 
-        int file_id = H5.H5Fcreate(filePath, HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT, HDF5Constants
-                .H5P_DEFAULT);
+        int file_id = H5.H5Fcreate(filePath, HDF5Constants.H5F_ACC_TRUNC,
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+
 
         for ( int r = 0; r < sizes.size(); r++ )
         {
@@ -574,8 +590,11 @@ public class Hdf55ImarisBdvWriter {
             //
             // Create resolution group
             //
-            int resolution_group_id = H5.H5Gcreate(file_id, "Resolution " + r,
-                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+            int resolution_group_id = H5.H5Gcreate(file_id,
+                    "Resolution " + r,
+                    HDF5Constants.H5P_DEFAULT,
+                    HDF5Constants.H5P_DEFAULT,
+                    HDF5Constants.H5P_DEFAULT);
 
             //
             // Create data
@@ -593,7 +612,7 @@ public class Hdf55ImarisBdvWriter {
             // create "dataset creation property list" (dcpl)
             int dcpl_id = H5.H5Pcreate( HDF5Constants.H5P_DATASET_CREATE );
 
-            // set chunking
+            // add chunking to dcpl
             long[] chunk = new long[] {
                     chunks.get(r)[2],
                     chunks.get(r)[1],
@@ -602,8 +621,21 @@ public class Hdf55ImarisBdvWriter {
             H5.H5Pset_chunk(dcpl_id, chunk.length, chunk);
 
             // create dataset
-            int dataset_id = H5.H5Dcreate( resolution_group_id,
-                    "Data", imageData_type_id, space_id, 0, dcpl_id, 0);
+            int dataset_id = -1;
+            try
+            {
+                dataset_id = H5.H5Dcreate(resolution_group_id,
+                        "Data",
+                        image_file_type,
+                        space_id,
+                        HDF5Constants.H5P_DEFAULT,
+                        dcpl_id,
+                        HDF5Constants.H5P_DEFAULT);
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+            }
 
             // do the binning
             //
@@ -615,12 +647,14 @@ public class Hdf55ImarisBdvWriter {
             {
                 byte[] data = getByteData( impBinned, c, t );
 
-                H5.H5Dwrite( dataset_id,
-                        imageData_type_id,
+                int out = H5.H5Dwrite(dataset_id,
+                        image_memory_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
                         data );
+                int a = 1;
+
             }
             else if ( imp.getBitDepth() == 16)
             {
@@ -628,7 +662,7 @@ public class Hdf55ImarisBdvWriter {
                 short[] data = getShortData( impBinned, c, t );
 
                 H5.H5Dwrite( dataset_id,
-                        imageData_type_id,
+                        image_file_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
@@ -640,7 +674,7 @@ public class Hdf55ImarisBdvWriter {
                 float[] data = getFloatData(impBinned, c, t);
 
                 H5.H5Dwrite( dataset_id,
-                        imageData_type_id,
+                        image_file_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
@@ -652,8 +686,11 @@ public class Hdf55ImarisBdvWriter {
                         "only 8-bit, 16-bit and 32-bit are possible.");
             }
 
+
+            H5.H5Sclose( space_id );
             H5.H5Dclose( dataset_id );
-            H5.H5Gclose(resolution_group_id );
+            H5.H5Pclose( dcpl_id );
+            H5.H5Gclose(resolution_group_id);
 
         }
 
