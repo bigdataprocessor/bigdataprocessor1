@@ -22,7 +22,7 @@
             <developer>
                 <id>tischi</id>
                 <name>Christian Tischer</name>
-		<email>Christian.Tischer@EMBL.DE</email>
+		        <email>Christian.Tischer@EMBL.DE</email>
                 <url></url>
                 <organization>EMBL Heidelberg</organization>
                 <organizationUrl>http://www.embl.de</organizationUrl>

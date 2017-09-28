@@ -34,6 +34,7 @@ import ij.plugin.Binner;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by tischi on 11/04/17.
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 
 public class SaveVSSFrame implements Runnable {
     int t;
+    AtomicInteger counter;
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
     Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings;
@@ -50,12 +52,14 @@ public class SaveVSSFrame implements Runnable {
     public SaveVSSFrame(DataStreamingTools dataStreamingTools,
                         int t,
                         SavingSettings savingSettings,
-                        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings)
+                        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings,
+                        AtomicInteger counter)
     {
         this.dataStreamingTools = dataStreamingTools;
         this.t = t;
         this.savingSettings = savingSettings;
         this.imarisH5Settings = imarisH5Settings;
+        this.counter = counter;
     }
 
     public void run()
@@ -194,9 +198,8 @@ public class SaveVSSFrame implements Runnable {
 
             }
 
-
             logger.progress("Saved time point",
-                    "" + dataStreamingTools.counter.addAndGet(1)
+                    "" + counter.addAndGet(1)
                     + "/" + imp.getNFrames()
                     + "; free memory [bytes]: "
                     + IJ.freeMemory());

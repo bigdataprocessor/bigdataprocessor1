@@ -102,7 +102,6 @@ public class DataStreamingTools {
 
     private static Logger logger = new IJLazySwingLogger();
     public boolean interruptSavingThreads = false;
-    public AtomicInteger counter;
 
     public DataStreamingTools()
     {
@@ -1350,11 +1349,14 @@ public class DataStreamingTools {
         ExecutorService es = Executors.newFixedThreadPool( nSavingThreads );
         List<Future> futures = new ArrayList<>();
 
-        counter = new AtomicInteger(0);
+        AtomicInteger counter = new AtomicInteger(0);
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
-            futures.add( es.submit( new SaveVSSFrame( this, t,
-                    savingSettings, imarisH5Settings ) ) );
+            futures.add( es.submit( new SaveVSSFrame( this,
+                    t,
+                    savingSettings,
+                    imarisH5Settings,
+                    counter ) ) );
         }
 
     }
