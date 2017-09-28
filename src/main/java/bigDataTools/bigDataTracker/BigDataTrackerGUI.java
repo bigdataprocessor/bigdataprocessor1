@@ -92,13 +92,13 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         trackingSettings.nt = imp.getNFrames();
         trackingSettings.intensityGate = new int[]{-1,-1};
         trackingSettings.viewFirstNProcessedRegions = 1;
+        trackingSettings.imageFeatureEnhancement = Utils.ImageFilterTypes.NONE.toString();
 
         setDefaults();
     }
 
     public void setDefaults()
     {
-
         String[] defaults = {
                 "" + (int) trackingSettings.objectSize.getX() + "," +
                         (int) trackingSettings.objectSize.getY() + "," +
@@ -535,7 +535,8 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             // Image feature enhancement method
             //
             JComboBox cb = (JComboBox)e.getSource();
-            trackingSettings.imageFeatureEnhancement = (String)cb.getSelectedItem();
+            trackingSettings.imageFeatureEnhancement = (String) cb.getSelectedItem();
+            int a = 1;
         }
         else if ( e.getActionCommand().equals( comboNames[1]) )
         {

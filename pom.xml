@@ -17,22 +17,21 @@
         <relativePath />
     </parent>
 
-
-        <developers>
-            <developer>
-                <id>tischi</id>
-                <name>Christian Tischer</name>
-		        <email>Christian.Tischer@EMBL.DE</email>
-                <url></url>
-                <organization>EMBL Heidelberg</organization>
-                <organizationUrl>http://www.embl.de</organizationUrl>
-                <roles>
-                    <role>microscopy</role>
-                    <role>image analysis</role>
-                </roles>
-                <timezone>+1</timezone>
-            </developer>
-        </developers>
+    <developers>
+        <developer>
+            <id>tischi</id>
+            <name>Christian Tischer</name>
+            <email>Christian.Tischer@EMBL.DE</email>
+            <url></url>
+            <organization>EMBL Heidelberg</organization>
+            <organizationUrl>http://www.embl.de</organizationUrl>
+            <roles>
+                <role>microscopy</role>
+                <role>image analysis</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
 	<properties>
 		<main-class>bigDataTools.dataStreamingTools.DataStreamingTools</main-class>

@@ -40,7 +40,7 @@ class ObjectTracker implements Runnable
         //
 
         if ( trackingSettings.imageFeatureEnhancement.
-                equals(Utils.ImageFilterTypes.NONE.toString()) )
+                equals( Utils.ImageFilterTypes.NONE.toString() ) )
         {
             imageFilter = new DoNotFilter();
         }
