@@ -472,7 +472,7 @@ public class VirtualStackOfStacks extends VirtualStack {
 
     public ImagePlus getFullFrame(int t, int c, int nThreads)
     {
-        return( getFullFrame(t, c, new Point3D(1,1,1), nThreads));
+        return( getFullFrame(t, c, new Point3D(1,1,1), nThreads) );
     }
 
     public ImagePlus getFullFrame(int t, int c, Point3D pSubSample, int nThreads) {
@@ -494,7 +494,7 @@ public class VirtualStackOfStacks extends VirtualStack {
         region5D.subSampling = pSubSample;
         int[] intensityGate = new int[]{-1,-1};
 
-        ImagePlus imp = getDataCube(region5D, intensityGate, nThreads);
+        ImagePlus imp = getDataCube( region5D, intensityGate, nThreads );
 
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1)
         {

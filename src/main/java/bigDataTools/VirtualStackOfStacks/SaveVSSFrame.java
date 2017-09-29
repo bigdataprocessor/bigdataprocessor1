@@ -107,7 +107,7 @@ public class SaveVSSFrame implements Runnable {
             }
             else
             {
-                impChannelTime = vss.getFullFrame(t, c, savingSettings.nThreads);
+                impChannelTime = vss.getFullFrame( t, c, savingSettings.nThreads );
             }
 
             // Gate
@@ -122,12 +122,12 @@ public class SaveVSSFrame implements Runnable {
             if ( savingSettings.convertTo8Bit )
             {
                 IJ.setMinAndMax(impChannelTime, savingSettings.mapTo0, savingSettings.mapTo255);
-                IJ.run(impChannelTime, "8-bit", "");
+                IJ.run( impChannelTime, "8-bit", "" );
             }
 
             if ( savingSettings.convertTo16Bit )
             {
-                IJ.run(impChannelTime, "16-bit", "");
+                IJ.run( impChannelTime, "16-bit", "" );
             }
 
             // Bin, project and save
@@ -182,7 +182,6 @@ public class SaveVSSFrame implements Runnable {
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                     {
                         Hdf55ImarisBdvWriter writer = new Hdf55ImarisBdvWriter();
-
                         writer.writeChannelTimeH5File( impBinned, imarisH5Settings,
                                 c, t, savingSettings.fileBaseName, savingSettings.directory );
                     }
@@ -201,7 +200,7 @@ public class SaveVSSFrame implements Runnable {
             logger.progress("Saved time point",
                     "" + counter.addAndGet(1)
                     + "/" + imp.getNFrames()
-                    + "; free memory [bytes]: "
+                    + "; memory: "
                     + IJ.freeMemory());
 
         }

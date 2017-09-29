@@ -331,8 +331,8 @@ public class Utils {
         else
         {
             if( requestedMemoryGB > 0.1 ) {
-                logger.info("Memory [GB]: Max=" + maxMemoryGB + "; Free=" + freeMemoryGB + "; Requested=" +
-                        requestedMemoryGB);
+                //logger.info("Memory [GB]: Max=" + maxMemoryGB + "; Free=" + freeMemoryGB + "; Requested=" +
+                //        requestedMemoryGB);
             }
 
         }
