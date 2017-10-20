@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by tischi on 13/07/17.
@@ -142,7 +143,9 @@ public class Hdf55ImarisBdvWriter {
             for ( int i = 0; i < 3; i++ )
             {
                 if( newChunk[i] > newSize[i] )
-                    newChunk = newSize;
+                {
+                    newChunk[i] = newSize[i];
+                }
 
             }
             chunks.add( newChunk );
@@ -365,7 +368,8 @@ public class Hdf55ImarisBdvWriter {
                     //
                     // Create histogram
                     //
-                    int[] histo_data = { 1,1,1 };
+                    long[] histo_data = new long[255];
+                    Arrays.fill( histo_data, 100 );
                     long[] histo_dims = { histo_data.length };
                     int histo_dataspace_id = H5.H5Screate_simple(
                             histo_dims.length, histo_dims, null);
@@ -374,11 +378,11 @@ public class Hdf55ImarisBdvWriter {
                     imaris expects 64bit unsigned int values:
                     - http://open.bitplane.com/Default.aspx?tabid=268
                     thus, we are using as memory type: H5T_NATIVE_ULLONG
-                    and as the corresponding dataset type: H5T_STD_I64LE
+                    and as the corresponding dataset type: H5T_STD_U64LE
                     - https://support.hdfgroup.org/HDF5/release/dttable.html
                     */
                     int histo_dataset_id = H5.H5Dcreate(r_t_c_group_id, "Histogram",
-                            HDF5Constants.H5T_STD_I64LE, histo_dataspace_id,
+                            HDF5Constants.H5T_STD_U64LE, histo_dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT,
                             HDF5Constants.H5P_DEFAULT);
@@ -502,8 +506,11 @@ public class Hdf55ImarisBdvWriter {
         setH5StringAttribute(dataSetInfo_time_group_id, "FileTimePoints",
                 String.valueOf(imp.getNFrames()) );
 
-        setH5StringAttribute(dataSetInfo_time_group_id, "TimePoint1",
-                "2000-01-01 00:00:00");
+        for ( int t = 1; t <= imp.getNFrames(); ++t )
+        {
+            setH5StringAttribute(dataSetInfo_time_group_id, "TimePoint"+t,
+                    "2000-01-01 00:00:00");
+        }
 
         H5.H5Gclose( dataSetInfo_time_group_id );
 
@@ -558,7 +565,9 @@ public class Hdf55ImarisBdvWriter {
         else if ( impCT.getBitDepth() == 16)
         {
             image_memory_type = HDF5Constants.H5T_NATIVE_USHORT;
-            image_file_type = HDF5Constants.H5T_STD_U16BE;
+            // image_file_type = HDF5Constants.H5T_STD_U16BE;
+            image_file_type = HDF5Constants.H5T_STD_U16LE;
+
         }
         else if ( impCT.getBitDepth() == 32)
         {

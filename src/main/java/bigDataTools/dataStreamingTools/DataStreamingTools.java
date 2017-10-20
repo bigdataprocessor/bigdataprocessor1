@@ -910,17 +910,17 @@ public class DataStreamingTools {
         }
     }
 
-    private boolean hdf5DataSetExists(IHDF5Reader reader, String hdf5DataSet)
+    private boolean hdf5DataSetExists( IHDF5Reader reader, String hdf5DataSet )
     {
         String dataSets = "";
         boolean dataSetExists = false;
 
-        if (reader.object().isDataSet(hdf5DataSet))
+        if ( reader.object().isDataSet( hdf5DataSet ) )
         {
             return true;
         }
 
-        for (String dataSet : reader.getGroupMembers("/"))
+        for ( String dataSet : reader.getGroupMembers("/") )
         {
             /*
             if (dataSet.equals(hdf5DataSet)) {
@@ -930,7 +930,7 @@ public class DataStreamingTools {
             dataSets += "- " + dataSet + "\n";
         }
 
-        if (!dataSetExists)
+        if (  ! dataSetExists )
         {
             IJ.showMessage("The selected Hdf5 data set does not exist; " +
                     "please change to one of the following:\n\n" +

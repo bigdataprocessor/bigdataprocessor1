@@ -37,7 +37,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfBinning = new JTextField("1,1,1", 10);
     JTextField tfCropZMinMax = new JTextField("1,all", 5);
     JTextField tfCropTMinMax = new JTextField("1,all", 5);
-    JTextField tfIOThreads = new JTextField("30", 2);
+    JTextField tfIOThreads = new JTextField("5", 2);
     JTextField tfRowsPerStrip = new JTextField("10", 3);
     JTextField tfMapTo255 = new JTextField("65535",5);
     JTextField tfMapTo0 = new JTextField("0",5);
@@ -56,7 +56,14 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             "classified--C<C01-01>--T<T00001-00001>--Z<Z00001-01162>.tif",
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
-    JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None","Data","Data111","ITKImage/0/VoxelData","Data222","Data444"});
+    JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None",
+            "Resolution 0/Data",
+            "Resolution 1/Data",
+            "Resolution 2/Data",
+            "Resolution 3/Data",
+            "ITKImage/0/VoxelData",
+            "Data","Data111", "Data222", "Data444"});
+
     JComboBox comboFileTypeForSaving = new JComboBox( Utils.FileType.values() );
 
     final String BDV = "Big Data Viewer";

@@ -315,12 +315,13 @@ public class VirtualStackOfStacks extends VirtualStack {
 
     }
 
-    /** Assigns and saves a pixel array to the specified slice,
+    /**
+     *  Assigns and saves a pixel array to the specified slice,
      were 1<=n<=nslices.
      The method is synchronized to avoid that two threads try to write
      into the same file.
      */
-    public void setAndSaveBytePixels(byte[] pixels, Region5D region5D) throws IOException
+    public void setAndSaveBytePixels( byte[] pixels, Region5D region5D ) throws IOException
     {
 
         int c = region5D.c;
@@ -334,7 +335,8 @@ public class VirtualStackOfStacks extends VirtualStack {
             try
             {
                 Thread.sleep(100);
-            } catch (InterruptedException e)
+            }
+            catch ( InterruptedException e )
             {
                 e.printStackTrace();
             }
@@ -345,11 +347,12 @@ public class VirtualStackOfStacks extends VirtualStack {
         if ( infos[c][t][z] == null )
         {
 
-            File f = new File(directory + channelFolders[c] + "/" + ctzFileList[c][t][z]);
-            if ( !f.exists() )
+            File f = new File( directory + channelFolders[c] + "/" + ctzFileList[c][t][z] );
+            if ( ! f.exists() )
             {
                 // file does not exist yet => create a black one
-                ImagePlus imp = NewImage.createByteImage("title", nX ,nY, 1, NewImage.FILL_BLACK);
+                ImagePlus imp = NewImage.createByteImage( "title",
+                        nX ,nY, 1, NewImage.FILL_BLACK);
                 FileSaver fileSaver = new FileSaver(imp);
                 fileSaver.saveAsTiff( pathCTZ );
                 setInfoFromFile( t, c, z );
@@ -361,10 +364,11 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         }
 
-        // replace new pixels in existing file
+        // replace pixels in existing file
         try
         {
             RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
+
             long offsetToImageData = infos[c][t][z].offset;
 
             int xs = (int) region5D.offset.getX();
@@ -375,8 +379,8 @@ public class VirtualStackOfStacks extends VirtualStack {
 
             for ( int y = ys; y <= ye; y ++ )
             {
-                raf.seek(offsetToImageData + y * nX + xs);
-                raf.write(pixels, (y - ys) * nx, nx);
+                raf.seek( offsetToImageData + y * nX + xs );
+                raf.write( pixels, (y - ys) * nx, nx );
             }
 
             raf.close();
