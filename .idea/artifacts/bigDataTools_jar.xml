@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="bigDataTools:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/bigDataTools_jar</output-path>
+    <root id="archive" name="bigDataTools.jar">
+      <element id="module-output" name="bigDataTools" />
+    </root>
+  </artifact>
+</component>

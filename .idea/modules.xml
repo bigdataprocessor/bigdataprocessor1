@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/bigDataTools.iml" filepath="$PROJECT_DIR$/bigDataTools.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/fiji--bigDataTools.iml" filepath="$PROJECT_DIR$/.idea/fiji--bigDataTools.iml" />
     </modules>
   </component>
 </project>
