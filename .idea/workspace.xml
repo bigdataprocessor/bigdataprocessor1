@@ -112,8 +112,8 @@
       <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="132" column="24" lean-forward="false" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="24" />
+            <state relative-caret-position="140">
+              <caret line="162" column="10" lean-forward="false" selection-start-line="162" selection-start-column="10" selection-end-line="162" selection-end-column="10" />
               <folding>
                 <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
               </folding>
@@ -448,7 +448,7 @@
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../fiji-plugin-registrationTools" />
@@ -1373,8 +1373,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="132" column="24" lean-forward="false" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="24" />
+        <state relative-caret-position="140">
+          <caret line="162" column="10" lean-forward="false" selection-start-line="162" selection-start-column="10" selection-end-line="162" selection-end-column="10" />
           <folding>
             <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
           </folding>

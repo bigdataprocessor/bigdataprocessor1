@@ -143,7 +143,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             textFields[i].addActionListener(this);
             textFields[i].addFocusListener(this);
             textFields[i].setText(defaults[i]);
-            textFields[i].setToolTipText(toolTipTexts[iToolTipText]);
+            //textFields[i].setToolTipText(toolTipTexts[iToolTipText]);
             labels[i] = new JLabel(texts[i] + ": ");
             labels[i].setLabelFor(textFields[i]);
         }
@@ -157,7 +157,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             buttons[i] = new JButton(buttonActions[i]);
             buttons[i].setActionCommand(buttonActions[i]);
             buttons[i].addActionListener(this);
-            buttons[i].setToolTipText(toolTipTexts[iToolTipText]);
+            //buttons[i].setToolTipText(toolTipTexts[iToolTipText]);
         }
 
         //
