@@ -14,10 +14,9 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_VIB_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_fiji_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_pal_optimization_2_0_1_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$7.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -110,21 +109,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WriteImarisAndBdv.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java">
+      <file leaf-file-name="BigDataTrackerGUI.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="27" column="19" lean-forward="false" selection-start-line="27" selection-start-column="19" selection-end-line="27" selection-end-column="19" />
-              <folding />
+            <state relative-caret-position="124">
+              <caret line="132" column="24" lean-forward="false" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="24" />
+              <folding>
+                <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SaveVSSFrame.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SaveVSSFrame.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="462">
-              <caret line="222" column="0" lean-forward="true" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+              <caret line="222" column="0" lean-forward="false" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
                 <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
@@ -277,6 +278,7 @@
       <find>Stream from</find>
       <find>5</find>
       <find>writeChan</find>
+      <find>toolTip</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -334,13 +336,13 @@
         <option value="$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/IJ.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55ImarisBdvWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
       </list>
     </option>
   </component>
@@ -411,6 +413,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="bigDataTools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fiji-plugin-bigDataTools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fiji-plugin-bigDataTools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="bigDataTools" type="462c0819:PsiDirectoryNode" />
+              <item name="bigDataTracker" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="fiji-plugin-bigDataTools" type="b2602c69:ProjectViewProjectNode" />
@@ -702,13 +713,13 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23458283" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23458283" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21160822" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21160822" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1136,14 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="100" column="5" lean-forward="false" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1515">
@@ -1338,7 +1341,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
-          <caret line="222" column="0" lean-forward="true" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+          <caret line="222" column="0" lean-forward="false" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
             <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
@@ -1368,6 +1371,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="132" column="24" lean-forward="false" selection-start-line="132" selection-start-column="17" selection-end-line="132" selection-end-column="24" />
+          <folding>
+            <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
@@ -1379,7 +1392,7 @@
               <type id="artifact" />
             </show-content>
           </artifact-editor>
-          <last-edited>bigDataTools-localFiji:jar</last-edited>
+          <last-edited>bigDataTools:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

@@ -170,7 +170,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             comboBoxes[i] = new JComboBox(comboChoices[i]);
             comboBoxes[i].setActionCommand(comboNames[i]);
             comboBoxes[i].addActionListener(this);
-            comboBoxes[i].setToolTipText(toolTipTexts[iToolTipText]);
+            //comboBoxes[i].setToolTipText(toolTipTexts[iToolTipText]);
             comboLabels[i] = new JLabel(comboNames[i] + ": ");
             comboLabels[i].setLabelFor(comboBoxes[i]);
         }
