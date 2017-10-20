@@ -46,6 +46,7 @@ public class SaveVSSFrame implements Runnable {
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
     Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings;
+    final long startTime;
 
     Logger logger = new IJLazySwingLogger();
 
@@ -53,13 +54,15 @@ public class SaveVSSFrame implements Runnable {
                         int t,
                         SavingSettings savingSettings,
                         Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings,
-                        AtomicInteger counter)
+                        AtomicInteger counter,
+                        final long startTime )
     {
         this.dataStreamingTools = dataStreamingTools;
         this.t = t;
         this.savingSettings = savingSettings;
         this.imarisH5Settings = imarisH5Settings;
         this.counter = counter;
+        this.startTime = startTime;
     }
 
     public void run()
@@ -197,14 +200,25 @@ public class SaveVSSFrame implements Runnable {
 
             }
 
-            logger.progress("Saved time point",
-                    "" + counter.addAndGet(1)
-                    + "/" + imp.getNFrames()
-                    + "; memory: "
-                    + IJ.freeMemory());
+            documentProgress( imp.getNFrames() );
 
         }
 
+    }
+
+    private void documentProgress( int total )
+    {
+        counter.incrementAndGet();
+
+        double minutesSpent = (int) (1.0 * System.currentTimeMillis() - startTime ) / (1000 * 60);
+        double minutesPerStack = minutesSpent / counter.get();
+        double minutesLeft = (total - counter.get()) * minutesPerStack;
+
+        logger.progress("Saved time point",
+                "" + counter.get() + "/" + total
+                        + "; time (spent, left) [min]: " + (int) minutesSpent + ", " + (int) minutesLeft
+                        + "; memory: "
+                        + IJ.freeMemory());
     }
 
     public void saveAsTiffXYZMaxProjection(ImagePlus imp, int c, int t, String path)

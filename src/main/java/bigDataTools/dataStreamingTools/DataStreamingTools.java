@@ -1350,13 +1350,15 @@ public class DataStreamingTools {
         List<Future> futures = new ArrayList<>();
 
         AtomicInteger counter = new AtomicInteger(0);
+        final long startTime = System.currentTimeMillis();
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
             futures.add( es.submit( new SaveVSSFrame( this,
                     t,
                     savingSettings,
                     imarisH5Settings,
-                    counter ) ) );
+                    counter,
+                    startTime) ) );
         }
 
     }
