@@ -25,7 +25,7 @@ public class WriteImarisAndBdv {
         Hdf55ImarisBdvWriter hdf5Writer = new Hdf55ImarisBdvWriter();
         String fileBaseName = "test";
         String directory = "/Users/tischi/Desktop/example-data/imaris-out/";
-        hdf5Writer.saveAsImarisAndBdv( imp , fileBaseName, directory );
+        hdf5Writer.saveAsImarisAndBdv( imp, new int[]{1,1,1}, fileBaseName,  directory );
     }
 
 }

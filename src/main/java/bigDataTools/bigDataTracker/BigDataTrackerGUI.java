@@ -91,7 +91,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
         trackingSettings.subSamplingT = 1;
         trackingSettings.nt = imp.getNFrames();
         trackingSettings.intensityGate = new int[]{-1,-1};
-        trackingSettings.viewFirstNProcessedRegions = 1;
+        trackingSettings.viewFirstNProcessedRegions = 0;
         trackingSettings.imageFeatureEnhancement = Utils.ImageFilterTypes.NONE.toString();
 
         setDefaults();

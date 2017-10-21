@@ -1329,10 +1329,16 @@ public class DataStreamingTools {
 
             imarisH5Settings = new Hdf55ImarisBdvWriter.ImarisH5Settings();
 
+            // only consider the first binning, because
+            // the other binnings are determined by Imaris resolution pyramid
+            String[] binnings = savingSettings.bin.split(";");
+            int[] binning = Utils.delimitedStringToIntegerArray(binnings[0], ",");
+
             writer.saveImarisAndBdvMasterFiles(
                     savingSettings.imp,
                     savingSettings.directory,
                     savingSettings.fileBaseName,
+                    binning,
                     imarisH5Settings);
 
             logger.info("Image sizes at different resolutions:");
@@ -1340,7 +1346,6 @@ public class DataStreamingTools {
 
             logger.info("Image chunking:");
             Utils.logArrayList(imarisH5Settings.chunks);
-
 
         }
 

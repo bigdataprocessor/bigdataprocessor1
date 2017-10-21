@@ -1,10 +1,14 @@
 package bigDataTools;
 
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import bigDataTools.logging.IJLazySwingLogger;
+import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.plugin.Binner;
+import ij.plugin.Duplicator;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 
@@ -20,6 +24,8 @@ import java.util.Arrays;
  */
 public class Hdf55ImarisBdvWriter {
 
+    Logger logger = new IJLazySwingLogger();
+
     public Hdf55ImarisBdvWriter()
     {
 
@@ -34,6 +40,7 @@ public class Hdf55ImarisBdvWriter {
     }
 
     public void saveAsImarisAndBdv ( ImagePlus imp,
+                                     int[] binning,
                                      String directory,
                                      String baseFileName )
     {
@@ -43,6 +50,7 @@ public class Hdf55ImarisBdvWriter {
         saveImarisAndBdvMasterFiles( imp,
                  directory,
                  baseFileName,
+                 binning,
                  imarisH5Settings);
 
         //
@@ -64,6 +72,7 @@ public class Hdf55ImarisBdvWriter {
     public void saveImarisAndBdvMasterFiles(ImagePlus imp,
                                             String directory,
                                             String baseFileName,
+                                            int[] primaryBinning,
                                             ImarisH5Settings imarisH5Settings)
     {
 
@@ -76,7 +85,7 @@ public class Hdf55ImarisBdvWriter {
         calibration[1] = imp.getCalibration().pixelHeight;
         calibration[2] = imp.getCalibration().pixelDepth;
 
-        setImarisResolutionLevelsAndChunking(imp, binnings, sizes, chunks);
+        setImarisResolutionLevelsAndChunking(imp, primaryBinning, binnings, sizes, chunks);
 
         writeImarisMasterFile(imp, sizes, calibration, baseFileName, directory);
 
@@ -85,6 +94,7 @@ public class Hdf55ImarisBdvWriter {
     }
 
     public void setImarisResolutionLevelsAndChunking(ImagePlus imp,
+                                                     int[] primaryBinning,
                                                      ArrayList<int[]> binnings,
                                                      ArrayList<long[]> sizes,
                                                      ArrayList<long[]> chunks)
@@ -92,9 +102,39 @@ public class Hdf55ImarisBdvWriter {
         long minVoxelVolume = 1024 * 1024;
 
         long[] size = new long[3];
-        size[0] = imp.getWidth();
-        size[1] = imp.getHeight();
-        size[2] = imp.getNSlices();
+
+        // bin the image to see how large it would be
+        if ( primaryBinning[0] > 1 || primaryBinning[1] > 1 || primaryBinning[2] > 1 )
+        {
+            logger.info("Determining image size at " +
+                    "highest resolution level after initial binning...");
+
+            ImagePlus impBinned = null;
+            // TODO: implement for non-vss
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            impBinned = vss.getFullFrame( 0, 0, 1 );
+
+            Binner binner = new Binner();
+            impBinned = binner.shrink( impBinned, primaryBinning[0], primaryBinning[1], primaryBinning[2], binner.AVERAGE );
+            size[0] = impBinned.getWidth();
+            size[1] = impBinned.getHeight();
+            size[2] = impBinned.getNSlices();
+
+            logger.info("nx: " + size[0]);
+            logger.info("ny: " + size[1]);
+            logger.info("nz: " + size[2]);
+
+        }
+        else
+        {
+            size[0] = imp.getWidth();
+            size[1] = imp.getHeight();
+            size[2] = imp.getNSlices();
+        }
+
+
+
+
         int impByteDepth = imp.getBitDepth() / 8;
 
         sizes.add( size );

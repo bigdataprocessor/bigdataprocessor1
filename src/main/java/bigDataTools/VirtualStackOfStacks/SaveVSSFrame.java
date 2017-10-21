@@ -153,18 +153,15 @@ public class SaveVSSFrame implements Runnable {
                 //
                 ImagePlus impBinned = impChannelTime;
 
-                if ( ! savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
+                int[] binningA = Utils.delimitedStringToIntegerArray(binning, ",");
+
+                if ( binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1 )
                 {
-                    int[] binningA = Utils.delimitedStringToIntegerArray(binning, ",");
-
-                    if ( binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1 )
-                    {
-                        Binner binner = new Binner();
-                        impBinned = binner.shrink(impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE);
-                        newPath = savingSettings.filePath + "--bin-" + binningA[0] + "-" + binningA[1] + "-" + binningA[2];
-                    }
-
+                    Binner binner = new Binner();
+                    impBinned = binner.shrink( impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE );
+                    newPath = savingSettings.filePath + "--bin-" + binningA[0] + "-" + binningA[1] + "-" + binningA[2];
                 }
+
 
                 // Save volume
                 //
