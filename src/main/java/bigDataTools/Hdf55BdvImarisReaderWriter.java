@@ -11,6 +11,9 @@ import ij.plugin.Binner;
 import ij.plugin.Duplicator;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
+import ncsa.hdf.object.*;     // the common object package
+import ncsa.hdf.object.h5.H5File;
+//import ncsa.hdf.object.h5.*;  // the HDF5 implementation
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,15 +21,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by tischi on 13/07/17.
  */
-public class Hdf55ImarisBdvWriter {
+public class Hdf55BdvImarisReaderWriter {
 
     Logger logger = new IJLazySwingLogger();
 
-    public Hdf55ImarisBdvWriter()
+    public Hdf55BdvImarisReaderWriter()
     {
 
     }
@@ -340,6 +344,70 @@ public class Hdf55ImarisBdvWriter {
 
 
     /**
+     * Analyze imaris file and determine
+     * - nx,ny,nc,nz,nt
+     *
+     * @param directory
+     * @param fileName
+     */
+    public void analyzeImarisFile(String directory,
+                                  String fileName)
+    {
+
+        String filePath = directory + File.separator + fileName;
+
+        int file_id = H5.H5Fopen(filePath, HDF5Constants.H5F_ACC_RDONLY, HDF5Constants.H5P_DEFAULT);
+        int count = (int) H5.H5Gn_members(file_id, "/");
+
+        String dsetImgInfoName = "/DataSetInfo/Image";
+        String x = getH5StringAttribute( file_id, dsetImgInfoName, "X" );
+        String y = getH5StringAttribute( file_id, dsetImgInfoName, "Y" );
+        String z = getH5StringAttribute( file_id, dsetImgInfoName, "Z" );
+
+
+
+    }
+
+
+    public String getH5StringAttribute(int file_id, String objectName, String attributeName )
+    {
+        int attribute_id = H5.H5Aopen_by_name(file_id, objectName, attributeName,
+                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
+        int filetype_id = H5.H5Aget_type(attribute_id);
+        int sdim = H5.H5Tget_size(filetype_id);
+        sdim++; // Make room for null terminator
+        int dataspace_id = H5.H5Aget_space(attribute_id);
+        long[] dims = {4};
+        H5.H5Sget_simple_extent_dims(dataspace_id, dims, null);
+        byte[][] dset_data = new byte[(int) dims[0]][(int)sdim];
+        StringBuffer[] str_data = new StringBuffer[(int) dims[0]];
+
+        // Create the memory datatype.
+        int memtype_id = H5.H5Tcopy(HDF5Constants.H5T_C_S1);
+        H5.H5Tset_size(memtype_id, sdim);
+
+        // Read data.
+        H5.H5Aread(attribute_id, memtype_id, dset_data);
+        byte[] tempbuf = new byte[(int)sdim];
+        for (int indx = 0; indx < (int) dims[0]; indx++) {
+            for (int jndx = 0; jndx < sdim; jndx++) {
+                tempbuf[jndx] = dset_data[indx][jndx];
+            }
+            str_data[indx] = new StringBuffer(new String(tempbuf).trim());
+        }
+
+        String attributeString = "";
+        for ( int i = 0; i < str_data.length; i++ )
+        {
+            attributeString += str_data[i].charAt(0);
+        }
+
+        return ( attributeString );
+
+
+    }
+
+    /**
      * Writes the Imaris master file
      * - https://support.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateExternal
      * - https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_extlink.c
@@ -350,6 +418,18 @@ public class Hdf55ImarisBdvWriter {
                                       String fileName,
                                       String directory)
     {
+
+        double histogramMax = 0.0;
+
+        if ( imp.getBitDepth() == 8 )
+        {
+            histogramMax = 255.0;
+        }
+        else if ( imp.getBitDepth() == 16 )
+        {
+            histogramMax = 65535;
+        }
+
 
         //
         // Create master file
@@ -450,7 +530,7 @@ public class Hdf55ImarisBdvWriter {
                             String.valueOf( 0.0 ) );
 
                     setH5StringAttribute(r_t_c_group_id, "HistogramMax",
-                            String.valueOf( 65535.0 ) );
+                            String.valueOf( histogramMax ) );
 
                     H5.H5Gclose(r_t_c_group_id);
                 }
@@ -480,14 +560,19 @@ public class Hdf55ImarisBdvWriter {
         //
         setH5StringAttribute(dataSetInfo_image_group_id, "Description", "description");
 
+
+        // physical size
+
         setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax0",
-                String.valueOf(1.0 * sizes.get(0)[0] * calibration[0]));
+                String.valueOf( 1.0 * sizes.get(0)[0] * calibration[0] ));
 
         setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax1",
-                String.valueOf(1.0 * sizes.get(0)[1] * calibration[1]));
+                String.valueOf( 1.0 * sizes.get(0)[1] * calibration[1] ));
 
         setH5StringAttribute(dataSetInfo_image_group_id, "ExtMax2",
                 String.valueOf( 1.0 * sizes.get(0)[2] * calibration[2] ) );
+
+        // physical origin
 
         setH5StringAttribute(dataSetInfo_image_group_id, "ExtMin0", "0.0");
 
@@ -497,14 +582,16 @@ public class Hdf55ImarisBdvWriter {
 
         setH5StringAttribute(dataSetInfo_image_group_id, "Unit", "um");
 
+        // number of pixels
+
         setH5StringAttribute(dataSetInfo_image_group_id, "X",
-                String.valueOf(sizes.get(0)[0]) );
+                String.valueOf( sizes.get(0)[0]) );
 
         setH5StringAttribute(dataSetInfo_image_group_id, "Y",
-                String.valueOf(sizes.get(0)[1]) );
+                String.valueOf( sizes.get(0)[1]) );
 
         setH5StringAttribute(dataSetInfo_image_group_id, "Z",
-                String.valueOf(sizes.get(0)[2]) );
+                String.valueOf( sizes.get(0)[2]) );
 
         H5.H5Gclose( dataSetInfo_image_group_id );
 

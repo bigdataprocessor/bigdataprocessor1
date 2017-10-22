@@ -51,7 +51,7 @@ package bigDataTools.dataStreamingTools;
 //import org.scijava.util.Bytes;
 
 
-import bigDataTools.Hdf55ImarisBdvWriter;
+import bigDataTools.Hdf55BdvImarisReaderWriter;
 import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -1319,15 +1319,15 @@ public class DataStreamingTools {
         }
 
 
-        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings = null;
+        Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings = null;
 
         if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
             nSavingThreads = 1; // H5 is not multi-threaded anyway.
 
-            Hdf55ImarisBdvWriter writer = new Hdf55ImarisBdvWriter();
+            Hdf55BdvImarisReaderWriter writer = new Hdf55BdvImarisReaderWriter();
 
-            imarisH5Settings = new Hdf55ImarisBdvWriter.ImarisH5Settings();
+            imarisH5Settings = new Hdf55BdvImarisReaderWriter.ImarisH5Settings();
 
             // only consider the first binning, because
             // the other binnings are determined by Imaris resolution pyramid

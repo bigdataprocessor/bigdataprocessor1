@@ -1,6 +1,6 @@
 package bigDataTools.VirtualStackOfStacks;
 
-import bigDataTools.Hdf55ImarisBdvWriter;
+import bigDataTools.Hdf55BdvImarisReaderWriter;
 import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.dataStreamingTools.SavingSettings;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -23,8 +23,6 @@ import loci.formats.meta.IMetadata;
 import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
 import loci.formats.tiff.IFD;
-import ncsa.hdf.hdf5lib.H5;
-import ncsa.hdf.hdf5lib.HDF5Constants;
 import ncsa.hdf.hdf5lib.exceptions.HDF5Exception;
 import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
@@ -32,8 +30,6 @@ import ome.xml.model.primitives.PositiveInteger;
 
 import ij.plugin.Binner;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -45,7 +41,7 @@ public class SaveVSSFrame implements Runnable {
     AtomicInteger counter;
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
-    Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings;
+    Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings;
     final long startTime;
 
     Logger logger = new IJLazySwingLogger();
@@ -53,7 +49,7 @@ public class SaveVSSFrame implements Runnable {
     public SaveVSSFrame(DataStreamingTools dataStreamingTools,
                         int t,
                         SavingSettings savingSettings,
-                        Hdf55ImarisBdvWriter.ImarisH5Settings imarisH5Settings,
+                        Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings,
                         AtomicInteger counter,
                         final long startTime )
     {
@@ -181,7 +177,7 @@ public class SaveVSSFrame implements Runnable {
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                     {
-                        Hdf55ImarisBdvWriter writer = new Hdf55ImarisBdvWriter();
+                        Hdf55BdvImarisReaderWriter writer = new Hdf55BdvImarisReaderWriter();
                         writer.writeChannelTimeH5File( impBinned, imarisH5Settings,
                                 c, t, savingSettings.fileBaseName, savingSettings.directory );
                     }
