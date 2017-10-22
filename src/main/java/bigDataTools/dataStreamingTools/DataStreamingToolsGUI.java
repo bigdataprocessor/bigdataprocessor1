@@ -7,6 +7,8 @@ import bigDataTools.utils.Utils;
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.GenericDialog;
+import ij.gui.NonBlockingGenericDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -341,6 +343,23 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         }
     }
 
+
+    public boolean checkImageProperties()
+    {
+
+        GenericDialog gd = new NonBlockingGenericDialog("Check Image Properties");
+        gd.addMessage(
+                "Before saving please consider checking the image calibration in [Image > Properties].\n" +
+                        " \nFor further analysis it can for instance be important that " +
+                        "the pixel width, height and depth are set properly.\n" +
+                        " \nYou can leave this dialog open. " +
+                        "Simply press [OK] once you checked/corrected the meta-data.\n ");
+        gd.showDialog();
+
+        if ( gd.wasCanceled() ) return false;
+        return true;
+    }
+
     public void actionPerformed( ActionEvent e )
     {
         int i = 0;
@@ -416,8 +435,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         {
 
             ImagePlus imp = IJ.getImage();
-            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
+            if ( ! Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+
+            if ( ! checkImageProperties() ) return;
 
             // Check that all image files have been parsed
             //

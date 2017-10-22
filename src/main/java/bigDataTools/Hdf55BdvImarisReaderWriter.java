@@ -364,8 +364,6 @@ public class Hdf55BdvImarisReaderWriter {
         String y = getH5StringAttribute( file_id, dsetImgInfoName, "Y" );
         String z = getH5StringAttribute( file_id, dsetImgInfoName, "Z" );
 
-
-
     }
 
 
