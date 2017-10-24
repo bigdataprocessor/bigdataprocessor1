@@ -294,6 +294,12 @@ public class Utils {
         return(ok);
     }
 
+    public static String getChannelTimeString( int c, int t )
+    {
+        String s = String.format("--C%02d--T%05d", c, t);
+        return ( s );
+    }
+
     public static boolean checkMemoryRequirements(long numPixels, int bitDepth, int nThreads)
     {
         //

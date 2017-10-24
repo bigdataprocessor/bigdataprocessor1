@@ -1,7 +1,5 @@
 package bigDataTools.testing;
 
-import bigDataTools.Hdf55BdvImarisReaderWriter;
-import ij.IJ;
 import ij.ImagePlus;
 
 /**

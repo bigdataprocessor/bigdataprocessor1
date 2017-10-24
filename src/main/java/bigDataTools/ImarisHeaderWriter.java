@@ -1,3 +1,4 @@
+
 package bigDataTools;
 
 import ncsa.hdf.hdf5lib.H5;
@@ -11,35 +12,38 @@ import static bigDataTools.Hdf5Utils.getGroup;
 import static bigDataTools.Hdf5Utils.createFile;
 import static bigDataTools.Hdf5Utils.setH5StringAttribute;
 
-public class ImarisHeaderWriter {
+public abstract class ImarisHeaderWriter {
 
-    private int file_id;
-    final String G_DATA_SET_INFO = "DataSetInfo";
-    final String G_DATA_SET = "DataSet";
-    final String G_IMAGE = "Image";
-    final String G_TIME_INFO = "TimeInfo";
-    final String G_CHANNEL = "Channel";
-    final String G_RESOLUTION_LEVEL = "ResolutionLevel";
+    final static String G_DATA_SET_INFO = "DataSetInfo";
+    final static String G_DATA_SET = "DataSet";
+    final static String G_IMAGE = "Image";
+    final static String G_TIME_INFO = "TimeInfo";
+    final static String G_CHANNEL = "Channel";
+    final static String G_TIMEPOINT = "TimePoint";
+
+    final static String G_RESOLUTION_LEVEL = "ResolutionLevel";
 
     final String[] XYZ = new String[]{"X","Y","Z"};
 
-    int file_id;
 
-    public void write( ImarisDataSetProperties idp,
-                       String directory,
-                       String filename )
+    public static void write( ImarisDataSetProperties idp,
+                              String directory,
+                              String filename )
     {
 
-        file_id = createMasterFile( directory, filename );
+        int file_id = createMasterFile( directory, filename );
 
-        writeDataSetInfoImage( idp.dimensions.get(0), idp.interval );
-        writeDataSetInfoTimeInfo( idp.timePoints );
-        writeDataSetInfoChannels( idp.channels);
+        writeDataSetInfoImage( file_id, idp.getDimensions().get(0), idp.getInterval() );
+        writeDataSetInfoTimeInfo( file_id, idp.getTimePoints() );
+        writeDataSetInfoChannels( file_id, idp.getChannels() );
+        writeDataSets( file_id,
+                idp.getDimensions().size(),
+                idp.getChannels() );
 
         H5.H5Fclose(file_id);
     }
 
-    private int createMasterFile( String directory, String filename )
+    private static int createMasterFile( String directory, String filename )
     {
 
         int file_id = createFile( directory, filename );
@@ -56,16 +60,45 @@ public class ImarisHeaderWriter {
     }
 
 
-
-    private void addExternalDataSet ( int t, int c,
-                                     String directory, String filename,
-                                     String h5DataPathInExternalFile )
+    private static void writeDataSets( int file_id,
+                                       int numResolutions,
+                                       ArrayList < ArrayList < String[] > > dataSets )
     {
+        for ( int t = 0; t < dataSets.size(); ++t )
+        {
+            for ( int c = 0; c < dataSets.size(); ++c )
+            {
+                writeDataSet( file_id, t, c, numResolutions, dataSets.get( t ).get( c ) );
+            }
+        }
+    }
+
+    private static void writeDataSet ( int file_id,
+                                       int t,
+                                       int c,
+                                       int numResolutions,
+                                       String[] dirFileGroup )
+    {
+
+        for (int r = 0; r < numResolutions; ++r )
+        {
+            int group_id = getGroup( file_id, G_DATA_SET
+                    + "/" + G_RESOLUTION_LEVEL
+                    + "/" + G_TIMEPOINT + " " + t );
+
+            H5.H5Lcreate_external(
+                    "./" + dirFileGroup[ 1 ],
+                    dirFileGroup[ 2 ],
+                    group_id, G_CHANNEL + " " + c,
+                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT );
+
+            H5.H5Gclose( group_id );
+        }
 
     }
 
 
-    public void writeDataSetInfoImage( long[] dimensions, RealInterval interval )
+    private static void writeDataSetInfoImage( int file_id, long[] dimensions, RealInterval interval )
     {
 
         int group_id = getGroup( file_id, G_DATA_SET_INFO + "/" +  G_IMAGE );
@@ -94,7 +127,7 @@ public class ImarisHeaderWriter {
 
     }
 
-    public void writeDataSetInfoTimeInfo( ArrayList < String > times)
+    private static void writeDataSetInfoTimeInfo( int file_id, ArrayList < String > times)
     {
 
         int group_id = getGroup( file_id, G_DATA_SET_INFO + "/" + G_TIME_INFO );
@@ -117,7 +150,7 @@ public class ImarisHeaderWriter {
 
     }
 
-    public void addDataSetInfoChannel( int id, String color )
+    private static void addDataSetInfoChannel( int file_id, int id, String color )
     {
 
         int group_id = getGroup( file_id, G_DATA_SET_INFO + "/" + G_CHANNEL + " " + id );
@@ -134,7 +167,7 @@ public class ImarisHeaderWriter {
         H5.H5Gclose( group_id );
     }
 
-    public void writeDataSetInfoChannels( ArrayList<String> channels )
+    private static void writeDataSetInfoChannels( int file_id, ArrayList<String> channels )
     {
         for ( int c = 0; c < channels.size(); ++c )
         {
@@ -142,101 +175,4 @@ public class ImarisHeaderWriter {
         }
     }
 
-    public void addDataSets( int file_id,  )
-    {
-
-        int dataset_group_id = H5.H5Gcreate(file_id, "/DataSet",
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
-
-        for (int r = 0; r < sizes.size(); r++)
-        {
-            int r_group_id = H5.H5Gcreate(dataset_group_id,
-                    "/DataSet" + "/ResolutionLevel " + r,
-                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                    HDF5Constants.H5P_DEFAULT);
-
-            for (int t = 0; t < imp.getNFrames(); t++)
-            {
-                int r_t_group_id = H5.H5Gcreate(r_group_id,
-                        "TimePoint " + t ,
-                        HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                        HDF5Constants.H5P_DEFAULT);
-
-                for (int c = 0; c < imp.getNChannels(); c++)
-                {
-                    int r_t_c_group_id = H5.H5Gcreate(r_t_group_id,
-                            "Channel " + c ,
-                            HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT);
-
-                    //
-                    // Create link to the actual data in an external data file
-                    //
-                    String relativePath = "./";
-                    String pathNameData = relativePath + filename
-                            + getChannelTimeString( c , t ) + ".h5";
-
-                    H5.H5Lcreate_external(
-                            pathNameData, getExternalH5DataPath( r ),
-                            r_t_c_group_id, "Data",
-                            HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-                    //
-                    // Create histogram
-                    //
-                    long[] histo_data = new long[255];
-                    Arrays.fill( histo_data, 100 );
-                    long[] histo_dims = { histo_data.length };
-                    int histo_dataspace_id = H5.H5Screate_simple(
-                            histo_dims.length, histo_dims, null);
-
-                    /*
-                    imaris expects 64bit unsigned int values:
-                    - http://open.bitplane.com/Default.aspx?tabid=268
-                    thus, we are using as memory type: H5T_NATIVE_ULLONG
-                    and as the corresponding dataset type: H5T_STD_U64LE
-                    - https://support.hdfgroup.org/HDF5/release/dttable.html
-                    */
-                    int histo_dataset_id = H5.H5Dcreate(r_t_c_group_id, "Histogram",
-                            HDF5Constants.H5T_STD_U64LE, histo_dataspace_id,
-                            HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT);
-
-                    H5.H5Dwrite(histo_dataset_id,
-                            HDF5Constants.H5T_NATIVE_ULLONG,
-                            HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
-                            HDF5Constants.H5P_DEFAULT, histo_data);
-
-                    H5.H5Dclose(histo_dataset_id);
-                    H5.H5Sclose(histo_dataspace_id);
-
-                    // Set channel group attributes
-                    //
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeX",
-                            String.valueOf(sizes.get(r)[0]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeY",
-                            String.valueOf(sizes.get(r)[1]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeZ",
-                            String.valueOf(sizes.get(r)[2]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "HistogramMin",
-                            String.valueOf( 0.0 ) );
-
-                    setH5StringAttribute(r_t_c_group_id, "HistogramMax",
-                            String.valueOf( histogramMax ) );
-
-                    H5.H5Gclose(r_t_c_group_id);
-                }
-                H5.H5Gclose(r_t_group_id);
-            }
-            H5.H5Gclose(r_group_id);
-        }
-        H5.H5Gclose(dataset_group_id);
-
-
-    }
 }

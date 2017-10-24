@@ -51,7 +51,8 @@ package bigDataTools.dataStreamingTools;
 //import org.scijava.util.Bytes;
 
 
-import bigDataTools.Hdf55BdvImarisReaderWriter;
+import bigDataTools.ImarisDataSetProperties;
+import bigDataTools.ImarisHeaderWriter;
 import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -1306,7 +1307,7 @@ public class DataStreamingTools {
 
     }
 
-    public void saveVSSAsStacks(SavingSettings savingSettings)
+    public void saveVSSAsStacks( SavingSettings savingSettings )
     {
 
         interruptSavingThreads = false;
@@ -1318,34 +1319,33 @@ public class DataStreamingTools {
             nSavingThreads = 1; // H5 is not multi-threaded anyway.
         }
 
-
-        Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings = null;
+        // TODO: clean this up...
+        ImarisDataSetProperties idp = new ImarisDataSetProperties();
 
         if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
             nSavingThreads = 1; // H5 is not multi-threaded anyway.
 
-            Hdf55BdvImarisReaderWriter writer = new Hdf55BdvImarisReaderWriter();
-
-            imarisH5Settings = new Hdf55BdvImarisReaderWriter.ImarisH5Settings();
-
-            // only consider the first binning, because
-            // the other binnings are determined by Imaris resolution pyramid
             String[] binnings = savingSettings.bin.split(";");
             int[] binning = Utils.delimitedStringToIntegerArray(binnings[0], ",");
+            idp.initialiseFromImagePlus( savingSettings.imp,  binning );
 
-            writer.saveImarisAndBdvMasterFiles(
-                    savingSettings.imp,
+            ImarisHeaderWriter.write( idp,
                     savingSettings.directory,
-                    savingSettings.fileBaseName,
-                    binning,
-                    imarisH5Settings);
+                    savingSettings.fileBaseName + ".ims"
+                    );
+
+            // TODO: remove below
+            ImarisHeaderWriter.write( idp,
+                    savingSettings.directory,
+                    savingSettings.fileBaseName + ".h5"
+            );
 
             logger.info("Image sizes at different resolutions:");
-            Utils.logArrayList(imarisH5Settings.sizes);
+            Utils.logArrayList( idp.getDimensions() );
 
             logger.info("Image chunking:");
-            Utils.logArrayList(imarisH5Settings.chunks);
+            Utils.logArrayList( idp.getChunks() );
 
         }
 
@@ -1356,12 +1356,13 @@ public class DataStreamingTools {
 
         AtomicInteger counter = new AtomicInteger(0);
         final long startTime = System.currentTimeMillis();
+
         for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
             futures.add( es.submit( new SaveVSSFrame( this,
                     t,
                     savingSettings,
-                    imarisH5Settings,
+                    idp,
                     counter,
                     startTime) ) );
         }

@@ -7,11 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5Utils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__au_com_bytecode_opencsv_2_4.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__jitk_jitk_tps_2_1_1_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_3D_Viewer_4_0_2_SNAPSHOT.xml" afterPath="" />
@@ -19,13 +14,35 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_VIB_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_fiji_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_pal_optimization_2_0_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Hdf55ImarisBdvWriter$ImarisH5Settings.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Hdf55ImarisBdvWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$6.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$ParseFilesIntoVirtualStack.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsGUI$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsGUI$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsGUI$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsPlugIn_$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingToolsPlugIn_.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/SavingSettings.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/testing/WriteImarisAndBdv.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/testHDF5.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/testing/testHDF5.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,40 +63,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Hdf55BdvImarisReaderWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java">
+      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="198" column="0" lean-forward="true" selection-start-line="102" selection-start-column="4" selection-end-line="198" selection-end-column="0" />
+            <state relative-caret-position="747">
+              <caret line="332" column="31" lean-forward="false" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="31" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="docComment;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="class#ImarisH5Settings#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="docComment;method#writeBdvMasterFiles#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="e#6643#6666#0" expanded="false" />
-                <element signature="e#9208#9210#0" expanded="false" />
-                <element signature="e#10206#10227#0" expanded="false" />
-                <element signature="e#11003#11036#0" expanded="false" />
-                <element signature="e#11235#11248#0" expanded="false" />
-                <element signature="docComment;method#writeImarisMasterFile#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="e#14490#14492#0" expanded="false" />
-                <element signature="e#14716#14718#0" expanded="false" />
-                <element signature="e#14948#15000#0" expanded="false" />
-                <element signature="e#15205#15222#0" expanded="false" />
-                <element signature="e#17290#17292#0" expanded="false" />
-                <element signature="e#17595#17612#0" expanded="false" />
-                <element signature="e#18135#18137#0" expanded="false" />
-                <element signature="e#19235#19237#0" expanded="false" />
-                <element signature="e#20164#20166#0" expanded="false" />
-                <element signature="e#20687#20689#0" expanded="false" />
-                <element signature="e#20998#21000#0" expanded="false" />
-                <element signature="e#22717#22730#0" expanded="false" />
-                <element signature="method#getExternalH5DataPath#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-                <element signature="method#createViewSetupString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-                <element signature="method#createSingleAttributeString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-                <element signature="method#createBdvXMLString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-                <element signature="e#29504#29548#0" expanded="false" />
-                <element signature="e#29959#29996#0" expanded="false" />
+                <element signature="docComment;class#Utils#0" expanded="false" />
+                <element signature="class#ImageFilterTypes#0;class#Utils#0" expanded="false" />
+                <element signature="e#3539#3547#0" expanded="false" />
+                <element signature="e#3833#3841#0" expanded="false" />
+                <element signature="e#4488#4527#0" expanded="false" />
+                <element signature="e#5830#5838#0" expanded="false" />
+                <element signature="method#getChannelTimeString#0;class#Utils#0" expanded="true" />
+                <element signature="e#9470#9472#0" expanded="false" />
+                <element signature="e#9774#9867#0" expanded="false" />
+                <element signature="e#14018#14103#0" expanded="false" />
+                <element signature="e#14456#14541#0" expanded="false" />
+                <element signature="e#15543#15578#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -88,118 +89,55 @@
       <file leaf-file-name="ImarisHeaderWriter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="30" column="4" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+            <state relative-caret-position="260">
+              <caret line="79" column="32" lean-forward="false" selection-start-line="79" selection-start-column="32" selection-end-line="79" selection-end-column="32" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2168#2185#0" expanded="false" />
-                <element signature="e#3005#3022#0" expanded="false" />
-                <element signature="e#5322#5324#0" expanded="false" />
-                <element signature="e#5880#5882#0" expanded="false" />
+                <element signature="method#write#0;class#ImarisHeaderWriter#0" expanded="true" />
+                <element signature="method#writeDataSets#0;class#ImarisHeaderWriter#0" expanded="true" />
+                <element signature="method#writeDataSet#0;class#ImarisHeaderWriter#0" expanded="true" />
+                <element signature="e#3486#3503#0" expanded="false" />
+                <element signature="e#4344#4361#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Hdf5DataCubeWriter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Hdf5DataCubeWriter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="75" column="4" lean-forward="false" selection-start-line="75" selection-start-column="4" selection-end-line="75" selection-end-column="4" />
+            <state relative-caret-position="354">
+              <caret line="58" column="48" lean-forward="false" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
               <folding>
-                <element signature="e#2249#2251#0" expanded="false" />
-                <element signature="e#3098#3111#0" expanded="false" />
-                <element signature="method#writeHistogram#0;class#Hdf5DataCubeWriter#0" expanded="true" />
-                <element signature="e#6047#6049#0" expanded="false" />
-                <element signature="e#6570#6572#0" expanded="false" />
-                <element signature="e#6881#6883#0" expanded="false" />
-                <element signature="e#8130#8147#0" expanded="false" />
-                <element signature="e#8590#8603#0" expanded="false" />
+                <element signature="e#3204#3217#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImarisDataSetProperties.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ImarisDataSetProperties.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+            <state relative-caret-position="348">
+              <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#initialisePropertiesFromImarisFile#0;class#ImarisDataSetProperties#0" expanded="true" />
-                <element signature="method#addChannelFromImarisFile#0;class#ImarisDataSetProperties#0" expanded="true" />
+                <element signature="method#ImarisDataSetProperties#0;class#ImarisDataSetProperties#0" expanded="true" />
+                <element signature="e#844#845#0" expanded="true" />
+                <element signature="e#919#920#0" expanded="true" />
+                <element signature="e#978#979#0" expanded="true" />
+                <element signature="e#1052#1053#0" expanded="true" />
+                <element signature="e#1112#1113#0" expanded="true" />
+                <element signature="e#1183#1184#0" expanded="true" />
+                <element signature="e#1244#1245#0" expanded="true" />
+                <element signature="e#1283#1284#0" expanded="true" />
+                <element signature="e#1328#1329#0" expanded="true" />
+                <element signature="e#1359#1360#0" expanded="true" />
+                <element signature="e#1413#1414#0" expanded="true" />
+                <element signature="e#1444#1445#0" expanded="true" />
+                <element signature="method#initialiseFromImagePlus#0;class#ImarisDataSetProperties#0" expanded="true" />
+                <element signature="method#addExternalHdf5DataSet#0;class#ImarisDataSetProperties#0" expanded="true" />
+                <marker date="1508856931000" expanded="false" signature="5227:5458" ph="{...}" />
+                <marker date="1508856931000" expanded="false" signature="7235:7243" ph="{}" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Hdf5Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="197" column="32" lean-forward="false" selection-start-line="197" selection-start-column="32" selection-end-line="197" selection-end-column="32" />
-              <folding>
-                <element signature="e#1894#1937#0" expanded="false" />
-                <element signature="method#createFile#0;class#Hdf5Utils#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testHDF5.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/testing/testHDF5.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="15" column="8" lean-forward="false" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-              <folding>
-                <element signature="method#createImarisOutput#0;class#testHDF5#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SaveVSSFrame.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-631">
-              <caret line="85" column="23" lean-forward="true" selection-start-line="85" selection-start-column="23" selection-end-line="85" selection-end-column="23" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
-                <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
-                <element signature="e#3126#3133#0" expanded="false" />
-                <element signature="e#3403#3450#0" expanded="false" />
-                <element signature="e#3869#3876#0" expanded="false" />
-                <element signature="e#4060#4070#0" expanded="false" />
-                <element signature="e#4461#4485#0" expanded="false" />
-                <element signature="e#4903#4913#0" expanded="false" />
-                <element signature="e#5591#5605#0" expanded="false" />
-                <element signature="e#5712#5719#0" expanded="false" />
-                <element signature="method#documentProgress#0;class#SaveVSSFrame#0" expanded="true" />
-                <element signature="e#8443#8445#0" expanded="false" />
-                <element signature="e#8835#8858#0" expanded="false" />
-                <element signature="e#9695#9749#0" expanded="false" />
-                <element signature="e#11127#11182#0" expanded="false" />
-                <element signature="e#11668#11708#0" expanded="false" />
-                <element signature="e#11925#11947#0" expanded="false" />
-                <element signature="e#12063#12075#0" expanded="false" />
-                <element signature="e#12703#12713#0" expanded="false" />
-                <element signature="e#12984#13005#0" expanded="false" />
-                <element signature="e#13127#13139#0" expanded="false" />
-                <element signature="e#13797#13807#0" expanded="false" />
-                <element signature="e#13996#14029#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1605">
-              <caret line="107" column="21" lean-forward="false" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="21" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -207,35 +145,80 @@
       <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10875">
-              <caret line="1360" column="46" lean-forward="false" selection-start-line="1360" selection-start-column="46" selection-end-line="1360" selection-end-column="46" />
+            <state relative-caret-position="1080">
+              <caret line="1368" column="0" lean-forward="false" selection-start-line="1368" selection-start-column="0" selection-end-line="1368" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
                 <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="e#4836#4838#0" expanded="false" />
-                <element signature="e#5426#5476#0" expanded="false" />
-                <element signature="e#5600#5620#0" expanded="false" />
-                <element signature="e#6722#6745#0" expanded="false" />
+                <element signature="e#4873#4875#0" expanded="false" />
+                <element signature="e#5463#5513#0" expanded="false" />
+                <element signature="e#5637#5657#0" expanded="false" />
+                <element signature="e#6759#6782#0" expanded="false" />
                 <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="e#13367#13369#0" expanded="false" />
-                <element signature="e#15678#15680#0" expanded="false" />
-                <element signature="e#15916#15918#0" expanded="false" />
-                <element signature="e#16616#16658#0" expanded="false" />
-                <element signature="e#17467#17469#0" expanded="false" />
-                <element signature="e#20162#20164#0" expanded="false" />
-                <element signature="e#20408#20410#0" expanded="false" />
-                <element signature="e#24759#24805#0" expanded="false" />
-                <element signature="e#25698#25700#0" expanded="false" />
-                <element signature="e#25927#25944#0" expanded="false" />
+                <element signature="e#13404#13406#0" expanded="false" />
+                <element signature="e#15715#15717#0" expanded="false" />
+                <element signature="e#15953#15955#0" expanded="false" />
+                <element signature="e#16653#16695#0" expanded="false" />
+                <element signature="e#17504#17506#0" expanded="false" />
+                <element signature="e#20199#20201#0" expanded="false" />
+                <element signature="e#20445#20447#0" expanded="false" />
+                <element signature="e#24796#24842#0" expanded="false" />
+                <element signature="e#25735#25737#0" expanded="false" />
+                <element signature="e#25964#25981#0" expanded="false" />
                 <element signature="method#setImageDataInfoFromH5#0;class#DataStreamingTools#0" expanded="true" />
                 <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="e#36419#36426#0" expanded="false" />
-                <element signature="e#38595#38622#0" expanded="false" />
-                <element signature="e#39400#39460#0" expanded="false" />
+                <element signature="e#36456#36463#0" expanded="false" />
+                <element signature="e#38632#38659#0" expanded="false" />
+                <element signature="e#39437#39497#0" expanded="false" />
                 <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-                <element signature="e#40492#40515#0" expanded="false" />
-                <element signature="e#40873#40947#0" expanded="false" />
+                <element signature="e#40529#40552#0" expanded="false" />
+                <element signature="e#40910#40984#0" expanded="false" />
                 <element signature="method#cancelSaving#0;class#DataStreamingTools#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BigDataTracker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="249">
+              <caret line="284" column="36" lean-forward="false" selection-start-line="284" selection-start-column="35" selection-end-line="284" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SaveVSSFrame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="182" column="44" lean-forward="false" selection-start-line="182" selection-start-column="44" selection-end-line="182" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
+                <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
+                <element signature="e#3151#3158#0" expanded="false" />
+                <element signature="e#3428#3475#0" expanded="false" />
+                <element signature="e#3894#3901#0" expanded="false" />
+                <element signature="e#4085#4095#0" expanded="false" />
+                <element signature="e#4486#4510#0" expanded="false" />
+                <element signature="e#4928#4938#0" expanded="false" />
+                <element signature="e#5616#5630#0" expanded="false" />
+                <element signature="e#5737#5744#0" expanded="false" />
+                <element signature="method#documentProgress#0;class#SaveVSSFrame#0" expanded="true" />
+                <element signature="e#8492#8494#0" expanded="false" />
+                <element signature="e#8884#8907#0" expanded="false" />
+                <element signature="e#9744#9798#0" expanded="false" />
+                <element signature="e#11176#11231#0" expanded="false" />
+                <element signature="e#11717#11757#0" expanded="false" />
+                <element signature="e#11974#11996#0" expanded="false" />
+                <element signature="e#12112#12124#0" expanded="false" />
+                <element signature="e#12752#12762#0" expanded="false" />
+                <element signature="e#13033#13054#0" expanded="false" />
+                <element signature="e#13176#13188#0" expanded="false" />
+                <element signature="e#13846#13856#0" expanded="false" />
+                <element signature="e#14045#14078#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -244,10 +227,11 @@
       <file leaf-file-name="DataStreamingToolsGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="357" column="0" lean-forward="false" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
+            <state relative-caret-position="205">
+              <caret line="516" column="68" lean-forward="true" selection-start-line="516" selection-start-column="68" selection-end-line="516" selection-end-column="68" />
               <folding>
-                <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="true" />
+                <element signature="method#checkImageProperties#0;class#DataStreamingToolsGUI#0" expanded="true" />
+                <element signature="method#run#0;class#13268:13730" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -281,11 +265,20 @@
       <find>getExtre</find>
       <find>writeLo</find>
       <find>exter</find>
-      <find>Channel</find>
       <find>&quot;Channel</find>
       <find>s</find>
       <find>writeCh</find>
       <find>getByte</find>
+      <find>TimeP</find>
+      <find>Channel</find>
+      <find>histo</find>
+      <find>threads</find>
+      <find>Histo</find>
+      <find>cells</find>
+      <find>H5Lcreate_external</find>
+      <find>external</find>
+      <find>futures.get</find>
+      <find>imaris</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -331,25 +324,25 @@
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/logging/IJLazySwingLogger.java" />
         <option value="$MAVEN_REPOSITORY$/net/imagej/ij/1.51h/ij-1.51h-sources.jar!/ij/IJ.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/ObjectTracker.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/VirtualStackOfStacks.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTrackerGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55ImarisBdvWriter.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/WriteImarisAndBdv.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/testing/testHDF5.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisReaderWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDatasetProperties.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisWriter.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5Writer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java" />
         <option value="$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java" />
       </list>
     </option>
   </component>
@@ -446,6 +439,15 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="bigDataTools" type="462c0819:PsiDirectoryNode" />
               <item name="testing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fiji-plugin-bigDataTools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fiji-plugin-bigDataTools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="bigDataTools" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="fiji-plugin-bigDataTools" type="b2602c69:ProjectViewProjectNode" />
@@ -745,6 +747,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23458283" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -755,7 +758,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12732475" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26108727" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39177752" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.008583691" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -768,7 +771,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23458283" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -824,7 +826,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>784</line>
+          <line>785</line>
           <properties />
           <option name="timeStamp" value="196" />
         </line-breakpoint>
@@ -848,13 +850,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java</url>
-          <line>467</line>
+          <line>472</line>
           <properties />
           <option name="timeStamp" value="446" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java</url>
-          <line>391</line>
+          <line>397</line>
           <properties />
           <option name="timeStamp" value="461" />
         </line-breakpoint>
@@ -866,42 +868,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>919</line>
+          <line>920</line>
           <properties />
           <option name="timeStamp" value="571" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java</url>
-          <line>917</line>
+          <line>918</line>
           <properties />
           <option name="timeStamp" value="572" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java</url>
-          <line>138</line>
-          <properties />
-          <option name="timeStamp" value="578" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java</url>
-          <line>115</line>
-          <properties />
-          <option name="timeStamp" value="582" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java</url>
-          <line>125</line>
-          <properties />
-          <option name="timeStamp" value="583" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java</url>
-          <line>133</line>
+          <line>166</line>
           <properties />
           <option name="timeStamp" value="601" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java</url>
+          <line>201</line>
+          <properties />
+          <option name="timeStamp" value="604" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java</url>
+          <line>261</line>
+          <properties />
+          <option name="timeStamp" value="605" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java</url>
+          <line>94</line>
+          <properties />
+          <option name="timeStamp" value="606" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="602" />
+      <option name="time" value="607" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1115,33 +1117,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="282" column="22" lean-forward="false" selection-start-line="282" selection-start-column="22" selection-end-line="282" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1515">
-          <caret line="332" column="31" lean-forward="false" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="31" />
-          <folding>
-            <element signature="docComment;class#Utils#0" expanded="false" />
-            <element signature="class#ImageFilterTypes#0;class#Utils#0" expanded="false" />
-            <element signature="e#3539#3547#0" expanded="false" />
-            <element signature="e#3833#3841#0" expanded="false" />
-            <element signature="e#4488#4527#0" expanded="false" />
-            <element signature="e#5830#5838#0" expanded="false" />
-            <element signature="e#9315#9317#0" expanded="false" />
-            <element signature="e#9619#9712#0" expanded="false" />
-            <element signature="e#13863#13948#0" expanded="false" />
-            <element signature="e#14301#14386#0" expanded="false" />
-            <element signature="e#15388#15423#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ch/systemsx/cisd/hdf5/IHDF5ObjectReadOnlyInfoProviderHandler.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -1174,6 +1149,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
           <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding>
+            <element signature="method#setDefaults#0;class#BigDataTrackerGUI#0" expanded="false" />
+            <element signature="method#showDialog#0;class#BigDataTrackerGUI#0" expanded="false" />
+            <element signature="e#6366#6374#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#BigDataTrackerGUI#0" expanded="false" />
+            <element signature="e#18866#18874#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1232,41 +1214,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10875">
-          <caret line="1360" column="46" lean-forward="false" selection-start-line="1360" selection-start-column="46" selection-end-line="1360" selection-end-column="46" />
-          <folding>
-            <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
-            <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="e#4836#4838#0" expanded="false" />
-            <element signature="e#5426#5476#0" expanded="false" />
-            <element signature="e#5600#5620#0" expanded="false" />
-            <element signature="e#6722#6745#0" expanded="false" />
-            <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="e#13367#13369#0" expanded="false" />
-            <element signature="e#15678#15680#0" expanded="false" />
-            <element signature="e#15916#15918#0" expanded="false" />
-            <element signature="e#16616#16658#0" expanded="false" />
-            <element signature="e#17467#17469#0" expanded="false" />
-            <element signature="e#20162#20164#0" expanded="false" />
-            <element signature="e#20408#20410#0" expanded="false" />
-            <element signature="e#24759#24805#0" expanded="false" />
-            <element signature="e#25698#25700#0" expanded="false" />
-            <element signature="e#25927#25944#0" expanded="false" />
-            <element signature="method#setImageDataInfoFromH5#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="e#36419#36426#0" expanded="false" />
-            <element signature="e#38595#38622#0" expanded="false" />
-            <element signature="e#39400#39460#0" expanded="false" />
-            <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
-            <element signature="e#40492#40515#0" expanded="false" />
-            <element signature="e#40873#40947#0" expanded="false" />
-            <element signature="method#cancelSaving#0;class#DataStreamingTools#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1605">
@@ -1292,60 +1239,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="357" column="0" lean-forward="false" selection-start-line="357" selection-start-column="0" selection-end-line="357" selection-end-column="0" />
-          <folding>
-            <element signature="method#actionPerformed#0;class#DataStreamingToolsGUI#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ncsa/hdf/hdf5lib/H5.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="950" column="22" lean-forward="false" selection-start-line="950" selection-start-column="22" selection-end-line="950" selection-end-column="22" />
-          <folding>
-            <element signature="method#H5Gcreate#1;class#H5#0" expanded="true" />
-            <element signature="method#H5Gopen#0;class#H5#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-631">
-          <caret line="85" column="23" lean-forward="true" selection-start-line="85" selection-start-column="23" selection-end-line="85" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
-            <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
-            <element signature="e#3126#3133#0" expanded="false" />
-            <element signature="e#3403#3450#0" expanded="false" />
-            <element signature="e#3869#3876#0" expanded="false" />
-            <element signature="e#4060#4070#0" expanded="false" />
-            <element signature="e#4461#4485#0" expanded="false" />
-            <element signature="e#4903#4913#0" expanded="false" />
-            <element signature="e#5591#5605#0" expanded="false" />
-            <element signature="e#5712#5719#0" expanded="false" />
-            <element signature="method#documentProgress#0;class#SaveVSSFrame#0" expanded="true" />
-            <element signature="e#8443#8445#0" expanded="false" />
-            <element signature="e#8835#8858#0" expanded="false" />
-            <element signature="e#9695#9749#0" expanded="false" />
-            <element signature="e#11127#11182#0" expanded="false" />
-            <element signature="e#11668#11708#0" expanded="false" />
-            <element signature="e#11925#11947#0" expanded="false" />
-            <element signature="e#12063#12075#0" expanded="false" />
-            <element signature="e#12703#12713#0" expanded="false" />
-            <element signature="e#12984#13005#0" expanded="false" />
-            <element signature="e#13127#13139#0" expanded="false" />
-            <element signature="e#13797#13807#0" expanded="false" />
-            <element signature="e#13996#14029#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="337">
@@ -1357,82 +1250,176 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/utils/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="75" column="4" lean-forward="false" selection-start-line="75" selection-start-column="4" selection-end-line="75" selection-end-column="4" />
+        <state relative-caret-position="747">
+          <caret line="332" column="31" lean-forward="false" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="31" />
           <folding>
-            <element signature="e#2249#2251#0" expanded="false" />
-            <element signature="e#3098#3111#0" expanded="false" />
-            <element signature="method#writeHistogram#0;class#Hdf5DataCubeWriter#0" expanded="true" />
-            <element signature="e#6047#6049#0" expanded="false" />
-            <element signature="e#6570#6572#0" expanded="false" />
-            <element signature="e#6881#6883#0" expanded="false" />
-            <element signature="e#8130#8147#0" expanded="false" />
-            <element signature="e#8590#8603#0" expanded="false" />
+            <element signature="docComment;class#Utils#0" expanded="false" />
+            <element signature="class#ImageFilterTypes#0;class#Utils#0" expanded="false" />
+            <element signature="e#3539#3547#0" expanded="false" />
+            <element signature="e#3833#3841#0" expanded="false" />
+            <element signature="e#4488#4527#0" expanded="false" />
+            <element signature="e#5830#5838#0" expanded="false" />
+            <element signature="method#getChannelTimeString#0;class#Utils#0" expanded="true" />
+            <element signature="e#9470#9472#0" expanded="false" />
+            <element signature="e#9774#9867#0" expanded="false" />
+            <element signature="e#14018#14103#0" expanded="false" />
+            <element signature="e#14456#14541#0" expanded="false" />
+            <element signature="e#15543#15578#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingToolsGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="30" column="4" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+        <state relative-caret-position="205">
+          <caret line="516" column="68" lean-forward="true" selection-start-line="516" selection-start-column="68" selection-end-line="516" selection-end-column="68" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2168#2185#0" expanded="false" />
-            <element signature="e#3005#3022#0" expanded="false" />
-            <element signature="e#5322#5324#0" expanded="false" />
-            <element signature="e#5880#5882#0" expanded="false" />
+            <element signature="method#checkImageProperties#0;class#DataStreamingToolsGUI#0" expanded="true" />
+            <element signature="method#run#0;class#13268:13730" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/bigDataTracker/BigDataTracker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="284" column="36" lean-forward="false" selection-start-line="284" selection-start-column="35" selection-end-line="284" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cisd/jhdf5/14.12.5/jhdf5-14.12.5.jar!/ncsa/hdf/hdf5lib/H5.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="994" column="43" lean-forward="false" selection-start-line="994" selection-start-column="43" selection-end-line="994" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="198" column="0" lean-forward="true" selection-start-line="102" selection-start-column="4" selection-end-line="198" selection-end-column="0" />
+        <state relative-caret-position="218">
+          <caret line="439" column="10" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="1002" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisHeaderWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="79" column="32" lean-forward="false" selection-start-line="79" selection-start-column="32" selection-end-line="79" selection-end-column="32" />
+          <folding>
+            <element signature="method#write#0;class#ImarisHeaderWriter#0" expanded="true" />
+            <element signature="method#writeDataSets#0;class#ImarisHeaderWriter#0" expanded="true" />
+            <element signature="method#writeDataSet#0;class#ImarisHeaderWriter#0" expanded="true" />
+            <element signature="e#3486#3503#0" expanded="false" />
+            <element signature="e#4344#4361#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="1368" column="0" lean-forward="false" selection-start-line="1368" selection-start-column="0" selection-end-line="1368" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#DataStreamingTools#0" expanded="false" />
+            <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#4873#4875#0" expanded="false" />
+            <element signature="e#5463#5513#0" expanded="false" />
+            <element signature="e#5637#5657#0" expanded="false" />
+            <element signature="e#6759#6782#0" expanded="false" />
+            <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#13404#13406#0" expanded="false" />
+            <element signature="e#15715#15717#0" expanded="false" />
+            <element signature="e#15953#15955#0" expanded="false" />
+            <element signature="e#16653#16695#0" expanded="false" />
+            <element signature="e#17504#17506#0" expanded="false" />
+            <element signature="e#20199#20201#0" expanded="false" />
+            <element signature="e#20445#20447#0" expanded="false" />
+            <element signature="e#24796#24842#0" expanded="false" />
+            <element signature="e#25735#25737#0" expanded="false" />
+            <element signature="e#25964#25981#0" expanded="false" />
+            <element signature="method#setImageDataInfoFromH5#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="method#hdf5DataSetExists#0;class#DataStreamingTools#0" expanded="true" />
+            <element signature="e#36456#36463#0" expanded="false" />
+            <element signature="e#38632#38659#0" expanded="false" />
+            <element signature="e#39437#39497#0" expanded="false" />
+            <element signature="docComment;method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="false" />
+            <element signature="e#40529#40552#0" expanded="false" />
+            <element signature="e#40910#40984#0" expanded="false" />
+            <element signature="method#cancelSaving#0;class#DataStreamingTools#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/SaveVSSFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="182" column="44" lean-forward="false" selection-start-line="182" selection-start-column="44" selection-end-line="182" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-            <element signature="class#ImarisH5Settings#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-            <element signature="docComment;method#writeBdvMasterFiles#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-            <element signature="e#6643#6666#0" expanded="false" />
-            <element signature="e#9208#9210#0" expanded="false" />
-            <element signature="e#10206#10227#0" expanded="false" />
-            <element signature="e#11003#11036#0" expanded="false" />
-            <element signature="e#11235#11248#0" expanded="false" />
-            <element signature="docComment;method#writeImarisMasterFile#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-            <element signature="e#14490#14492#0" expanded="false" />
-            <element signature="e#14716#14718#0" expanded="false" />
-            <element signature="e#14948#15000#0" expanded="false" />
-            <element signature="e#15205#15222#0" expanded="false" />
-            <element signature="e#17290#17292#0" expanded="false" />
-            <element signature="e#17595#17612#0" expanded="false" />
-            <element signature="e#18135#18137#0" expanded="false" />
-            <element signature="e#19235#19237#0" expanded="false" />
-            <element signature="e#20164#20166#0" expanded="false" />
-            <element signature="e#20687#20689#0" expanded="false" />
-            <element signature="e#20998#21000#0" expanded="false" />
-            <element signature="e#22717#22730#0" expanded="false" />
-            <element signature="method#getExternalH5DataPath#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-            <element signature="method#createViewSetupString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-            <element signature="method#createSingleAttributeString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-            <element signature="method#createBdvXMLString#0;class#Hdf55BdvImarisReaderWriter#0" expanded="true" />
-            <element signature="e#29504#29548#0" expanded="false" />
-            <element signature="e#29959#29996#0" expanded="false" />
+            <element signature="docComment;class#SaveVSSFrame#0" expanded="false" />
+            <element signature="method#SaveVSSFrame#0;class#SaveVSSFrame#0" expanded="true" />
+            <element signature="e#3151#3158#0" expanded="false" />
+            <element signature="e#3428#3475#0" expanded="false" />
+            <element signature="e#3894#3901#0" expanded="false" />
+            <element signature="e#4085#4095#0" expanded="false" />
+            <element signature="e#4486#4510#0" expanded="false" />
+            <element signature="e#4928#4938#0" expanded="false" />
+            <element signature="e#5616#5630#0" expanded="false" />
+            <element signature="e#5737#5744#0" expanded="false" />
+            <element signature="method#documentProgress#0;class#SaveVSSFrame#0" expanded="true" />
+            <element signature="e#8492#8494#0" expanded="false" />
+            <element signature="e#8884#8907#0" expanded="false" />
+            <element signature="e#9744#9798#0" expanded="false" />
+            <element signature="e#11176#11231#0" expanded="false" />
+            <element signature="e#11717#11757#0" expanded="false" />
+            <element signature="e#11974#11996#0" expanded="false" />
+            <element signature="e#12112#12124#0" expanded="false" />
+            <element signature="e#12752#12762#0" expanded="false" />
+            <element signature="e#13033#13054#0" expanded="false" />
+            <element signature="e#13176#13188#0" expanded="false" />
+            <element signature="e#13846#13856#0" expanded="false" />
+            <element signature="e#14045#14078#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/ImarisDataSetProperties.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+        <state relative-caret-position="348">
+          <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#initialisePropertiesFromImarisFile#0;class#ImarisDataSetProperties#0" expanded="true" />
-            <element signature="method#addChannelFromImarisFile#0;class#ImarisDataSetProperties#0" expanded="true" />
+            <element signature="method#ImarisDataSetProperties#0;class#ImarisDataSetProperties#0" expanded="true" />
+            <element signature="e#844#845#0" expanded="true" />
+            <element signature="e#919#920#0" expanded="true" />
+            <element signature="e#978#979#0" expanded="true" />
+            <element signature="e#1052#1053#0" expanded="true" />
+            <element signature="e#1112#1113#0" expanded="true" />
+            <element signature="e#1183#1184#0" expanded="true" />
+            <element signature="e#1244#1245#0" expanded="true" />
+            <element signature="e#1283#1284#0" expanded="true" />
+            <element signature="e#1328#1329#0" expanded="true" />
+            <element signature="e#1359#1360#0" expanded="true" />
+            <element signature="e#1413#1414#0" expanded="true" />
+            <element signature="e#1444#1445#0" expanded="true" />
+            <element signature="method#initialiseFromImagePlus#0;class#ImarisDataSetProperties#0" expanded="true" />
+            <element signature="method#addExternalHdf5DataSet#0;class#ImarisDataSetProperties#0" expanded="true" />
+            <marker date="1508856931000" expanded="false" signature="5227:5458" ph="{...}" />
+            <marker date="1508856931000" expanded="false" signature="7235:7243" ph="{}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf5DataCubeWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="58" column="48" lean-forward="false" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
+          <folding>
+            <element signature="e#3204#3217#0" expanded="false" />
           </folding>
         </state>
       </provider>

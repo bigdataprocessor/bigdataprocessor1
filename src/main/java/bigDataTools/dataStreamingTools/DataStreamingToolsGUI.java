@@ -510,8 +510,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                     savingSettings.rowsPerStrip = rowsPerStrip;
                     savingSettings.nThreads = ioThreads;
 
-                    dataStreamingToolsSavingThreads = new DataStreamingTools();
-                    dataStreamingToolsSavingThreads.saveVSSAsStacks( savingSettings );
+                    new Thread(new Runnable() {
+                        public void run()
+                        {
+                            dataStreamingToolsSavingThreads = new DataStreamingTools();
+                            dataStreamingToolsSavingThreads.saveVSSAsStacks( savingSettings );
+                        }
+                    }).start();
 
                 }
 

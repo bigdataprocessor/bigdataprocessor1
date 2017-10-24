@@ -1,27 +1,94 @@
 package bigDataTools;
 
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import bigDataTools.logging.Logger;
+import bigDataTools.utils.Utils;
 import ij.ImagePlus;
+import ij.gui.GenericDialog;
 import ij.plugin.Binner;
 import net.imglib2.RealInterval;
 
 import java.util.ArrayList;
 
+
+
 public class ImarisDataSetProperties {
 
-    ArrayList < String > timePoints = new ArrayList<>();
-    ArrayList < long[] > dimensions = new ArrayList<>();
-    ArrayList < int[] > relativeBinnings = new ArrayList<>();
-    ArrayList < long[] > chunks = new ArrayList<>();
+    private ArrayList < long[] > dimensions;
+    private ArrayList < int[] > relativeBinnings;
+    private ArrayList < long[] > chunks;
+    private ArrayList < String > channels = new ArrayList<>();
+    private RealInterval interval = null;
+    private ArrayList < ArrayList < String[] > > timeChannelDataSets = new ArrayList<>();
 
-    ArrayList < String > channels = new ArrayList<>();
-    RealInterval interval = null;
-    ArrayList < ArrayList < String[] > > timeChannelData = new ArrayList<>();
+    final static long MIN_VOXELS = 1024 * 1024;
 
-    public void initialisePropertiesFromImagePlus ( ImagePlus imp,
-                                                    int[] primaryBinning )
+    Logger logger;
+
+    public ImarisDataSetProperties()
     {
-        long minVoxelVolume = 1024 * 1024;
+
+    }
+
+    public String getDataSetDirectory( int c, int t)
+    {
+        return ( timeChannelDataSets.get( t ).get( c )[DIRECTORY] );
+    }
+
+    public String getDataSetFilename( int c, int t)
+    {
+        return ( timeChannelDataSets.get( t ).get( c )[FILENAME] );
+    }
+
+    public String getDataSetGroupName( int c, int t)
+    {
+        return ( timeChannelDataSets.get( t ).get( c )[GROUP] );
+    }
+
+
+
+    public ArrayList< int[] > getRelativeBinnings()
+    {
+        return relativeBinnings;
+    }
+
+    public RealInterval getInterval()
+    {
+        return interval;
+    }
+
+
+
+    public ArrayList< String > getChannels()
+    {
+        return channels;
+    }
+
+    public ArrayList< String > getTimePoints()
+    {
+        return timePoints;
+    }
+
+    ArrayList < String > timePoints;
+
+    public ArrayList< long[] > getDimensions()
+    {
+        return dimensions;
+    }
+
+    public ArrayList< long[] > getChunks()
+    {
+        return chunks;
+    }
+
+
+    public void setLogger( Logger logger )
+    {
+        this.logger = logger;
+    }
+
+    private long[] getImageSize( ImagePlus imp, int[] primaryBinning )
+    {
 
         long[] size = new long[3];
 
@@ -54,24 +121,34 @@ public class ImarisDataSetProperties {
             size[2] = imp.getNSlices();
         }
 
+        return ( size );
 
+    }
 
+    private void initialiseResolutionLevels ( ImagePlus imp, int[] primaryBinning )
+    {
 
+        dimensions = new ArrayList<>();
+        relativeBinnings = new ArrayList<>();
+        chunks = new ArrayList<>();
+
+        long[] size = getImageSize( imp, primaryBinning );
         int impByteDepth = imp.getBitDepth() / 8;
 
-        sizes.add( size );
-
-        binnings.add( new int[]{ 1, 1, 1 } );
-
+        // Resolution level 0
+        dimensions.add( size );
+        relativeBinnings.add( new int[]{ 1, 1, 1 } );
         chunks.add(new long[]{32, 32, 4});
 
-        long voxelVolume = 0;
+        // Further resolution levels
+        long voxelsAtCurrentResolution = 0;
         int iResolution = 0;
 
-        do
+        while ( impByteDepth * voxelsAtCurrentResolution > MIN_VOXELS )
         {
-            long[] lastSize = sizes.get( iResolution );
-            int[] lastBinning = binnings.get( iResolution );
+
+            long[] lastSize = dimensions.get( iResolution );
+            int[] lastBinning = relativeBinnings.get( iResolution );
 
             long[] newSize = new long[3];
             int[] newBinning = new int[3];
@@ -86,20 +163,17 @@ public class ImarisDataSetProperties {
                 if ( 100 * lastSizeThisDimensionSquared > lastPerpendicularPlaneSize )
                 {
                     newSize[d] = lastSize[d] / 2;
-                    newBinning[d] = lastBinning[d] * 2;
+                    newBinning[d] = 2;
                 }
                 else
                 {
                     newSize[d] = lastSize[d];
-                    newBinning[d] = lastBinning[d];
+                    newBinning[d] = 1;
                 }
 
                 newSize[d] = Math.max( 1, newSize[d] );
 
             }
-
-            sizes.add( newSize );
-            binnings.add( newBinning );
 
             long[] newChunk = new long[] {16, 16, 16};
             for ( int i = 0; i < 3; i++ )
@@ -110,19 +184,85 @@ public class ImarisDataSetProperties {
                 }
 
             }
+
+            dimensions.add( newSize );
+            relativeBinnings.add( newBinning );
             chunks.add( newChunk );
 
-            voxelVolume = newSize[0] * newSize[1] * newSize[2];
+            voxelsAtCurrentResolution = newSize[0] * newSize[1] * newSize[2];
 
             iResolution++;
 
-        } while ( impByteDepth * voxelVolume > minVoxelVolume );
+        }
 
     }
 
+    private void initialiseTimePoints( ImagePlus imp )
+    {
+        timePoints = new ArrayList<>();
+
+        for ( int t = 0; t < imp.getNFrames(); ++t )
+        {
+            // TODO: extract real information from imp?
+            timePoints.add("2000-01-01 00:00:0" + t);
+        }
+    }
+
+    private void initialiseChannels( ImagePlus imp )
+    {
+        channels = new ArrayList<>();
+
+        for ( int c = 0; c < imp.getNChannels(); ++c )
+        {
+            // TODO: extract real information from imp?
+            channels.add("1 1 1");
+        }
+    }
+
+    public void initialiseFromImagePlus( ImagePlus imp,
+                                         int[] primaryBinning,
+                                         String directory,
+                                         String filename,
+                                         String h5Group)
+    {
+
+        initialiseResolutionLevels( imp, primaryBinning );
+        initialiseTimePoints( imp );
+        initialiseChannels( imp );
+
+        timeChannelDataSets = new ArrayList<>();
+        for ( int t = 0; t < timePoints.size(); ++t )
+        {
+            addExternalHdf5DataSet( directory, filename, h5Group, t );
+        }
 
 
-    public void initialisePropertiesFromImarisFile ( String directory, String filename )
+    }
+
+    final int DIRECTORY = 0;
+    final int FILENAME = 1;
+    final int GROUP = 2;
+
+    public void addExternalHdf5DataSet( String directory,
+                                        String filename,
+                                        String h5Group,
+                                        int t)
+    {
+        ArrayList< String[] > channelList = new ArrayList<>();
+
+        for ( int c = 0; c < channels.size(); ++c )
+        {
+            String[] dirFileGroup = new String[ 3 ];
+            dirFileGroup[ DIRECTORY ] = directory;
+            dirFileGroup[ FILENAME ] = filename + Utils.getChannelTimeString( t, c ) + ".h5";
+            dirFileGroup[ GROUP ] = h5Group;
+            channelList.add( dirFileGroup );
+        }
+
+        timeChannelDataSets.add( channelList );
+    }
+
+    public void initialiseFromImarisFile( String directory, String filename )
     {
 
     }

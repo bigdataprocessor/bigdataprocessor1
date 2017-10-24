@@ -1,6 +1,7 @@
 package bigDataTools.VirtualStackOfStacks;
 
-import bigDataTools.Hdf55BdvImarisReaderWriter;
+import bigDataTools.Hdf5DataCubeWriter;
+import bigDataTools.ImarisDataSetProperties;
 import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.dataStreamingTools.SavingSettings;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -41,7 +42,7 @@ public class SaveVSSFrame implements Runnable {
     AtomicInteger counter;
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
-    Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings;
+    ImarisDataSetProperties imarisDataSetProperties;
     final long startTime;
 
     Logger logger = new IJLazySwingLogger();
@@ -49,14 +50,14 @@ public class SaveVSSFrame implements Runnable {
     public SaveVSSFrame(DataStreamingTools dataStreamingTools,
                         int t,
                         SavingSettings savingSettings,
-                        Hdf55BdvImarisReaderWriter.ImarisH5Settings imarisH5Settings,
+                        ImarisDataSetProperties imarisDataSetProperties,
                         AtomicInteger counter,
                         final long startTime )
     {
         this.dataStreamingTools = dataStreamingTools;
         this.t = t;
         this.savingSettings = savingSettings;
-        this.imarisH5Settings = imarisH5Settings;
+        this.imarisDataSetProperties = imarisDataSetProperties;
         this.counter = counter;
         this.startTime = startTime;
     }
@@ -177,9 +178,13 @@ public class SaveVSSFrame implements Runnable {
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                     {
-                        Hdf55BdvImarisReaderWriter writer = new Hdf55BdvImarisReaderWriter();
-                        writer.writeChannelTimeH5File( impBinned, imarisH5Settings,
-                                c, t, savingSettings.fileBaseName, savingSettings.directory );
+                        Hdf5DataCubeWriter writer = new Hdf5DataCubeWriter();
+
+                        writer.writeImarisCompatibleResolutionPyramid(
+                                impBinned,
+                                imarisDataSetProperties,
+                                int c, int );
+
                     }
 
                 }
