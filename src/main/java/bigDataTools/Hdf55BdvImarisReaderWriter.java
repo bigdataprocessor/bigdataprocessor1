@@ -8,11 +8,8 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.plugin.Binner;
-import ij.plugin.Duplicator;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
-import ncsa.hdf.object.*;     // the common object package
-import ncsa.hdf.object.h5.H5File;
 //import ncsa.hdf.object.h5.*;  // the HDF5 implementation
 
 import java.io.BufferedWriter;
@@ -20,8 +17,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import static bigDataTools.Hdf5Utils.h5WriteLongArrayListAs32IntArray;
 
 /**
  * Created by tischi on 13/07/17.
@@ -232,7 +229,7 @@ public class Hdf55BdvImarisReaderWriter {
 
             h5WriteLongArrayListAs32IntArray( group_id, chunks, "subdivisions" );
 
-            h5WriteIntArrayListAsDoubleArray( group_id, binnings, "resolutions" );
+            h5WriteIntArrayListAsDoubleArray( group_id, binnings, "dimensions" );
 
             H5.H5Gclose( group_id );
 
@@ -413,7 +410,7 @@ public class Hdf55BdvImarisReaderWriter {
     public void writeImarisMasterFile(ImagePlus imp,
                                       ArrayList<long[]> sizes,
                                       double[] calibration,
-                                      String fileName,
+                                      String filename,
                                       String directory)
     {
 
@@ -432,113 +429,11 @@ public class Hdf55BdvImarisReaderWriter {
         //
         // Create master file
         //
-        String filePathMaster = directory + File.separator + fileName + "--imaris.ims";
-        File fileMaster = new File( filePathMaster );
-        if (fileMaster.exists()) fileMaster.delete();
 
-        int file_id = H5.H5Fcreate(filePathMaster, HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
+        ImarisHeaderWriter ims = new ImarisHeaderWriter();
 
-        setH5StringAttribute(file_id, "DataSetDirectoryName", "DataSet");
-        setH5StringAttribute(file_id, "DataSetInfoDirectoryName", "DataSetInfo");
-        setH5StringAttribute(file_id, "ImarisDataSet", "ImarisDataSet");
-        setH5StringAttribute(file_id, "ImarisVersion", "5.5.0");  // file-format version
-        setH5StringAttribute(file_id, "NumberOfDataSets", "1");
-        setH5StringAttribute(file_id, "ThumbnailDirectoryName", "Thumbnail");
-
-        int dataset_group_id = H5.H5Gcreate(file_id, "/DataSet",
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
-
-        for (int r = 0; r < sizes.size(); r++)
-        {
-            int r_group_id = H5.H5Gcreate(dataset_group_id,
-                    "/DataSet" + "/ResolutionLevel " + r,
-                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                    HDF5Constants.H5P_DEFAULT);
-
-            for (int t = 0; t < imp.getNFrames(); t++)
-            {
-                int r_t_group_id = H5.H5Gcreate(r_group_id,
-                        "TimePoint " + t ,
-                        HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                        HDF5Constants.H5P_DEFAULT);
-
-                for (int c = 0; c < imp.getNChannels(); c++)
-                {
-                    int r_t_c_group_id = H5.H5Gcreate(r_t_group_id,
-                            "Channel " + c ,
-                            HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT);
-
-                    //
-                    // Create link to the actual data in an external data file
-                    //
-                    String relativePath = "./";
-                    String pathNameData = relativePath + fileName
-                            + getChannelTimeString( c , t ) + ".h5";
-
-                    H5.H5Lcreate_external(
-                            pathNameData, getExternalH5DataPath( r ),
-                            r_t_c_group_id, "Data",
-                            HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-                    //
-                    // Create histogram
-                    //
-                    long[] histo_data = new long[255];
-                    Arrays.fill( histo_data, 100 );
-                    long[] histo_dims = { histo_data.length };
-                    int histo_dataspace_id = H5.H5Screate_simple(
-                            histo_dims.length, histo_dims, null);
-
-                    /*
-                    imaris expects 64bit unsigned int values:
-                    - http://open.bitplane.com/Default.aspx?tabid=268
-                    thus, we are using as memory type: H5T_NATIVE_ULLONG
-                    and as the corresponding dataset type: H5T_STD_U64LE
-                    - https://support.hdfgroup.org/HDF5/release/dttable.html
-                    */
-                    int histo_dataset_id = H5.H5Dcreate(r_t_c_group_id, "Histogram",
-                            HDF5Constants.H5T_STD_U64LE, histo_dataspace_id,
-                            HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT,
-                            HDF5Constants.H5P_DEFAULT);
-
-                    H5.H5Dwrite(histo_dataset_id,
-                            HDF5Constants.H5T_NATIVE_ULLONG,
-                            HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL,
-                            HDF5Constants.H5P_DEFAULT, histo_data);
-
-                    H5.H5Dclose(histo_dataset_id);
-                    H5.H5Sclose(histo_dataspace_id);
-
-                    // Set channel group attributes
-                    //
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeX",
-                            String.valueOf(sizes.get(r)[0]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeY",
-                            String.valueOf(sizes.get(r)[1]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "ImageSizeZ",
-                            String.valueOf(sizes.get(r)[2]) );
-
-                    setH5StringAttribute(r_t_c_group_id, "HistogramMin",
-                            String.valueOf( 0.0 ) );
-
-                    setH5StringAttribute(r_t_c_group_id, "HistogramMax",
-                            String.valueOf( histogramMax ) );
-
-                    H5.H5Gclose(r_t_c_group_id);
-                }
-                H5.H5Gclose(r_t_group_id);
-            }
-            H5.H5Gclose(r_group_id);
-        }
-        H5.H5Gclose(dataset_group_id);
-
-
+        int file_id = ims.initMasterFile( directory, filename + ".ims" );
+        ims.addDataSets( file_id,  );
 
         //
         // Create DataSetInfo group
@@ -938,173 +833,6 @@ public class Hdf55BdvImarisReaderWriter {
         }
 
         return ( data );
-
-    }
-
-    private void setH5IntegerAttribute( int dataset_id, String attrName, int[] attrValue )
-    {
-
-        long[] attrDims = { attrValue.length };
-
-        // Create the data space for the attribute.
-        int dataspace_id = H5.H5Screate_simple(attrDims.length, attrDims, null);
-
-        // Create a dataset attribute.
-        int attribute_id = H5.H5Acreate(dataset_id, attrName,
-                        HDF5Constants.H5T_STD_I32BE, dataspace_id,
-                        HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-        // Write the attribute data.
-        H5.H5Awrite(attribute_id, HDF5Constants.H5T_NATIVE_INT, attrValue);
-
-        // Close the attribute.
-        H5.H5Aclose(attribute_id);
-    }
-
-    private void setH5DoubleAttribute( int dataset_id, String attrName, double[] attrValue )
-    {
-
-        long[] attrDims = { attrValue.length };
-
-        // Create the data space for the attribute.
-        int dataspace_id = H5.H5Screate_simple(attrDims.length, attrDims, null);
-
-        // Create a dataset attribute.
-        int attribute_id = H5.H5Acreate(dataset_id, attrName,
-                HDF5Constants.H5T_IEEE_F64BE, dataspace_id,
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-        // Write the attribute data.
-        H5.H5Awrite(attribute_id, HDF5Constants.H5T_NATIVE_DOUBLE, attrValue);
-
-        // Close the attribute.
-        H5.H5Aclose(attribute_id);
-    }
-
-    private void setH5StringAttribute( int dataset_id, String attrName, String attrValue )
-    {
-
-        long[] attrDims = { attrValue.getBytes().length };
-
-        // Create the data space for the attribute.
-        int dataspace_id = H5.H5Screate_simple(attrDims.length, attrDims, null);
-
-        // Create the data space for the attribute.
-        //int dataspace_id = H5.H5Screate( HDF5Constants.H5S_SCALAR );
-
-        // Create attribute type
-        //int type_id = H5.H5Tcopy( HDF5Constants.H5T_C_S1 );
-        //H5.H5Tset_size(type_id, attrValue.length());
-
-        int type_id = HDF5Constants.H5T_C_S1;
-
-        // Create a dataset attribute.
-        int attribute_id = H5.H5Acreate( dataset_id, attrName,
-                type_id, dataspace_id,
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-        // Write the attribute
-        H5.H5Awrite(attribute_id, type_id, attrValue.getBytes());
-
-        // Close the attribute.
-        H5.H5Aclose(attribute_id);
-    }
-
-    private void h5WriteLongArrayListAs32IntArray( int group_id, ArrayList < long[] > list, String name )
-    {
-
-        int[][] data = new int[ list.size() ][ list.get(0).length ];
-
-        for (int i = 0; i < list.size(); i++)
-        {
-            for (int j = 0; j < list.get(i).length; j++)
-            {
-                data[i][j] = (int) list.get(i)[j];
-            }
-        }
-
-        long[] data_dims = { data.length, data[0].length };
-
-        int dataspace_id = H5.H5Screate_simple( data_dims.length, data_dims, null );
-
-        int dataset_id = H5.H5Dcreate(group_id, name,
-                HDF5Constants.H5T_STD_I32LE, dataspace_id,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
-
-        H5.H5Dwrite( dataset_id, HDF5Constants.H5T_NATIVE_INT,
-                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data );
-
-        H5.H5Dclose(dataset_id);
-
-        H5.H5Sclose(dataspace_id);
-
-    }
-
-    private void h5WriteLongArrayListAsDoubleArray( int group_id, ArrayList < long[] > list, String name )
-    {
-
-        double[] data = new double[list.size() * list.get(0).length];
-
-        int p = 0;
-        for (int i = 0; i < list.size(); i++)
-        {
-            for (int j = 0; j < list.get(i).length; j++)
-            {
-                data[ p++ ] = list.get(i)[j];
-            }
-        }
-
-        long[] data_dims = { list.size(), list.get(0).length };
-
-        int dataspace_id = H5.H5Screate_simple( data_dims.length, data_dims, null );
-
-        int dataset_id = H5.H5Dcreate( group_id, name,
-                HDF5Constants.H5T_IEEE_F64BE, dataspace_id,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
-
-        H5.H5Dwrite( dataset_id, HDF5Constants.H5T_NATIVE_DOUBLE,
-                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data );
-
-        H5.H5Dclose(dataset_id);
-
-        H5.H5Sclose(dataspace_id);
-
-    }
-
-    private void h5WriteIntArrayListAsDoubleArray( int group_id, ArrayList < int[] > list, String name )
-    {
-
-        double[] data = new double[list.size() * list.get(0).length];
-
-        int p = 0;
-        for (int i = 0; i < list.size(); i++)
-        {
-            for (int j = 0; j < list.get(i).length; j++)
-            {
-                data[ p++ ] = list.get(i)[j];
-            }
-        }
-
-        long[] data_dims = { list.size(), list.get(0).length };
-
-        int dataspace_id = H5.H5Screate_simple( data_dims.length, data_dims, null );
-
-        int dataset_id = H5.H5Dcreate( group_id, name,
-                HDF5Constants.H5T_IEEE_F64BE, dataspace_id,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT,
-                HDF5Constants.H5P_DEFAULT);
-
-        H5.H5Dwrite( dataset_id, HDF5Constants.H5T_NATIVE_DOUBLE,
-                HDF5Constants.H5S_ALL, HDF5Constants.H5S_ALL, HDF5Constants.H5P_DEFAULT, data );
-
-        H5.H5Dclose(dataset_id);
-
-        H5.H5Sclose(dataspace_id);
 
     }
 

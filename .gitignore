@@ -1,0 +1,12 @@
+# Eclipse #
+/.classpath
+/.project
+/.target
+/.settings/
+/doc
+# Maven #
+
+# IntelliJ #
+.idea/
+.travis/
+target/
