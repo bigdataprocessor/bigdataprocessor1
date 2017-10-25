@@ -15,7 +15,7 @@ public class Hdf5DataCubeWriter {
     int image_memory_type;
     int image_file_type;
 
-    final String RESOLUTION = "Resolution";
+    final String G_RESOLUTION_LEVEL = "ResolutionLevel ";
     final String DATA_CUBE = "Data";
     final String HISTOGRAM = "Histogram";
 
@@ -55,8 +55,9 @@ public class Hdf5DataCubeWriter {
     {
 
 
-        file_id = createFile( idp.getDataSetDirectory( c, t ),
-                idp.getDataSetFilename( c, t ));
+        file_id = createFile(
+                idp.getDataSetDirectory( c, t ),
+                idp.getDataSetFilename( c, t ) );
 
         setImageMemoryAndFileType( imp );
 
@@ -72,10 +73,10 @@ public class Hdf5DataCubeWriter {
                         , "binned", "AVERAGE" );
             }
 
-            writeDataCube( impResolutionLevel, RESOLUTION + r,
+            writeDataCube( impResolutionLevel, G_RESOLUTION_LEVEL + r,
                     idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
-            writeHistogram( impResolutionLevel, RESOLUTION + r );
+            writeHistogram( impResolutionLevel, G_RESOLUTION_LEVEL + r );
         }
 
         H5F.H5Fclose( file_id );
@@ -84,7 +85,7 @@ public class Hdf5DataCubeWriter {
 
     private void writeDataCube( ImagePlus imp, String group, long[] dimension, long[] chunk )
     {
-        int group_id = Hdf5Utils.getGroup( file_id, group );
+        int group_id = Hdf5Utils.createGroup( file_id, group );
 
         int space_id = H5.H5Screate_simple( dimension.length, dimension, null );
 
@@ -158,12 +159,13 @@ public class Hdf5DataCubeWriter {
         H5.H5Sclose( space_id );
         H5.H5Dclose( dataset_id );
         H5.H5Pclose( dcpl_id );
+        H5.H5Gclose( group_id );
 
     }
 
     private void writeHistogram( ImagePlus imp, String group )
     {
-        int group_id = Hdf5Utils.getGroup( file_id, group );
+        int group_id = Hdf5Utils.createGroup( file_id, group );
 
         ImageStatistics imageStatistics = imp.getStatistics();
 

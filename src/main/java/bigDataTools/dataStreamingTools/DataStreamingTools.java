@@ -52,7 +52,7 @@ package bigDataTools.dataStreamingTools;
 
 
 import bigDataTools.ImarisDataSetProperties;
-import bigDataTools.ImarisHeaderWriter;
+import bigDataTools.ImarisWriter;
 import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -137,12 +137,15 @@ public class DataStreamingTools {
             imageDataInfo = new ImageDataInfo();
             imageDataInfo.h5DataSetName = h5DataSetName;
 
-            setAllInfosByParsingFilesAndFolders(
+            if ( ! setAllInfosByParsingFilesAndFolders(
                     imageDataInfo,
                     directory,
                     namingScheme,
-                    filterPattern
-            );
+                    filterPattern ) )
+            {
+                return null;
+            }
+
         }
 
 
@@ -386,7 +389,7 @@ public class DataStreamingTools {
 
 
 
-    public void setAllInfosByParsingFilesAndFolders(
+    public boolean setAllInfosByParsingFilesAndFolders(
             ImageDataInfo imageDataInfo,
             String directory,
             String channelTimePattern,
@@ -466,7 +469,7 @@ public class DataStreamingTools {
             if (fileLists[0] == null || fileLists[0].length == 0)
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
-                return;
+                return false;
             }
 
         }
@@ -676,7 +679,7 @@ public class DataStreamingTools {
                 {
                     IJ.showMessage("The pattern for multi-channel loading must" +
                             "contain <c> and <t> to match channels and time in the filenames.");
-                    return;
+                    return false;
                 }
 
                 // replace shortcuts by actual regexp
@@ -740,7 +743,7 @@ public class DataStreamingTools {
             else
             {
                 IJ.showMessage("Unsupported file type: " + fileLists[0][0]);
-                return;
+                return false;
             }
 
 
@@ -779,7 +782,7 @@ public class DataStreamingTools {
                                     "Please change the pattern.\n\n" +
                                     "The Java error message was:\n" +
                                     e.toString());
-                            return;
+                            return false;
                         }
                     }
 
@@ -808,6 +811,8 @@ public class DataStreamingTools {
             }
 
         }
+
+        return true;
 
     }
 
@@ -1327,16 +1332,21 @@ public class DataStreamingTools {
             nSavingThreads = 1; // H5 is not multi-threaded anyway.
 
             String[] binnings = savingSettings.bin.split(";");
-            int[] binning = Utils.delimitedStringToIntegerArray(binnings[0], ",");
-            idp.initialiseFromImagePlus( savingSettings.imp,  binning );
+            int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
 
-            ImarisHeaderWriter.write( idp,
+            idp.setFromImagePlus( savingSettings.imp,
+                    binning,
+                    savingSettings.directory,
+                    savingSettings.fileBaseName,
+                    "/");
+
+            ImarisWriter.write( idp,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".ims"
                     );
 
             // TODO: remove below
-            ImarisHeaderWriter.write( idp,
+            ImarisWriter.write( idp,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".h5"
             );
@@ -1531,7 +1541,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                final String directory = "/Users/tischi/Downloads/BDTracker_test_data/";
+                final String directory = "/Users/tischi/Downloads/xxx/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*

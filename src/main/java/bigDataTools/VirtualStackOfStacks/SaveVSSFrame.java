@@ -183,7 +183,7 @@ public class SaveVSSFrame implements Runnable {
                         writer.writeImarisCompatibleResolutionPyramid(
                                 impBinned,
                                 imarisDataSetProperties,
-                                int c, int );
+                                c, t );
 
                     }
 

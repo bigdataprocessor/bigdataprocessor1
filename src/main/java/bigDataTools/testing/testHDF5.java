@@ -9,9 +9,9 @@ public class testHDF5 {
 
     public static void main(String args[]) throws Exception {
 
-        Hdf55BdvImarisReaderWriter hdf5Writer = new Hdf55BdvImarisReaderWriter();
-        hdf5Writer.analyzeImarisFile( "/Users/tischi/Desktop/Ashna-Seg-Test/ashna-tmp/saved-from-imaris",
-                "im--bin-2-2-1.h5");
+        //Hdf55BdvImarisReaderWriter hdf5Writer = new Hdf55BdvImarisReaderWriter();
+        //hdf5Writer.analyzeImarisFile( "/Users/tischi/Desktop/Ashna-Seg-Test/ashna-tmp/saved-from-imaris",
+         //       "im--bin-2-2-1.h5");
 
         //hdf5Writer.analyzeImarisFile("/Users/tischi/Desktop/Ashna-Seg-Test/ashna-tmp/imaris",
         //        "im--C00--T00001.h5");
@@ -32,10 +32,9 @@ public class testHDF5 {
 
     public static void createImarisOutput(ImagePlus imp)
     {
-        Hdf55BdvImarisReaderWriter hdf5Writer = new Hdf55BdvImarisReaderWriter();
         String fileBaseName = "test";
         String directory = "/Users/tischi/Desktop/example-data/imaris-out/";
-        hdf5Writer.saveAsImarisAndBdv( imp, new int[]{1,1,1}, fileBaseName,  directory );
+
     }
 
 

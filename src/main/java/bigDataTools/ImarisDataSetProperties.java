@@ -1,11 +1,13 @@
 package bigDataTools;
 
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import bigDataTools.bigDataTracker.ImarisReader;
+import bigDataTools.bigDataTracker.ImarisUtils;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
-import ij.gui.GenericDialog;
 import ij.plugin.Binner;
+import net.imglib2.FinalRealInterval;
 import net.imglib2.RealInterval;
 
 import java.util.ArrayList;
@@ -19,9 +21,9 @@ public class ImarisDataSetProperties {
     private ArrayList < long[] > chunks;
     private ArrayList < String > channels = new ArrayList<>();
     private RealInterval interval = null;
-    private ArrayList < ArrayList < String[] > > timeChannelDataSets = new ArrayList<>();
+    private ArrayList < ArrayList < String[] > > dataSetsCT = new ArrayList<>();
+    private ArrayList < String > timePoints;
 
-    final static long MIN_VOXELS = 1024 * 1024;
 
     Logger logger;
 
@@ -32,20 +34,18 @@ public class ImarisDataSetProperties {
 
     public String getDataSetDirectory( int c, int t)
     {
-        return ( timeChannelDataSets.get( t ).get( c )[DIRECTORY] );
+        return ( dataSetsCT.get( c ).get( t )[ ImarisUtils.DIRECTORY] );
     }
 
     public String getDataSetFilename( int c, int t)
     {
-        return ( timeChannelDataSets.get( t ).get( c )[FILENAME] );
+        return ( dataSetsCT.get( c ).get( t )[ ImarisUtils.FILENAME] );
     }
 
     public String getDataSetGroupName( int c, int t)
     {
-        return ( timeChannelDataSets.get( t ).get( c )[GROUP] );
+        return ( dataSetsCT.get( c ).get( t )[ ImarisUtils.GROUP] );
     }
-
-
 
     public ArrayList< int[] > getRelativeBinnings()
     {
@@ -57,8 +57,6 @@ public class ImarisDataSetProperties {
         return interval;
     }
 
-
-
     public ArrayList< String > getChannels()
     {
         return channels;
@@ -69,8 +67,6 @@ public class ImarisDataSetProperties {
         return timePoints;
     }
 
-    ArrayList < String > timePoints;
-
     public ArrayList< long[] > getDimensions()
     {
         return dimensions;
@@ -80,7 +76,6 @@ public class ImarisDataSetProperties {
     {
         return chunks;
     }
-
 
     public void setLogger( Logger logger )
     {
@@ -125,7 +120,7 @@ public class ImarisDataSetProperties {
 
     }
 
-    private void initialiseResolutionLevels ( ImagePlus imp, int[] primaryBinning )
+    private void setResolutionLevels( ImagePlus imp, int[] primaryBinning )
     {
 
         dimensions = new ArrayList<>();
@@ -144,7 +139,7 @@ public class ImarisDataSetProperties {
         long voxelsAtCurrentResolution = 0;
         int iResolution = 0;
 
-        while ( impByteDepth * voxelsAtCurrentResolution > MIN_VOXELS )
+        while ( impByteDepth * voxelsAtCurrentResolution > ImarisUtils.MIN_VOXELS )
         {
 
             long[] lastSize = dimensions.get( iResolution );
@@ -197,7 +192,7 @@ public class ImarisDataSetProperties {
 
     }
 
-    private void initialiseTimePoints( ImagePlus imp )
+    private void setTimePoints( ImagePlus imp )
     {
         timePoints = new ArrayList<>();
 
@@ -208,7 +203,7 @@ public class ImarisDataSetProperties {
         }
     }
 
-    private void initialiseChannels( ImagePlus imp )
+    private void setChannels( ImagePlus imp )
     {
         channels = new ArrayList<>();
 
@@ -219,52 +214,92 @@ public class ImarisDataSetProperties {
         }
     }
 
-    public void initialiseFromImagePlus( ImagePlus imp,
-                                         int[] primaryBinning,
-                                         String directory,
-                                         String filename,
-                                         String h5Group)
+    private void setInterval( ImagePlus imp )
+    {
+        double[] min = new double[3];
+        double[] max = new double[3];
+        max[ 0 ] = imp.getWidth() * imp.getCalibration().pixelWidth;
+        max[ 1 ] = imp.getHeight() * imp.getCalibration().pixelHeight;
+        max[ 2 ] = imp.getNSlices() * imp.getCalibration().pixelDepth;
+        interval = new FinalRealInterval( min, max );
+    }
+
+    public void setFromImagePlus( ImagePlus imp,
+                                  int[] primaryBinning,
+                                  String directory, // TODO: not needed?
+                                  String filename,
+                                  String h5Group)
     {
 
-        initialiseResolutionLevels( imp, primaryBinning );
-        initialiseTimePoints( imp );
-        initialiseChannels( imp );
+        setResolutionLevels( imp, primaryBinning );
+        setTimePoints( imp );
+        setChannels( imp );
+        setInterval( imp );
 
-        timeChannelDataSets = new ArrayList<>();
-        for ( int t = 0; t < timePoints.size(); ++t )
+        dataSetsCT = new ArrayList<>();
+        for ( int c = 0; c < channels.size(); ++c )
         {
-            addExternalHdf5DataSet( directory, filename, h5Group, t );
+            ArrayList < String[] > timePoints = new ArrayList<>();
+            for ( int t = 0; t < timePoints.size(); ++t )
+            {
+                String[] dataSet = createExternalHdf5DataSet( directory, filename, h5Group, c, t );
+                timePoints.add ( dataSet );
+            }
+            dataSetsCT.add( timePoints );
         }
-
 
     }
 
-    final int DIRECTORY = 0;
-    final int FILENAME = 1;
-    final int GROUP = 2;
 
-    public void addExternalHdf5DataSet( String directory,
-                                        String filename,
-                                        String h5Group,
-                                        int t)
+    public String[] createExternalHdf5DataSet( String directory,
+                                               String filename,
+                                               String h5Group,
+                                               int c,
+                                               int t)
     {
-        ArrayList< String[] > channelList = new ArrayList<>();
 
-        for ( int c = 0; c < channels.size(); ++c )
-        {
-            String[] dirFileGroup = new String[ 3 ];
-            dirFileGroup[ DIRECTORY ] = directory;
-            dirFileGroup[ FILENAME ] = filename + Utils.getChannelTimeString( t, c ) + ".h5";
-            dirFileGroup[ GROUP ] = h5Group;
-            channelList.add( dirFileGroup );
-        }
+        String[] dirFileGroup = new String[ 3 ];
+        dirFileGroup[ ImarisUtils.DIRECTORY ] = directory;
+        dirFileGroup[ ImarisUtils.FILENAME ] = filename + Utils.getChannelTimeString( t, c ) + ".h5";
+        dirFileGroup[ ImarisUtils.GROUP ] = h5Group;
 
-        timeChannelDataSets.add( channelList );
+        return (dirFileGroup);
+
     }
 
     public void initialiseFromImarisFile( String directory, String filename )
     {
+        ImarisReader reader = new ImarisReader( directory, filename );
 
+        channels = reader.readChannels();
+        timePoints = reader.readTimePoints();
+        dimensions = reader.readDimensions();
+        reader.closeFile();
+    }
+
+    private ArrayList< ArrayList <String[]> > createDataSets(
+            String directory,
+            String filename,
+            int nr, int nt, int nc)
+    {
+        ArrayList< ArrayList< String[] > > dataSets = new ArrayList<>();
+
+        for ( int r = 0; r < nr; ++r )
+        {
+            for ( int c = 0; c < nc; ++c )
+            {
+                ArrayList< String[] > timePoints = new ArrayList<>();
+                for ( int t = 0; t < nt; ++t )
+                {
+                    String[] dataSet =
+                            ImarisUtils.createExternalDataSet(
+                                    directory, filename, r,  t,  c);
+                    timePoints.add( dataSet );
+                }
+            }
+        }
+
+        return ( dataSets );
     }
 
     public void addChannelFromImarisFile ( String directory, String filename )
