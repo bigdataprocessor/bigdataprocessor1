@@ -27,9 +27,7 @@ public class Hdf5DataCubeWriter {
         else if ( imp.getBitDepth() == 16)
         {
             image_memory_type = HDF5Constants.H5T_NATIVE_USHORT;
-            // image_file_type = HDF5Constants.H5T_STD_U16BE;
-            image_file_type = HDF5Constants.H5T_STD_U16LE;
-
+            image_file_type = HDF5Constants.H5T_STD_U16BE;
         }
         else if ( imp.getBitDepth() == 32)
         {
@@ -79,8 +77,22 @@ public class Hdf5DataCubeWriter {
     }
 
 
-    private void writeDataCube( ImagePlus imp, String group, long[] dimension, long[] chunk )
+    private void writeDataCube( ImagePlus imp, String group, long[] dimensionXYZ, long[] chunkXYZ )
     {
+
+        // change dimension order to fit hdf5
+
+        long[] dimension = new long[]{
+                dimensionXYZ[2],
+                dimensionXYZ[1],
+                dimensionXYZ[0]};
+
+        long[] chunk = new long[]{
+                chunkXYZ[2],
+                chunkXYZ[1],
+                chunkXYZ[0]};
+
+
         int group_id = Hdf5Utils.createGroup( file_id, group );
 
         int space_id = H5.H5Screate_simple( dimension.length, dimension, null );

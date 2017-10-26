@@ -209,7 +209,7 @@ public class ImarisDataSet {
         for ( int c = 0; c < imp.getNChannels(); ++c )
         {
             // TODO: extract real information from imp?
-            channels.add("1 1 1");
+            channels.add( ImarisUtils.DEFAULT_COLOR );
         }
     }
 
@@ -263,6 +263,7 @@ public class ImarisDataSet {
         channels = reader.readChannels();
         timePoints = reader.readTimePoints();
         dimensions = reader.readDimensions();
+        interval = reader.readInterval();
 
         ctrDataSets = new CTRDataSets();
 
@@ -272,7 +273,7 @@ public class ImarisDataSet {
             {
                 for ( int r = 0; r < dimensions.size(); ++r )
                 {
-                    ctrDataSets.addImaris(  c, t, r, directory, filename );
+                    ctrDataSets.addImaris( c, c, t, r, directory, filename );
                 }
             }
         }
@@ -295,13 +296,17 @@ public class ImarisDataSet {
         int nt = reader.readTimePoints().size();
         int nr = reader.readDimensions().size();
 
+        int ncCurrent = channels.size();
+
         for ( int c = 0; c < nc; ++c )
         {
+            channels.add( ImarisUtils.DEFAULT_COLOR  );
+
             for ( int t = 0; t < nt; ++t )
             {
                 for ( int r = 0; r < nr; ++r )
                 {
-                    ctrDataSets.addImaris( c, t, r, directory, filename);
+                    ctrDataSets.addImaris( c + ncCurrent, c, t, r, directory, filename);
                 }
             }
         }

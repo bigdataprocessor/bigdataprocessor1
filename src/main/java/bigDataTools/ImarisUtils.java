@@ -23,6 +23,11 @@ public abstract class ImarisUtils {
     public final static String DATA_SET_INFO = "DataSetInfo";
     public final static String COLOR = "Color";
 
+    public final static String DEFAULT_COLOR = "1.000 1.000 1.000";
+
+    public final static String RESOLUTION_LEVELS_ATTRIBUTE = "ResolutionLevels";
+
+
     public final static int DIRECTORY = 0;
     public final static int FILENAME = 1;
     public final static int GROUP = 2;
@@ -30,16 +35,18 @@ public abstract class ImarisUtils {
 
 
 
-    public static ArrayList< File > getMasterFilesInFolder(
-            String directory,
-            int masterLevel)
+    public static ArrayList< File > getImarisFiles(
+            String directory )
     {
 
-        File dir = new File(".");
+        File dir = new File(directory);
         File [] files = dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith("master"+masterLevel+".ims");
+                boolean accept =
+                        ( name.endsWith( ".ims" )
+                        && (!name.contains( "meta" )) );
+                return accept;
             }
         });
 

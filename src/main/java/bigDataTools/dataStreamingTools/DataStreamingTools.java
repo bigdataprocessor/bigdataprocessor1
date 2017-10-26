@@ -55,7 +55,6 @@ import bigDataTools.ImarisDataSet;
 import bigDataTools.ImarisUtils;
 import bigDataTools.ImarisWriter;
 import bigDataTools.VirtualStackOfStacks.*;
-import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.ImageDataInfo;
@@ -509,7 +508,7 @@ public class DataStreamingTools {
                 matcherID = patternID.matcher(fileName);
                 if (matcherID.matches())
                 {
-                    fileIDset.add(matcherID.group(1));
+                    fileIDset.add( matcherID.group(1) );
                 }
             }
             String[] fileIDs = fileIDset.toArray(new String[fileIDset.size()]);
@@ -1347,11 +1346,11 @@ public class DataStreamingTools {
                     );
 
 
-            ArrayList < File > imarisMasterFiles = ImarisUtils.getMasterFilesInFolder( savingSettings.directory, 0 );
+            ArrayList < File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
 
-            if ( imarisMasterFiles.size() > 1 )
+            if ( imarisFiles.size() > 1 )
             {
-                ImarisWriter.writeCombinedHeaderFile( imarisMasterFiles, "meta.ims" );
+                ImarisWriter.writeCombinedHeaderFile( imarisFiles, "meta.ims" );
             }
 
 
@@ -1551,7 +1550,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                final String directory = "/Users/tischi/Downloads/xxx/";
+                final String directory = "/Users/tischi/Downloads/uuu/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
@@ -1565,8 +1564,8 @@ public class DataStreamingTools {
                 dataStreamingTools.openFromDirectory(
                         directory,
                         "None",
-                        ".*",
-                        "Data",
+                        "im1--C.*",
+                        "ResolutionLevel 0/Data",
                         imageDataInfo,
                         nIOthreads,
                         true,
@@ -1579,8 +1578,8 @@ public class DataStreamingTools {
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
 
-        BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
-        bigDataTrackerPlugIn.run("");
+        //BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
+        //bigDataTrackerPlugIn.run("");
 
 
 

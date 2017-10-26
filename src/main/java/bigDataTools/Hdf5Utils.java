@@ -279,41 +279,51 @@ public abstract class Hdf5Utils {
 
     public static String readStringAttribute( int object_id, String objectName, String attributeName )
     {
-        int attribute_id = H5.H5Aopen_by_name( object_id, objectName, attributeName,
-                HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT);
-
-        if ( attribute_id < 0 )
-        {
-            return null;
-        }
-
-        int filetype_id = H5.H5Aget_type(attribute_id);
-        int sdim = H5.H5Tget_size(filetype_id);
-        sdim++; // Make room for null terminator
-        int dataspace_id = H5.H5Aget_space(attribute_id);
-        long[] dims = {4};
-        H5.H5Sget_simple_extent_dims(dataspace_id, dims, null);
-        byte[][] dset_data = new byte[(int) dims[0]][(int)sdim];
-        StringBuffer[] str_data = new StringBuffer[(int) dims[0]];
-
-        // Create the memory datatype.
-        int memtype_id = H5.H5Tcopy(HDF5Constants.H5T_C_S1);
-        H5.H5Tset_size(memtype_id, sdim);
-
-        // Read data.
-        H5.H5Aread(attribute_id, memtype_id, dset_data);
-        byte[] tempbuf = new byte[(int)sdim];
-        for (int indx = 0; indx < (int) dims[0]; indx++) {
-            for (int jndx = 0; jndx < sdim; jndx++) {
-                tempbuf[jndx] = dset_data[indx][jndx];
-            }
-            str_data[indx] = new StringBuffer(new String(tempbuf).trim());
-        }
-
         String attributeString = "";
-        for ( int i = 0; i < str_data.length; i++ )
+
+        try
         {
-            attributeString += str_data[i].charAt(0);
+            int attribute_id = H5.H5Aopen_by_name( object_id, objectName, attributeName,
+                    HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT );
+
+            if ( attribute_id < 0 )
+            {
+                return null;
+            }
+
+            int filetype_id = H5.H5Aget_type( attribute_id );
+            int sdim = H5.H5Tget_size( filetype_id );
+            sdim++; // Make room for null terminator
+            int dataspace_id = H5.H5Aget_space( attribute_id );
+            long[] dims = { 4 };
+            H5.H5Sget_simple_extent_dims( dataspace_id, dims, null );
+            byte[][] dset_data = new byte[ ( int ) dims[ 0 ] ][ ( int ) sdim ];
+            StringBuffer[] str_data = new StringBuffer[ ( int ) dims[ 0 ] ];
+
+            // Create the memory datatype.
+            int memtype_id = H5.H5Tcopy( HDF5Constants.H5T_C_S1 );
+            H5.H5Tset_size( memtype_id, sdim );
+
+            // Read data.
+            H5.H5Aread( attribute_id, memtype_id, dset_data );
+            byte[] tempbuf = new byte[ ( int ) sdim ];
+            for ( int indx = 0; indx < ( int ) dims[ 0 ]; indx++ )
+            {
+                for ( int jndx = 0; jndx < sdim; jndx++ )
+                {
+                    tempbuf[ jndx ] = dset_data[ indx ][ jndx ];
+                }
+                str_data[ indx ] = new StringBuffer( new String( tempbuf ).trim() );
+            }
+
+            for ( int i = 0; i < str_data.length; i++ )
+            {
+                attributeString += str_data[ i ];
+            }
+        }
+        catch ( Exception e )
+        {
+            attributeString = null;
         }
 
         return ( attributeString );

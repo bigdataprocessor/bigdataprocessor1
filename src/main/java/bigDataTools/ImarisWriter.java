@@ -20,7 +20,6 @@ public abstract class ImarisWriter {
 
         ImarisDataSet imarisDataSet = new ImarisDataSet();
 
-
         for ( int f = 0; f < masterFiles.size(); ++f )
         {
             if ( f == 0 )
@@ -45,7 +44,7 @@ public abstract class ImarisWriter {
 
         int file_id = createMasterFile( directory, filename );
 
-        writeDataSetInfoImage( file_id, idp.getDimensions().get(0), idp.getInterval() );
+        writeDataSetInfoImage( file_id, idp.getDimensions(), idp.getInterval() );
         writeDataSetInfoTimeInfo( file_id, idp.getTimePoints() );
         writeDataSetInfoChannels( file_id, idp.getChannels() );
         writeDataSets( file_id, idp );
@@ -97,8 +96,7 @@ public abstract class ImarisWriter {
 
             H5.H5Lcreate_external(
                     "./" + imarisDataSet.getDataSetFilename( c, t, r ),
-                    imarisDataSet.getDataSetGroupName( c, t, r )
-                    + "/" + ImarisUtils.RESOLUTION_LEVEL + r,
+                    imarisDataSet.getDataSetGroupName( c, t, r ),
                     group_id,
                     ImarisUtils.CHANNEL + c,
                     HDF5Constants.H5P_DEFAULT, HDF5Constants.H5P_DEFAULT );
@@ -109,7 +107,9 @@ public abstract class ImarisWriter {
     }
 
 
-    private static void writeDataSetInfoImage( int file_id, long[] dimensions, RealInterval interval )
+    private static void writeDataSetInfoImage( int file_id,
+                                               ArrayList< long [] > dimensions,
+                                               RealInterval interval )
     {
 
         int group_id = createGroup( file_id, ImarisUtils.DATA_SET_INFO + "/" +  ImarisUtils.IMAGE );
@@ -130,9 +130,24 @@ public abstract class ImarisWriter {
 
             // number of pixels
             writeStringAttribute( group_id, ImarisUtils.XYZ[d],
-                    String.valueOf( dimensions[d] ) );
+                    String.valueOf( dimensions.get(0)[d] ) );
 
         }
+
+
+        for ( int r = 0; r < dimensions.size(); ++r )
+        {
+            for ( int d = 0; d < 3; ++d )
+            {
+                // number of pixels at different resolutions
+                writeStringAttribute( group_id, ImarisUtils.XYZ[d] + d,
+                        String.valueOf( dimensions.get(0)[d] ) );
+            }
+        }
+
+        writeStringAttribute( group_id, ImarisUtils.RESOLUTION_LEVELS_ATTRIBUTE,
+                              String.valueOf( dimensions.size() ));
+
 
         H5.H5Gclose( group_id );
 
@@ -173,7 +188,7 @@ public abstract class ImarisWriter {
                 "ColorOpacity", "1");
 
         writeStringAttribute(group_id,
-                "Color", String.format("'[%s]'", color) );
+                "Color", color);
 
         H5.H5Gclose( group_id );
     }

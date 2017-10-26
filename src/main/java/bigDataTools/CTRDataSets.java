@@ -28,7 +28,7 @@ public class CTRDataSets {
         return ( ctr );
     }
 
-    public void addImaris(  int c, int t, int r,
+    public void addImaris(  int cIntern, int cExtern, int t, int r,
                             String directory,
                             String filename )
     {
@@ -38,9 +38,9 @@ public class CTRDataSets {
                 DATA_SET
                         + "/" + RESOLUTION_LEVEL + r
                         + "/" + TIME_POINT + t
-                        + "/" + CHANNEL + c);
+                        + "/" + CHANNEL + cExtern);
 
-        add( c, t, r, dataSet );
+        add( cIntern, t, r, dataSet );
 
     }
 
