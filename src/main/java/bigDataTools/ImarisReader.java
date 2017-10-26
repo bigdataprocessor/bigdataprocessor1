@@ -1,11 +1,11 @@
-package bigDataTools.bigDataTracker;
+package bigDataTools;
 
 import ncsa.hdf.hdf5lib.H5;
 
 import java.util.ArrayList;
 
 import static bigDataTools.Hdf5Utils.*;
-import static bigDataTools.bigDataTracker.ImarisUtils.*;
+import static bigDataTools.ImarisUtils.*;
 
 public class ImarisReader {
 
@@ -52,7 +52,7 @@ public class ImarisReader {
             String timePoint = readStringAttribute( file_id,
                     DATA_SET_INFO
                     + "/" + TIME_INFO ,
-                    TIMEPOINT_ATTRIBUTE + t );
+                    TIME_POINT_ATTRIBUTE + t );
 
             if ( timePoint == null ) break;
 
@@ -73,7 +73,7 @@ public class ImarisReader {
 
             String dataSetName = DATA_SET
                     + RESOLUTION_LEVEL + r
-                    + TIMEPOINT + 0
+                    + TIME_POINT + 0
                     + CHANNEL + 0
                     + DATA;
 
@@ -109,7 +109,7 @@ public class ImarisReader {
             for ( int t )
             String dataSetName = DATA_SET
                     + RESOLUTION_LEVEL + r
-                    + TIMEPOINT + 0
+                    + TIME_POINT + 0
                     + CHANNEL + 0
                     + DATA;
 

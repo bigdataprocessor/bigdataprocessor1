@@ -15,10 +15,6 @@ public class Hdf5DataCubeWriter {
     int image_memory_type;
     int image_file_type;
 
-    final String G_RESOLUTION_LEVEL = "ResolutionLevel ";
-    final String DATA_CUBE = "Data";
-    final String HISTOGRAM = "Histogram";
-
 
     private void setImageMemoryAndFileType( ImagePlus imp )
     {
@@ -50,14 +46,14 @@ public class Hdf5DataCubeWriter {
 
     public void writeImarisCompatibleResolutionPyramid(
             ImagePlus imp,
-            ImarisDataSetProperties idp,
+            ImarisDataSet idp,
             int c, int t)
     {
 
 
         file_id = createFile(
-                idp.getDataSetDirectory( c, t ),
-                idp.getDataSetFilename( c, t ) );
+                idp.getDataSetDirectory( c, t,0 ),
+                idp.getDataSetFilename( c, t,0 ) );
 
         setImageMemoryAndFileType( imp );
 
@@ -73,10 +69,10 @@ public class Hdf5DataCubeWriter {
                         , "binned", "AVERAGE" );
             }
 
-            writeDataCube( impResolutionLevel, G_RESOLUTION_LEVEL + r,
+            writeDataCube( impResolutionLevel, ImarisUtils.RESOLUTION_LEVEL + r,
                     idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
-            writeHistogram( impResolutionLevel, G_RESOLUTION_LEVEL + r );
+            writeHistogram( impResolutionLevel, ImarisUtils.RESOLUTION_LEVEL  + r );
         }
 
         H5F.H5Fclose( file_id );
@@ -99,7 +95,7 @@ public class Hdf5DataCubeWriter {
         try
         {
             dataset_id = H5.H5Dcreate(group_id,
-                    DATA_CUBE,
+                    ImarisUtils.DATA,
                     image_file_type,
                     space_id,
                     HDF5Constants.H5P_DEFAULT,
@@ -187,7 +183,7 @@ public class Hdf5DataCubeWriter {
         int histo_dataspace_id = H5.H5Screate_simple(
                 histo_dims.length, histo_dims, null);
 
-        int histo_dataset_id = H5.H5Dcreate( group_id, HISTOGRAM,
+        int histo_dataset_id = H5.H5Dcreate( group_id, ImarisUtils.HISTOGRAM,
                 HDF5Constants.H5T_STD_U64LE, histo_dataspace_id,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT,

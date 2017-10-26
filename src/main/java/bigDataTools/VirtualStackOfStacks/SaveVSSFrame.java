@@ -1,7 +1,7 @@
 package bigDataTools.VirtualStackOfStacks;
 
 import bigDataTools.Hdf5DataCubeWriter;
-import bigDataTools.ImarisDataSetProperties;
+import bigDataTools.ImarisDataSet;
 import bigDataTools.dataStreamingTools.DataStreamingTools;
 import bigDataTools.dataStreamingTools.SavingSettings;
 import bigDataTools.logging.IJLazySwingLogger;
@@ -42,7 +42,7 @@ public class SaveVSSFrame implements Runnable {
     AtomicInteger counter;
     DataStreamingTools dataStreamingTools;
     SavingSettings savingSettings;
-    ImarisDataSetProperties imarisDataSetProperties;
+    ImarisDataSet imarisDataSetProperties;
     final long startTime;
 
     Logger logger = new IJLazySwingLogger();
@@ -50,7 +50,7 @@ public class SaveVSSFrame implements Runnable {
     public SaveVSSFrame(DataStreamingTools dataStreamingTools,
                         int t,
                         SavingSettings savingSettings,
-                        ImarisDataSetProperties imarisDataSetProperties,
+                        ImarisDataSet imarisDataSetProperties,
                         AtomicInteger counter,
                         final long startTime )
     {

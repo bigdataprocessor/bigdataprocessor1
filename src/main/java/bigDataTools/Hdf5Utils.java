@@ -6,10 +6,6 @@ import ncsa.hdf.hdf5lib.HDF5Constants;
 import java.io.File;
 import java.util.ArrayList;
 
-import static bigDataTools.bigDataTracker.ImarisUtils.DATA_SET_INFO;
-import static bigDataTools.bigDataTracker.ImarisUtils.TIMEPOINT_ATTRIBUTE;
-import static bigDataTools.bigDataTracker.ImarisUtils.TIME_INFO;
-
 public abstract class Hdf5Utils {
 
 

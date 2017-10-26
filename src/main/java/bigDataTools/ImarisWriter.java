@@ -1,11 +1,11 @@
 
 package bigDataTools;
 
-import bigDataTools.bigDataTracker.ImarisUtils;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 import net.imglib2.RealInterval;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static bigDataTools.Hdf5Utils.createGroup;
@@ -15,7 +15,30 @@ import static bigDataTools.Hdf5Utils.writeStringAttribute;
 public abstract class ImarisWriter {
 
 
-    public static void write( ImarisDataSetProperties idp,
+    public static void writeCombinedHeaderFile( ArrayList < File > masterFiles, String filename )
+    {
+
+        ImarisDataSet imarisDataSet = new ImarisDataSet();
+
+
+        for ( int f = 0; f < masterFiles.size(); ++f )
+        {
+            if ( f == 0 )
+            {
+                imarisDataSet.setFromImaris( masterFiles.get( f ) );
+            }
+            else
+            {
+                imarisDataSet.addChannelsFromImaris( masterFiles.get( f ) );
+            }
+        }
+
+        write( imarisDataSet, masterFiles.get( 0 ).getParent(), filename );
+
+    }
+
+
+    public static void write( ImarisDataSet idp,
                               String directory,
                               String filename )
     {
@@ -48,7 +71,7 @@ public abstract class ImarisWriter {
 
 
     private static void writeDataSets( int file_id,
-                                       ImarisDataSetProperties idp)
+                                       ImarisDataSet idp)
     {
         for ( int t = 0; t < idp.getTimePoints().size(); ++t )
         {
@@ -62,19 +85,19 @@ public abstract class ImarisWriter {
     private static void writeDataSet ( int file_id,
                                        int t,
                                        int c,
-                                       ImarisDataSetProperties idp )
+                                       ImarisDataSet imarisDataSet )
     {
 
-        for (int r = 0; r < idp.getDimensions().size(); ++r )
+        for (int r = 0; r < imarisDataSet.getDimensions().size(); ++r )
         {
             int group_id = createGroup( file_id,
                     ImarisUtils.DATA_SET
                             + "/" + ImarisUtils.RESOLUTION_LEVEL + r
-                            + "/" + ImarisUtils.TIMEPOINT + t );
+                            + "/" + ImarisUtils.TIME_POINT + t );
 
             H5.H5Lcreate_external(
-                    "./" + idp.getDataSetFilename( c, t ),
-                    idp.getDataSetGroupName( c, t )
+                    "./" + imarisDataSet.getDataSetFilename( c, t, r ),
+                    imarisDataSet.getDataSetGroupName( c, t, r )
                     + "/" + ImarisUtils.RESOLUTION_LEVEL + r,
                     group_id,
                     ImarisUtils.CHANNEL + c,

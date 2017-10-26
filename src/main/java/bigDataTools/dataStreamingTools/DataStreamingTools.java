@@ -51,7 +51,8 @@ package bigDataTools.dataStreamingTools;
 //import org.scijava.util.Bytes;
 
 
-import bigDataTools.ImarisDataSetProperties;
+import bigDataTools.ImarisDataSet;
+import bigDataTools.ImarisUtils;
 import bigDataTools.ImarisWriter;
 import bigDataTools.VirtualStackOfStacks.*;
 import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
@@ -422,7 +423,7 @@ public class DataStreamingTools {
                     if (fileLists[i] == null)
                     {
                         logger.info("no files found in folder: " + directory + imageDataInfo.channelFolders[i]);
-                        return;
+                        return false;
                     }
                 }
                 logger.info("found sub-folders => interpreting as channel folders.");
@@ -432,7 +433,7 @@ public class DataStreamingTools {
                 logger.info("no sub-folders found.");
                 IJ.showMessage("No sub-folders found; please specify a different options for loading " +
                         "the channels");
-                return;
+                return false;
             }
 
         }
@@ -496,7 +497,7 @@ public class DataStreamingTools {
             if (fileLists[0].length == 0)
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
-                return;
+                return false;
             }
 
             // check which different fileIDs there are
@@ -1325,7 +1326,7 @@ public class DataStreamingTools {
         }
 
         // TODO: clean this up...
-        ImarisDataSetProperties idp = new ImarisDataSetProperties();
+        ImarisDataSet imarisDataSet = new ImarisDataSet();
 
         if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
@@ -1334,28 +1335,37 @@ public class DataStreamingTools {
             String[] binnings = savingSettings.bin.split(";");
             int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
 
-            idp.setFromImagePlus( savingSettings.imp,
+            imarisDataSet.setFromImagePlus( savingSettings.imp,
                     binning,
                     savingSettings.directory,
                     savingSettings.fileBaseName,
                     "/");
 
-            ImarisWriter.write( idp,
+            ImarisWriter.write( imarisDataSet,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".ims"
                     );
 
+
+            ArrayList < File > imarisMasterFiles = ImarisUtils.getMasterFilesInFolder( savingSettings.directory, 0 );
+
+            if ( imarisMasterFiles.size() > 1 )
+            {
+                ImarisWriter.writeCombinedHeaderFile( imarisMasterFiles, "meta.ims" );
+            }
+
+
             // TODO: remove below
-            ImarisWriter.write( idp,
+            ImarisWriter.write( imarisDataSet,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".h5"
             );
 
             logger.info("Image sizes at different resolutions:");
-            Utils.logArrayList( idp.getDimensions() );
+            Utils.logArrayList( imarisDataSet.getDimensions() );
 
             logger.info("Image chunking:");
-            Utils.logArrayList( idp.getChunks() );
+            Utils.logArrayList( imarisDataSet.getChunks() );
 
         }
 
@@ -1372,7 +1382,7 @@ public class DataStreamingTools {
             futures.add( es.submit( new SaveVSSFrame( this,
                     t,
                     savingSettings,
-                    idp,
+                    imarisDataSet,
                     counter,
                     startTime) ) );
         }
