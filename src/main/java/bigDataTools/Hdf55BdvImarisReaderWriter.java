@@ -137,8 +137,6 @@ public class Hdf55BdvImarisReaderWriter {
         }
 
 
-
-
         int impByteDepth = imp.getBitDepth() / 8;
 
         sizes.add( size );
