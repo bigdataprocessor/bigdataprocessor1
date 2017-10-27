@@ -7,21 +7,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6deed41-7cda-4f77-bee8-c8185ffee7b5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__au_com_bytecode_opencsv_2_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__jitk_jitk_tps_2_1_1_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_3D_Viewer_4_0_2_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_TrackMate__3_5_1_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_VIB_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_fiji_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_pal_optimization_2_0_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_3D_Viewer_4_0_2_SNAPSHOT.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/META-INF/MANIFEST.MF" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Hdf55ImarisBdvWriter$ImarisH5Settings.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_pal_optimization_2_0_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_VIB_lib_2_1_2_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__jitk_jitk_tps_2_1_1_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__au_com_bytecode_opencsv_2_4.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/testing/WriteImarisAndBdv.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/Hdf55ImarisBdvWriter.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/dataStreamingTools/DataStreamingTools$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/bigDataTools/testing/WriteImarisAndBdv.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__sc_fiji_TrackMate__3_5_1_SNAPSHOT.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" afterPath="$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" afterPath="$PROJECT_DIR$/out/artifacts/fiji_plugin_bigDataTools.jar" />
     </list>
     <ignored path="fiji--bigDataTools.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,27 +48,27 @@
             <state relative-caret-position="898">
               <caret line="181" column="94" lean-forward="false" selection-start-line="181" selection-start-column="94" selection-end-line="181" selection-end-column="94" />
               <folding>
-                <marker date="1509094036000" expanded="true" signature="6672:7050" ph="{...}" />
-                <marker date="1509094036000" expanded="true" signature="6731:6801" ph="//..." />
-                <marker date="1509094036000" expanded="false" signature="7103:7662" ph="{...}" />
-                <marker date="1509094036000" expanded="false" signature="7753:8219" ph="{...}" />
-                <marker date="1509094036000" expanded="false" signature="8318:14626" ph="{...}" />
-                <marker date="1509094036000" expanded="true" signature="8443:8485" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="8835:8917" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="9218:9277" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="9695:9764" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="11127:11201" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="11668:11781" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="11925:11970" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="12063:12098" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="12703:12736" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="12984:13028" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="13127:13162" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="13797:13830" ph="//..." />
-                <marker date="1509094036000" expanded="true" signature="13996:14048" ph="//..." />
-                <marker date="1509094036000" expanded="false" signature="14739:18251" ph="{...}" />
-                <marker date="1509094036000" expanded="false" signature="18306:18837" ph="{...}" />
-                <marker date="1509094036000" expanded="false" signature="18899:19725" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="6672:7050" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="6731:6801" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="7103:7662" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="7753:8219" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="8318:14626" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="8443:8485" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="8835:8917" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="9218:9277" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="9695:9764" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="11127:11201" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="11668:11781" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="11925:11970" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="12063:12098" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="12703:12736" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="12984:13028" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="13127:13162" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="13797:13830" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="13996:14048" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="14739:18251" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="18306:18837" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="18899:19725" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -77,40 +77,12 @@
       <file leaf-file-name="DataStreamingTools.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="53">
+            <state relative-caret-position="513">
               <caret line="917" column="0" lean-forward="false" selection-start-line="917" selection-start-column="0" selection-end-line="917" selection-end-column="0" />
               <folding>
-                <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#run#0;class#6804:7098" expanded="true" />
-                <element signature="method#setMissingInfos#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#setImageDataInfoFromH5#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#setImageDataInfoFromTiff#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="e#34236#34237#0" expanded="true" />
-                <element signature="e#34312#34313#0" expanded="true" />
-                <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#getCroppedVSS#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#getCroppedVSS#1;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#createImagePlusFromVSS#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#run#0;class#41285:41544" expanded="true" />
-                <element signature="method#saveVSSAsPlanes#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#run#0;class#42569:42826" expanded="true" />
-                <element signature="method#saveVSSAsStacks#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#cancelSaving#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
-                <element signature="method#run#0;class#50867:51950" expanded="true" />
-                <marker date="1509094036000" expanded="false" signature="55187:55685" ph="{...}" />
-                <marker date="1509094036000" expanded="false" signature="55760:56338" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="52215:55100" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="55187:55685" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="55760:56338" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -124,10 +96,22 @@
               <folding>
                 <element signature="method#checkImageProperties#0;class#DataStreamingToolsGUI#0" expanded="true" />
                 <element signature="method#run#0;class#16542:16861" expanded="true" />
-                <marker date="1509094100000" expanded="false" signature="22918:23167" ph="{...}" />
-                <marker date="1509094100000" expanded="false" signature="25707:26752" ph="{...}" />
-                <marker date="1509094100000" expanded="false" signature="25764:25772" ph="&lt;~&gt;" />
-                <marker date="1509094100000" expanded="false" signature="26847:27513" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="19576:19637" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="20634:20834" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="22882:23181" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="22918:23167" ph="{...}" />
+                <marker date="1509106333000" expanded="true" signature="23292:23343" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="23542:23657" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="24059:24089" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="24257:24280" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="24454:24479" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="24700:24725" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="24898:24943" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="25707:26752" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="25764:25772" ph="&lt;~&gt;" />
+                <marker date="1509106333000" expanded="true" signature="25785:25976" ph="//..." />
+                <marker date="1509106333000" expanded="true" signature="26556:26692" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="26847:27513" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -136,50 +120,52 @@
       <file leaf-file-name="OpenerExtension.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+            <state relative-caret-position="445">
+              <caret line="423" column="0" lean-forward="true" selection-start-line="97" selection-start-column="0" selection-end-line="423" selection-end-column="0" />
               <folding>
-                <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
-                <element signature="class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Hdf55BdvImarisReaderWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/Hdf55BdvImarisReaderWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-              <folding>
-                <element signature="docComment;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="class#ImarisH5Settings#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="docComment;method#writeBdvMasterFiles#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="e#6739#6762#0" expanded="false" />
-                <element signature="e#9305#9307#0" expanded="false" />
-                <element signature="e#10303#10324#0" expanded="false" />
-                <element signature="e#11100#11133#0" expanded="false" />
-                <element signature="e#11332#11345#0" expanded="false" />
-                <element signature="docComment;method#writeImarisMasterFile#0;class#Hdf55BdvImarisReaderWriter#0" expanded="false" />
-                <element signature="e#14587#14589#0" expanded="false" />
-                <element signature="e#16573#16575#0" expanded="false" />
-                <element signature="e#17131#17133#0" expanded="false" />
-                <element signature="e#18609#18640#0" expanded="false" />
-                <element signature="e#19553#19555#0" expanded="false" />
-                <element signature="e#19785#19837#0" expanded="false" />
-                <element signature="e#20042#20059#0" expanded="false" />
-                <element signature="e#21386#21388#0" expanded="false" />
-                <element signature="e#22127#22129#0" expanded="false" />
-                <element signature="e#22432#22449#0" expanded="false" />
-                <element signature="e#22972#22974#0" expanded="false" />
-                <element signature="e#24072#24074#0" expanded="false" />
-                <element signature="e#25001#25003#0" expanded="false" />
-                <element signature="e#25524#25526#0" expanded="false" />
-                <element signature="e#25835#25837#0" expanded="false" />
-                <element signature="e#27554#27567#0" expanded="false" />
-                <element signature="e#33194#33237#0" expanded="false" />
-                <element signature="e#39857#39901#0" expanded="false" />
-                <element signature="e#40312#40349#0" expanded="false" />
+                <element signature="docComment;class#OpenerExtension#0" expanded="false" />
+                <element signature="e#6085#6113#0" expanded="false" />
+                <element signature="e#8159#8242#0" expanded="false" />
+                <element signature="e#9105#9155#0" expanded="false" />
+                <element signature="e#12068#12096#0" expanded="false" />
+                <element signature="e#14125#14143#0" expanded="false" />
+                <marker date="1509106333000" expanded="false" signature="16065:20449" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="17516:17573" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="18063:18148" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="20521:21149" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="20531:20584" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="21156:21210" ph="/**...*/" />
+                <marker date="1509106333000" expanded="false" signature="21284:43850" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="21895:22014" ph="/**...*/" />
+                <marker date="1509106333000" expanded="false" signature="22075:22116" ph="/**...*/" />
+                <marker date="1509106333000" expanded="false" signature="22999:23577" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="23605:30620" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="27321:27404" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="29991:30075" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="30687:36826" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="31827:32008" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="32349:32435" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="33143:33338" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="33563:33861" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="34533:34612" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="36949:38230" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="38351:38716" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="38748:38928" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="39039:42219" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="40146:40205" ph="//..." />
+                <marker date="1509106333000" expanded="false" signature="42231:42264" ph="/**...*/" />
+                <marker date="1509106333000" expanded="false" signature="42290:43843" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="42388:42466" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="42515:42602" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="42653:42729" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="42767:42950" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="42981:43000" ph=" { " />
+                <marker date="1509106333000" expanded="false" signature="43012:43026" ph=" }" />
+                <marker date="1509106333000" expanded="false" signature="43070:43310" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="43346:43564" ph="{...}" />
+                <marker date="1509106333000" expanded="false" signature="43597:43616" ph=" { " />
+                <marker date="1509106333000" expanded="false" signature="43625:43639" ph=" }" />
+                <marker date="1509106333000" expanded="false" signature="43681:43832" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -1097,10 +1083,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="1999" column="21" lean-forward="false" selection-start-line="1999" selection-start-column="21" selection-end-line="1999" selection-end-column="21" />
-          <folding>
-            <element signature="e#59060#59061#0" expanded="false" />
-            <element signature="e#59102#59103#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1167,10 +1149,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="1810" column="22" lean-forward="false" selection-start-line="1810" selection-start-column="22" selection-end-line="1810" selection-end-column="22" />
-          <folding>
-            <element signature="method#H5Aopen_by_name#0;class#H5#0" expanded="false" />
-            <element signature="method#H5Tget_array_dims#2;class#H5#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1187,27 +1165,27 @@
         <state relative-caret-position="898">
           <caret line="181" column="94" lean-forward="false" selection-start-line="181" selection-start-column="94" selection-end-line="181" selection-end-column="94" />
           <folding>
-            <marker date="1509094036000" expanded="true" signature="6672:7050" ph="{...}" />
-            <marker date="1509094036000" expanded="true" signature="6731:6801" ph="//..." />
-            <marker date="1509094036000" expanded="false" signature="7103:7662" ph="{...}" />
-            <marker date="1509094036000" expanded="false" signature="7753:8219" ph="{...}" />
-            <marker date="1509094036000" expanded="false" signature="8318:14626" ph="{...}" />
-            <marker date="1509094036000" expanded="true" signature="8443:8485" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="8835:8917" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="9218:9277" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="9695:9764" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="11127:11201" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="11668:11781" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="11925:11970" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="12063:12098" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="12703:12736" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="12984:13028" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="13127:13162" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="13797:13830" ph="//..." />
-            <marker date="1509094036000" expanded="true" signature="13996:14048" ph="//..." />
-            <marker date="1509094036000" expanded="false" signature="14739:18251" ph="{...}" />
-            <marker date="1509094036000" expanded="false" signature="18306:18837" ph="{...}" />
-            <marker date="1509094036000" expanded="false" signature="18899:19725" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="6672:7050" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="6731:6801" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="7103:7662" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="7753:8219" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="8318:14626" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="8443:8485" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="8835:8917" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="9218:9277" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="9695:9764" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="11127:11201" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="11668:11781" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="11925:11970" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="12063:12098" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="12703:12736" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="12984:13028" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="13127:13162" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="13797:13830" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="13996:14048" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="14739:18251" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="18306:18837" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="18899:19725" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1219,10 +1197,22 @@
           <folding>
             <element signature="method#checkImageProperties#0;class#DataStreamingToolsGUI#0" expanded="true" />
             <element signature="method#run#0;class#16542:16861" expanded="true" />
-            <marker date="1509094100000" expanded="false" signature="22918:23167" ph="{...}" />
-            <marker date="1509094100000" expanded="false" signature="25707:26752" ph="{...}" />
-            <marker date="1509094100000" expanded="false" signature="25764:25772" ph="&lt;~&gt;" />
-            <marker date="1509094100000" expanded="false" signature="26847:27513" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="19576:19637" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="20634:20834" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="22882:23181" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="22918:23167" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="23292:23343" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="23542:23657" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="24059:24089" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="24257:24280" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="24454:24479" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="24700:24725" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="24898:24943" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="25707:26752" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="25764:25772" ph="&lt;~&gt;" />
+            <marker date="1509106333000" expanded="true" signature="25785:25976" ph="//..." />
+            <marker date="1509106333000" expanded="true" signature="26556:26692" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="26847:27513" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1274,51 +1264,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/dataStreamingTools/DataStreamingTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="53">
+        <state relative-caret-position="513">
           <caret line="917" column="0" lean-forward="false" selection-start-line="917" selection-start-column="0" selection-end-line="917" selection-end-column="0" />
           <folding>
-            <element signature="method#DataStreamingTools#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#openFromDirectory#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#run#0;class#6804:7098" expanded="true" />
-            <element signature="method#setMissingInfos#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#setAllInfosByParsingFilesAndFolders#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#setImageDataInfoFromH5#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#setImageDataInfoFromTiff#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#openFromInfoFile#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#sortAndFilterFileList#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#getFilesInFolder#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#getFoldersInFolder#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="e#34236#34237#0" expanded="true" />
-            <element signature="e#34312#34313#0" expanded="true" />
-            <element signature="method#writeFileInfosSer#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#readFileInfosSer#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#getCroppedVSS#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#getCroppedVSS#1;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#createImagePlusFromVSS#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#loadVSSFullyIntoRAM#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#run#0;class#41285:41544" expanded="true" />
-            <element signature="method#saveVSSAsPlanes#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#run#0;class#42569:42826" expanded="true" />
-            <element signature="method#saveVSSAsStacks#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#cancelSaving#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#ParseFilesIntoVirtualStack#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#run#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#showImageAndInfo#0;class#ParseFilesIntoVirtualStack#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#main#0;class#DataStreamingTools#0" expanded="true" />
-            <element signature="method#run#0;class#50867:51950" expanded="true" />
-            <marker date="1509094036000" expanded="false" signature="55187:55685" ph="{...}" />
-            <marker date="1509094036000" expanded="false" signature="55760:56338" ph="{...}" />
+            <marker date="1509106333000" expanded="true" signature="52215:55100" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="55187:55685" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="55760:56338" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bigDataTools/VirtualStackOfStacks/OpenerExtension.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+        <state relative-caret-position="445">
+          <caret line="423" column="0" lean-forward="true" selection-start-line="97" selection-start-column="0" selection-end-line="423" selection-end-column="0" />
           <folding>
-            <element signature="method#readDataCube#0;class#OpenerExtension#0" expanded="true" />
-            <element signature="class#readCroppedPlaneFromTiffIntoImageStack#0;class#OpenerExtension#0" expanded="false" />
+            <element signature="docComment;class#OpenerExtension#0" expanded="false" />
+            <element signature="e#6085#6113#0" expanded="false" />
+            <element signature="e#8159#8242#0" expanded="false" />
+            <element signature="e#9105#9155#0" expanded="false" />
+            <element signature="e#12068#12096#0" expanded="false" />
+            <element signature="e#14125#14143#0" expanded="false" />
+            <marker date="1509106333000" expanded="false" signature="16065:20449" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="17516:17573" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="18063:18148" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="20521:21149" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="20531:20584" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="21156:21210" ph="/**...*/" />
+            <marker date="1509106333000" expanded="false" signature="21284:43850" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="21895:22014" ph="/**...*/" />
+            <marker date="1509106333000" expanded="false" signature="22075:22116" ph="/**...*/" />
+            <marker date="1509106333000" expanded="false" signature="22999:23577" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="23605:30620" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="27321:27404" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="29991:30075" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="30687:36826" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="31827:32008" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="32349:32435" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="33143:33338" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="33563:33861" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="34533:34612" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="36949:38230" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="38351:38716" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="38748:38928" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="39039:42219" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="40146:40205" ph="//..." />
+            <marker date="1509106333000" expanded="false" signature="42231:42264" ph="/**...*/" />
+            <marker date="1509106333000" expanded="false" signature="42290:43843" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="42388:42466" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="42515:42602" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="42653:42729" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="42767:42950" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="42981:43000" ph=" { " />
+            <marker date="1509106333000" expanded="false" signature="43012:43026" ph=" }" />
+            <marker date="1509106333000" expanded="false" signature="43070:43310" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="43346:43564" ph="{...}" />
+            <marker date="1509106333000" expanded="false" signature="43597:43616" ph=" { " />
+            <marker date="1509106333000" expanded="false" signature="43625:43639" ph=" }" />
+            <marker date="1509106333000" expanded="false" signature="43681:43832" ph="{...}" />
           </folding>
         </state>
       </provider>
