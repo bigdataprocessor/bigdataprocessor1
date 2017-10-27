@@ -281,7 +281,6 @@ public class ImarisDataSet {
         reader.closeFile();
     }
 
-
     public void addChannelsFromImaris( File file )
     {
         addChannelsFromImaris( file.getParent(), file.getName() );

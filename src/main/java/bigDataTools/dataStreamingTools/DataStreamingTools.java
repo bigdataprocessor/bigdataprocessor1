@@ -1544,13 +1544,12 @@ public class DataStreamingTools {
         //imp3.show();
 
 
-
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
                 int nIOthreads = 10;
-                final String directory = "/Users/tischi/Downloads/uuu/";
+                final String directory = "/Users/tischi/Downloads/xxx/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
@@ -1564,7 +1563,7 @@ public class DataStreamingTools {
                 dataStreamingTools.openFromDirectory(
                         directory,
                         "None",
-                        "im1--C.*",
+                        "im--C.*",
                         "ResolutionLevel 0/Data",
                         imageDataInfo,
                         nIOthreads,
