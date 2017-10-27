@@ -1549,7 +1549,7 @@ public class DataStreamingTools {
             public void run()
             {
                 int nIOthreads = 10;
-                final String directory = "/Users/tischi/Downloads/xxx/";
+                final String directory = "/Users/tischi/Downloads/mri-stack/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
@@ -1563,7 +1563,7 @@ public class DataStreamingTools {
                 dataStreamingTools.openFromDirectory(
                         directory,
                         "None",
-                        "im--C.*",
+                        ".*",
                         "ResolutionLevel 0/Data",
                         imageDataInfo,
                         nIOthreads,

@@ -38,6 +38,9 @@ import bigDataTools.Region5D;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
+import ch.systemsx.cisd.hdf5.HDF5DataSetInformation;
+import ch.systemsx.cisd.hdf5.HDF5Factory;
+import ch.systemsx.cisd.hdf5.IHDF5Reader;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
@@ -52,6 +55,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+
+import static bigDataTools.VirtualStackOfStacks.OpenerExtension.hdf5InfoToString;
 
 // todo: replace all == with "equals"
 // TODO: extend VirtualStack rather than ImageStack ?
@@ -220,6 +225,25 @@ public class VirtualStackOfStacks extends VirtualStack {
                 // todo: this could be much leaner
                 // e.g. the nX, nY and bit depth
                 //
+
+                int bytesPerPixel = 0;
+
+                IHDF5Reader reader = HDF5Factory.openForReading(directory + channelFolders[c] + "/" + ctzFileList[c][t][0]);
+                HDF5DataSetInformation dsInfo = reader.getDataSetInformation( h5DataSet );
+                String dsTypeString = hdf5InfoToString(dsInfo);
+                if ( dsTypeString.equals("int16") || dsTypeString.equals("uint16") )
+                {
+                    bytesPerPixel = 2;
+                }
+                else if ( dsTypeString.equals("int8") || dsTypeString.equals("uint8") )
+                {
+                    bytesPerPixel = 1;
+                }
+                else
+                {
+                    logger.error( "Unsupported bit depth " + dsTypeString );
+                }
+
                 infoCT = new FileInfoSer[nZ];
                 for (z = 0; z < nZ; z++)
                 {
@@ -228,7 +252,7 @@ public class VirtualStackOfStacks extends VirtualStack {
                     infoCT[z].directory = channelFolders[c] + "/";
                     infoCT[z].width = nX;
                     infoCT[z].height = nY;
-                    infoCT[z].bytesPerPixel = 2; // todo: how to get the bit-depth from the info?
+                    infoCT[z].bytesPerPixel = bytesPerPixel; // todo: how to get the bit-depth from the info?
                     infoCT[z].h5DataSet = h5DataSet;
                     infoCT[z].fileTypeString = fileType;
                 }

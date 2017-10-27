@@ -47,7 +47,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfGateMax = new JTextField("255",5);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
-            ".*",".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+            ".*",".*--C.*",".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
@@ -59,12 +59,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None",
+            "Data",
             "Resolution 0/Data",
             "Resolution 1/Data",
             "Resolution 2/Data",
             "Resolution 3/Data",
             "ITKImage/0/VoxelData",
-            "Data","Data111", "Data222", "Data444"});
+            "Data111", "Data222", "Data444"});
 
     JComboBox comboFileTypeForSaving = new JComboBox( Utils.FileType.values() );
 

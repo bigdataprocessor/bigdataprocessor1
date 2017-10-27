@@ -9,6 +9,9 @@ import ij.process.ImageStatistics;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 
+import static bigDataTools.Hdf5Utils.writeStringAttribute;
+import static bigDataTools.ImarisUtils.*;
+
 public class Hdf5DataCubeWriter {
     
     int file_id;
@@ -67,17 +70,19 @@ public class Hdf5DataCubeWriter {
                         , "binned", "AVERAGE" );
             }
 
-            writeDataCube( impResolutionLevel, ImarisUtils.RESOLUTION_LEVEL + r,
+            writeDataCubeAndAttributes( impResolutionLevel,
+                    RESOLUTION_LEVEL + r,
                     idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
-            writeHistogram( impResolutionLevel, ImarisUtils.RESOLUTION_LEVEL  + r );
+
+            writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL  + r );
         }
 
         H5F.H5Fclose( file_id );
     }
 
 
-    private void writeDataCube( ImagePlus imp, String group, long[] dimensionXYZ, long[] chunkXYZ )
+    private void writeDataCubeAndAttributes( ImagePlus imp, String group, long[] dimensionXYZ, long[] chunkXYZ )
     {
 
         // change dimension order to fit hdf5
@@ -107,7 +112,7 @@ public class Hdf5DataCubeWriter {
         try
         {
             dataset_id = H5.H5Dcreate(group_id,
-                    ImarisUtils.DATA,
+                    DATA,
                     image_file_type,
                     space_id,
                     HDF5Constants.H5P_DEFAULT,
@@ -164,6 +169,13 @@ public class Hdf5DataCubeWriter {
         }
 
 
+        for ( int d = 0; d < 3; ++d )
+        {
+            writeStringAttribute( group_id,
+                    IMAGE_SIZE + XYZ[d],
+                            String.valueOf( dimensionXYZ[d]) );
+        }
+
         H5.H5Sclose( space_id );
         H5.H5Dclose( dataset_id );
         H5.H5Pclose( dcpl_id );
@@ -171,7 +183,7 @@ public class Hdf5DataCubeWriter {
 
     }
 
-    private void writeHistogram( ImagePlus imp, String group )
+    private void writeHistogramAndAttributes( ImagePlus imp, String group )
     {
         int group_id = Hdf5Utils.createGroup( file_id, group );
 
@@ -195,7 +207,7 @@ public class Hdf5DataCubeWriter {
         int histo_dataspace_id = H5.H5Screate_simple(
                 histo_dims.length, histo_dims, null);
 
-        int histo_dataset_id = H5.H5Dcreate( group_id, ImarisUtils.HISTOGRAM,
+        int histo_dataset_id = H5.H5Dcreate( group_id, HISTOGRAM,
                 HDF5Constants.H5T_STD_U64LE, histo_dataspace_id,
                 HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT,
@@ -207,6 +219,14 @@ public class Hdf5DataCubeWriter {
                 HDF5Constants.H5P_DEFAULT, histogram);
 
 
+        writeStringAttribute( group_id,
+                HISTOGRAM + "Min",
+                String.valueOf( imageStatistics.min ) );
+
+        writeStringAttribute( group_id,
+                HISTOGRAM + "Max",
+                String.valueOf( imageStatistics.max ) );
+        
         H5.H5Dclose( histo_dataset_id );
         H5.H5Sclose( histo_dataspace_id );
         H5.H5Gclose( group_id );
