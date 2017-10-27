@@ -438,7 +438,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             if ( ! Utils.hasVirtualStackOfStacks(imp) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            if ( ! checkImageProperties() ) return;
+            //if ( ! checkImageProperties() ) return;
 
             // Check that all image files have been parsed
             //
@@ -487,7 +487,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                             Math.min(ioThreads, imp.getNFrames())) ) return;
 
                     String compression = "";
-                    if(cbLZW.isSelected())
+                    if( cbLZW.isSelected() )
                         compression="LZW";
 
                     SavingSettings savingSettings = new SavingSettings();
