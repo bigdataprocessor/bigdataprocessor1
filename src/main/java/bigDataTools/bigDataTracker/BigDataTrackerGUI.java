@@ -380,7 +380,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             trackingSettings.imp = imp;
 
             // TODO: think about below:
-            trackingSettings.trackingFactor = 1.0 + 1.0 * maxDisplacement.getX() /
+            trackingSettings.trackingFactor = 1.0 + 2.0 * maxDisplacement.getX() /
                     trackingSettings.objectSize.getX() ;
 
             trackingSettings.iterationsCenterOfMass =

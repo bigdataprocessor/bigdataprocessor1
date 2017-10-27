@@ -277,7 +277,9 @@ public abstract class Hdf5Utils {
         }
     }
 
-    public static String readStringAttribute( int object_id, String objectName, String attributeName )
+    public static String readStringAttribute( int object_id,
+                                              String objectName,
+                                              String attributeName )
     {
         String attributeString = "";
 
@@ -313,18 +315,23 @@ public abstract class Hdf5Utils {
                 {
                     tempbuf[ jndx ] = dset_data[ indx ][ jndx ];
                 }
-                str_data[ indx ] = new StringBuffer( new String( tempbuf ).trim() );
+                str_data[ indx ] = new StringBuffer( new String( tempbuf ) );
             }
 
             for ( int i = 0; i < str_data.length; i++ )
             {
                 attributeString += str_data[ i ];
             }
+
+            // remove null chars
+            attributeString = attributeString.replace( "\u0000", "" );
+
         }
         catch ( Exception e )
         {
             attributeString = null;
         }
+
 
         return ( attributeString );
 

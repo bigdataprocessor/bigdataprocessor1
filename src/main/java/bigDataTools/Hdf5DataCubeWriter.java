@@ -5,15 +5,17 @@ import ch.systemsx.cisd.hdf5.hdf5lib.H5F;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
+import ij.measure.Calibration;
 import ij.process.ImageStatistics;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 
+import static bigDataTools.Hdf5Utils.writeDoubleAttribute;
 import static bigDataTools.Hdf5Utils.writeStringAttribute;
 import static bigDataTools.ImarisUtils.*;
 
 public class Hdf5DataCubeWriter {
-    
+
     int file_id;
     int image_memory_type;
     int image_file_type;
@@ -22,25 +24,25 @@ public class Hdf5DataCubeWriter {
     private void setImageMemoryAndFileType( ImagePlus imp )
     {
 
-        if ( imp.getBitDepth() == 8)
+        if ( imp.getBitDepth() == 8 )
         {
-            image_memory_type = HDF5Constants.H5T_NATIVE_UCHAR ;
+            image_memory_type = HDF5Constants.H5T_NATIVE_UCHAR;
             image_file_type = HDF5Constants.H5T_STD_U8BE;
         }
-        else if ( imp.getBitDepth() == 16)
+        else if ( imp.getBitDepth() == 16 )
         {
             image_memory_type = HDF5Constants.H5T_NATIVE_USHORT;
             image_file_type = HDF5Constants.H5T_STD_U16BE;
         }
-        else if ( imp.getBitDepth() == 32)
+        else if ( imp.getBitDepth() == 32 )
         {
             image_memory_type = HDF5Constants.H5T_NATIVE_FLOAT;
             image_file_type = HDF5Constants.H5T_IEEE_F32BE;
         }
         else
         {
-            IJ.showMessage("Image data type is not supported, " +
-                    "only 8-bit, 16-bit and 32-bit floating point are possible.");
+            IJ.showMessage( "Image data type is not supported, " +
+                    "only 8-bit, 16-bit and 32-bit floating point are possible." );
         }
     }
 
@@ -48,13 +50,13 @@ public class Hdf5DataCubeWriter {
     public void writeImarisCompatibleResolutionPyramid(
             ImagePlus imp,
             ImarisDataSet idp,
-            int c, int t)
+            int c, int t )
     {
 
 
         file_id = createFile(
-                idp.getDataSetDirectory( c, t,0 ),
-                idp.getDataSetFilename( c, t,0 ) );
+                idp.getDataSetDirectory( c, t, 0 ),
+                idp.getDataSetFilename( c, t, 0 ) );
 
         setImageMemoryAndFileType( imp );
 
@@ -75,7 +77,7 @@ public class Hdf5DataCubeWriter {
                     idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
 
-            writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL  + r );
+            writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r );
         }
 
         H5F.H5Fclose( file_id );
@@ -88,14 +90,14 @@ public class Hdf5DataCubeWriter {
         // change dimension order to fit hdf5
 
         long[] dimension = new long[]{
-                dimensionXYZ[2],
-                dimensionXYZ[1],
-                dimensionXYZ[0]};
+                dimensionXYZ[ 2 ],
+                dimensionXYZ[ 1 ],
+                dimensionXYZ[ 0 ] };
 
         long[] chunk = new long[]{
-                chunkXYZ[2],
-                chunkXYZ[1],
-                chunkXYZ[0]};
+                chunkXYZ[ 2 ],
+                chunkXYZ[ 1 ],
+                chunkXYZ[ 0 ] };
 
 
         int group_id = Hdf5Utils.createGroup( file_id, group );
@@ -105,43 +107,47 @@ public class Hdf5DataCubeWriter {
         // create "dataset creation property list" (dcpl)
         int dcpl_id = H5.H5Pcreate( HDF5Constants.H5P_DATASET_CREATE );
 
-        H5.H5Pset_chunk(dcpl_id, chunk.length, chunk);
+        H5.H5Pset_chunk( dcpl_id, chunk.length, chunk );
 
         // create dataset
         int dataset_id = -1;
         try
         {
-            dataset_id = H5.H5Dcreate(group_id,
+            dataset_id = H5.H5Dcreate( group_id,
                     DATA,
                     image_file_type,
                     space_id,
                     HDF5Constants.H5P_DEFAULT,
                     dcpl_id,
-                    HDF5Constants.H5P_DEFAULT);
+                    HDF5Constants.H5P_DEFAULT );
         }
         catch ( Exception e )
         {
             e.printStackTrace();
         }
 
+
+        writeImagePlusData( dataset_id, imp );
+
+        // Attributes
+        writeSizeAttribute( group_id, dimensionXYZ );
+        writeCalibrationAttribute( dataset_id, imp.getCalibration() );
+
+        H5.H5Sclose( space_id );
+        H5.H5Dclose( dataset_id );
+        H5.H5Pclose( dcpl_id );
+        H5.H5Gclose( group_id );
+
+    }
+
+    private void writeImagePlusData( int dataset_id, ImagePlus imp )
+    {
+
         // write data
-        //
-        if ( imp.getBitDepth() == 8 )
+    //
+        if(imp.getBitDepth()==8)
         {
-            byte[] data = getByteData( imp, 0,0 );
-
-            H5.H5Dwrite(dataset_id,
-                    image_memory_type,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5P_DEFAULT,
-                    data );
-
-        }
-        else if ( imp.getBitDepth() == 16 )
-        {
-
-            short[] data = getShortData( imp,0,0 );
+            byte[] data = getByteData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
                     image_memory_type,
@@ -151,9 +157,22 @@ public class Hdf5DataCubeWriter {
                     data );
 
         }
-        else if ( imp.getBitDepth() == 32 )
+        else if(imp.getBitDepth()==16)
         {
-            float[] data = getFloatData( imp,0,0 );
+
+            short[] data = getShortData( imp, 0, 0 );
+
+            H5.H5Dwrite( dataset_id,
+                    image_memory_type,
+                    HDF5Constants.H5S_ALL,
+                    HDF5Constants.H5S_ALL,
+                    HDF5Constants.H5P_DEFAULT,
+                    data );
+
+        }
+        else if(imp.getBitDepth()==32)
+        {
+            float[] data = getFloatData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
                     image_memory_type,
@@ -164,22 +183,35 @@ public class Hdf5DataCubeWriter {
         }
         else
         {
-            IJ.showMessage("Image data type is not supported, " +
-                    "only 8-bit, 16-bit and 32-bit are possible.");
+            IJ.showMessage( "Image data type is not supported, " +
+                    "only 8-bit, 16-bit and 32-bit are possible." );
         }
 
+    }
 
+
+    private void writeSizeAttribute( int group_id, long[] dimension )
+    {
         for ( int d = 0; d < 3; ++d )
         {
             writeStringAttribute( group_id,
                     IMAGE_SIZE + XYZ[d],
-                            String.valueOf( dimensionXYZ[d]) );
+                    String.valueOf( dimension[d]) );
         }
+    }
 
-        H5.H5Sclose( space_id );
-        H5.H5Dclose( dataset_id );
-        H5.H5Pclose( dcpl_id );
-        H5.H5Gclose( group_id );
+
+    private void writeCalibrationAttribute( int object_id, Calibration calibration )
+    {
+
+        double[] calibrationXYZ = new double[]
+                {
+                        calibration.pixelWidth,
+                        calibration.pixelHeight,
+                        calibration.pixelDepth
+                };
+
+        writeDoubleAttribute(  object_id, "element_size_um", calibrationXYZ );
 
     }
 
@@ -226,7 +258,7 @@ public class Hdf5DataCubeWriter {
         writeStringAttribute( group_id,
                 HISTOGRAM + "Max",
                 String.valueOf( imageStatistics.max ) );
-        
+
         H5.H5Dclose( histo_dataset_id );
         H5.H5Sclose( histo_dataspace_id );
         H5.H5Gclose( group_id );

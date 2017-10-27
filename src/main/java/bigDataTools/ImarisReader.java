@@ -72,7 +72,7 @@ public class ImarisReader {
 
         int nr = Integer.parseInt( readStringAttribute( file_id,
                 DATA_SET_INFO + "/" + IMAGE,
-                RESOLUTION_LEVELS_ATTRIBUTE ) );
+                RESOLUTION_LEVELS_ATTRIBUTE ).trim() );
 
         for ( int r = 0; r < nr; ++r )
         {
@@ -123,10 +123,10 @@ public class ImarisReader {
         {
             // physical interval
             min[d] = Double.parseDouble( readStringAttribute( file_id, DATA_SET_INFO + "/" + IMAGE,
-                    "ExtMax" + d ) );
+                    "ExtMax" + d ).trim() );
 
             max[d] = Double.parseDouble( readStringAttribute( file_id, DATA_SET_INFO + "/" + IMAGE,
-                    "ExtMin" + d ) );
+                    "ExtMin" + d ).trim() );
         }
 
         FinalRealInterval interval = new FinalRealInterval( min, max );

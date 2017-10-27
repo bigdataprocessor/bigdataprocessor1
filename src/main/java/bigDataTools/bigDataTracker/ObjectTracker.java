@@ -132,8 +132,7 @@ class ObjectTracker implements Runnable
 
             // correct for sub-sampling
             //
-            pShift = Utils.multiplyPoint3dComponents(pShift,
-                    trackingSettings.subSamplingXYZ);
+            pShift = Utils.multiplyPoint3dComponents(pShift, trackingSettings.subSamplingXYZ);
             // no z-shift if only one slice
             if (imp.getNSlices() == 1) pShift = new Point3D(pShift.getX(), pShift.getY(), 0);
         }
@@ -153,7 +152,7 @@ class ObjectTracker implements Runnable
         //
         // store results
         //
-        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt,
+        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt, dt,
                 elapsedReadingTime, elapsedProcessingTime);
 
 
@@ -313,13 +312,14 @@ class ObjectTracker implements Runnable
             tMaxUpdate = tNow;
             if(finish) tMaxUpdate = tNow; // include last data point
 
-            for (int tUpdate = tPrevious + 1; tUpdate <= tMaxUpdate; tUpdate++) {
+            for (int tUpdate = tPrevious + 1; tUpdate <= tMaxUpdate; tUpdate++)
+            {
 
                 Point3D pPrevious = track.getPosition( tPrevious );
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
-                pUpdate = pPrevious.add( pShift.multiply(interpolation) );
+                pUpdate = pPrevious.add( pShift.multiply( interpolation ) );
 
-                publishResult( imp, track, trackTable, logger, pUpdate, tUpdate, nt, elapsedReadingTime, elapsedProcessingTime);
+                publishResult( imp, track, trackTable, logger, pUpdate, tUpdate, nt, dt, elapsedReadingTime, elapsedProcessingTime);
 
             }
 
@@ -340,7 +340,7 @@ class ObjectTracker implements Runnable
     }
 
     private void publishResult(ImagePlus imp, Track track, TrackTable trackTable, Logger logger, Point3D location,
-                               int t, int nt,
+                               int t, int nt, int dt,
                                long elapsedReadingTime, long elapsedProcessingTime)
     {
 
@@ -358,13 +358,11 @@ class ObjectTracker implements Runnable
 
         bigDataTracker.addLocationToOverlay(track, t);
 
-        // TODO: make this somehow a logger.progress
-        logger.info("Track: " + track.getID() +
+        logger.progress( "Track: " + track.getID(),
                 "; Image: " + imp.getTitle() +
-                "; Frame: " + (t - track.getTmin() + 1) + "/" + nt +
-                "; Reading [ms] = " + elapsedReadingTime +
-                "; Processing [ms] = " + elapsedProcessingTime);
-
+                        "; Frame: " + ( t - track.getTmin() + 1 ) + "/" + nt +
+                        "; Reading [ms] = " + elapsedReadingTime +
+                        "; Processing [ms] = " + elapsedProcessingTime );
 
     }
 
