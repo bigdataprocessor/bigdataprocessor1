@@ -319,7 +319,7 @@ public class SaveVSSFrame implements Runnable {
                 // compute start level in image processor
                 int srcLevel = (int)saveBlockOffset[0];
                 //IJ.info( "source level = " +srcLevel);
-                // write Stack according to data type
+                // writeHeader Stack according to data type
                 //
                 int imgColorType = imp.getType();
 

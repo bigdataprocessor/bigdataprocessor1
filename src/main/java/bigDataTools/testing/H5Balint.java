@@ -127,7 +127,7 @@ public class H5Balint {
 
 
 
-        // write the data
+        // writeHeader the data
         //
         // H5Dwrite(dset, types[f], H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
         //

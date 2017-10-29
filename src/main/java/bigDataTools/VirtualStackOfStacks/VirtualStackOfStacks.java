@@ -343,7 +343,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     /**
      *  Assigns and saves a pixel array to the specified slice,
      were 1<=n<=nslices.
-     The method is synchronized to avoid that two threads try to write
+     The method is synchronized to avoid that two threads try to writeHeader
      into the same file.
      */
     public void saveByteCube( byte[][][] pixelsZYX, FinalInterval interval ) throws IOException
@@ -688,7 +688,7 @@ public class VirtualStackOfStacks extends VirtualStack {
             // - this helps both the center of mass and the correlation
             if( (intensityGate[0] != -1) || (intensityGate[1] != -1) )
             {
-                Utils.applyIntensityGate(impLoaded, intensityGate );
+                Utils.applyIntensityGate( impLoaded, intensityGate );
             }
 
             //

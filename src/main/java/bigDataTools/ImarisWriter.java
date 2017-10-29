@@ -15,7 +15,7 @@ import static bigDataTools.Hdf5Utils.writeStringAttribute;
 public abstract class ImarisWriter {
 
 
-    public static void writeCombinedHeaderFile( ArrayList < File > masterFiles, String filename )
+    public static void writeCombinedHeader( ArrayList < File > masterFiles, String filename )
     {
 
         ImarisDataSet imarisDataSet = new ImarisDataSet();
@@ -32,14 +32,14 @@ public abstract class ImarisWriter {
             }
         }
 
-        write( imarisDataSet, masterFiles.get( 0 ).getParent(), filename );
+        writeHeader( imarisDataSet, masterFiles.get( 0 ).getParent(), filename );
 
     }
 
 
-    public static void write( ImarisDataSet idp,
-                              String directory,
-                              String filename )
+    public static void writeHeader( ImarisDataSet idp,
+                                    String directory,
+                                    String filename )
     {
 
         int file_id = createMasterFile( directory, filename );

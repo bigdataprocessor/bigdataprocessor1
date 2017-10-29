@@ -1,6 +1,7 @@
 package bigDataTools;
 
 import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
@@ -23,13 +24,10 @@ public class ImarisDataSet {
     private CTRDataSets ctrDataSets;
     private ArrayList < String > timePoints;
 
+    Logger logger = new IJLazySwingLogger();
 
-    Logger logger;
-
-    public ImarisDataSet()
-    {
-
-    }
+    public ImarisDataSet( )
+    {}
 
     public String getDataSetDirectory( int c, int t, int r)
     {

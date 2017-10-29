@@ -467,7 +467,7 @@ public class FastTiffDecoder {
             fi.pixelDepth = in.readFloat(); //SliceSpacing
             int skip = in.readShort();      //CurrentSlice
             fi.frameInterval = in.readFloat();
-            //ij.IJ.write("fi.pixelDepth: "+fi.pixelDepth);
+            //ij.IJ.writeHeader("fi.pixelDepth: "+fi.pixelDepth);
         }
 
         in.seek(offset+272);
@@ -735,7 +735,7 @@ public class FastTiffDecoder {
             value = getValue(fieldType, count)&0xffffffffL;
 
             if (debugMode && ifdCount<10) dumpTag(tag, (int)count, (int)value, fi);
-            //ij.IJ.write(i+"/"+nEntries+" "+tag + ", count=" + count + ", value=" + value);
+            //ij.IJ.writeHeader(i+"/"+nEntries+" "+tag + ", count=" + count + ", value=" + value);
             //if (tag==0) return null;
             switch (tag) {
                 case IMAGE_WIDTH:

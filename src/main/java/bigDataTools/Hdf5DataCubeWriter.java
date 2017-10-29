@@ -142,7 +142,7 @@ public class Hdf5DataCubeWriter {
     private void writeImagePlusData( int dataset_id, ImagePlus imp )
     {
 
-        // write data
+        // writeHeader data
     //
         if(imp.getBitDepth()==8)
         {

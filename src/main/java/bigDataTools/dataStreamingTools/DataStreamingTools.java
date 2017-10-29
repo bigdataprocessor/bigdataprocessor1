@@ -55,7 +55,6 @@ import bigDataTools.ImarisDataSet;
 import bigDataTools.ImarisUtils;
 import bigDataTools.ImarisWriter;
 import bigDataTools.VirtualStackOfStacks.*;
-import bigDataTools.bigDataTracker.BigDataTrackerPlugIn_;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.ImageDataInfo;
@@ -1327,6 +1326,7 @@ public class DataStreamingTools {
 
         // TODO: clean this up...
         ImarisDataSet imarisDataSet = new ImarisDataSet();
+        imarisDataSet.setLogger( logger );
 
         if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
@@ -1341,7 +1341,7 @@ public class DataStreamingTools {
                     savingSettings.fileBaseName,
                     "/");
 
-            ImarisWriter.write( imarisDataSet,
+            ImarisWriter.writeHeader( imarisDataSet,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".ims"
                     );
@@ -1351,12 +1351,12 @@ public class DataStreamingTools {
 
             if ( imarisFiles.size() > 1 )
             {
-                ImarisWriter.writeCombinedHeaderFile( imarisFiles, "meta.ims" );
+                ImarisWriter.writeCombinedHeader( imarisFiles, "meta.ims" );
             }
 
 
             // TODO: remove below
-            ImarisWriter.write( imarisDataSet,
+            ImarisWriter.writeHeader( imarisDataSet,
                     savingSettings.directory,
                     savingSettings.fileBaseName + ".h5"
             );
