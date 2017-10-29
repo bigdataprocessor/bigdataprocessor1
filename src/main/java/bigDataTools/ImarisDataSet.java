@@ -93,7 +93,11 @@ public class ImarisDataSet {
                     "highest resolution level after initial binning...");
 
             ImagePlus impBinned = null;
-            // TODO: implement for non-vss
+            if ( ! ( imp.getStack() instanceof VirtualStackOfStacks) )
+            {
+                logger.error( "This currently only works for streamed data." );
+                return null;
+            }
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
             impBinned = vss.getFullFrame( 0, 0, 1 );
 

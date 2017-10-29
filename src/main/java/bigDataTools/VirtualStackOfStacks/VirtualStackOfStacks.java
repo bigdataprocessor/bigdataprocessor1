@@ -49,6 +49,7 @@ import ij.gui.NewImage;
 import ij.io.FileSaver;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
+import net.imglib2.FinalInterval;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -345,84 +346,87 @@ public class VirtualStackOfStacks extends VirtualStack {
      The method is synchronized to avoid that two threads try to write
      into the same file.
      */
-    public void setAndSaveBytePixels( byte[] pixels, Region5D region5D ) throws IOException
+    public void saveByteCube( byte[][][] pixelsZYX, FinalInterval interval ) throws IOException
     {
+        // TODO: how to make this more global?
+        final int X = 0, Y = 1, C = 2, Z = 3, T = 4;
 
-        int c = region5D.c;
-        int t = region5D.t;
-        int z = (int)region5D.offset.getZ();
+        int c = (int) interval.min(C);
+        int t = (int) interval.min(T);
 
-        String pathCTZ = directory + channelFolders[c] + "/" + ctzFileList[c][t][z];
-
-        while ( lockedFiles.contains( pathCTZ ) )
+        for ( int z = (int) interval.min(Z); z <= interval.max(Z); ++z )
         {
+            String pathCTZ = directory + channelFolders[ c ] + "/" + ctzFileList[ c ][ t ][ z ];
+
+            while ( lockedFiles.contains( pathCTZ ) )
+            {
+                try
+                {
+                    Thread.sleep( 100 );
+                } catch ( InterruptedException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            synchronized ( this )
+            {
+                lockedFiles.add( pathCTZ );
+            }
+
+            if ( infos[ c ][ t ][ z ] == null )
+            {
+
+                File f = new File( directory + channelFolders[ c ] + "/" + ctzFileList[ c ][ t ][ z ] );
+                if ( !f.exists() )
+                {
+                    // file does not exist yet => create a black one
+                    ImagePlus imp = NewImage.createByteImage( "title",
+                            nX, nY, 1, NewImage.FILL_BLACK );
+                    FileSaver fileSaver = new FileSaver( imp );
+                    fileSaver.saveAsTiff( pathCTZ );
+                    setInfoFromFile( t, c, z );
+                }
+                else
+                {
+                    setInfoFromFile( t, c, z );
+                }
+
+            }
+
+            // replace pixels in existing file
             try
             {
-                Thread.sleep(100);
-            }
-            catch ( InterruptedException e )
+                RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
+
+                long offsetToImageData = infos[ c ][ t ][ z ].offset;
+
+                for ( int y = (int) interval.min(Y); y <= interval.max(Y); y++ )
+                {
+                    raf.seek( offsetToImageData + y * nX + interval.min(X) );
+                    int yChunk =  y - (int) interval.min( Y );
+                    int zChunk =  z - (int) interval.min( Z );
+                    int nx = pixelsZYX[ zChunk ][ yChunk ].length;
+                    raf.write( pixelsZYX[ zChunk ][ yChunk ], 0, nx );
+                }
+
+                raf.close();
+
+            } catch ( FileNotFoundException e )
             {
+                IJ.log( e.toString() );
+                e.printStackTrace();
+            } catch ( IOException e )
+            {
+                IJ.log( e.toString() );
                 e.printStackTrace();
             }
-        }
 
-        synchronized ( this ) { lockedFiles.add( pathCTZ ); }
-
-        if ( infos[c][t][z] == null )
-        {
-
-            File f = new File( directory + channelFolders[c] + "/" + ctzFileList[c][t][z] );
-            if ( ! f.exists() )
+            synchronized ( this )
             {
-                // file does not exist yet => create a black one
-                ImagePlus imp = NewImage.createByteImage( "title",
-                        nX ,nY, 1, NewImage.FILL_BLACK);
-                FileSaver fileSaver = new FileSaver(imp);
-                fileSaver.saveAsTiff( pathCTZ );
-                setInfoFromFile( t, c, z );
+                lockedFiles.remove( pathCTZ );
             }
-            else
-            {
-                setInfoFromFile( t, c, z );
-            }
-
         }
-
-        // replace pixels in existing file
-        try
-        {
-            RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
-
-            long offsetToImageData = infos[c][t][z].offset;
-
-            int xs = (int) region5D.offset.getX();
-            int ys = (int) region5D.offset.getY();
-            int nx = (int) region5D.size.getX();
-            int ny = (int) region5D.size.getY();
-            int ye = ys + ny - 1;
-
-            for ( int y = ys; y <= ye; y ++ )
-            {
-                raf.seek( offsetToImageData + y * nX + xs );
-                raf.write( pixels, (y - ys) * nx, nx );
-            }
-
-            raf.close();
-
-        }
-        catch (FileNotFoundException e)
-        {
-            IJ.log(e.toString());
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            IJ.log(e.toString());
-            e.printStackTrace();
-        }
-
-        synchronized (this ) { lockedFiles.remove( pathCTZ ); }
-
     }
 
         /** Returns an ImageProcessor for the specified slice,

@@ -48,7 +48,7 @@ public class Hdf5DataCubeWriter {
 
 
     public void writeImarisCompatibleResolutionPyramid(
-            ImagePlus imp,
+            ImagePlus imp3d,
             ImarisDataSet idp,
             int c, int t )
     {
@@ -58,9 +58,9 @@ public class Hdf5DataCubeWriter {
                 idp.getDataSetDirectory( c, t, 0 ),
                 idp.getDataSetFilename( c, t, 0 ) );
 
-        setImageMemoryAndFileType( imp );
+        setImageMemoryAndFileType( imp3d );
 
-        ImagePlus impResolutionLevel = imp;
+        ImagePlus impResolutionLevel = imp3d;
 
         for ( int r = 0; r < idp.getDimensions().size(); r++ )
         {
@@ -75,7 +75,6 @@ public class Hdf5DataCubeWriter {
             writeDataCubeAndAttributes( impResolutionLevel,
                     RESOLUTION_LEVEL + r,
                     idp.getDimensions().get( r ), idp.getChunks().get( r ) );
-
 
             writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r );
         }
