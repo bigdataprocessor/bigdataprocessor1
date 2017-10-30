@@ -106,7 +106,18 @@ class ObjectTracker implements Runnable
         region5D.t = tStart;
         region5D.c = channel;
         region5D.offset = p0offset;
-        region5D.size = pSize;
+        if ( trackingSettings.trackingMethod.equals( "center of mass" ) )
+        {
+            // we need to load the bigger region, because this is what will also be
+            // loaded for the subsequent time-points; and - without aggressive
+            // background subtraction - the center-of-mass
+            // algorithm is sensitive to the size of the region.
+            region5D.size = pSize.add( trackingSettings.maxDisplacement.multiply( 2.0 ) );
+        }
+        else if ( trackingSettings.trackingMethod.equals( "correlation" ) )
+        {
+            region5D.size = pSize;
+        }
         region5D.subSampling = trackingSettings.subSamplingXYZ;
         imp0 = Utils.getDataCube(imp, region5D, trackingSettings.intensityGate, nThreads);
         elapsedReadingTime = System.currentTimeMillis() - startTime;
@@ -125,7 +136,7 @@ class ObjectTracker implements Runnable
             startTime = System.currentTimeMillis();
             // iteratively compute the shift of the center of mass relative to the center of the image stack
             // using only half the image size for iteration
-            pShift = compute16bitShiftUsingIterativeCenterOfMass(imp0.getStack(),
+            pShift = compute16bitShiftUsingIterativeCenterOfMass( imp0.getStack(),
                     trackingSettings.trackingFactor,
                     trackingSettings.iterationsCenterOfMass);
             elapsedProcessingTime = System.currentTimeMillis() - startTime;
@@ -144,9 +155,9 @@ class ObjectTracker implements Runnable
 
 
         //
-        // store track location for first image
+        // store track location of first image
         //
-        Point3D pUpdate = Utils.computeCenterFromOffsetSize( p0offset.add(pShift), pSize );
+        Point3D pUpdate = Utils.computeCenterFromOffsetSize( p0offset.add( pShift ), pSize );
 
 
         //
@@ -162,17 +173,13 @@ class ObjectTracker implements Runnable
         boolean finish = false;
         int tMax = tStart + nt - 1;
         int tPrevious = tStart;
-        int tNow;
-        int tMaxUpdate;
         int iProcessed = 0;
 
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
         //  - p1offset has to be the position where the current image was loaded
 
-        for (int t = tStart + dt; t < tStart + nt + dt; t = t + dt) {
-
-            tNow = t;
+        for (int tNow = tStart + dt; tNow < tStart + nt + dt; tNow = tNow + dt) {
 
             if(tNow >= tMax) {
                 // due to the sub-sampling in t the addition of dt
@@ -193,12 +200,19 @@ class ObjectTracker implements Runnable
 
             if ( trackingSettings.trackingMethod.equals( "correlation" ) )
             {
+                // reload the previous time-point, but now at the
+                // drift corrected position and only with the actual
+                // user-selected size
+                // the idea is that this should help the algorithm to
+                // stay focussed on one object, rather than jump to another one,
+                // which might pass by during the sequence.
 
                 // previous
                 region5D0.t = tPrevious;
                 region5D0.c = channel;
 
-                // small size
+                // only load small size, because we already know the
+                // drift corrected position
                 region5D0.size = pSize;
                 p0offset = Utils.computeOffsetFromCenterSize(
                         p1center, region5D0.size );
@@ -213,10 +227,11 @@ class ObjectTracker implements Runnable
             region5D1.t = tNow;
             region5D1.c = channel;
 
-            // large size
-            region5D1.size = pSize.add(trackingSettings.maxDisplacement);
-            p1offset = Utils.computeOffsetFromCenterSize(
-                    p1center, region5D1.size);
+            // size including maximal displacement
+            // this needs to be multiplied by 2 because we do not know
+            // in which direction (positive or negative) the shift will be
+            region5D1.size = pSize.add( trackingSettings.maxDisplacement.multiply( 2.0 ) );
+            p1offset = Utils.computeOffsetFromCenterSize( p1center, region5D1.size );
             region5D1.offset = p1offset;
 
             region5D1.subSampling = trackingSettings.subSamplingXYZ;
@@ -236,14 +251,13 @@ class ObjectTracker implements Runnable
                 //
                 imp0 = imageFilter.filter( imp0 );
 
-
                 if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
                 {
-                    imp0.setTitle("t"+t+"-previous");
+                    imp0.setTitle("t"+tNow+"-previous");
                     imp0.show();
                     IJ.run(imp0, "Invert LUT", "");
 
-                    imp1.setTitle("t"+t+"-next");
+                    imp1.setTitle("t"+tNow+"-next");
                     imp1.show(); 
                     IJ.run(imp1, "Invert LUT", "");
                 }
@@ -273,17 +287,17 @@ class ObjectTracker implements Runnable
                 if( logger.isShowDebug() )  logger.info("measuring drift using center of mass...");
 
                 // compute the different of the center of mass
-                // to the geometric center of imp1
+                // and the geometric center of imp1
                 startTime = System.currentTimeMillis();
                 //info("timepoint: "+t);
                 pLocalShift = compute16bitShiftUsingIterativeCenterOfMass( imp1.getStack(),
                         trackingSettings.trackingFactor,
-                        trackingSettings.iterationsCenterOfMass);
+                        trackingSettings.iterationsCenterOfMass );
                 stopTime = System.currentTimeMillis();
                 elapsedProcessingTime = stopTime - startTime;
 
                 // correct for sub-sampling
-                pLocalShift = Utils.multiplyPoint3dComponents( pLocalShift, trackingSettings.subSamplingXYZ);
+                pLocalShift = Utils.multiplyPoint3dComponents( pLocalShift, trackingSettings.subSamplingXYZ );
                 //info("Center of Mass Local Shift: "+pLocalShift);
 
                 if( logger.isShowDebug() )
@@ -294,12 +308,13 @@ class ObjectTracker implements Runnable
                 // the drift corrected position in the global coordinate system is: p1offset.add(pLocalShift)
                 // in center coordinates this is: computeCenterFromOffsetSize(p1offset.add(pShift),pSize)
                 // relative to previous tracking position:
-                //info(""+track.getXYZ(tPrevious).toString());
-                //info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
-                //info(""+p1offset.add(pLocalShift).toString());
+                // info(""+track.getXYZ(tPrevious).toString());
+                // info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
+                // info(""+p1offset.add(pLocalShift).toString());
                 pShift = Utils.computeCenterFromOffsetSize(
-                        p1offset.add( pLocalShift ), pSize).subtract( track.getPosition( tPrevious ) );
-                // no z-shift if only one slice
+                        p1offset.add( pLocalShift ), pSize ).subtract( track.getPosition( tPrevious ) );
+
+                // no z-shift if there is only one slice
                 if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
 
                 if( logger.isShowDebug() )  logger.info("actual shift is "+pShift.toString());
@@ -308,18 +323,16 @@ class ObjectTracker implements Runnable
 
             // compute time-points between this and the previous one (inclusive)
             // using linear interpolation
-
-            tMaxUpdate = tNow;
-            if(finish) tMaxUpdate = tNow; // include last data point
-
-            for (int tUpdate = tPrevious + 1; tUpdate <= tMaxUpdate; tUpdate++)
+            for ( int tUpdate = tPrevious + 1; tUpdate <= tNow; ++tUpdate )
             {
 
                 Point3D pPrevious = track.getPosition( tPrevious );
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add( pShift.multiply( interpolation ) );
 
-                publishResult( imp, track, trackTable, logger, pUpdate, tUpdate, nt, dt, elapsedReadingTime, elapsedProcessingTime);
+                publishResult( imp, track, trackTable, logger,
+                        pUpdate, tUpdate, nt, dt,
+                        elapsedReadingTime, elapsedProcessingTime);
 
             }
 
