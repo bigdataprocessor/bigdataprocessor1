@@ -60,4 +60,16 @@ public abstract class ImarisUtils {
 
         return ( masterFiles );
     }
+
+    public static void createImarisMetaFile( String directory )
+    {
+        // create imaris meta file
+        ArrayList < File > imarisFiles = ImarisUtils.getImarisFiles( directory );
+        if ( imarisFiles.size() > 1 )
+        {
+            ImarisWriter.writeCombinedHeader( imarisFiles, "meta.ims" );
+        }
+    }
+
+
 }
