@@ -5,6 +5,7 @@ import ij.IJ;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -106,55 +107,128 @@ public class IJLazySwingLogger implements Logger {
     }
 
     @Override
-    public synchronized void progress( String message, String progress )
+    public synchronized void progress( String progressId, String progress )
     {
         SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
 
-                if (isIJLogWindowLogging)
-                {
+                String text = String.format("[PROGRESS]: %s %s", progressId, progress);
+                ArrayList < String > texts =  new ArrayList<>();
+                texts.add( text );
+                logProgress( progressId, texts );
 
-                    if (IJ.getLog() != null)
-                    {
-                        String[] logs = IJ.getLog().split("\n");
-                        if (logs[logs.length - 1].contains(message))
-                        {
-                            IJ.log(String.format("\\Update:[PROGRESS]: %s %s", message, progress));
-                        }
-                        else
-                        {
-                            IJ.log(String.format("[PROGRESS]: %s %s", message, progress));
-                        }
-                    }
-                    else
-                    {
-                        IJ.log(String.format("[PROGRESS]: %s %s", message, progress));
-                    }
-
-                }
-
-                if (isFileLogging)
-                {
-                    List<String> logs = readSmallTextFile( logFilePath );
-                    int i = logs.size() - 1;
-
-                    if ( logs.get(i).contains( message ) )
-                    {
-                        logs.set(i, String.format("[PROGRESS]: %s %s", message, progress));
-                    }
-                    else
-                    {
-                        logs.add( String.format("[PROGRESS]: %s %s", message, progress) );
-                    }
-
-                    writeSmallTextFile(logs, logFilePath);
-                }
             }
         });
     }
 
-    AtomicInteger progressPos = new AtomicInteger(0);
+    AtomicInteger progressPos = new AtomicInteger(0 );
+
+    @Override
+    public synchronized void progress( String header,
+                                       ArrayList< String > messages,
+                                       long startTime,
+                                       long counter, long counterMax)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+
+                // Tasks
+                String countInfo = " " + counter + "/" + counterMax;
+
+                // Time
+                long milliseconds = ( System.currentTimeMillis() - startTime );
+                double minutes = 1.0 * milliseconds / ( 1000 * 60 );
+                double millisecondsPerTask = 1.0 * milliseconds / counter;
+                double minutesPerTask = 1.0 * minutes / counter;
+                long tasksLeft = counterMax - counter;
+                double minutesLeft = 1.0 * tasksLeft * minutesPerTask;
+
+                String timeInfo = String.format(
+                        "Time (spent, to-go, per task) [min]: " +
+                        "%.1f, %.1f, %.1f", minutes, minutesLeft, minutesPerTask);
+
+                // Memory
+                long megaBytes = IJ.currentMemory() / 1000000L;
+                long megaBytesAvailable = IJ.maxMemory() / 1000000L;
+
+                String memoryInfo = "Memory (current, avail) [MB]: "
+                        + megaBytes + ", " + megaBytesAvailable;
+
+                // Join messages
+                ArrayList < String > texts = new ArrayList<>( );
+
+                texts.add( header );
+                texts.add( countInfo );
+                texts.add( timeInfo );
+                texts.add( memoryInfo );
+
+                if ( messages != null )
+                {
+                    for ( String message : messages )
+                    {
+                        texts.add( message );
+                    }
+                }
+
+                logProgress( header, texts );
+
+            }
+        });
+    }
+
+
+
+    private void logProgress( String message, ArrayList < String > texts )
+    {
+
+        String jointText = "";
+
+        for ( String text : texts )
+        {
+            jointText += text + "; ";
+        }
+
+        int k = 1; //texts.size()
+
+        if ( isIJLogWindowLogging )
+        {
+            String logWindowText = jointText;
+
+            if ( IJ.getLog() != null )
+            {
+                String[] logs = IJ.getLog().split( "\n" );
+                if ( logs.length > k )
+                {
+                    if ( logs[ logs.length - k ].contains( message ) )
+                    {
+                        logWindowText = "\\Update:" + logWindowText;
+                    }
+                }
+            }
+            IJ.log( logWindowText );
+        }
+
+        if ( isFileLogging )
+        {
+            List< String > logs = readSmallTextFile( logFilePath );
+            int i = logs.size() - k;
+            if ( i >= 0 )
+            {
+                if ( logs.get( i ).contains( message ) )
+                {
+                    logs.set( i, jointText );
+                }
+                else
+                {
+                    logs.add( jointText );
+                }
+            }
+            writeSmallTextFile( logs, logFilePath );
+        }
+
+    }
 
     @Override
     public void progressWheel(String message)

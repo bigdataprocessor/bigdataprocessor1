@@ -16,16 +16,19 @@ public class MonitorThreadPoolStatus {
     public static void showProgressAndWaitUntilDone(List<Future> futures,
                                                     String message,
                                                     int updateFrequencyMilliseconds) {
-        int done = 0;
-        while( done != futures.size() )
+
+        long start = System.currentTimeMillis();
+
+        int i = 0;
+        while( i != futures.size() )
         {
-            done = 0;
+            i = 0;
             for ( Future f : futures )
             {
-                if (f.isDone() ) done++;
+                if (f.isDone() ) i++;
             }
 
-            logger.progress( message,  done + "/" + futures.size() );
+            logger.progress( message, null, start, i, futures.size() );
 
             try {
                 Thread.sleep(updateFrequencyMilliseconds);

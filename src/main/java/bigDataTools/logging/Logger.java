@@ -1,6 +1,7 @@
 package bigDataTools.logging;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface Logger {
 
@@ -33,6 +34,17 @@ public interface Logger {
      * @param message
      */
     void progress(String message, String progress);
+
+
+    /**
+     * prints messages that are merely for information, such as progress of computations
+     *
+     * @param message
+     */
+    void progress( String header,
+                   ArrayList< String > messages,
+                   long startTime,
+                   long counter, long counterMax);
 
     /**
      * shows important messages that should not be overlooked by the user

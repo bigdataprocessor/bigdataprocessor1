@@ -1,5 +1,6 @@
 package bigDataTools.dataStreamingTools;
 
+import bigDataTools.ImarisUtils;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.ImageDataInfo;
@@ -59,13 +60,12 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None",
-            "Data",
-            "Resolution 0/Data",
-            "Resolution 1/Data",
-            "Resolution 2/Data",
-            "Resolution 3/Data",
-            "ITKImage/0/VoxelData",
-            "Data111", "Data222", "Data444"});
+            "Data","Data111",
+            ImarisUtils.RESOLUTION_LEVEL +"0/Data",
+            ImarisUtils.RESOLUTION_LEVEL +"1/Data",
+            ImarisUtils.RESOLUTION_LEVEL +"2/Data",
+            ImarisUtils.RESOLUTION_LEVEL +"3/Data",
+            "ITKImage/0/VoxelData", "Data222", "Data444"});
 
     JComboBox comboFileTypeForSaving = new JComboBox( Utils.FileType.values() );
 

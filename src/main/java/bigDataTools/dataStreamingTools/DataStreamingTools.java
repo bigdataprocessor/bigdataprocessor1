@@ -209,7 +209,7 @@ public class DataStreamingTools {
                 {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
-                            "Parsed time-points: ",
+                            "Parsing time-points..",
                             2000);
                 }
             });
