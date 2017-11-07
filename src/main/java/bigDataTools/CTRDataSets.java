@@ -50,7 +50,7 @@ public class CTRDataSets {
     {
         DataSet dataSet = new DataSet(
                 directory,
-                filename + Utils.getChannelTimeString( t, c ) + ".h5",
+                filename + Utils.getChannelTimeString( c, t ) + ".h5",
                  RESOLUTION_LEVEL + r );
 
         add( c, t, r, dataSet );

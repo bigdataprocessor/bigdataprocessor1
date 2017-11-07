@@ -1269,3 +1269,71 @@ public class Hdf55BdvImarisReaderWriter {
 
 
 }
+
+
+
+            if ( false && (chunkXYZ[2] == 1) )
+            {
+                // write plane wise
+
+                byte[][] data = getByteDataSliceWise( imp, 0, 0 );
+
+                int status = 0;
+                for ( int i = 0; i < imp.getNSlices(); ++i )
+                {
+                    long[] start = new long[]{ i, 0, 0 };
+                    long[] count = new long[]{ 0, imp.getHeight(), imp.getWidth()};
+                    //long[] block = new long[]{ 1, 1, 1 };
+
+                    dataspace_id = H5.H5Dget_space( dataset_id );
+                    H5.H5Sselect_hyperslab( dataspace_id,
+                            HDF5Constants.H5S_SELECT_SET,
+                            start,
+                            new long[]{1,1,1},
+                            count,
+                            new long[]{1,1,1}
+                            );
+
+                    status = H5.H5Dwrite( dataset_id,
+                            image_memory_type,
+                            HDF5Constants.H5S_ALL,
+                            HDF5Constants.H5S_ALL,
+                            HDF5Constants.H5P_DEFAULT,
+                            data );
+                }
+
+            }
+            else
+            {
+                //byte[] data = getByteData( imp, 0, 0 );
+
+
+
+
+    private byte[] getByteData( ImagePlus imp, int c, int t )
+    {
+        ImageStack stack = imp.getStack();
+
+        int[] size = new int[]{
+                imp.getWidth(),
+                imp.getHeight(),
+                imp.getNSlices()
+        };
+
+        byte[] data = new byte[ size[0] * size[1] * size[2] ];
+
+        int pos = 0;
+
+        for (int z = 0; z < imp.getNSlices(); z++)
+        {
+            int n = imp.getStackIndex(c+1, z+1, t+1);
+
+            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data,
+                    pos, size[0] * size[1] );
+
+            pos += size[0] * size[1];
+        }
+
+        return ( data );
+
+    }

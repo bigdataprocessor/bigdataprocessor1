@@ -5,6 +5,7 @@ import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
 import bigDataTools.utils.Utils;
 import ij.ImagePlus;
+import ij.measure.Calibration;
 import ij.plugin.Binner;
 import net.imglib2.FinalRealInterval;
 import net.imglib2.RealInterval;
@@ -134,7 +135,21 @@ public class ImarisDataSet {
         // Resolution level 0
         dimensions.add( size );
         relativeBinnings.add( new int[]{ 1, 1, 1 } );
-        chunks.add(new long[]{32, 32, 4});
+
+        long volume = size[0] * size[1] * size[2];
+
+        // TODO: does 1 as z-chunking work for imaris?
+        long[] firstChunk = new long[]{ 32, 32, 1 };
+
+        if ( volume > Integer.MAX_VALUE - 100 )
+        {
+            firstChunk[2] = 1;
+            // this forces plane wise writing and thus
+            // avoids java indexing issues when loading the
+            // whole dataset into RAM in the Hdf5DataCubeWriter
+        }
+
+        chunks.add(new long[]{ 32, 32, 1 });
 
         // Further resolution levels
         long voxelsAtCurrentResolution = 0;
@@ -181,6 +196,16 @@ public class ImarisDataSet {
 
             }
 
+            long thisVolume = newSize[0] * newSize[1] * newSize[2];
+
+            if ( thisVolume > Integer.MAX_VALUE - 100 )
+            {
+                newChunk[2] = 1;
+                // this forces plane wise writing and thus
+                // avoids java indexing issues when loading the
+                // whole dataset into RAM in the Hdf5DataCubeWriter
+            }
+
             dimensions.add( newSize );
             relativeBinnings.add( newBinning );
             chunks.add( newChunk );
@@ -219,9 +244,24 @@ public class ImarisDataSet {
     {
         double[] min = new double[3];
         double[] max = new double[3];
-        max[ 0 ] = imp.getWidth() * imp.getCalibration().pixelWidth;
-        max[ 1 ] = imp.getHeight() * imp.getCalibration().pixelHeight;
-        max[ 2 ] = imp.getNSlices() * imp.getCalibration().pixelDepth;
+
+        Calibration calibration = imp.getCalibration();
+
+        double conversionToMicrometer = 1.0;
+
+        if ( calibration.getUnit().equals( "nm" )
+                || calibration.getUnit().equals( "nanometer" )
+                || calibration.getUnit().equals( "nanometre" ) )
+        {
+            conversionToMicrometer = 1.0 / 1000.0;
+        }
+
+
+        max[ 0 ] = imp.getWidth() * calibration.pixelWidth * conversionToMicrometer;
+        max[ 1 ] = imp.getHeight() * calibration.pixelHeight * conversionToMicrometer;
+        max[ 2 ] = imp.getNSlices() * calibration.pixelDepth * conversionToMicrometer;
+
+
         interval = new FinalRealInterval( min, max );
     }
 

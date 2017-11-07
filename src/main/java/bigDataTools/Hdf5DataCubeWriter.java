@@ -126,7 +126,7 @@ public class Hdf5DataCubeWriter {
         }
 
 
-        writeImagePlusData( dataset_id, imp );
+        writeImagePlusData( chunkXYZ, space_id, dataset_id, imp );
 
         // Attributes
         writeSizeAttribute( group_id, dimensionXYZ );
@@ -139,27 +139,26 @@ public class Hdf5DataCubeWriter {
 
     }
 
-    private void writeImagePlusData( int dataset_id, ImagePlus imp )
+    private void writeImagePlusData( long[] chunkXYZ, int dataspace_id, int dataset_id, ImagePlus imp )
     {
 
         // writeHeader data
-    //
-        if(imp.getBitDepth()==8)
+        //
+        if( imp.getBitDepth() == 8 )
         {
-            byte[] data = getByteData( imp, 0, 0 );
+            byte[][] data = getByteData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
-                    image_memory_type,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5P_DEFAULT,
-                    data );
-
+                        image_memory_type,
+                        HDF5Constants.H5S_ALL,
+                        HDF5Constants.H5S_ALL,
+                        HDF5Constants.H5P_DEFAULT,
+                        data );
         }
         else if(imp.getBitDepth()==16)
         {
 
-            short[] data = getShortData( imp, 0, 0 );
+            short[][] data = getShortData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
                     image_memory_type,
@@ -171,7 +170,7 @@ public class Hdf5DataCubeWriter {
         }
         else if(imp.getBitDepth()==32)
         {
-            float[] data = getFloatData( imp, 0, 0 );
+            float[][] data = getFloatData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
                     image_memory_type,
@@ -269,7 +268,9 @@ public class Hdf5DataCubeWriter {
         return ( Hdf5Utils.createFile( directory, filename  ) );
     }
 
-    private byte[] getByteData(ImagePlus imp, int c, int t)
+
+
+    private byte[][] getByteData( ImagePlus imp, int c, int t )
     {
         ImageStack stack = imp.getStack();
 
@@ -279,25 +280,22 @@ public class Hdf5DataCubeWriter {
                 imp.getNSlices()
         };
 
-        byte[] data = new byte[ size[0] * size[1] * size[2] ];
-
-        int pos = 0;
+        byte[][] data = new byte[ size[2] ] [ size[1] * size[0] ];
 
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data,
-                    pos, size[0] * size[1] );
+            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+                    0, size[0] * size[1] );
 
-            pos += size[0] * size[1];
         }
 
         return ( data );
 
     }
 
-    private short[] getShortData(ImagePlus imp, int c, int t)
+    private short[][] getShortData(ImagePlus imp, int c, int t)
     {
         ImageStack stack = imp.getStack();
 
@@ -307,25 +305,22 @@ public class Hdf5DataCubeWriter {
                 imp.getNSlices()
         };
 
-        short[] data = new short[ size[0] * size[1] * size[2] ];
-
-        int pos = 0;
+        short[][] data = new short[ size[2] ] [ size[1] * size[0] ];
 
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data,
-                    pos, size[0] * size[1] );
+            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+                    0, size[0] * size[1] );
 
-            pos += size[0] * size[1];
         }
 
         return ( data );
 
     }
 
-    private float[] getFloatData(ImagePlus imp, int c, int t)
+    private float[][] getFloatData(ImagePlus imp, int c, int t)
     {
         ImageStack stack = imp.getStack();
 
@@ -335,20 +330,16 @@ public class Hdf5DataCubeWriter {
                 imp.getNSlices()
         };
 
-        float[] data = new float[ size[0] * size[1] * size[2] ];
-
-        int pos = 0;
+        float[][] data = new float[ size[2] ] [ size[1] * size[0] ];
 
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data,
-                    pos, size[0] * size[1] );
+            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+                    0, size[0] * size[1] );
 
-            pos += size[0] * size[1];
         }
-
         return ( data );
 
     }
