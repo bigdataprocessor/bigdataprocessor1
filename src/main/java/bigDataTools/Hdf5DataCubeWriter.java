@@ -285,9 +285,10 @@ public class Hdf5DataCubeWriter {
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
+            data[z] = (byte[]) stack.getProcessor(n).getPixels();
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
-                    0, size[0] * size[1] );
+            //System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+            //       0, size[0] * size[1] );
 
         }
 
@@ -310,9 +311,10 @@ public class Hdf5DataCubeWriter {
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
+            data[z] = (short[]) stack.getProcessor(n).getPixels();
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
-                    0, size[0] * size[1] );
+            //System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+            //        0, size[0] * size[1] );
 
         }
 
@@ -335,9 +337,10 @@ public class Hdf5DataCubeWriter {
         for (int z = 0; z < imp.getNSlices(); z++)
         {
             int n = imp.getStackIndex(c+1, z+1, t+1);
+            data[z] = (float[]) stack.getProcessor(n).getPixels();
 
-            System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
-                    0, size[0] * size[1] );
+            //System.arraycopy( stack.getProcessor(n).getPixels(), 0, data[z],
+            //        0, size[0] * size[1] );
 
         }
         return ( data );
