@@ -101,7 +101,7 @@ public class Hdf5DataCubeWriter {
 
         int group_id = Hdf5Utils.createGroup( file_id, group );
 
-        int space_id = H5.H5Screate_simple( dimension.length, dimension, null );
+        int dataspace_id = H5.H5Screate_simple( dimension.length, dimension, null );
 
         // create "dataset creation property list" (dcpl)
         int dcpl_id = H5.H5Pcreate( HDF5Constants.H5P_DATASET_CREATE );
@@ -115,7 +115,7 @@ public class Hdf5DataCubeWriter {
             dataset_id = H5.H5Dcreate( group_id,
                     DATA,
                     image_file_type,
-                    space_id,
+                    dataspace_id,
                     HDF5Constants.H5P_DEFAULT,
                     dcpl_id,
                     HDF5Constants.H5P_DEFAULT );
@@ -125,14 +125,13 @@ public class Hdf5DataCubeWriter {
             e.printStackTrace();
         }
 
-
-        writeImagePlusData( chunkXYZ, space_id, dataset_id, imp );
+        writeImagePlusData( chunkXYZ, dataspace_id, dataset_id, imp );
 
         // Attributes
         writeSizeAttribute( group_id, dimensionXYZ );
         writeCalibrationAttribute( dataset_id, imp.getCalibration() );
 
-        H5.H5Sclose( space_id );
+        H5.H5Sclose( dataspace_id );
         H5.H5Dclose( dataset_id );
         H5.H5Pclose( dcpl_id );
         H5.H5Gclose( group_id );
@@ -146,14 +145,52 @@ public class Hdf5DataCubeWriter {
         //
         if( imp.getBitDepth() == 8 )
         {
+
+
             byte[][] data = getByteData( imp, 0, 0 );
 
-            H5.H5Dwrite( dataset_id,
+            if ( true ) // chunkXYZ[2] != 1 )
+            {
+
+                H5.H5Dwrite( dataset_id,
                         image_memory_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
                         data );
+            }
+            else
+            {
+                // experimental...does not work yet...
+
+                // write plane wise
+
+                int status = 0;
+                //for ( int i = 0; i < imp.getNSlices()/2; ++i )
+                //{
+                    long[] start = new long[]{ 10, imp.getHeight()/2, imp.getWidth()/2 };
+                    long[] count = new long[]{ 0, 100, 100};
+                    //long[] block = new long[]{ 1, 1, 1 };
+
+                    //dataspace_id = H5.H5Dget_space( dataset_id );
+
+                    H5.H5Sselect_hyperslab( dataspace_id,
+                            HDF5Constants.H5S_SELECT_SET,
+                            start,
+                            null,
+                            count,
+                            null
+                    );
+
+                    status = H5.H5Dwrite( dataset_id,
+                            image_memory_type,
+                            HDF5Constants.H5S_ALL,
+                            HDF5Constants.H5S_ALL,
+                            HDF5Constants.H5P_DEFAULT,
+                            data );
+                //}
+
+            }
         }
         else if(imp.getBitDepth()==16)
         {

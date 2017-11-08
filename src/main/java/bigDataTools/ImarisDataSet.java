@@ -88,6 +88,8 @@ public class ImarisDataSet {
         // bin image to see how large it would be
         if ( primaryBinning[0] > 1 || primaryBinning[1] > 1 || primaryBinning[2] > 1 )
         {
+
+            /*
             logger.info("Determining image size at " +
                     "highest resolution level after initial binning...");
 
@@ -106,9 +108,16 @@ public class ImarisDataSet {
             size[1] = impBinned.getHeight();
             size[2] = impBinned.getNSlices();
 
-            logger.info("nx: " + size[0]);
-            logger.info("ny: " + size[1]);
-            logger.info("nz: " + size[2]);
+            */
+
+            size[0] = imp.getWidth();
+            size[1] = imp.getHeight();
+            size[2] = imp.getNSlices();
+
+            for ( int d = 0; d < 3; ++d )
+            {
+                size[d] /= primaryBinning[d];
+            }
 
         }
         else
