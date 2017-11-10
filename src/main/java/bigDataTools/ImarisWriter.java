@@ -46,7 +46,7 @@ public abstract class ImarisWriter {
 
         writeDataSetInfoImage( file_id, idp.getDimensions(), idp.getInterval() );
         writeDataSetInfoTimeInfo( file_id, idp.getTimePoints() );
-        writeDataSetInfoChannels( file_id, idp.getChannels() );
+        writeDataSetInfoChannels( file_id, idp.getChannelNames(), idp.getChannelColors()  );
         writeDataSets( file_id, idp );
 
         H5.H5Fclose(file_id);
@@ -74,7 +74,7 @@ public abstract class ImarisWriter {
     {
         for ( int t = 0; t < idp.getTimePoints().size(); ++t )
         {
-            for ( int c = 0; c < idp.getChannels().size(); ++c )
+            for ( int c = 0; c < idp.getChannelColors().size(); ++c )
             {
                 writeDataSet( file_id, t, c, idp );
             }
@@ -176,7 +176,8 @@ public abstract class ImarisWriter {
 
     }
 
-    private static void writeDataSetInfoChannel( int file_id, int c, String color )
+    private static void writeDataSetInfoChannel( int file_id, int c,
+                                                 String name, String color )
     {
 
         int group_id = createGroup( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.CHANNEL + c );
@@ -190,14 +191,20 @@ public abstract class ImarisWriter {
         writeStringAttribute(group_id,
                 "Color", color);
 
+        writeStringAttribute(group_id,
+                "Name", name);
+
+
         H5.H5Gclose( group_id );
     }
 
-    private static void writeDataSetInfoChannels( int file_id, ArrayList<String> channels )
+    private static void writeDataSetInfoChannels( int file_id,
+                                                  ArrayList<String> channelNames,
+                                                  ArrayList<String> channelColors )
     {
-        for ( int c = 0; c < channels.size(); ++c )
+        for ( int c = 0; c < channelColors.size(); ++c )
         {
-            writeDataSetInfoChannel( file_id, c, channels.get( c ) );
+            writeDataSetInfoChannel( file_id, c, channelNames.get(c), channelColors.get( c ) );
         }
     }
 

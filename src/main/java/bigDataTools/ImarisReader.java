@@ -2,8 +2,6 @@ package bigDataTools;
 
 import ncsa.hdf.hdf5lib.H5;
 import net.imglib2.FinalRealInterval;
-import net.imglib2.Interval;
-import net.imglib2.ops.parse.token.Int;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class ImarisReader {
         H5.H5Fclose( file_id );
     }
 
-    public ArrayList< String > readChannels( )
+    public ArrayList< String > readChannelColors( )
     {
         ArrayList < String > channelColors = new ArrayList<>();
 
@@ -34,7 +32,7 @@ public class ImarisReader {
             String color = readStringAttribute( file_id,
                     DATA_SET_INFO
                             + "/" + CHANNEL + c,
-                    COLOR );
+                    CHANNEL_COLOR );
 
             if ( color == null ) break;
 
@@ -44,6 +42,28 @@ public class ImarisReader {
 
         return ( channelColors ) ;
     }
+
+    public ArrayList< String > readChannelNames( )
+    {
+        ArrayList < String > channelNames = new ArrayList<>();
+
+        for ( int c = 0; ; ++c )
+        {
+
+            String color = readStringAttribute( file_id,
+                    DATA_SET_INFO
+                            + "/" + CHANNEL + c,
+                    CHANNEL_COLOR );
+
+            if ( color == null ) break;
+
+            channelNames.add( color );
+
+        }
+
+        return ( channelNames ) ;
+    }
+
 
     public ArrayList< String > readTimePoints( )
     {

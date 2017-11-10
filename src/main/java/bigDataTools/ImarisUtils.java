@@ -23,7 +23,9 @@ public abstract class ImarisUtils {
     public final static String RESOLUTION_LEVEL = "ResolutionLevel ";
     public final static String[] XYZ = new String[]{"X","Y","Z"};
     public final static String DATA_SET_INFO = "DataSetInfo";
-    public final static String COLOR = "Color";
+    public final static String CHANNEL_COLOR = "Color";
+    public final static String CHANNEL_NAME = "Name";
+
 
     public final static String DEFAULT_COLOR = "1.000 1.000 1.000";
 

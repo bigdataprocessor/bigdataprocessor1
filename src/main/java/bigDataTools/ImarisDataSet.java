@@ -1,12 +1,9 @@
 package bigDataTools;
 
-import bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import bigDataTools.logging.IJLazySwingLogger;
 import bigDataTools.logging.Logger;
-import bigDataTools.utils.Utils;
 import ij.ImagePlus;
 import ij.measure.Calibration;
-import ij.plugin.Binner;
 import net.imglib2.FinalRealInterval;
 import net.imglib2.RealInterval;
 
@@ -20,7 +17,8 @@ public class ImarisDataSet {
     private ArrayList < long[] > dimensions;
     private ArrayList < int[] > relativeBinnings;
     private ArrayList < long[] > chunks;
-    private ArrayList < String > channels;
+    private ArrayList < String > channelColors;
+    private ArrayList < String > channelNames;
     private RealInterval interval;
     private CTRDataSets ctrDataSets;
     private ArrayList < String > timePoints;
@@ -29,6 +27,11 @@ public class ImarisDataSet {
 
     public ImarisDataSet( )
     {}
+
+    public ArrayList< String > getChannelNames()
+    {
+        return channelNames;
+    }
 
     public String getDataSetDirectory( int c, int t, int r)
     {
@@ -55,9 +58,9 @@ public class ImarisDataSet {
         return interval;
     }
 
-    public ArrayList< String > getChannels()
+    public ArrayList< String > getChannelColors()
     {
-        return channels;
+        return channelColors;
     }
 
     public ArrayList< String > getTimePoints()
@@ -240,13 +243,19 @@ public class ImarisDataSet {
 
     private void setChannels( ImagePlus imp )
     {
-        channels = new ArrayList<>();
+        channelColors = new ArrayList<>();
+        channelNames = new ArrayList<>();
 
         for ( int c = 0; c < imp.getNChannels(); ++c )
         {
-            // TODO: extract real information from imp?
-            channels.add( ImarisUtils.DEFAULT_COLOR );
+            channelColors.add( ImarisUtils.DEFAULT_COLOR );
+            channelNames.add( imp.getTitle() + "_channel_" + c );
         }
+    }
+
+    public void setChannelNames( ArrayList< String > channelNames )
+    {
+        this.channelNames = channelNames;
     }
 
     private void setInterval( ImagePlus imp )
@@ -288,7 +297,7 @@ public class ImarisDataSet {
 
         ctrDataSets = new CTRDataSets();
 
-        for ( int c = 0; c < channels.size(); ++c )
+        for ( int c = 0; c < channelColors.size(); ++c )
         {
             for ( int t = 0; t < timePoints.size(); ++t )
             {
@@ -301,7 +310,6 @@ public class ImarisDataSet {
 
     }
 
-
     public void setFromImaris( File file )
     {
         setFromImaris( file.getParent(), file.getName() );
@@ -311,14 +319,15 @@ public class ImarisDataSet {
     {
         ImarisReader reader = new ImarisReader( directory, filename );
 
-        channels = reader.readChannels();
+        channelColors = reader.readChannelColors();
+        channelNames = reader.readChannelNames();
         timePoints = reader.readTimePoints();
         dimensions = reader.readDimensions();
         interval = reader.readInterval();
 
         ctrDataSets = new CTRDataSets();
 
-        for ( int c = 0; c < channels.size(); ++c )
+        for ( int c = 0; c < channelColors.size(); ++c )
         {
             for ( int t = 0; t < timePoints.size(); ++t )
             {
@@ -339,24 +348,24 @@ public class ImarisDataSet {
 
     public void addChannelsFromImaris( String directory, String filename )
     {
-
         ImarisReader reader = new ImarisReader( directory, filename );
 
-        int nc = reader.readChannels().size();
+        int nc = reader.readChannelColors().size();
         int nt = reader.readTimePoints().size();
         int nr = reader.readDimensions().size();
 
-        int ncCurrent = channels.size();
+        int currentNumChannelsInMetaFile = channelColors.size();
 
         for ( int c = 0; c < nc; ++c )
         {
-            channels.add( ImarisUtils.DEFAULT_COLOR  );
+            channelColors.add( reader.readChannelColors().get( c ) );
+            channelNames.add( reader.readChannelNames().get( c ) );
 
             for ( int t = 0; t < nt; ++t )
             {
                 for ( int r = 0; r < nr; ++r )
                 {
-                    ctrDataSets.addImaris( c + ncCurrent, c, t, r, directory, filename);
+                    ctrDataSets.addImaris( c + currentNumChannelsInMetaFile, c, t, r, directory, filename);
                 }
             }
         }
