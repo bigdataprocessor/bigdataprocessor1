@@ -412,6 +412,7 @@ class ObjectTracker implements Runnable
         if( logger.isShowDebug() )   logger.info("PhaseCorrelation phc = new PhaseCorrelation(...)");
         PhaseCorrelation phc = new PhaseCorrelation( ImagePlusAdapter.wrap( imp1 ),
                 ImagePlusAdapter.wrap( imp0 ), 5, true);
+
         if( logger.isShowDebug() )   logger.info("phc.process()... ");
         phc.process();
         // get the first peak that is not a clean 1.0,

@@ -16,7 +16,7 @@ Currently we support data saved as Tiff or HDF5 stacks, the latter is for instan
 
 Please place below file into Fiji's plugins folder:
 
-https://github.com/tischi/fiji-plugin-bigDataTools/raw/master/out/artifacts/fiji--bigDataTools_.jar
+https://github.com/tischi/fiji-plugin-bigDataTools/raw/master/out/artifacts/fiji_pluging_bigDataTools.jar
 
 ...and restart Fiji.
 

@@ -47,4 +47,17 @@ You will be in the "Streaming" tab.
 
 The Big Data Tracker (BDT) plugin enables efficient and fast tracking in and drift correction of terabyte-sized data sets. The key feature is that only the minimal data cube needed to track an object or to drift correct the data set is loaded at every time-point.
   
+### Parameter settings
+
+#### Image feature enhancement
+
+Image feature enhancement was implemented to help the "correlation" tracking method and we think it is less useful for the center-of-mass based tracking.
+
+In correlation trackin one looks for the shift between subsequent images that maximises the sum of the pixel-wise product of both images; thereby basically trying to match bright pixels in image1 onto bright pixels in image2. One issue with this approach is the situation when, e.g., image2 features a really bright region that was not present already in image2. The correlation will be maximal if this really bright region falls onto some bright region of image1, even if pixel-wise match is not perfect. In other words the correlation has the tendency to simply find a shift that puts the two brightest regions of both images on top of each other, even if they don't look exactly the same. That is why we implemented the "threshold" image feature enhancement method, which replaces all pixel values by 0 or 1, thereby counteracting the overly strong weight of very bright image regions.  
+
+In general, a good way to check whether the enhancement works for your data is to check how the images look after the feature enhancement, using the "Show N first processed image pairs" setting. 
+
+##### Threshold
+
+For each image plane this method runs an automated tresholding algorithm, currently it is the "Default" method of ImageJ (https://imagej.net/Auto_Threshold#Default). We might add other thresholding methods in the future. Please let us know if you prefer another one. 
 

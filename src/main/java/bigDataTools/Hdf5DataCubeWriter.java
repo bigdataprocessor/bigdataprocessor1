@@ -141,15 +141,12 @@ public class Hdf5DataCubeWriter {
     private void writeImagePlusData( long[] chunkXYZ, int dataspace_id, int dataset_id, ImagePlus imp )
     {
 
-        // writeHeader data
-        //
         if( imp.getBitDepth() == 8 )
         {
 
-
             byte[][] data = getByteData( imp, 0, 0 );
 
-            if ( true ) // chunkXYZ[2] != 1 )
+            if ( chunkXYZ[2] != 1 )
             {
 
                 H5.H5Dwrite( dataset_id,
@@ -161,19 +158,18 @@ public class Hdf5DataCubeWriter {
             }
             else
             {
-                // experimental...does not work yet...
+                // write plane wise (hopefully avoiding java int indexing issues)
 
-                // write plane wise
+                for ( int i = 0; i < imp.getNSlices(); ++i )
+                {
+                    byte[] slice = data[i];
 
-                int status = 0;
-                //for ( int i = 0; i < imp.getNSlices()/2; ++i )
-                //{
-                    long[] start = new long[]{ 10, imp.getHeight()/2, imp.getWidth()/2 };
-                    long[] count = new long[]{ 0, 100, 100};
-                    //long[] block = new long[]{ 1, 1, 1 };
+                    long[] start = new long[]{ i, 0, 0 };
+                    long[] count = new long[]{ 1, imp.getHeight(), imp.getWidth()};
 
-                    //dataspace_id = H5.H5Dget_space( dataset_id );
+                    dataspace_id = H5.H5Dget_space( dataset_id );
 
+                    // Select hyperslab in file dataspace
                     H5.H5Sselect_hyperslab( dataspace_id,
                             HDF5Constants.H5S_SELECT_SET,
                             start,
@@ -182,13 +178,18 @@ public class Hdf5DataCubeWriter {
                             null
                     );
 
-                    status = H5.H5Dwrite( dataset_id,
+                    // Create memspace
+                    int memspace = H5.H5Screate_simple( 1, new long[]{slice.length}, null );
+
+                    // write
+                    H5.H5Dwrite( dataset_id,
                             image_memory_type,
-                            HDF5Constants.H5S_ALL,
-                            HDF5Constants.H5S_ALL,
+                            memspace,
+                            dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
-                            data );
-                //}
+                            slice );
+
+                }
 
             }
         }

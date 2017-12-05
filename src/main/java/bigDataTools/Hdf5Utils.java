@@ -216,7 +216,6 @@ public abstract class Hdf5Utils {
     }
 
 
-
     public static int openFile( String directory, String filename )
     {
         String filePathMaster = directory + File.separator + filename;
