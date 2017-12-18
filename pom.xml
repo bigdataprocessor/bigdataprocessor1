@@ -6,36 +6,83 @@
 		http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<groupId>almf.fiji.plugin</groupId>
-	<artifactId>bigDataTools</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
 
-    <parent>
-        <groupId>org.scijava</groupId>
-        <artifactId>pom-scijava</artifactId>
-        <version>14.0.0</version>
-        <relativePath />
-    </parent>
+    <groupId>de.embl.cba</groupId>
+    <artifactId>fiji-plugin-bigDataTools_</artifactId>
+    <version>0.1.1</version>
+
+    <name>Fiji plugin for big image data</name>
+    <description>A plugin for big image data.</description>
+    <inceptionYear>2017</inceptionYear>
+    <organization>
+        <name>EMBL</name>
+        <url>http://embl.de/</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>Simplified BSD License</name>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <url>https://github.com/tischi/fiji-plugin-bigDataTools</url>
 
     <developers>
         <developer>
             <id>tischi</id>
             <name>Christian Tischer</name>
-            <email>Christian.Tischer@EMBL.DE</email>
-            <url></url>
-            <organization>EMBL Heidelberg</organization>
-            <organizationUrl>http://www.embl.de</organizationUrl>
             <roles>
-                <role>microscopy</role>
-                <role>image analysis</role>
+                <role>lead</role>
+                <role>developer</role>
+                <role>debugger</role>
+                <role>reviewer</role>
+                <role>support</role>
+                <role>maintainer</role>
             </roles>
-            <timezone>+1</timezone>
         </developer>
     </developers>
+    <contributors>
+        <contributor>
+            <name>None</name>
+        </contributor>
+    </contributors>
 
-	<properties>
-		<main-class>bigDataTools.dataStreamingTools.DataStreamingTools</main-class>
-        </properties>
+    <scm>
+        <connection>scm:git:git://github.com/tischi/fiji-plugin-bigDataTools</connection>
+        <developerConnection>scm:git:git@github.com/tischi/fiji-plugin-bigDataTools</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/tischi/fiji-plugin-bigDataTools</url>
+    </scm>
+
+    <mailingLists>
+        <mailingList>
+            <name>ImageJ Forum</name>
+            <archive>http://forum.imagej.net/</archive>
+        </mailingList>
+    </mailingLists>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/tischi/fiji-plugin-bigDataTools/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>None</system>
+    </ciManagement>
+
+    <properties>
+        <package-name>de.embl.cba.bigDataTools</package-name>
+        <license.licenseName>bsd_2</license.licenseName>
+        <license.copyrightOwners>EMBL</license.copyrightOwners>
+        <imagej.app.directory>/Applications/Fiji.app/</imagej.app.directory>
+        <enforcer.skip>true</enforcer.skip>
+    </properties>
+
+    <parent>
+        <groupId>org.scijava</groupId>
+        <artifactId>pom-scijava</artifactId>
+        <version>17.2.0</version>
+        <relativePath />
+    </parent>
 
     <repositories>
 
@@ -53,43 +100,14 @@
             <url>http://maven.imagej.net/content/repositories/releases</url>
         </repository>
 
-
-            <!--
-            <repository>
-                <id>central</id>
-                <url>http://maven.imagej.net/content/repositories/central/</url>
-            </repository>
-            -->
-
-            <!--
-
-
-        <repository>
-            <id>imagej.snapshots</id>
-            <url>http://maven.imagej.net/content/repositories/snapshots</url>
-        </repository>
-
-
-
-
-            <repository>
-                <id>unidata</id>
-                <name>Unidata Repository</name>
-                <url>http://artifacts.unidata.ucar.edu/content/repositories/unidata-releases</url>
-            </repository>
-
-            <repository>
-                <id>ome</id>
-                <name>OME Artifactory</name>
-                <url>http://artifacts.openmicroscopy.org/artifactory/maven/</url>
-            </repository>
-            -->
-
-
     </repositories>
 
-
     <dependencies>
+
+        <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>imagej</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>net.imagej</groupId>
@@ -97,14 +115,8 @@
         </dependency>
 
         <dependency>
-            <groupId>cisd</groupId>
-            <artifactId>jhdf5</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hdfgroup</groupId>
-            <artifactId>hdf-java</artifactId>
-            <version>2.6.1</version>
+            <groupId>net.imglib2</groupId>
+            <artifactId>imglib2</artifactId>
         </dependency>
 
         <dependency>
@@ -112,110 +124,24 @@
             <artifactId>formats-gpl</artifactId>
         </dependency>
 
-
-        <!-- PhaseCorrelation Code -->
         <dependency>
-            <!-- mpicbg.imglib.algorithm -->
             <groupId>mpicbg</groupId>
             <artifactId>imglib-algorithms</artifactId>
             <version>2.0.0-beta6</version>
         </dependency>
 
         <dependency>
-            <!-- mpicbg.imglib.image -->
             <groupId>mpicbg</groupId>
             <artifactId>imglib-ij</artifactId>
             <version>2.0.0-beta6</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>sc.fiji</groupId>
-            <artifactId>TrackMate_</artifactId>
-        </dependency>
-
-        <!--
-
-        <dependency>
-            <groupId>mpicbg</groupId>
-            <artifactId>mpicbg</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mpicbg</groupId>
-            <artifactId>imglib</artifactId>
-        </dependency>
-
-            <dependency>
-                <groupId>sc.fiji</groupId>
-                <artifactId>bigdataviewer-vistools</artifactId>
-           </dependency>
-
-            <dependency>
-                <groupId>io.scif</groupId>
-                <artifactId>scifio</artifactId>
-           </dependency>
-
-            <dependency>
-                <groupId>net.imagej</groupId>
-                <artifactId>imagej-ops</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>net.imglib2</groupId>
-                <artifactId>pom-imglib2</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>org.scijava</groupId>
-                <artifactId>scijava-common</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>net.imagej</groupId>
-                <artifactId>ij</artifactId>
-            </dependency>
-
-
-
-
-
-            <dependency>
-                <groupId>net.imglib2</groupId>
-                <artifactId>imglib2-ij</artifactId>
-            </dependency>
-
-            <dependency>
-                <groupId>net.imagej</groupId>
-                <artifactId>imagej-common</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>net.imagej</groupId>
-                <artifactId>ij</artifactId>
-                <version>1.51f</version>
-            </dependency>
-            <dependency>
-                <groupId>net.imagej</groupId>
-                <artifactId>ij</artifactId>
-                <version>1.51f</version>
-            </dependency>
-            -->
-
-        </dependencies>
+    </dependencies>
 
 
 	<build>
 		<plugins>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            -->
+
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
@@ -228,8 +154,8 @@
 				</configuration>
 			</plugin>
 
-
 		</plugins>
 	</build>
+
 
 </project>
