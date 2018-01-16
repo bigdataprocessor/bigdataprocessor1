@@ -31,7 +31,7 @@ public class ImarisReader {
             String color = readStringAttribute( file_id,
                     ImarisUtils.DATA_SET_INFO
                             + "/" + ImarisUtils.CHANNEL + c,
-                    ImarisUtils.CHANNEL_COLOR );
+                            ImarisUtils.CHANNEL_COLOR );
 
             if ( color == null ) break;
 
@@ -52,7 +52,7 @@ public class ImarisReader {
             String color = readStringAttribute( file_id,
                     ImarisUtils.DATA_SET_INFO
                             + "/" + ImarisUtils.CHANNEL + c,
-                    ImarisUtils.CHANNEL_COLOR );
+                            ImarisUtils.CHANNEL_NAME );
 
             if ( color == null ) break;
 

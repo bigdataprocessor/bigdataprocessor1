@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public abstract class ImarisWriter {
 
 
+    // TODO: make non abstract with Constructor
+
     public static void writeCombinedHeader( ArrayList < File > masterFiles, String filename )
     {
 
@@ -42,7 +44,7 @@ public abstract class ImarisWriter {
 
         writeDataSetInfoImage( file_id, idp.getDimensions(), idp.getInterval() );
         writeDataSetInfoTimeInfo( file_id, idp.getTimePoints() );
-        writeDataSetInfoChannels( file_id, idp.getChannelNames(), idp.getChannelColors()  );
+        writeDataSetInfoChannels( file_id, idp  );
         writeDataSets( file_id, idp );
 
         H5.H5Fclose(file_id);
@@ -173,10 +175,11 @@ public abstract class ImarisWriter {
     }
 
     private static void writeDataSetInfoChannel( int file_id, int c,
-                                                 String name, String color )
+                                                ImarisDataSet imarisDataSet )
     {
 
-        int group_id = Hdf5Utils.createGroup( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.CHANNEL + c );
+        int group_id = Hdf5Utils.createGroup( file_id,
+                ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.CHANNEL + c );
 
         Hdf5Utils.writeStringAttribute(group_id,
                 "ColorMode", "BaseColor");
@@ -185,22 +188,21 @@ public abstract class ImarisWriter {
                 "ColorOpacity", "1");
 
         Hdf5Utils.writeStringAttribute(group_id,
-                "Color", color);
+                "Name", imarisDataSet.getChannelNames().get( c ) );
 
         Hdf5Utils.writeStringAttribute(group_id,
-                "Name", name);
+                "Color", imarisDataSet.getChannelColors().get( c ) );
 
 
         H5.H5Gclose( group_id );
     }
 
     private static void writeDataSetInfoChannels( int file_id,
-                                                  ArrayList<String> channelNames,
-                                                  ArrayList<String> channelColors )
+                                                  ImarisDataSet imarisDataSet )
     {
-        for ( int c = 0; c < channelColors.size(); ++c )
+        for ( int c = 0; c < imarisDataSet.getChannelNames().size(); ++c )
         {
-            writeDataSetInfoChannel( file_id, c, channelNames.get(c), channelColors.get( c ) );
+            writeDataSetInfoChannel( file_id, c, imarisDataSet );
         }
     }
 

@@ -106,6 +106,12 @@
 
         <dependency>
             <groupId>net.imagej</groupId>
+            <artifactId>imagej-legacy</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>net.imagej</groupId>
             <artifactId>imagej</artifactId>
         </dependency>
 
@@ -134,6 +140,12 @@
             <groupId>mpicbg</groupId>
             <artifactId>imglib-ij</artifactId>
             <version>2.0.0-beta6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.java.openjfx.backport</groupId>
+            <artifactId>openjfx-78-backport</artifactId>
+            <version>1.8.0-ea-b96.1</version>
         </dependency>
 
     </dependencies>
