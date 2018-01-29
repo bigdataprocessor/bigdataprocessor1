@@ -1484,14 +1484,16 @@ public class DataStreamingTools {
     public static void main(String[] args)
     {
         // set the plugins.dir property to make the plugin appear in the Plugins menu
-        Class<?> clazz = DataStreamingTools.class;
+
+        /*Class<?> clazz = DataStreamingTools.class;
         String url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class").toString();
         String pluginsDir = url.substring("file:".length(), url.length() - clazz.getName().length() - ".class".length
                 ());
-        System.setProperty("plugins.dir", pluginsDir);
+        System.setProperty("plugins.dir", pluginsDir);*/
 
         // start ImageJ
-        new ij.ImageJ();
+        final net.imagej.ImageJ ij = new net.imagej.ImageJ();
+        ij.ui().showUI();
 
 
         //IJ.run("Memory & Threads...", "maximum=3000 parallel=4 run");
@@ -1544,13 +1546,12 @@ public class DataStreamingTools {
         //ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
         //imp3.show();
 
-
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
                 int nIOthreads = 10;
-                final String directory = "/Users/tischi/Downloads/mri-stack/";
+                final String directory = "/Users/tischer/Downloads/mri-stack/";
                 ///Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF--10x10x10nm--Classification
                 String namingPattern = null; ImageDataInfo imageDataInfo = null;
                 /*
@@ -1572,8 +1573,10 @@ public class DataStreamingTools {
                         false);
             }
         });
+
         t1.start();
         IJ.wait(1000);
+
 
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
