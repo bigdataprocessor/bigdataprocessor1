@@ -341,12 +341,11 @@ public class VirtualStackOfStacks extends VirtualStack {
     /**
      *  Assigns and saves a pixel array to the specified slice,
      were 1<=n<=nslices.
-     The method is synchronized to avoid that two threads try to writeHeader
-     into the same file.
+     The method is synchronized to avoid that two threads try to writeinto the same file.
      */
     public void saveByteCube( byte[][][] pixelsZYX, FinalInterval interval ) throws IOException
     {
-        // TODO: how to make this more global?
+        // TODO: make this more global
         final int X = 0, Y = 1, C = 2, Z = 3, T = 4;
 
         int c = (int) interval.min(C);
@@ -358,29 +357,23 @@ public class VirtualStackOfStacks extends VirtualStack {
 
             while ( lockedFiles.contains( pathCTZ ) )
             {
-                try
-                {
-                    Thread.sleep( 100 );
-                } catch ( InterruptedException e )
-                {
-                    e.printStackTrace();
-                }
+                sleep( 100 );
             }
 
             synchronized ( this )
             {
-                lockedFiles.add( pathCTZ );
+            //    lockedFiles.add( pathCTZ );
             }
 
             if ( infos[ c ][ t ][ z ] == null )
             {
 
-                File f = new File( directory + channelFolders[ c ] + "/" + ctzFileList[ c ][ t ][ z ] );
-                if ( !f.exists() )
+                File f = new File( pathCTZ );
+
+                if ( ! f.exists() )
                 {
                     // file does not exist yet => create a black one
-                    ImagePlus imp = NewImage.createByteImage( "title",
-                            nX, nY, 1, NewImage.FILL_BLACK );
+                    ImagePlus imp = NewImage.createByteImage( "title", nX, nY, 1, NewImage.FILL_BLACK );
                     FileSaver fileSaver = new FileSaver( imp );
                     fileSaver.saveAsTiff( pathCTZ );
                     setInfoFromFile( t, c, z );
@@ -392,42 +385,66 @@ public class VirtualStackOfStacks extends VirtualStack {
 
             }
 
-            // replace pixels in existing file
-            try
+            boolean allPixelsSaved = false;
+
+            while( ! allPixelsSaved )
             {
-                RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
-
-                long offsetToImageData = infos[ c ][ t ][ z ].offset;
-
-                for ( int y = (int) interval.min(Y); y <= interval.max(Y); y++ )
+                // replace pixels in existing file
+                try
                 {
-                    raf.seek( offsetToImageData + y * nX + interval.min(X) );
-                    int yChunk =  y - (int) interval.min( Y );
-                    int zChunk =  z - (int) interval.min( Z );
-                    int nx = pixelsZYX[ zChunk ][ yChunk ].length;
-                    raf.write( pixelsZYX[ zChunk ][ yChunk ], 0, nx );
+                    RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
+
+                    long offsetToImageData = infos[ c ][ t ][ z ].offset;
+
+                    for ( int y = ( int ) interval.min( Y ); y <= interval.max( Y ); y++ )
+                    {
+                        //System.out.print( interval.min( Y ) + "\n" );
+                        //sleep( 100 );
+
+                        raf.seek( offsetToImageData + y * nX + interval.min( X ) );
+                        int yChunk = y - ( int ) interval.min( Y );
+                        int zChunk = z - ( int ) interval.min( Z );
+                        int nx = pixelsZYX[ zChunk ][ yChunk ].length;
+                        raf.write( pixelsZYX[ zChunk ][ yChunk ], 0, nx );
+                    }
+
+                    raf.close();
+
+                    allPixelsSaved = true;
+
+                }
+                catch ( FileNotFoundException e )
+                {
+                    //IJ.log( e.toString() );
+                    //e.printStackTrace();
+                    sleep( 500 );
+                }
+                catch ( IOException e )
+                {
+                    //IJ.log( e.toString() );
+                    //e.printStackTrace();
+                    sleep( 500 );
                 }
 
-                raf.close();
 
-            } catch ( FileNotFoundException e )
-            {
-                IJ.log( e.toString() );
-                e.printStackTrace();
-            } catch ( IOException e )
-            {
-                IJ.log( e.toString() );
-                e.printStackTrace();
             }
 
             synchronized ( this )
             {
                 lockedFiles.remove( pathCTZ );
             }
-        }
+
+        } // z
+
+
     }
 
-        /** Returns an ImageProcessor for the specified slice,
+    private void sleep( int milliSeconds )
+    {
+        try { Thread.sleep( milliSeconds ); } catch ( InterruptedException e ) { e.printStackTrace(); }
+    }
+
+    /** Returns an ImageProcessor for the specified slice,
      were 1<=n<=nslices. Returns null if the stack is empty.
     N is computed by IJ assuming the czt ordering, with
     n = ( channel + z*nC + t*nZ*nC ) + 1

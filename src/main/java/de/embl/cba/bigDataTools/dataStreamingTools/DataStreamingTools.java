@@ -1581,7 +1581,7 @@ public class DataStreamingTools {
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
 
-        //BigDataTrackerPlugIn_ bigDataTrackerPlugIn = new BigDataTrackerPlugIn_();
+        //BigDataTrackerIJ1Plugin bigDataTrackerPlugIn = new BigDataTrackerIJ1Plugin();
         //bigDataTrackerPlugIn.run("");
 
 

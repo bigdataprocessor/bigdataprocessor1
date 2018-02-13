@@ -4,7 +4,7 @@ import ij.plugin.PlugIn;
 
 import javax.swing.*;
 
-public class DataStreamingToolsPlugIn_ implements PlugIn {
+public class DataStreamingToolsIJ1Plugin implements PlugIn {
 
     @Override
     public void run(String s)

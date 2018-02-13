@@ -1,6 +1,5 @@
 package de.embl.cba.bigDataTools.logging;
 
-import ij.IJ;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ij.IJ;
+import org.scijava.log.LogService;
+
 
 public class IJLazySwingLogger implements Logger {
 
@@ -24,6 +26,8 @@ public class IJLazySwingLogger implements Logger {
     private String logFileDirectory = null;
     private String logFileName = null;
     private String logFilePath = null;
+
+    private LogService logService = null;
 
     final static Charset ENCODING = StandardCharsets.UTF_8;
 
