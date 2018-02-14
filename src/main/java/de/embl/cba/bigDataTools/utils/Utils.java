@@ -160,7 +160,7 @@ public class Utils {
 
     }
 
-    public static void show(ImagePlus imp)
+    public static void show( ImagePlus imp )
     {
         imp.show();
         imp.setPosition(1, imp.getNSlices() / 2, 1);

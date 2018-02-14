@@ -171,8 +171,7 @@ public class DataStreamingTools {
         stack.setDirectory( directory );
         stack.setNamingScheme( namingScheme );
 
-        ImagePlus imp = new ImagePlus("stream", stack);
-
+        ImagePlus imp = createImagePlusFromVSS( stack );
 
         // obtain file header informations for all c, t, z
         //
@@ -226,9 +225,6 @@ public class DataStreamingTools {
         {
             logger.error("DataStreamingTools:openFromDirectory:ParseFilesIntoVirtualStack: "+e.toString());
         }
-
-
-
 
         return( imp );
 
@@ -1197,8 +1193,7 @@ public class DataStreamingTools {
 
     }
 
-    // TODO: is this method needed?
-    private static ImagePlus createImagePlusFromVSS(VirtualStackOfStacks stack)
+    private static ImagePlus createImagePlusFromVSS( VirtualStackOfStacks stack )
     {
         int nC = stack.getChannels();
         int nZ = stack.getDepth();
@@ -1211,7 +1206,7 @@ public class DataStreamingTools {
         //FileInfoSer[][][] infos = stack.getFileInfosSer();
         //FileInfoSer fi = infos[0][0][0];
 
-        ImagePlus imp = new ImagePlus("", stack);
+        ImagePlus imp = new ImagePlus("stream", stack);
 
         // todo: what does this do?
         //if (imp.getType() == ImagePlus.GRAY16 || imp.getType() == ImagePlus.GRAY32)
@@ -1445,7 +1440,7 @@ public class DataStreamingTools {
             //
             if (vss != null && vss.getSize() > 0)
             {
-                imp = createImagePlusFromVSS(vss);
+                imp = createImagePlusFromVSS( vss );
             }
             else
             {
@@ -1453,7 +1448,7 @@ public class DataStreamingTools {
                 return;
             }
 
-            Utils.show(imp);
+            Utils.show( imp );
             imp.setTitle("stream"); // TODO: get the selected directory as image name
 
             // show compression info
