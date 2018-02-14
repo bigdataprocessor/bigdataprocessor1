@@ -55,6 +55,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
 // todo: replace all == with "equals"
@@ -298,16 +300,19 @@ public class VirtualStackOfStacks extends VirtualStack {
 
                 infos[c][t] = infoCT;
             }
-            else if (fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString()))
+            else if ( fileType.equals(Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
             {
                 ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][z]);
+
                 try
                 {
                     infos[c][t][z] = ftd.getTiffInfo()[0];
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
                 }
+                catch ( IOException e )
+                {
+                    System.out.print( e.toString() );
+                }
+
                 infos[c][t][z].directory = channelFolders[c] + "/"; // relative path to main directory
                 infos[c][t][z].fileName = ctzFileList[c][t][z];
                 infos[c][t][z].fileTypeString = fileType;
@@ -383,9 +388,8 @@ public class VirtualStackOfStacks extends VirtualStack {
      were 1<=n<=nslices.
      The method is synchronized to avoid that two threads try to writeinto the same file.
      */
-    public void saveByteCube( byte[][][] pixelsZYX, FinalInterval interval ) throws IOException
+    public void saveByteCube( byte[][][] pixelsZYX, FinalInterval interval )
     {
-        // TODO: make this more global
         final int X = 0, Y = 1, C = 2, Z = 3, T = 4;
 
         int c = (int) interval.min(C);
@@ -402,7 +406,7 @@ public class VirtualStackOfStacks extends VirtualStack {
 
             synchronized ( this )
             {
-            //    lockedFiles.add( pathCTZ );
+                lockedFiles.add( pathCTZ );
             }
 
             if ( infos[ c ][ t ][ z ] == null )
@@ -430,25 +434,28 @@ public class VirtualStackOfStacks extends VirtualStack {
             int ioErrors = 0;
             int MAX_ERRORS = 20;
 
+            FileLock lock = null;
+
             while( ! allPixelsSaved  && ioErrors < MAX_ERRORS )
             {
                 // replace pixels in existing file
                 try
                 {
-                    RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw" );
+
+                    RandomAccessFile raf = new RandomAccessFile( pathCTZ, "rw") ;
+
 
                     long offsetToImageData = infos[ c ][ t ][ z ].offset;
 
                     for ( int y = ( int ) interval.min( Y ); y <= interval.max( Y ); y++ )
                     {
-                        //System.out.print( interval.min( Y ) + "\n" );
-                        //sleep( 100 );
-
-                        raf.seek( offsetToImageData + y * nX + interval.min( X ) );
                         int yChunk = y - ( int ) interval.min( Y );
                         int zChunk = z - ( int ) interval.min( Z );
                         int nx = pixelsZYX[ zChunk ][ yChunk ].length;
+
+                        raf.seek( offsetToImageData + y * nX + interval.min( X ) );
                         raf.write( pixelsZYX[ zChunk ][ yChunk ], 0, nx );
+
                     }
 
                     raf.close();
@@ -456,28 +463,26 @@ public class VirtualStackOfStacks extends VirtualStack {
                     allPixelsSaved = true;
 
                 }
-                catch ( IOException e )
+                catch ( Exception e )
                 {
                     //IJ.log( e.toString() );
                     //e.printStackTrace();
-                    System.out.print( "CAUGHT IO EXCEPTION:" );
+                    System.out.println( "#################################### CAUGHT EXCEPTION:" );
                     System.out.print( e.toString() );
                     sleep( 1000 );
                     ioException = true;
                     ioErrors++;
                 }
-
-
             }
 
             if ( ioException == true && ioErrors < MAX_ERRORS )
             {
-                System.out.print( "RECOVERED FROM IO EXCEPTION AFTER ATTEMPTS:" );
+                System.out.print( "#################################### RECOVERED FROM IO EXCEPTION AFTER ATTEMPTS:\n" );
                 System.out.print( ioErrors );
             }
             else if ( ioException == true && ioErrors == MAX_ERRORS )
             {
-                System.out.print( "DID NOT RECOVER FROM IO ERRORS." );
+                System.out.print( "#################################### DID NOT RECOVER FROM IO ERRORS.\n" );
                 System.out.print( ioErrors );
             }
 
@@ -489,8 +494,9 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         } // z
 
-
     }
+
+
 
     private void sleep( int milliSeconds )
     {

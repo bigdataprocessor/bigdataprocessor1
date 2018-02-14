@@ -27,14 +27,7 @@ public class ConcurrentFileAccess
         Thread thread = new Thread(new Runnable() {
             public void run()
             {
-                try
-                {
-                    vss.saveByteCube(  dataCube, new FinalInterval( new long[]{0,0,0,0,0}, new long[]{50,50,0,0,0} ) );
-                }
-                catch ( IOException e )
-                {
-                    e.printStackTrace();
-                }
+                vss.saveByteCube(  dataCube, new FinalInterval( new long[]{0,0,0,0,0}, new long[]{50,50,0,0,0} ) );
             }
         });
         thread.start();
@@ -43,14 +36,7 @@ public class ConcurrentFileAccess
         Thread thread2 = new Thread(new Runnable() {
             public void run()
             {
-                try
-                {
-                    vss.saveByteCube(  dataCube, new FinalInterval( new long[]{10,10,0,0,0}, new long[]{50,50,0,0,0} ) );
-                }
-                catch ( IOException e )
-                {
-                    e.printStackTrace();
-                }
+                vss.saveByteCube(  dataCube, new FinalInterval( new long[]{10,10,0,0,0}, new long[]{50,50,0,0,0} ) );
             }
         });
         thread2.start();
