@@ -1276,14 +1276,14 @@ public class DataStreamingTools {
 
     }
 
-    public void saveVSSAsPlanes(SavingSettings savingSettings)
+    public void saveVSSAsPlanes( SavingSettings savingSettings )
     {
 
         interruptSavingThreads = false;
 
         // Do the jobs
         //
-        ExecutorService es = Executors.newFixedThreadPool(savingSettings.nThreads);
+        ExecutorService es = Executors.newFixedThreadPool( savingSettings.nThreads );
         List<Future> futures = new ArrayList<>();
         for ( int c = 0; c < savingSettings.imp.getNChannels(); c++)
         {

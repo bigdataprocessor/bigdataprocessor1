@@ -168,8 +168,7 @@ public class SaveVSSFrame implements Runnable {
                     //
                     if ( savingSettings.fileType.equals( Utils.FileType.TIFF ) )
                     {
-                        saveAsTiff(impBinned, c, t, savingSettings.compression,
-                                savingSettings.rowsPerStrip, newPath);
+                        saveAsTiff(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath);
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) )
                     {

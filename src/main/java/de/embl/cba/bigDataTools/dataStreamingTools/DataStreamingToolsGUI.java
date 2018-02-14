@@ -67,7 +67,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             ImarisUtils.RESOLUTION_LEVEL +"3/Data",
             "ITKImage/0/VoxelData", "Data222", "Data444"});
 
-    JComboBox comboFileTypeForSaving = new JComboBox( Utils.FileType.values() );
+    JComboBox comboFileTypeForSaving = new JComboBox( new Utils.FileType[]{
+            Utils.FileType.TIFF,
+            Utils.FileType.HDF5,
+            Utils.FileType.HDF5_IMARIS_BDV } );
 
     final String BDV = "Big Data Viewer";
     JButton viewInBigDataViewer =  new JButton(BDV);
@@ -524,11 +527,11 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             }
 
         }
-        else if ( e.getActionCommand().equals(SAVE_PLANES) )
+        else if ( e.getActionCommand().equals( SAVE_PLANES ) )
         {
 
             ImagePlus imp = IJ.getImage();
-            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
+            if ( ! Utils.hasVirtualStackOfStacks( imp ) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             Utils.FileType fileType = (Utils.FileType) comboFileTypeForSaving.getSelectedItem();

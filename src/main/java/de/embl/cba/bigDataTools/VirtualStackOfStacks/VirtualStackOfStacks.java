@@ -73,6 +73,9 @@ public class VirtualStackOfStacks extends VirtualStack {
     String[] channelFolders;
     String[][][] ctzFileList;
     String h5DataSet;
+    String namingScheme;
+    String filterPattern;
+
     private ArrayList < String > lockedFiles = new  ArrayList<>();
 
     Logger logger = new IJLazySwingLogger();
@@ -100,6 +103,7 @@ public class VirtualStackOfStacks extends VirtualStack {
         }
 
     }
+
 
     public VirtualStackOfStacks(String directory, FileInfoSer[][][] infos)
     {
@@ -133,6 +137,42 @@ public class VirtualStackOfStacks extends VirtualStack {
         }
 
     }
+
+    public void setDirectory( String directory )
+    {
+        this.directory = directory;
+    }
+
+    public String getH5DataSet()
+    {
+        return h5DataSet;
+    }
+
+    public void setH5DataSet( String h5DataSet )
+    {
+        this.h5DataSet = h5DataSet;
+    }
+
+    public String getNamingScheme()
+    {
+        return namingScheme;
+    }
+
+    public void setNamingScheme( String namingScheme )
+    {
+        this.namingScheme = namingScheme;
+    }
+
+    public String getFilterPattern()
+    {
+        return filterPattern;
+    }
+
+    public void setFilterPattern( String filterPattern )
+    {
+        this.filterPattern = filterPattern;
+    }
+
 
     public void logStatus() {
               logger.info("# VirtualStackOfStacks");
@@ -386,8 +426,11 @@ public class VirtualStackOfStacks extends VirtualStack {
             }
 
             boolean allPixelsSaved = false;
+            boolean ioException = false;
+            int ioErrors = 0;
+            int MAX_ERRORS = 20;
 
-            while( ! allPixelsSaved )
+            while( ! allPixelsSaved  && ioErrors < MAX_ERRORS )
             {
                 // replace pixels in existing file
                 try
@@ -413,21 +456,31 @@ public class VirtualStackOfStacks extends VirtualStack {
                     allPixelsSaved = true;
 
                 }
-                catch ( FileNotFoundException e )
-                {
-                    //IJ.log( e.toString() );
-                    //e.printStackTrace();
-                    sleep( 500 );
-                }
                 catch ( IOException e )
                 {
                     //IJ.log( e.toString() );
                     //e.printStackTrace();
-                    sleep( 500 );
+                    System.out.print( "CAUGHT IO EXCEPTION:" );
+                    System.out.print( e.toString() );
+                    sleep( 1000 );
+                    ioException = true;
+                    ioErrors++;
                 }
 
 
             }
+
+            if ( ioException == true && ioErrors < MAX_ERRORS )
+            {
+                System.out.print( "RECOVERED FROM IO EXCEPTION AFTER ATTEMPTS:" );
+                System.out.print( ioErrors );
+            }
+            else if ( ioException == true && ioErrors == MAX_ERRORS )
+            {
+                System.out.print( "DID NOT RECOVER FROM IO ERRORS." );
+                System.out.print( ioErrors );
+            }
+
 
             synchronized ( this )
             {
