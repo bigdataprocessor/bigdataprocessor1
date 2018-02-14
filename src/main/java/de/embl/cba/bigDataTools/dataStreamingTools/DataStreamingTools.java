@@ -165,6 +165,12 @@ public class DataStreamingTools {
                 imageDataInfo.fileType,
                 imageDataInfo.h5DataSetName);
 
+
+        stack.setFilterPattern( filterPattern );
+        stack.setH5DataSet( h5DataSetName );
+        stack.setDirectory( directory );
+        stack.setNamingScheme( namingScheme );
+
         ImagePlus imp = new ImagePlus("stream", stack);
 
 
@@ -209,7 +215,7 @@ public class DataStreamingTools {
                 {
                     MonitorThreadPoolStatus.showProgressAndWaitUntilDone(
                             futures,
-                            "Parsing time-points..",
+                            "Parsing files..",
                             2000);
                 }
             });
