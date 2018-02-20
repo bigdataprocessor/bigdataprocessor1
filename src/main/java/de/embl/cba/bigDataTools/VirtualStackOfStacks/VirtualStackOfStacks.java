@@ -204,13 +204,13 @@ public class VirtualStackOfStacks extends VirtualStack {
         return numberOfUnparsedFiles;
     }
 
-    public void setInfoFromFile(int t, int c, int z)
+    public void setInfoFromFile(int c, int t, int z)
     {
-        setInfoFromFile( t, c, z, true);
+        setInfoFromFile( c, t, z, true);
     }
 
     /** Adds an image stack from file infos */
-    public void setInfoFromFile(int t, int c, int z, boolean throwError)
+    public void setInfoFromFile(int c, int t, int z, boolean throwError)
     {
         FileInfoSer[] info = null;
         FileInfoSer[] infoCT = null;
@@ -536,11 +536,11 @@ public class VirtualStackOfStacks extends VirtualStack {
             }
             else
             {
-                setInfoFromFile(t, c, z);
+                setInfoFromFile(c, t, z);
             }
         }
 
-        FileInfoSer fi = infos[c][t][z];
+        FileInfoSer fi = infos[ c ][ t ][ z ];
 
         Point3D po, ps;
         po = new Point3D(0,0,z);

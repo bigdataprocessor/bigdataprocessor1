@@ -625,7 +625,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             }); t1.start();
 
         }
-        else if (e.getActionCommand().equals(CROPasNewStream))
+        else if ( e.getActionCommand().equals( CROPasNewStream ) )
         {
             //
             // Crop As New Stream

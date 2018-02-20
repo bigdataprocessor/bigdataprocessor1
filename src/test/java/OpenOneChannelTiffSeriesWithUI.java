@@ -2,11 +2,8 @@ import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingToolsGUI;
 import ij.IJ;
 
-public class OpenOneChannelTiffSeriesAndShowUI
+public class OpenOneChannelTiffSeriesWithUI
 {
-
-    public final static String ROOT = "/Users/tischer/Documents/fiji-plugin-bigDataTools/";
-    public final static String TEST_RESOURCES = ROOT + "/src/test/resources/";
 
     public static void main(String[] args)
     {
@@ -17,12 +14,12 @@ public class OpenOneChannelTiffSeriesAndShowUI
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
-                final String directory = TEST_RESOURCES + "tiff-nc1-nt1";
+                final String directory = "/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/tiff-nc1-nt2";
                 dataStreamingTools.openFromDirectory(
                         directory,
                         "None",
                         ".*",
-                        "ResolutionLevel 0/Data",
+                        "",
                         null,
                         10  ,
                         true,
