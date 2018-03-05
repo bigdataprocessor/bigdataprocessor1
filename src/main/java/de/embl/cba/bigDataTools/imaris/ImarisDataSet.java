@@ -1,7 +1,9 @@
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.imaris;
 
+import de.embl.cba.bigDataTools.CTRDataSets;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.Calibration;
 import net.imglib2.FinalRealInterval;
@@ -155,13 +157,13 @@ public class ImarisDataSet {
 
         if ( volume > Integer.MAX_VALUE - 100 )
         {
-            firstChunk[2] = 1;
+            firstChunk[ 2 ] = 1;
+            IJ.log("Data set is larger than " + Integer.MAX_VALUE );
             // this forces plane wise writing and thus
-            // avoids java indexing issues when loading the
-            // whole dataset into RAM in the Hdf5DataCubeWriter
+            // avoids java indexing issues when saving the data to HDF5
         }
 
-        chunks.add(new long[]{ 32, 32, 1 });
+        chunks.add( firstChunk );
 
         // Further resolution levels
         long voxelsAtCurrentResolution = 0;

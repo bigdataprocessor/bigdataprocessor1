@@ -1,7 +1,7 @@
 package de.embl.cba.bigDataTools.VirtualStackOfStacks;
 
 import de.embl.cba.bigDataTools.Hdf5DataCubeWriter;
-import de.embl.cba.bigDataTools.ImarisDataSet;
+import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
 import de.embl.cba.bigDataTools.dataStreamingTools.SavingSettings;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
@@ -240,8 +240,6 @@ public class SaveVSSFrame implements Runnable {
         //
         //  Open output file
         //
-
-
         try
         {
             String sC = String.format("%1$02d", c);
@@ -263,7 +261,7 @@ public class SaveVSSFrame implements Runnable {
             //  create channelDims vector for MDxxxArray
             //
             int[] channelDims = null;
-            if (nZ > 1)
+            if ( nZ > 1 )
             {
                 channelDims = new int[3];
                 channelDims[0] = nZ;
@@ -280,8 +278,8 @@ public class SaveVSSFrame implements Runnable {
             // take care of data sets with more than 2^31 elements
             //
             long   maxSaveBlockSize = (1L<<31) - 1;
-            long[] saveBlockDimensions = new long[channelDims.length];
-            long[] saveBlockOffset = new long[channelDims.length];
+            long[] saveBlockDimensions = new long[ channelDims.length ];
+            long[] saveBlockOffset = new long[ channelDims.length ];
             int    nSaveBlocks = 1;
             long   levelsPerWriteOperation = nZ;
 
@@ -379,8 +377,7 @@ public class SaveVSSFrame implements Runnable {
 
                 //  add element_size_um attribute
                 //
-                writer.float32().setArrayAttr( dsetName, "element_size_um",
-                        element_size_um);
+                writer.float32().setArrayAttr( dsetName, "element_size_um", element_size_um);
 
             }
             writer.close();

@@ -177,7 +177,6 @@ public class BigDataTracker {
             }
             else
             {
-                logger.error("Your image is RAM resident...not sure this works yet...");
                 impCroppedAlongObject = getCroppedImagePlus(
                         track.getImp(),
                         trackOffsets.toArray(new Point3D[trackOffsets.size()]),
@@ -185,7 +184,6 @@ public class BigDataTracker {
                         track.getTmin(),
                         track.getTmax());
             }
-
 
             impCroppedAlongObject.setTitle("Track_" + track.getID());
             imps.add(impCroppedAlongObject);

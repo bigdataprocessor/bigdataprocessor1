@@ -1,4 +1,4 @@
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.imaris;
 
 import java.io.File;
 import java.io.FilenameFilter;

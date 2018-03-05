@@ -1,4 +1,4 @@
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.imaris;
 
 import ncsa.hdf.hdf5lib.H5;
 import net.imglib2.FinalRealInterval;

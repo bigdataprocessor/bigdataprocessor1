@@ -420,11 +420,11 @@ public class VirtualStackOfStacks extends VirtualStack {
                     ImagePlus imp = NewImage.createByteImage( "title", nX, nY, 1, NewImage.FILL_BLACK );
                     FileSaver fileSaver = new FileSaver( imp );
                     fileSaver.saveAsTiff( pathCTZ );
-                    setInfoFromFile( t, c, z );
+                    setInfoFromFile( c, t, z );
                 }
                 else
                 {
-                    setInfoFromFile( t, c, z );
+                    setInfoFromFile( c, t, z );
                 }
 
             }
@@ -637,7 +637,7 @@ public class VirtualStackOfStacks extends VirtualStack {
         // make sure we have all the file-info data
         if ( infos[region5D.c][region5D.t] == null ) {
             // stack info not yet loaded => get it!
-            setInfoFromFile(region5D.t, region5D.c, 0);
+            setInfoFromFile( region5D.c, region5D.t, 0 );
         }
 
         // make sure we have all the file-info data
@@ -647,11 +647,11 @@ public class VirtualStackOfStacks extends VirtualStack {
         {
             if ( (z > -1) && (z < nZ ) ) // because during tracking one could ask for out-of-bounds z-planes
             {
-                if (infos[region5D.c][region5D.t][z] == null)
+                if (infos[ region5D.c ][ region5D.t ][ z ] == null)
                 {
                     File f = new File(directory + channelFolders[region5D.c] + "/" + ctzFileList[region5D.c][region5D.t][z]);
                     // file info not yet loaded => get it!
-                    setInfoFromFile(region5D.t, region5D.c, z);
+                    setInfoFromFile( region5D.c, region5D.t, z );
                 }
             }
         }

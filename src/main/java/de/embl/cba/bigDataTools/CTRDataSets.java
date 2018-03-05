@@ -1,5 +1,6 @@
 package de.embl.cba.bigDataTools;
 
+import de.embl.cba.bigDataTools.imaris.ImarisUtils;
 import de.embl.cba.bigDataTools.utils.Utils;
 
 import java.util.HashMap;

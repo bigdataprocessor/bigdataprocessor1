@@ -1,6 +1,7 @@
 
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.imaris;
 
+import de.embl.cba.bigDataTools.Hdf5Utils;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
 import net.imglib2.RealInterval;
@@ -67,8 +68,7 @@ public abstract class ImarisWriter {
     }
 
 
-    private static void writeDataSets( int file_id,
-                                       ImarisDataSet idp)
+    private static void writeDataSets( int file_id, ImarisDataSet idp)
     {
         for ( int t = 0; t < idp.getTimePoints().size(); ++t )
         {

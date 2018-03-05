@@ -51,9 +51,9 @@ package de.embl.cba.bigDataTools.dataStreamingTools;
 //import org.scijava.util.Bytes;
 
 
-import de.embl.cba.bigDataTools.ImarisDataSet;
-import de.embl.cba.bigDataTools.ImarisUtils;
-import de.embl.cba.bigDataTools.ImarisWriter;
+import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
+import de.embl.cba.bigDataTools.imaris.ImarisUtils;
+import de.embl.cba.bigDataTools.imaris.ImarisWriter;
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.*;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
@@ -447,19 +447,20 @@ public class DataStreamingTools {
 
             logger.info("Searching files in folder: " + directory);
             fileLists = new String[1][];
-            fileLists[0] = getFilesInFolder(directory, filterPattern);
+            fileLists[0] = getFilesInFolder( directory, filterPattern );
+            logger.info("Number of files in main folder matching the filter pattern: " + fileLists[0].length );
 
-            if (fileLists[0] != null)
+            if ( fileLists[0] != null )
             {
 
                 //
-                // check if it is Leica single tiff SPIM files
+                // check if those are Leica single tiff SPIM files
                 //
 
-                Pattern patternLeica = Pattern.compile("LightSheet 2.*");
-                for (String fileName : fileLists[0])
+                Pattern patternLeica = Pattern.compile("LightSheet .*");
+                for ( String fileName : fileLists[0] )
                 {
-                    if (patternLeica.matcher(fileName).matches())
+                    if ( patternLeica.matcher( fileName ).matches() )
                     {
                         fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
                         logger.info("detected fileType: " + fileType);
@@ -485,9 +486,8 @@ public class DataStreamingTools {
             imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
 
             //
-            // Do special stuff related to leica single files
+            // Do special stuff related to Leica files
             //
-
             Matcher matcherZ, matcherC, matcherT, matcherID;
             Pattern patternC = Pattern.compile(".*--C(.*).tif");
             Pattern patternZnoC = Pattern.compile(".*--Z(.*).tif");
@@ -495,7 +495,7 @@ public class DataStreamingTools {
             Pattern patternT = Pattern.compile(".*--t(.*)--Z.*");
             Pattern patternID = Pattern.compile(".*?_(\\d+).*"); // is this correct?
 
-            if (fileLists[0].length == 0)
+            if ( fileLists[0].length == 0 )
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
                 return false;
@@ -1155,12 +1155,12 @@ public class DataStreamingTools {
             {
                 for (int z = 0; z < nZ; z++)
                 {
-                    if ( infos[c][t][z] == null )
+                    if ( infos[ c ][ t ][ z ] == null )
                     {
                         // for streaming from single tiffs it can be
                         // that some planes are not parsed yet
-                        vss.setInfoFromFile(c, t, z);
-                        logger.progress("Parsing file header: ", "c"+c+" t"+t+" z"+z);
+                        vss.setInfoFromFile( c, t, z );
+                        logger.progress("Parsing file header: ", "c" + c + " t" + t + " z" + z);
                     }
                     croppedInfos[c][t-tMin][z] = new FileInfoSer( infos[c][t][z] );
                     if (croppedInfos[c][t-tMin][z].isCropped)
@@ -1318,21 +1318,46 @@ public class DataStreamingTools {
 
         interruptSavingThreads = false;
 
-        int nSavingThreads = savingSettings.nThreads;
+        int numSavingThreads = getNumSavingThreads( savingSettings );
 
-        if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) )
+        ImarisDataSet imarisDataSet = getImarisDataSet( savingSettings );
+
+        saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, imarisDataSet );
+
+    }
+
+    private void saveFilesForEachChannelAndTimePoint( SavingSettings savingSettings, int numSavingThreads, ImarisDataSet imarisDataSet )
+    {
+        // Save individual files for each channel and time-point
+        //
+        ExecutorService es = Executors.newFixedThreadPool( numSavingThreads );
+        List<Future> futures = new ArrayList<>();
+
+        AtomicInteger counter = new AtomicInteger(0);
+        final long startTime = System.currentTimeMillis();
+
+        for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
         {
-            nSavingThreads = 1; // H5 is not multi-threaded anyway.
+            futures.add(
+                    es.submit(
+                        new SaveVSSFrame( this,
+                            t,
+                            savingSettings,
+                            imarisDataSet,
+                            counter,
+                            startTime) ) );
         }
+    }
 
+    private ImarisDataSet getImarisDataSet( SavingSettings savingSettings )
+    {
         // TODO: clean this up...
         ImarisDataSet imarisDataSet = new ImarisDataSet();
+
         imarisDataSet.setLogger( logger );
 
         if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
-            nSavingThreads = 1; // H5 is not multi-threaded anyway.
-
             String[] binnings = savingSettings.bin.split(";");
             int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
 
@@ -1348,7 +1373,7 @@ public class DataStreamingTools {
                     );
 
 
-            ArrayList < File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
+            ArrayList< File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
 
             if ( imarisFiles.size() > 1 )
             {
@@ -1357,10 +1382,7 @@ public class DataStreamingTools {
 
 
             // TODO: remove below
-            ImarisWriter.writeHeader( imarisDataSet,
-                    savingSettings.directory,
-                    savingSettings.fileBaseName + ".h5"
-            );
+            ImarisWriter.writeHeader( imarisDataSet, savingSettings.directory, savingSettings.fileBaseName + ".h5" );
 
             logger.info("Image sizes at different resolutions:");
             Utils.logArrayList( imarisDataSet.getDimensions() );
@@ -1370,24 +1392,19 @@ public class DataStreamingTools {
 
         }
 
-        // Save individual files for each channel and time-point
-        //
-        ExecutorService es = Executors.newFixedThreadPool( nSavingThreads );
-        List<Future> futures = new ArrayList<>();
+        return imarisDataSet;
 
-        AtomicInteger counter = new AtomicInteger(0);
-        final long startTime = System.currentTimeMillis();
+    }
 
-        for (int t = 0; t < savingSettings.imp.getNFrames(); t++)
+    private int getNumSavingThreads( SavingSettings savingSettings )
+    {
+        int nSavingThreads = savingSettings.nThreads;
+
+        if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) || savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
         {
-            futures.add( es.submit( new SaveVSSFrame( this,
-                    t,
-                    savingSettings,
-                    imarisDataSet,
-                    counter,
-                    startTime) ) );
+            nSavingThreads = 1; // H5 is not multi-threaded anyway.
         }
-
+        return nSavingThreads;
     }
 
     public void cancelSaving()

@@ -1,3 +1,4 @@
+import de.embl.cba.bigDataTools.bigDataTracker.BigDataTrackerGUI;
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingToolsGUI;
 import ij.IJ;
@@ -14,7 +15,7 @@ public class OpenOneChannelTiffSeriesWithUI
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
-                final String directory = "/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/tiff-nc1-nt2";
+                final String directory = "/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/tiff-nc1-nt2-16bit";
                 dataStreamingTools.openFromDirectory(
                         directory,
                         "None",
@@ -31,6 +32,9 @@ public class OpenOneChannelTiffSeriesWithUI
 
         DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
         dataStreamingToolsGUI.showDialog();
+
+        BigDataTrackerGUI bigDataTrackerGUI = new BigDataTrackerGUI();
+        bigDataTrackerGUI.showDialog();
 
     }
 

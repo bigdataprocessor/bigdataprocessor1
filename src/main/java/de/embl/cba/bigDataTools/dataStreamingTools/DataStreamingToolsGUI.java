@@ -1,6 +1,6 @@
 package de.embl.cba.bigDataTools.dataStreamingTools;
 
-import de.embl.cba.bigDataTools.ImarisUtils;
+import de.embl.cba.bigDataTools.imaris.ImarisUtils;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
 import de.embl.cba.bigDataTools.utils.ImageDataInfo;
@@ -48,13 +48,15 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfGateMax = new JTextField("255",5);
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
-            ".*",".*--C.*",".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+            ".*", ".*--C.*", ".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             Utils.LOAD_CHANNELS_FROM_FOLDERS,
             "<Z0000-0009>.tif",
             ".*--C<c>--T<t>.tif",
+            ".*--C<c>--T<t>.h5",
             ".*_C<c>_T<t>.tif",
+            ".*--t<t>--Z<z>--C<c>.tif",
             "Cam_<c>_<t>.h5",
             "classified--C<C01-01>--T<T00001-00001>--Z<Z00001-01162>.tif",
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
@@ -640,7 +642,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             //
 
             int numberOfUnparsedFiles = vss.numberOfUnparsedFiles();
-            if(numberOfUnparsedFiles > 0) {
+            if( numberOfUnparsedFiles > 0 ) {
                 logger.error("There are still " + numberOfUnparsedFiles +
                         " files in the folder that have not been parsed yet.\n" +
                         "Please try again later (check ImageJ's status bar).");

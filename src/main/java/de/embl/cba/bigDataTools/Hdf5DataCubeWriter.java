@@ -1,5 +1,6 @@
 package de.embl.cba.bigDataTools;
 
+import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
 import de.embl.cba.bigDataTools.utils.Utils;
 
 import ij.IJ;
@@ -14,7 +15,7 @@ import ncsa.hdf.hdf5lib.exceptions.HDF5LibraryException;
 
 import static de.embl.cba.bigDataTools.Hdf5Utils.writeDoubleAttribute;
 import static de.embl.cba.bigDataTools.Hdf5Utils.writeStringAttribute;
-import static de.embl.cba.bigDataTools.ImarisUtils.*;
+import static de.embl.cba.bigDataTools.imaris.ImarisUtils.*;
 
 public class Hdf5DataCubeWriter {
 
@@ -49,16 +50,10 @@ public class Hdf5DataCubeWriter {
     }
 
 
-    public void writeImarisCompatibleResolutionPyramid(
-            ImagePlus imp3d,
-            ImarisDataSet idp,
-            int c, int t ) throws HDF5LibraryException
+    public void writeImarisCompatibleResolutionPyramid( ImagePlus imp3d, ImarisDataSet idp, int c, int t ) throws HDF5LibraryException
     {
 
-
-        file_id = createFile(
-                idp.getDataSetDirectory( c, t, 0 ),
-                idp.getDataSetFilename( c, t, 0 ) );
+        file_id = createFile( idp.getDataSetDirectory( c, t, 0 ), idp.getDataSetFilename( c, t, 0 ) );
 
         setImageMemoryAndFileType( imp3d );
 
@@ -146,11 +141,11 @@ public class Hdf5DataCubeWriter {
 
         if( imp.getBitDepth() == 8 )
         {
-
             byte[][] data = getByteData( imp, 0, 0 );
 
-            if ( chunkXYZ[2] != 1 )
+            if ( chunkXYZ[ 2 ] != 1 )
             {
+                System.out.println( "Saving 8-bit hdf5 as one block." );
 
                 H5.H5Dwrite( dataset_id,
                         image_memory_type,
@@ -162,10 +157,11 @@ public class Hdf5DataCubeWriter {
             else
             {
                 // write plane wise (hopefully avoiding java int indexing issues)
+                System.out.println( "Saving 8-bit hdf5 plane-wise." );
 
                 for ( int i = 0; i < imp.getNSlices(); ++i )
                 {
-                    byte[] slice = data[i];
+                    byte[] slice = data[ i ];
 
                     long[] start = new long[]{ i, 0, 0 };
                     long[] count = new long[]{ 1, imp.getHeight(), imp.getWidth()};
@@ -196,17 +192,57 @@ public class Hdf5DataCubeWriter {
 
             }
         }
-        else if(imp.getBitDepth()==16)
+        else if( imp.getBitDepth() == 16 )
         {
-
             short[][] data = getShortData( imp, 0, 0 );
 
-            H5.H5Dwrite( dataset_id,
-                    image_memory_type,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5S_ALL,
-                    HDF5Constants.H5P_DEFAULT,
-                    data );
+            if ( chunkXYZ[ 2 ] != 1 )
+            {
+
+                H5.H5Dwrite( dataset_id,
+                        image_memory_type,
+                        HDF5Constants.H5S_ALL,
+                        HDF5Constants.H5S_ALL,
+                        HDF5Constants.H5P_DEFAULT,
+                        data );
+            }
+            else
+            {
+                System.out.println( "Saving 16-bit hdf5 plane-wise." );
+                // write plane wise (avoiding java int indexing issues)
+
+                for ( int i = 0; i < imp.getNSlices(); ++i )
+                {
+                    short[] slice = data[ i ];
+
+                    long[] start = new long[]{ i, 0, 0 };
+                    long[] count = new long[]{ 1, imp.getHeight(), imp.getWidth()};
+
+                    dataspace_id = H5.H5Dget_space( dataset_id );
+
+                    // Select hyperslab in file dataspace
+                    H5.H5Sselect_hyperslab( dataspace_id,
+                            HDF5Constants.H5S_SELECT_SET,
+                            start,
+                            null,
+                            count,
+                            null
+                    );
+
+                    // Create memspace
+                    int memspace = H5.H5Screate_simple( 1, new long[]{slice.length}, null );
+
+                    // write
+                    H5.H5Dwrite( dataset_id,
+                            image_memory_type,
+                            memspace,
+                            dataspace_id,
+                            HDF5Constants.H5P_DEFAULT,
+                            slice );
+
+                }
+
+            }
 
         }
         else if(imp.getBitDepth()==32)
