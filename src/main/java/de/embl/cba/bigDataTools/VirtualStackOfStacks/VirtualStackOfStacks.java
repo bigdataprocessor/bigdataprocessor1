@@ -616,7 +616,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     /*
     Currenly only works if all files exist...
      */
-    public ImagePlus getDataCube(Region5D region5D, int[] intensityGate, int nThreads)   {
+    public ImagePlus getDataCube( Region5D region5D, int[] intensityGate, int nThreads )   {
 
         ImagePlus impLoaded = null;
 
@@ -627,11 +627,9 @@ public class VirtualStackOfStacks extends VirtualStack {
         }
 
         // check stuff
-        if ( region5D.c < 0 )
-            logger.error("Selected channel is negative: " + region5D.c);
+        if ( region5D.c < 0 ) logger.error("Selected channel is negative: " + region5D.c );
 
-        if ( region5D.t < 0 )
-            logger.error("Selected time-point is negative: " + region5D.t);
+        if ( region5D.t < 0 ) logger.error("Selected time-point is negative: " + region5D.t );
 
 
         // make sure we have all the file-info data
@@ -641,9 +639,7 @@ public class VirtualStackOfStacks extends VirtualStack {
         }
 
         // make sure we have all the file-info data
-        for ( int z = (int)region5D.offset.getZ() ;
-              z < (int)region5D.offset.getZ() + (int)region5D.size.getZ();
-              ++z )
+        for ( int z = (int)region5D.offset.getZ() ; z < (int)region5D.offset.getZ() + (int)region5D.size.getZ(); ++z )
         {
             if ( (z > -1) && (z < nZ ) ) // because during tracking one could ask for out-of-bounds z-planes
             {
@@ -659,11 +655,11 @@ public class VirtualStackOfStacks extends VirtualStack {
         FileInfoSer fi;
         if ( (int)region5D.offset.getZ() >= 0 )
         {
-            fi = infos[region5D.c][region5D.t][(int) region5D.offset.getZ()];
+            fi = infos[ region5D.c ][ region5D.t ][ (int) region5D.offset.getZ() ];
         }
         else // requesting negative z can happen during object tracking
         {
-            fi = infos[region5D.c][region5D.t][0];
+            fi = infos[ region5D.c ][ region5D.t ][ 0 ];
         }
 
         if (fi.isCropped)

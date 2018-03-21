@@ -40,8 +40,7 @@ class ObjectTracker implements Runnable
         // filter image (hopefully good for improving the correlation)
         //
 
-        if ( trackingSettings.imageFeatureEnhancement.
-                equals( Utils.ImageFilterTypes.NONE.toString() ) )
+        if ( trackingSettings.imageFeatureEnhancement.equals( Utils.ImageFilterTypes.NONE.toString() ) )
         {
             imageFilter = new DoNotFilter();
         }
@@ -58,7 +57,7 @@ class ObjectTracker implements Runnable
             // - :probably some auto-local threshold works better?
             String method = "Default";
             imageFilter = new ThresholdFilter( method );
-            logger.info("Images will be tresholded using method : " + method);
+            logger.info( "Images will be tresholded using method : " + method );
         }
 
     }
@@ -85,8 +84,7 @@ class ObjectTracker implements Runnable
         int channel = trackingSettings.channel;
         int nt = trackingSettings.nt;
         int dt = trackingSettings.subSamplingT;
-        Point3D pStart = new Point3D(
-                trackingSettings.trackStartROI.getXBase(),
+        Point3D pStart = new Point3D( trackingSettings.trackStartROI.getXBase(),
                 trackingSettings.trackStartROI.getYBase(),
                 trackingSettings.trackStartROI.getImage().getZ() - 1);
 
@@ -120,9 +118,8 @@ class ObjectTracker implements Runnable
             region5D.size = pSize;
         }
         region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube(imp, region5D, trackingSettings.intensityGate, nThreads);
+        imp0 = Utils.getDataCube( imp, region5D, trackingSettings.intensityGate, nThreads );
         elapsedReadingTime = System.currentTimeMillis() - startTime;
-
 
         //
         // filter image to ease tracking
@@ -164,8 +161,7 @@ class ObjectTracker implements Runnable
         //
         // store results
         //
-        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt, dt,
-                elapsedReadingTime, elapsedProcessingTime);
+        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime);
 
 
         //
@@ -176,13 +172,20 @@ class ObjectTracker implements Runnable
         int tPrevious = tStart;
         int iProcessed = 0;
 
+        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+        {
+            imp0.setTitle( "t" + tStart + "-processed" );
+            imp0.show();
+        }
+
+
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
         //  - p1offset has to be the position where the current image was loaded
 
         for (int tNow = tStart + dt; tNow < tStart + nt + dt; tNow = tNow + dt) {
 
-            if(tNow >= tMax) {
+            if( tNow >= tMax ) {
                 // due to the sub-sampling in t the addition of dt
                 // can cause the frame to be outside of
                 // the tracking range => load the last frame
@@ -205,7 +208,7 @@ class ObjectTracker implements Runnable
                 // drift corrected position and only with the actual
                 // user-selected size
                 // the idea is that this should help the algorithm to
-                // stay focussed on one object, rather than jump to another one,
+                // stay focused on one object, rather than jump to another one,
                 // which might pass by during the sequence.
 
                 // previous
@@ -215,13 +218,11 @@ class ObjectTracker implements Runnable
                 // only load small size, because we already know the
                 // drift corrected position
                 region5D0.size = pSize;
-                p0offset = Utils.computeOffsetFromCenterSize(
-                        p1center, region5D0.size );
+                p0offset = Utils.computeOffsetFromCenterSize( p1center, region5D0.size );
                 region5D0.offset = p0offset;
 
                 region5D0.subSampling = trackingSettings.subSamplingXYZ;
-                imp0 = Utils.getDataCube(imp, region5D0,
-                        trackingSettings.intensityGate, nThreads);
+                imp0 = Utils.getDataCube( imp, region5D0, trackingSettings.intensityGate, nThreads );
             }
 
             // now
@@ -236,8 +237,7 @@ class ObjectTracker implements Runnable
             region5D1.offset = p1offset;
 
             region5D1.subSampling = trackingSettings.subSamplingXYZ;
-            imp1 = Utils.getDataCube( imp, region5D1,
-                    trackingSettings.intensityGate, nThreads );
+            imp1 = Utils.getDataCube( imp, region5D1, trackingSettings.intensityGate, nThreads );
 
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 
@@ -245,23 +245,18 @@ class ObjectTracker implements Runnable
             //
             imp1 = imageFilter.filter( imp1 );
 
+            if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+            {
+                imp1.setTitle( "t" + tNow + "-processed" );
+                imp1.show();
+            }
+
             if ( trackingSettings.trackingMethod.equals( "correlation" ) ) {
 
                 // filter image
                 // - only necessary for correlation tracking
                 //
                 imp0 = imageFilter.filter( imp0 );
-
-                if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
-                {
-                    imp0.setTitle("t"+tNow+"-previous");
-                    imp0.show();
-                    IJ.run(imp0, "Invert LUT", "");
-
-                    imp1.setTitle("t"+tNow+"-next");
-                    imp1.show(); 
-                    IJ.run(imp1, "Invert LUT", "");
-                }
 
                 logger.debug("measuring drift using correlation...");
 
@@ -291,9 +286,7 @@ class ObjectTracker implements Runnable
                 // and the geometric center of imp1
                 startTime = System.currentTimeMillis();
                 //info("timepoint: "+t);
-                pLocalShift = compute16bitShiftUsingIterativeCenterOfMass( imp1.getStack(),
-                        trackingSettings.trackingFactor,
-                        trackingSettings.iterationsCenterOfMass );
+                pLocalShift = compute16bitShiftUsingIterativeCenterOfMass( imp1.getStack(), trackingSettings.trackingFactor, trackingSettings.iterationsCenterOfMass );
                 stopTime = System.currentTimeMillis();
                 elapsedProcessingTime = stopTime - startTime;
 
@@ -312,8 +305,7 @@ class ObjectTracker implements Runnable
                 // info(""+track.getXYZ(tPrevious).toString());
                 // info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
                 // info(""+p1offset.add(pLocalShift).toString());
-                pShift = Utils.computeCenterFromOffsetSize(
-                        p1offset.add( pLocalShift ), pSize ).subtract( track.getPosition( tPrevious ) );
+                pShift = Utils.computeCenterFromOffsetSize( p1offset.add( pLocalShift ), pSize ).subtract( track.getPosition( tPrevious ) );
 
                 // no z-shift if there is only one slice
                 if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
@@ -331,9 +323,7 @@ class ObjectTracker implements Runnable
                 double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
                 pUpdate = pPrevious.add( pShift.multiply( interpolation ) );
 
-                publishResult( imp, track, trackTable, logger,
-                        pUpdate, tUpdate, nt, dt,
-                        elapsedReadingTime, elapsedProcessingTime);
+                publishResult( imp, track, trackTable, logger, pUpdate, tUpdate, nt, dt, elapsedReadingTime, elapsedProcessingTime);
 
             }
 

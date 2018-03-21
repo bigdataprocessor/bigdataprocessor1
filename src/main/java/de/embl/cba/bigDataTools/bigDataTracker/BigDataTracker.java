@@ -106,7 +106,7 @@ public class BigDataTracker {
 
     }
 
-    public ArrayList<ImagePlus> getViewsOnTrackedObjects(String croppingFactor) {
+    public ArrayList<ImagePlus> getViewsOnTrackedObjects( String croppingFactor ) {
 
         ArrayList<ImagePlus> imps = new ArrayList<>();
 
@@ -152,25 +152,22 @@ public class BigDataTracker {
                     return null;
                 }
 
-                pCropSize = track.getObjectSize().multiply(croppingFactorValue);
+                pCropSize = track.getObjectSize().multiply( croppingFactorValue );
 
                 for( Point3D position : locations.values() )
                 {
-                    trackOffsets.add(Utils.computeOffsetFromCenterSize(position, pCropSize));
+                    trackOffsets.add( Utils.computeOffsetFromCenterSize( position, pCropSize ) );
                 }
 
             }
 
-
-            // TODO: convert to Region5D[] for more consistency ?
-
-            // get a new view on the tracked data
             ImagePlus impCroppedAlongObject = null;
+
             if ( track.getImp().getStack() instanceof VirtualStackOfStacks )
             {
                 impCroppedAlongObject = DataStreamingTools.getCroppedVSS(
                         track.getImp(),
-                        trackOffsets.toArray(new Point3D[trackOffsets.size()]),
+                        trackOffsets.toArray( new Point3D[ trackOffsets.size() ] ),
                         pCropSize,
                         track.getTmin(),
                         track.getTmax());
@@ -179,7 +176,7 @@ public class BigDataTracker {
             {
                 impCroppedAlongObject = getCroppedImagePlus(
                         track.getImp(),
-                        trackOffsets.toArray(new Point3D[trackOffsets.size()]),
+                        trackOffsets.toArray( new Point3D[trackOffsets.size()] ),
                         pCropSize,
                         track.getTmin(),
                         track.getTmax());
@@ -241,7 +238,7 @@ public class BigDataTracker {
 
     }
 
-    public synchronized void addLocationToOverlay(final Track track, int t) {
+    public synchronized void addLocationToOverlay( final Track track, int t ) {
 
         int rx = (int) track.getObjectSize().getX()/2;
         int ry = (int) track.getObjectSize().getY()/2;
@@ -269,7 +266,7 @@ public class BigDataTracker {
         }
     }
 
-    public synchronized Track addNewTrack(TrackingSettings trackingSettings) {
+    public synchronized Track addNewTrack( TrackingSettings trackingSettings ) {
 
         int trackID = tracks.size(); // TODO: something else here as ID?
         tracks.add(new Track(trackingSettings, trackID));
@@ -277,7 +274,7 @@ public class BigDataTracker {
 
     }
 
-    public void trackObject(TrackingSettings trackingSettings)
+    public void trackObject( TrackingSettings trackingSettings )
     {
         interruptTrackingThreads = false;
         // TODO: change number of threads here (currently 1)

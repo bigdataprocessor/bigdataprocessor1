@@ -1166,14 +1166,14 @@ public class DataStreamingTools {
                     if (croppedInfos[c][t-tMin][z].isCropped)
                     {
                         Point3D originalCropOffset = croppedInfos[c][t-tMin][z].getCropOffset();
-                        Point3D additionalOffset = po[t-tMin];
+                        Point3D additionalOffset = po[ t - tMin ];
                         Point3D adaptedCropOffset = originalCropOffset.add( additionalOffset );
                         croppedInfos[c][t-tMin][z].setCropOffset( adaptedCropOffset );
                     }
                     else
                     {
                         croppedInfos[c][t-tMin][z].isCropped = true;
-                        croppedInfos[c][t-tMin][z].setCropOffset(po[t-tMin]);
+                        croppedInfos[c][t-tMin][z].setCropOffset( po[ t - tMin ] );
                     }
                     croppedInfos[c][t-tMin][z].setCropSize(ps);
                     //info("channel "+channel);

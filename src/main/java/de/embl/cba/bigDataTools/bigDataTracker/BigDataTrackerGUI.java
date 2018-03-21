@@ -38,7 +38,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
             "dx(bin), dy(bin), dz(subsample), dt(subsample) [pixels, frames]",
             TRACKING_LENGTH,
             "Intensity gating [min, max]",
-            "Show N first processed image pairs [Num]",
+            "Show (processed) tracking regions [Num]",
             "Resize regions by [factor]"
     };
 
@@ -584,7 +584,7 @@ public class BigDataTrackerGUI implements ActionListener, FocusListener
 
     public void showTrackedObjects() {
 
-        ArrayList<ImagePlus> imps = bigDataTracker.getViewsOnTrackedObjects(resizeFactor);
+        ArrayList<ImagePlus> imps = bigDataTracker.getViewsOnTrackedObjects( resizeFactor );
 
         if( imps == null )
         {
