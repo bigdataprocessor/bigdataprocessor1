@@ -35,9 +35,6 @@ import java.util.concurrent.Future;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-// hdf5:  http://svnsis.ethz.ch/doc/hdf5/hdf5-14.12/
-
-/** Opens the nth image of the specified TIFF stack.*/
 class OpenerExtension extends Opener {
 
     // TODO: make it NOT an extension
@@ -48,8 +45,7 @@ class OpenerExtension extends Opener {
     {
     }
 
-    public ImagePlus readDataCube(String directory, FileInfoSer[] info,
-                                  int dz, Point3D po, Point3D ps, int nThreads)
+    public ImagePlus readDataCube(String directory, FileInfoSer[] info, int dz, Point3D po, Point3D ps, int nThreads)
     {
 
         // compute ranges to be loaded
@@ -449,7 +445,7 @@ class OpenerExtension extends Opener {
         totalTime = System.currentTimeMillis();
 
         // initialisation and allocation
-        int imByteWidth = fi.width*fi.bytesPerPixel;
+        int imByteWidth = fi.width * fi.bytesPerPixel;
         // todo: this is not necessary to allocate new, but could be filled
         ImageStack stack = ImageStack.create(nx, ny, nz, fi.bytesPerPixel * 8);
         byte[][] buffer = new byte[nz][1];
@@ -612,7 +608,8 @@ class OpenerExtension extends Opener {
                                                int z, int zs, int ze, int dz,
                                                int ys, int ye, int ny,
                                                int xs, int xe, int nx,
-                                               int imByteWidth) {
+                                               int imByteWidth)
+        {
             threadName = ""+z;
             this.directory = directory;
             this.info = info;

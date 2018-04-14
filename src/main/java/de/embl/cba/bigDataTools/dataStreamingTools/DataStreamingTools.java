@@ -457,10 +457,12 @@ public class DataStreamingTools {
                 // check if those are Leica single tiff SPIM files
                 //
 
-                Pattern patternLeica = Pattern.compile("LightSheet .*");
+                Pattern leicaPattern01 = Pattern.compile( "LightSheet .*" );
+                Pattern leicaPattern02 = Pattern.compile( "DLS .*" );
+
                 for ( String fileName : fileLists[0] )
                 {
-                    if ( patternLeica.matcher( fileName ).matches() )
+                    if ( leicaPattern01.matcher( fileName ).matches() || leicaPattern02.matcher( fileName ).matches() )
                     {
                         fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
                         logger.info("detected fileType: " + fileType);
@@ -1526,43 +1528,6 @@ public class DataStreamingTools {
             BigDataTracker register = new BigDataTracker();
             register.run("");
         }*/
-
-
-        //final String directory = "/Users/tischi/Desktop/Gustavo_Crop/";
-        //final String directory = "/Users/tischi/Desktop/example-data/iSPIM tif stacks/";
-        //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files/";
-        //final String directory = "/Users/tischi/Desktop/example-data/Leica single tif files 2channels/";
-
-        //final String directory = "/Volumes/almf/group/ALMFstuff/ALMF_Data/ALMF_testData/EM/GalNac_HPF/";
-
-        //final String directory = "/Users/tischi/Desktop/example-data/3d-embryo/";
-
-        //final String directory = "/Volumes/almf/tischer/browsing/";
-        //final String directory = "/Volumes/almf/tischer/browsing/";
-
-        //final String directory = "/Users/tischi/Desktop/BIAS2017-Registration/Cell45/";
-
-
-        //final String directory = "/Users/tischi/Desktop/example-data/Nils--MATLAB--Compressed/";
-
-        // final String directory = "/Volumes/USB DISK/Ashna -test/";
-        // final String directory = "/Users/tischi/Desktop/example-data/Ashna-Leica-Target-LSEA/";
-
-
-        //final String directory = "/Volumes/My Passport/Res_13/";
-        //final String directory = "/Users/tischi/Desktop/example-data/tracking_test/";
-        //final String directory = "/Volumes/almfspim/tischi/SPIM-example-data/Nils-MATLAB--tif-stacks--1channel--lzw-compressed/";
-        //String filter = null;
-
-        //String openingMethod = "tiffLoadAllIFDs";
-
-        //OpenHdf5Test oh5 = new OpenHdf5Test();
-        //oh5.openOneFileAsImp("/Users/tischi/Desktop/example-data/luxendo/ch0/fused_t00000_c0.h5");
-        // logger.isShowDebug()  = true;
-
-
-        //ImagePlus imp3 = IJ.openImage("/Users/tischi/Desktop/BIAS2017-Registration/Experiment-40_s5.tif");
-        //imp3.show();
 
         final DataStreamingTools dataStreamingTools = new DataStreamingTools();
         Thread t1 = new Thread(new Runnable() {
