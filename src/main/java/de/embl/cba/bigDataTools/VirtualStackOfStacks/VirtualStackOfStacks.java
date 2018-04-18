@@ -158,6 +158,17 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
 
+    public void setChromaticShifts( ArrayList< Point3D > shifts )
+    {
+        chromaticShifts = shifts;
+    }
+
+    public ArrayList< Point3D >  getChromaticShifts(  )
+    {
+        return chromaticShifts;
+    }
+
+
     public void setDirectory( String directory )
     {
         this.directory = directory;

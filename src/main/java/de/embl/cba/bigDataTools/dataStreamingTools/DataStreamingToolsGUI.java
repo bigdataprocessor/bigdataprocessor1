@@ -10,6 +10,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.gui.NonBlockingGenericDialog;
+import javafx.geometry.Point3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +47,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfMapTo0 = new JTextField("0",5);
     JTextField tfGateMin = new JTextField("0",5);
     JTextField tfGateMax = new JTextField("255",5);
-    JTextField tfChromaticShifts = new JTextField("0,0; 0,0; 0,0", 20 );
+    JTextField tfChromaticShifts = new JTextField("0,0,0; 0,0,0", 20 );
 
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
@@ -299,7 +300,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         panels.get(j).add( applyShifts );
         mainPanels.get(k).add(panels.get(j++));
 
-        jtp.add("Shifts", mainPanels.get(k++));
+        jtp.add("Chromatic Shifts", mainPanels.get(k++));
 
         // Viewing
         //
@@ -639,10 +640,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         }
         else if (e.getActionCommand().equals( APPLY_SHIFTS ) )
         {
+
             ImagePlus imp = IJ.getImage();
             if ( ! Utils.hasVirtualStackOfStacks( imp ) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            
+
+            setChromaticShifts( vss );
+
         }
         else if (e.getActionCommand().equals(LOAD_FULLY_INTO_RAM))
         {
@@ -734,7 +738,24 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         }
     }
 
-    private String[] getToolTipFile(String fileName) {
+    private void setChromaticShifts( VirtualStackOfStacks vss )
+    {
+        String[] shifts = tfChromaticShifts.getText().split( ";" );
+
+        if ( shifts.length != vss.getChannels() )
+        {
+            logger.error( "Parsing of shift text did not yield the same number of channels as the input image has." );
+            return;
+        }
+
+        for ( int c = 0; c < vss.getChannels() ; ++c )
+        {
+            int[] pixelShifts = Utils.delimitedStringToIntegerArray( shifts[ c ], "," );
+            vss.setChromaticShift( c, new Point3D( pixelShifts[ 0 ], pixelShifts[ 1 ], pixelShifts[ 2 ] ) );
+        }
+    }
+
+    private String[] getToolTipFile( String fileName ) {
 
         ArrayList<String> toolTipTexts = new ArrayList<String>();
 

@@ -1127,13 +1127,13 @@ public class DataStreamingTools {
 
         // Crop
         //
-        ImagePlus impCropped = getCroppedVSS(imp, po, ps, tMin, tMax);
-        impCropped.setTitle(imp.getTitle() + "-crop");
+        ImagePlus impCropped = getCroppedVSS( imp, po, ps, tMin, tMax );
+        impCropped.setTitle( imp.getTitle() + "-crop" );
         return impCropped;
 
     }
 
-    public static ImagePlus getCroppedVSS(ImagePlus imp, Point3D[] po, Point3D ps, int tMin, int tMax)
+    public static ImagePlus getCroppedVSS( ImagePlus imp, Point3D[] po, Point3D ps, int tMin, int tMax )
     {
 
         VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
@@ -1192,6 +1192,7 @@ public class DataStreamingTools {
 
         VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
         VirtualStackOfStacks stack = new VirtualStackOfStacks( parentStack.getDirectory(), croppedInfos );
+        stack.setChromaticShifts( vss.getChromaticShifts() );
         return createImagePlusFromVSS( stack );
 
     }

@@ -197,7 +197,7 @@ public class SaveVSSFrame implements Runnable {
 
             }
 
-            documentProgress( imp.getNFrames() );
+            documentProgress( imp.getNFrames() * imp.getNChannels() );
 
         }
 
@@ -211,7 +211,7 @@ public class SaveVSSFrame implements Runnable {
         double minutesPerStack = minutesSpent / counter.get();
         double minutesLeft = (total - counter.get()) * minutesPerStack;
 
-        logger.progress("Saved time point",
+        logger.progress("Saved file",
                 "" + counter.get() + "/" + total
                         + "; time (spent, left) [min]: " + (int) minutesSpent + ", " + (int) minutesLeft
                         + "; memory: "
