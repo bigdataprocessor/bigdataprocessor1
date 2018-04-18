@@ -46,12 +46,14 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
     JTextField tfMapTo0 = new JTextField("0",5);
     JTextField tfGateMin = new JTextField("0",5);
     JTextField tfGateMax = new JTextField("255",5);
+    JTextField tfChromaticShifts = new JTextField("0,0; 0,0; 0,0", 20 );
+
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
             ".*", ".*--C.*", ".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
-            Utils.LOAD_CHANNELS_FROM_FOLDERS,
+            DataStreamingTools.LOAD_CHANNELS_FROM_FOLDERS,
             "<Z0000-0009>.tif",
             ".*--C<c>--T<t>.tif",
             ".*--C<c>--T<t>.h5",
@@ -97,6 +99,11 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
     final String CROPasNewStream = "Crop as new stream";
     JButton cropAsNewStream =  new JButton(CROPasNewStream);
+
+    final String APPLY_SHIFTS = "Apply shifts";
+    JButton applyShifts =  new JButton( APPLY_SHIFTS );
+
+
 
     final String REPORT_ISSUE = "Report an issue";
     JButton reportIssue =  new JButton(REPORT_ISSUE);
@@ -272,6 +279,27 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).add(panels.get(j++));
 
         jtp.add("Saving", mainPanels.get(k++));
+
+
+
+        // Chromatic Shifts
+        //
+
+        mainPanels.add( new JPanel() );
+        mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
+
+        panels.add(new JPanel());
+        panels.get(j).add( new JLabel("Chromatic shifts [pixels]:") );
+        panels.get(j).add( tfChromaticShifts );
+        mainPanels.get(k).add(panels.get(j++));
+
+        panels.add(new JPanel());
+        applyShifts.setActionCommand( APPLY_SHIFTS );
+        applyShifts.addActionListener(this);
+        panels.get(j).add( applyShifts );
+        mainPanels.get(k).add(panels.get(j++));
+
+        jtp.add("Shifts", mainPanels.get(k++));
 
         // Viewing
         //
@@ -609,6 +637,13 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             }
 
         }
+        else if (e.getActionCommand().equals( APPLY_SHIFTS ) )
+        {
+            ImagePlus imp = IJ.getImage();
+            if ( ! Utils.hasVirtualStackOfStacks( imp ) ) return;
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            
+        }
         else if (e.getActionCommand().equals(LOAD_FULLY_INTO_RAM))
         {
 
@@ -634,7 +669,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             //
 
             ImagePlus imp = IJ.getImage();
-            if ( !Utils.hasVirtualStackOfStacks(imp) ) return;
+            if ( ! Utils.hasVirtualStackOfStacks( imp ) ) return;
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
             //settings.folderElastix + "bin/elastix",

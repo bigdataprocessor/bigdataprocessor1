@@ -101,6 +101,7 @@ import java.util.regex.Pattern;
  * */
 public class DataStreamingTools {
 
+    public static String LOAD_CHANNELS_FROM_FOLDERS = "channels from sub-folders";
     private static Logger logger = new IJLazySwingLogger();
     public boolean interruptSavingThreads = false;
 
@@ -408,7 +409,7 @@ public class DataStreamingTools {
 
         int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
 
-        if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+        if (channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
         {
             //
             // Check for sub-folders
@@ -660,7 +661,7 @@ public class DataStreamingTools {
         {
             boolean hasCTPattern = false;
 
-            if (channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+            if (channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
             {
 
                 nC = imageDataInfo.channelFolders.length;
@@ -724,7 +725,7 @@ public class DataStreamingTools {
             //
             // Create dummy channel folders, if no real ones exist
             //
-            if (!channelTimePattern.equals(Utils.LOAD_CHANNELS_FROM_FOLDERS))
+            if (!channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
             {
                 imageDataInfo.channelFolders = new String[nC];
                 for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";

@@ -41,7 +41,6 @@ import de.embl.cba.bigDataTools.utils.Utils;
 import ch.systemsx.cisd.hdf5.HDF5DataSetInformation;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.IHDF5Reader;
-import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.VirtualStack;
@@ -52,10 +51,8 @@ import javafx.geometry.Point3D;
 import net.imglib2.FinalInterval;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
@@ -77,13 +74,14 @@ public class VirtualStackOfStacks extends VirtualStack {
     String h5DataSet;
     String namingScheme;
     String filterPattern;
+    ArrayList< Point3D > chromaticShifts;
 
     private ArrayList < String > lockedFiles = new  ArrayList<>();
 
     Logger logger = new IJLazySwingLogger();
 
     /** Creates a new, empty virtual stack of required size */
-    public VirtualStackOfStacks(String directory, String[] channelFolders, String[][][] fileList, int nC, int nT, int nX, int nY, int nZ, int bitDepth, String fileType, String h5DataSet) {
+    public VirtualStackOfStacks( String directory, String[] channelFolders, String[][][] fileList, int nC, int nT, int nX, int nY, int nZ, int bitDepth, String fileType, String h5DataSet) {
         super();
 
         this.directory = directory;
@@ -100,6 +98,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         this.infos = new FileInfoSer[nC][nT][nZ];
         this.h5DataSet = h5DataSet;
 
+        initialiseChromaticShifts( nC );
+
         if( logger.isShowDebug() ) {
             logStatus();
         }
@@ -107,7 +107,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
 
-    public VirtualStackOfStacks(String directory, FileInfoSer[][][] infos)
+    public VirtualStackOfStacks( String directory, FileInfoSer[][][] infos )
     {
         super();
 
@@ -117,7 +117,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         nT = infos[0].length;
         bitDepth = infos[0][0][0].bytesPerPixel*8;
 
-        if(infos[0][0][0].isCropped) {
+        if(infos[0][0][0].isCropped)
+        {
             nX = (int) infos[0][0][0].pCropSize[0];
             nY = (int) infos[0][0][0].pCropSize[1];
             nZ = (int) infos[0][0][0].pCropSize[2];
@@ -129,6 +130,8 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         nSlices = nC*nT*nZ;
 
+        initialiseChromaticShifts( nC );
+
         if(infos[0][0][0].fileName.endsWith(".h5"))
             this.fileType = Utils.FileType.HDF5.toString();
         if(infos[0][0][0].fileName.endsWith(".tif"))
@@ -139,6 +142,21 @@ public class VirtualStackOfStacks extends VirtualStack {
         }
 
     }
+
+    private void initialiseChromaticShifts( int nC )
+    {
+        chromaticShifts = new ArrayList<>();
+        for ( int c = 0; c < nC; ++c )
+        {
+            chromaticShifts.add( new Point3D( 0,0,0 ) );
+        }
+    }
+
+    public void setChromaticShift( int c, Point3D shift )
+    {
+        chromaticShifts.set( c, shift );
+    }
+
 
     public void setDirectory( String directory )
     {
@@ -194,7 +212,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         return directory;
     }
 
-    public int numberOfUnparsedFiles() {
+    public int numberOfUnparsedFiles()
+    {
         int numberOfUnparsedFiles = 0;
         for(int c = 0; c < nC; c++ )
             for(int t = 0; t < nT; t++)
@@ -204,13 +223,13 @@ public class VirtualStackOfStacks extends VirtualStack {
         return numberOfUnparsedFiles;
     }
 
-    public void setInfoFromFile(int c, int t, int z)
+    public void setInfoFromFile( int c, int t, int z )
     {
         setInfoFromFile( c, t, z, true);
     }
 
     /** Adds an image stack from file infos */
-    public void setInfoFromFile(int c, int t, int z, boolean throwError)
+    public void setInfoFromFile( int c, int t, int z, boolean throwError )
     {
         FileInfoSer[] info = null;
         FileInfoSer[] infoCT = null;
@@ -508,7 +527,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     N is computed by IJ assuming the czt ordering, with
     n = ( channel + z*nC + t*nZ*nC ) + 1
     */
-    public ImageProcessor getProcessor(int n) {
+    public ImageProcessor getProcessor( int n ) {
         // recompute channel,z,t
         n -= 1;
         int c = (n % nC);
@@ -544,11 +563,14 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         Point3D po, ps;
         po = new Point3D(0,0,z);
-        if(fi.isCropped) {
+        if( fi.isCropped )
+        {
             // offset for cropping is added in  getDataCube
-            ps = new Point3D(fi.pCropSize[0],fi.pCropSize[1],1);
-        } else {
-            ps = new Point3D(fi.width,fi.height,1);
+            ps = new Point3D( fi.pCropSize[0], fi.pCropSize[1], 1);
+        }
+        else
+        {
+            ps = new Point3D( fi.width, fi.height, 1);
         }
 
         Region5D region5D = new Region5D();
@@ -558,7 +580,7 @@ public class VirtualStackOfStacks extends VirtualStack {
         region5D.size = ps;
         region5D.subSampling = new Point3D(1, 1, 1);
         int[] intensityGate = new int[]{-1,-1};
-        imp = getDataCube(region5D, intensityGate, 1);
+        imp = getDataCube( region5D, intensityGate, 1 );
 
         return imp.getProcessor();
 
@@ -581,11 +603,14 @@ public class VirtualStackOfStacks extends VirtualStack {
         return( getFullFrame(t, c, new Point3D(1,1,1), nThreads) );
     }
 
-    public ImagePlus getFullFrame(int t, int c, Point3D pSubSample, int nThreads) {
+    public ImagePlus getFullFrame( int t, int c, Point3D pSubSample, int nThreads ) {
 
         Point3D po, ps;
+
         po = new Point3D(0, 0, 0);
-        if(infos[0][0][0].isCropped) {
+
+        if(infos[0][0][0].isCropped)
+        {
             // offset is added by getDataCube
             ps = infos[0][0][0].getCropSize();
         } else {
@@ -604,7 +629,7 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1)
         {
-            return(resizeWidthAndHeight(imp,(int)pSubSample.getX(),(int)pSubSample.getY()));
+            return( resizeWidthAndHeight(imp,(int)pSubSample.getX(),(int)pSubSample.getY() ) );
         }
         else
         {
@@ -618,8 +643,6 @@ public class VirtualStackOfStacks extends VirtualStack {
      */
     public ImagePlus getDataCube( Region5D region5D, int[] intensityGate, int nThreads )   {
 
-        ImagePlus impLoaded = null;
-
         if ( logger.isShowDebug() ) {
               logger.info("# VirtualStackOfStacks.getDataCube");
               logger.info("t: " + region5D.t);
@@ -628,44 +651,14 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         // check stuff
         if ( region5D.c < 0 ) logger.error("Selected channel is negative: " + region5D.c );
-
         if ( region5D.t < 0 ) logger.error("Selected time-point is negative: " + region5D.t );
 
+        FileInfoSer fi = getFileInfo( region5D );
 
-        // make sure we have all the file-info data
-        if ( infos[region5D.c][region5D.t] == null ) {
-            // stack info not yet loaded => get it!
-            setInfoFromFile( region5D.c, region5D.t, 0 );
-        }
+        adjustRegionOffsetForCropping( region5D, fi );
 
-        // make sure we have all the file-info data
-        for ( int z = (int)region5D.offset.getZ() ; z < (int)region5D.offset.getZ() + (int)region5D.size.getZ(); ++z )
-        {
-            if ( (z > -1) && (z < nZ ) ) // because during tracking one could ask for out-of-bounds z-planes
-            {
-                if (infos[ region5D.c ][ region5D.t ][ z ] == null)
-                {
-                    File f = new File(directory + channelFolders[region5D.c] + "/" + ctzFileList[region5D.c][region5D.t][z]);
-                    // file info not yet loaded => get it!
-                    setInfoFromFile( region5D.c, region5D.t, z );
-                }
-            }
-        }
+        adjustRegionOffsetForChromaticShifts( region5D );
 
-        FileInfoSer fi;
-        if ( (int)region5D.offset.getZ() >= 0 )
-        {
-            fi = infos[ region5D.c ][ region5D.t ][ (int) region5D.offset.getZ() ];
-        }
-        else // requesting negative z can happen during object tracking
-        {
-            fi = infos[ region5D.c ][ region5D.t ][ 0 ];
-        }
-
-        if (fi.isCropped)
-        {
-            region5D.offset = region5D.offset.add(fi.getCropOffset());
-        }
 
         int dz = (int) region5D.subSampling.getZ();
 
@@ -693,51 +686,60 @@ public class VirtualStackOfStacks extends VirtualStack {
         int sy2 = sy - (oy2-oy);
         int sz2 = sz - (oz2-oz);
 
-        //
         // adjust for too large loading ranges due to high offsets
         // - note: ox2=ox and sx2=sx if ox was positive
         int nX = fi.width;
         int nY = fi.height;
-        int nZ = infos[region5D.c][region5D.t].length;
+        int nZ = infos[ region5D.c ][ region5D.t ].length;
 
         sx2 = (ox2+sx2 > nX) ? nX-ox2 : sx2;
         sy2 = (oy2+sy2 > nY) ? nY-oy2 : sy2;
         sz2 = (oz2+sz2 > nZ) ? nZ-oz2 : sz2;
 
-        //
+
         // check memory requirements
         //
-
         long numPixels = (long) sx2 * sy2 * sz2;
         int numStacks = 1;
         int bitDepth = this.getBitDepth();
 
-        if( ! Utils.checkMemoryRequirements(numPixels, bitDepth, numStacks) ) return(null);
+        if( ! Utils.checkMemoryRequirements( numPixels, bitDepth, numStacks) ) return(null);
 
-        //
-        // load the requested data into RAM
-        //
 
-        if( sx2>0 && sy2>0 && sz2>0 )
+        // load requested data into RAM
+        //
+        ImagePlus impLoaded = getRawLoaded( region5D, nThreads, dz, ox2, oy2, oz2, sx2, sy2, sz2 );
+
+        if (impLoaded == null)
         {
-            Point3D po2 = new Point3D(ox2, oy2, oz2);
-            Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            long duration = System.currentTimeMillis();
-
-            impLoaded = new OpenerExtension().readDataCube(directory,
-                    infos[region5D.c][region5D.t],
-                    dz, po2, ps2, nThreads);
-
-            duration = System.currentTimeMillis() - duration;
-
-            if (impLoaded == null)
-            {
-                logger.info("Error: loading failed!");
-                return null;
-            }
-
+            logger.info("Error: loading failed!");
+            return null;
         }
 
+        ImagePlus finalImp = getProcessedOfRightSize( intensityGate, fi, dz, ox, oy, oz, sx, sy, sz, ox2, oy2, oz2, sx2, sy2, sz2, impLoaded );
+
+        ImagePlus subSampled = getSubSampled( region5D, finalImp );
+
+
+        return subSampled;
+
+    }
+
+    private ImagePlus getSubSampled( Region5D region5D, ImagePlus finalImp )
+    {
+        // subsample in x and y
+        ImagePlus subSampled;
+
+        if ((int) region5D.subSampling.getX() > 1 || (int) region5D.subSampling.getY() > 1) {
+            subSampled = resizeWidthAndHeight(finalImp, (int) region5D.subSampling.getX(), (int) region5D.subSampling.getY());
+        } else {
+            subSampled = finalImp;
+        }
+        return subSampled;
+    }
+
+    private ImagePlus getProcessedOfRightSize( int[] intensityGate, FileInfoSer fi, int dz, int ox, int oy, int oz, int sx, int sy, int sz, int ox2, int oy2, int oz2, int sx2, int sy2, int sz2, ImagePlus impLoaded )
+    {
         // put the potentially smaller loaded stack into the full stack
 
         int finalStackOffsetX = (ox2 - ox);
@@ -781,13 +783,77 @@ public class VirtualStackOfStacks extends VirtualStack {
         // todo: if this is called from "getProcessor" I need different logic because
         // it should only return one plane
 
-        ImagePlus finalImp = new ImagePlus("", finalStack);
+        return new ImagePlus("", finalStack);
+    }
 
-        // subsample in x and y
-        if ((int) region5D.subSampling.getX() > 1 || (int) region5D.subSampling.getY() > 1) {
-            return (resizeWidthAndHeight(finalImp, (int) region5D.subSampling.getX(), (int) region5D.subSampling.getY()));
-        } else {
-            return (finalImp);
+    private ImagePlus getRawLoaded( Region5D region5D, int nThreads, int dz, int ox2, int oy2, int oz2, int sx2, int sy2, int sz2 )
+    {
+        ImagePlus impLoaded = null;
+
+        if( sx2>0 && sy2>0 && sz2>0 )
+        {
+            Point3D po2 = new Point3D(ox2, oy2, oz2);
+            Point3D ps2 = new Point3D(sx2, sy2, sz2);
+            long duration = System.currentTimeMillis();
+
+            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2, nThreads);
+            duration = System.currentTimeMillis() - duration;
+        }
+        return impLoaded;
+    }
+
+    private void adjustRegionOffsetForCropping( Region5D region5D, FileInfoSer fi )
+    {
+        if ( fi.isCropped )
+        {
+            region5D.offset = region5D.offset.add( fi.getCropOffset() );
+        }
+    }
+
+    private void adjustRegionOffsetForChromaticShifts( Region5D region5D )
+    {
+        region5D.offset = region5D.offset.add( chromaticShifts.get( region5D.c ) );
+    }
+
+    private FileInfoSer getFileInfo( Region5D region5D )
+    {
+        ensureExistenceOfFileInfo( region5D );
+
+        FileInfoSer fi;
+
+        if ( (int) region5D.offset.getZ() >= 0 )
+        {
+            fi = infos[ region5D.c ][ region5D.t ][ (int) region5D.offset.getZ() ];
+        }
+        else // requesting negative z can happen during object tracking
+        {
+            fi = infos[ region5D.c ][ region5D.t ][ 0 ];
+        }
+
+        return fi;
+    }
+
+    private void ensureExistenceOfFileInfo( Region5D region5D )
+    {
+        // make sure we have all the file-info data
+        if ( infos[ region5D.c ][ region5D.t ] == null )
+        {
+            // stack info not yet loaded => get it!
+            setInfoFromFile( region5D.c, region5D.t, 0 );
+        }
+
+        // make sure we have all the file-info data
+        for ( int z = (int)region5D.offset.getZ() ; z < (int)region5D.offset.getZ() + (int)region5D.size.getZ(); ++z )
+        {
+            if ( (z > -1) && (z < nZ ) ) // because during tracking one could ask for out-of-bounds z-planes
+            {
+                if ( infos[ region5D.c ][ region5D.t ][ z ] == null)
+                {
+                    File f = new File(directory + channelFolders[region5D.c] + "/" + ctzFileList[region5D.c][region5D.t][z]);
+                    // file info not yet loaded => get it!
+                    setInfoFromFile( region5D.c, region5D.t, z );
+                }
+            }
         }
     }
 
