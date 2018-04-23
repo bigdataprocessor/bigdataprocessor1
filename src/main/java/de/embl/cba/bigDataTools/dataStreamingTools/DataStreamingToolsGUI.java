@@ -6,6 +6,7 @@ import de.embl.cba.bigDataTools.logging.Logger;
 import de.embl.cba.bigDataTools.utils.ImageDataInfo;
 import de.embl.cba.bigDataTools.utils.Utils;
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import ij.CompositeImage;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
@@ -290,7 +291,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
         panels.add(new JPanel());
-        panels.get(j).add( new JLabel("Chromatic shifts [pixels]:") );
+        panels.get(j).add( new JLabel("Chromatic shifts in pixels for each channel [x,y,z; x,y,z; ...]:") );
         panels.get(j).add( tfChromaticShifts );
         mainPanels.get(k).add(panels.get(j++));
 
@@ -647,6 +648,10 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             setChromaticShifts( vss );
 
+            updateVSSImageDisplay( imp );
+            //imp.updateAndRepaintWindow();
+
+
         }
         else if (e.getActionCommand().equals(LOAD_FULLY_INTO_RAM))
         {
@@ -735,6 +740,23 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
             }
 
+        }
+    }
+
+    private void updateVSSImageDisplay( ImagePlus imp )
+    {
+        VirtualStackOfStacks vss = ( VirtualStackOfStacks ) imp.getStack();
+        if ( imp instanceof CompositeImage )
+        {
+            // TODO: update does not work
+            // one has to manage to somehow update the processors of all channels
+            CompositeImage compositeImage = (CompositeImage) imp;
+            compositeImage.updateAllChannelsAndDraw();
+        }
+        else
+        {
+            imp.setProcessor( vss.getProcessor( vss.getCurrentStackPosition() ) );
+            imp.updateAndDraw();
         }
     }
 

@@ -75,6 +75,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     String namingScheme;
     String filterPattern;
     ArrayList< Point3D > chromaticShifts;
+    int currentStackPosition = 0;
 
     private ArrayList < String > lockedFiles = new  ArrayList<>();
 
@@ -137,7 +138,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         if(infos[0][0][0].fileName.endsWith(".tif"))
             this.fileType = Utils.FileType.TIFF_STACKS.toString(); // TODO: could be sinlge tif?!
 
-        if( logger.isShowDebug() ) {
+        if( logger.isShowDebug() )
+        {
             logStatus();
         }
 
@@ -163,9 +165,10 @@ public class VirtualStackOfStacks extends VirtualStack {
         chromaticShifts = shifts;
     }
 
-    public ArrayList< Point3D >  getChromaticShifts(  )
+    public ArrayList< Point3D > getChromaticShiftsCopy(  )
     {
-        return chromaticShifts;
+        ArrayList< Point3D > chromaticShiftCopy = new ArrayList<>( chromaticShifts );
+        return chromaticShiftCopy;
     }
 
 
@@ -399,7 +402,8 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
     /** Returns the pixel array for the specified slice, were 1<=n<=nslices. */
-    public Object getPixels(int n) {
+    public Object getPixels( int n )
+    {
         ImageProcessor ip = getProcessor(n);
         if (ip!=null)
             return ip.getPixels();
@@ -526,11 +530,14 @@ public class VirtualStackOfStacks extends VirtualStack {
 
     }
 
-
-
     private void sleep( int milliSeconds )
     {
         try { Thread.sleep( milliSeconds ); } catch ( InterruptedException e ) { e.printStackTrace(); }
+    }
+
+    public int getCurrentStackPosition( )
+    {
+        return currentStackPosition;
     }
 
     /** Returns an ImageProcessor for the specified slice,
@@ -538,7 +545,10 @@ public class VirtualStackOfStacks extends VirtualStack {
     N is computed by IJ assuming the czt ordering, with
     n = ( channel + z*nC + t*nZ*nC ) + 1
     */
-    public ImageProcessor getProcessor( int n ) {
+    public ImageProcessor getProcessor( int n )
+    {
+        currentStackPosition = n;
+
         // recompute channel,z,t
         n -= 1;
         int c = (n % nC);
@@ -649,12 +659,11 @@ public class VirtualStackOfStacks extends VirtualStack {
 
     }
 
-    /*
-    Currenly only works if all files exist...
-     */
+
     public ImagePlus getDataCube( Region5D region5D, int[] intensityGate, int nThreads )   {
 
-        if ( logger.isShowDebug() ) {
+        if ( logger.isShowDebug() )
+        {
               logger.info("# VirtualStackOfStacks.getDataCube");
               logger.info("t: " + region5D.t);
               logger.info("channel: " + region5D.c);
@@ -688,14 +697,14 @@ public class VirtualStackOfStacks extends VirtualStack {
         //
 
         // set negative offsets to zero
-        int ox2 = (ox < 0) ? 0 : ox;
-        int oy2 = (oy < 0) ? 0 : oy;
-        int oz2 = (oz < 0) ? 0 : oz;
+        int ox2 = ( ox < 0 ) ? 0 : ox;
+        int oy2 = ( oy < 0 ) ? 0 : oy;
+        int oz2 = ( oz < 0 ) ? 0 : oz;
 
         // adjust the loaded sizes accordingly
-        int sx2 = sx - (ox2-ox);
-        int sy2 = sy - (oy2-oy);
-        int sz2 = sz - (oz2-oz);
+        int sx2 = sx - ( ox2 - ox );
+        int sy2 = sy - ( oy2 - oy );
+        int sz2 = sz - ( oz2 - oz );
 
         // adjust for too large loading ranges due to high offsets
         // - note: ox2=ox and sx2=sx if ox was positive
@@ -707,7 +716,6 @@ public class VirtualStackOfStacks extends VirtualStack {
         sy2 = (oy2+sy2 > nY) ? nY-oy2 : sy2;
         sz2 = (oz2+sz2 > nZ) ? nZ-oz2 : sz2;
 
-
         // check memory requirements
         //
         long numPixels = (long) sx2 * sy2 * sz2;
@@ -715,7 +723,6 @@ public class VirtualStackOfStacks extends VirtualStack {
         int bitDepth = this.getBitDepth();
 
         if( ! Utils.checkMemoryRequirements( numPixels, bitDepth, numStacks) ) return(null);
-
 
         // load requested data into RAM
         //
@@ -730,7 +737,6 @@ public class VirtualStackOfStacks extends VirtualStack {
         ImagePlus finalImp = getProcessedOfRightSize( intensityGate, fi, dz, ox, oy, oz, sx, sy, sz, ox2, oy2, oz2, sx2, sy2, sz2, impLoaded );
 
         ImagePlus subSampled = getSubSampled( region5D, finalImp );
-
 
         return subSampled;
 

@@ -1137,8 +1137,19 @@ public class DataStreamingTools {
     {
 
         VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+
         FileInfoSer[][][] infos = vss.getFileInfosSer();
 
+        FileInfoSer[][][] croppedInfos = getCroppedFileInfos( po, ps, tMin, tMax, vss, infos );
+
+        VirtualStackOfStacks croppedStack = createNewVSSFromCroppingInfos( imp, vss, croppedInfos );
+
+        return createImagePlusFromVSS( croppedStack );
+
+    }
+
+    private static FileInfoSer[][][] getCroppedFileInfos( Point3D[] po, Point3D ps, int tMin, int tMax, VirtualStackOfStacks vss, FileInfoSer[][][] infos )
+    {
         int nC = infos.length;
         int nT = tMax - tMin + 1;
         int nZ = infos[0][0].length;
@@ -1183,18 +1194,19 @@ public class DataStreamingTools {
                     //info("t "+t);
                     //info("z "+z);
                     //info("offset "+croppedInfos[channel][t-tMin][z].pCropOffset.toString());
-
                 }
-
             }
-
         }
+        return croppedInfos;
+    }
 
+    private static VirtualStackOfStacks createNewVSSFromCroppingInfos( ImagePlus imp, VirtualStackOfStacks vss, FileInfoSer[][][] croppedInfos )
+    {
         VirtualStackOfStacks parentStack = (VirtualStackOfStacks) imp.getStack();
         VirtualStackOfStacks stack = new VirtualStackOfStacks( parentStack.getDirectory(), croppedInfos );
-        stack.setChromaticShifts( vss.getChromaticShifts() );
-        return createImagePlusFromVSS( stack );
-
+        stack.setChromaticShifts( vss.getChromaticShiftsCopy() );
+        // NN: add stack.setShearingSetting( vss.getShearingSettings() );
+        return stack;
     }
 
     private static ImagePlus createImagePlusFromVSS( VirtualStackOfStacks stack )
