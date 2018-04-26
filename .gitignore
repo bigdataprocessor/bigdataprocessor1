@@ -11,3 +11,4 @@
 .travis/
 out/
 target/
+*.iml
