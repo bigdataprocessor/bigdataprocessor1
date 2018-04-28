@@ -27,6 +27,12 @@ public class ImarisDataSet {
 
     Logger logger = new IJLazySwingLogger();
 
+    // Trying to make blocks of about 8000 voxels in size (8-bit)
+    // Because I read somewhere that the OS reads often anyway in blocks of around 8000 bytes...
+    private static int CHUNKING_XY_HIGHEST_RESOLUTION = 256;
+    private static int CHUNKING_Z_HIGHEST_RESOLUTION = 1;
+    private static int CHUNKING_XYZ = 64;
+
     public ImarisDataSet( )
     {}
 
@@ -37,7 +43,7 @@ public class ImarisDataSet {
 
     public String getDataSetDirectory( int c, int t, int r)
     {
-        return ( ctrDataSets.get( c, t, r ).directory );
+        return ctrDataSets.get( c, t, r ).directory;
     }
 
     public String getDataSetFilename( int c, int t, int r )
@@ -63,6 +69,11 @@ public class ImarisDataSet {
     public ArrayList< String > getChannelColors()
     {
         return channelColors;
+    }
+
+    public int getNumChannels()
+    {
+        return channelNames.size();
     }
 
     public ArrayList< String > getTimePoints()
@@ -143,93 +154,100 @@ public class ImarisDataSet {
         relativeBinnings = new ArrayList<>();
         chunks = new ArrayList<>();
 
-        long[] size = getImageSize( imp, primaryBinning );
         int impByteDepth = imp.getBitDepth() / 8;
 
-        // Resolution level 0
-        dimensions.add( size );
-        relativeBinnings.add( new int[]{ 1, 1, 1 } );
+        long[] initialChunks = new long[]{ CHUNKING_XY_HIGHEST_RESOLUTION, CHUNKING_XY_HIGHEST_RESOLUTION, CHUNKING_Z_HIGHEST_RESOLUTION };
+        int[] initialBinning = new int[]{ 1, 1, 1 };
 
-        long volume = size[0] * size[1] * size[2];
-
-        // TODO: does 1 as z-chunking work for imaris?
-        long[] firstChunk = new long[]{ 32, 32, 1 };
-
-        if ( volume > Integer.MAX_VALUE - 100 )
+        for ( int iResolution = 0; ; ++iResolution )
         {
-            firstChunk[ 2 ] = 1;
-            IJ.log("Data set is larger than " + Integer.MAX_VALUE );
+            long currentVolume;
+            long[] currentChunks;
+            int[] currentRelativeBinning = new int[3];
+            long[] currentDimensions = new long[3];
+
+            if ( iResolution == 0 )
+            {
+                currentDimensions = getImageSize( imp, primaryBinning );
+                currentChunks = initialChunks;
+                currentRelativeBinning = initialBinning;
+            }
+            else
+            {
+
+                long[] lastDimensions = dimensions.get( iResolution - 1 );
+                long lastVolume = lastDimensions[ 0 ] * lastDimensions[ 1 ] * lastDimensions[ 2 ];
+
+                setDimensionsForThisResolutionLayer( currentDimensions, currentRelativeBinning, lastDimensions, lastVolume );
+                currentChunks = getChunksForThisResolutionLayer( currentDimensions );
+
+            }
+
+            currentVolume = currentDimensions[ 0 ] * currentDimensions[ 1 ] * currentDimensions[ 2 ];
+
+            adaptZChunkingToAccomodateJavaIndexingLimitations( currentVolume, currentChunks );
+
+            dimensions.add( currentDimensions );
+            chunks.add( currentChunks );
+            relativeBinnings.add( currentRelativeBinning );
+
+            if ( currentVolume < ImarisUtils.MIN_VOXELS )
+            {
+                break;
+            }
+
+        }
+
+        int a = 1; // debug
+
+    }
+
+    private void setDimensionsForThisResolutionLayer( long[] currentDimensions, int[] currentRelativeBinning, long[] lastDimensions, long lastVolume )
+    {
+        for ( int d = 0; d < 3; d++ )
+        {
+            long lastSizeThisDimensionSquared = lastDimensions[ d ] * lastDimensions[ d ];
+            long lastPerpendicularPlaneSize = lastVolume / lastDimensions[ d ];
+
+            if ( 100 * lastSizeThisDimensionSquared > lastPerpendicularPlaneSize )
+            {
+                currentDimensions[ d ] = lastDimensions[ d ] / 2;
+                currentRelativeBinning[ d ] = 2;
+            }
+            else
+            {
+                currentDimensions[ d ] = lastDimensions[ d ];
+                currentRelativeBinning[ d ] = 1;
+            }
+            currentDimensions[ d ] = Math.max( 1, currentDimensions[ d ] );
+        }
+    }
+
+    private long[] getChunksForThisResolutionLayer( long[] currentDimensions )
+    {
+        long[] currentChunks;
+        currentChunks = new long[]{ CHUNKING_XYZ, CHUNKING_XYZ, CHUNKING_XYZ };
+
+        for ( int d = 0; d < 3; d++ )
+        {
+            if ( currentChunks[ d ] > currentDimensions[ d ] )
+            {
+                currentChunks[ d ] = currentDimensions[ d ];
+            }
+        }
+
+        return currentChunks;
+    }
+
+    private void adaptZChunkingToAccomodateJavaIndexingLimitations( long currentVolume, long[] currentChunks )
+    {
+        if ( currentVolume > Integer.MAX_VALUE - 100 )
+        {
+            currentChunks[ 2 ] = 1;
+            IJ.log( "Data set is larger than " + Integer.MAX_VALUE );
             // this forces plane wise writing and thus
             // avoids java indexing issues when saving the data to HDF5
         }
-
-        chunks.add( firstChunk );
-
-        // Further resolution levels
-        long voxelsAtCurrentResolution = 0;
-        int iResolution = 0;
-
-        while ( impByteDepth * voxelsAtCurrentResolution > ImarisUtils.MIN_VOXELS )
-        {
-
-            long[] lastSize = dimensions.get( iResolution );
-            int[] lastBinning = relativeBinnings.get( iResolution );
-
-            long[] newSize = new long[3];
-            int[] newBinning = new int[3];
-
-            long lastVolume = lastSize[0] * lastSize[1] * lastSize[2];
-
-            for ( int d = 0; d < 3; d++)
-            {
-                long lastSizeThisDimensionSquared = lastSize[d] * lastSize[d];
-                long lastPerpendicularPlaneSize = lastVolume / lastSize[d];
-
-                if ( 100 * lastSizeThisDimensionSquared > lastPerpendicularPlaneSize )
-                {
-                    newSize[d] = lastSize[d] / 2;
-                    newBinning[d] = 2;
-                }
-                else
-                {
-                    newSize[d] = lastSize[d];
-                    newBinning[d] = 1;
-                }
-
-                newSize[d] = Math.max( 1, newSize[d] );
-
-            }
-
-            long[] newChunk = new long[] {16, 16, 16};
-            for ( int i = 0; i < 3; i++ )
-            {
-                if( newChunk[i] > newSize[i] )
-                {
-                    newChunk[i] = newSize[i];
-                }
-
-            }
-
-            long thisVolume = newSize[0] * newSize[1] * newSize[2];
-
-            if ( thisVolume > Integer.MAX_VALUE - 100 )
-            {
-                newChunk[2] = 1;
-                // this forces plane wise writing and thus
-                // avoids java indexing issues when loading the
-                // whole dataset into RAM in the Hdf5DataCubeWriter
-            }
-
-            dimensions.add( newSize );
-            relativeBinnings.add( newBinning );
-            chunks.add( newChunk );
-
-            voxelsAtCurrentResolution = newSize[0] * newSize[1] * newSize[2];
-
-            iResolution++;
-
-        }
-
     }
 
     private void setTimePoints( ImagePlus imp )
@@ -305,7 +323,7 @@ public class ImarisDataSet {
             {
                 for ( int r = 0; r < dimensions.size(); ++r )
                 {
-                    ctrDataSets.addExternal( c, t, r, directory, filenameStump);
+                    ctrDataSets.addExternal( c, t, r, directory, filenameStump );
                 }
             }
         }

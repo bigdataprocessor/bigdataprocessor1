@@ -661,14 +661,14 @@ public class DataStreamingTools {
         {
             boolean hasCTPattern = false;
 
-            if (channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
+            if ( channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS) )
             {
 
                 nC = imageDataInfo.channelFolders.length;
                 nT = fileLists[0].length;
 
             }
-            else if (channelTimePattern.equals("None"))
+            else if ( channelTimePattern.equals("None") )
             {
 
                 nC = 1;
@@ -696,7 +696,7 @@ public class DataStreamingTools {
                 HashSet<String> channelsHS = new HashSet();
                 HashSet<String> timepointsHS = new HashSet();
 
-                Pattern patternCT = Pattern.compile(channelTimePattern);
+                Pattern patternCT = Pattern.compile( channelTimePattern );
 
                 for (String fileName : fileLists[0])
                 {
@@ -713,7 +713,7 @@ public class DataStreamingTools {
                 // convert HashLists to sorted Lists
 
                 channels = new ArrayList<String>(channelsHS);
-                Collections.sort(channels);
+                Collections.sort( channels );
                 nC = channels.size();
 
                 timepoints = new ArrayList<String>(timepointsHS);
@@ -761,27 +761,28 @@ public class DataStreamingTools {
             // create the final file list
             //
 
-            imageDataInfo.ctzFileList = new String[imageDataInfo.nC][imageDataInfo.nT][imageDataInfo.nZ];
+            imageDataInfo.ctzFileList = new String[ imageDataInfo.nC ][ imageDataInfo.nT ][ imageDataInfo.nZ ];
 
-            if (hasCTPattern)
+            if ( hasCTPattern )
             {
 
                 // no sub-folders
                 // channel and t determined by pattern matching
 
-                Pattern patternCT = Pattern.compile(channelTimePattern);
+                Pattern patternCT = Pattern.compile( channelTimePattern );
 
-                for (String fileName : fileLists[0])
+                for ( String fileName : fileLists[0] )
                 {
 
-                    Matcher matcherCT = patternCT.matcher(fileName);
+                    Matcher matcherCT = patternCT.matcher( fileName );
                     if (matcherCT.matches())
                     {
                         try
                         {
-                            c = channels.indexOf(matcherCT.group("C"));
-                            t = timepoints.indexOf(matcherCT.group("T"));
-                        } catch (Exception e)
+                            c = channels.indexOf( matcherCT.group("C") );
+                            t = timepoints.indexOf( matcherCT.group("T") );
+                        }
+                        catch (Exception e)
                         {
                             IJ.showMessage("The multi-channel loading did not match the filenames.\n" +
                                     "Please change the pattern.\n\n" +

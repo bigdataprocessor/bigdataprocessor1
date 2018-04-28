@@ -64,14 +64,12 @@ public class Hdf5DataCubeWriter {
             if ( r > 0 )
             {
                 // bin further down
-                impResolutionLevel = Utils.bin( impResolutionLevel,
-                        idp.getRelativeBinnings().get( r )
-                        , "binned", "AVERAGE" );
+                impResolutionLevel = Utils.bin( impResolutionLevel, idp.getRelativeBinnings().get( r ), "binned", "AVERAGE" );
             }
 
-            writeDataCubeAndAttributes( impResolutionLevel,
-                    RESOLUTION_LEVEL + r,
-                    idp.getDimensions().get( r ), idp.getChunks().get( r ) );
+            System.out.println( "Writing resolution level " + r + "..." );
+
+            writeDataCubeAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r, idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
             writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r );
         }
@@ -103,7 +101,11 @@ public class Hdf5DataCubeWriter {
         // create "dataset creation property list" (dcpl)
         int dcpl_id = H5.H5Pcreate( HDF5Constants.H5P_DATASET_CREATE );
 
+        // chunks
         H5.H5Pset_chunk( dcpl_id, chunk.length, chunk );
+
+        // compression
+        H5.H5Pset_deflate( dcpl_id, 2);
 
         // create dataset
         int dataset_id = -1;
@@ -143,10 +145,12 @@ public class Hdf5DataCubeWriter {
         {
             byte[][] data = getByteData( imp, 0, 0 );
 
-            if ( chunkXYZ[ 2 ] != 1 )
-            {
-                System.out.println( "Saving 8-bit hdf5 as one block." );
+            long numVoxels = data.length * data[0].length;
+            boolean javaIndexingIssue = ( numVoxels > Integer.MAX_VALUE - 100 );
 
+
+            if ( ! javaIndexingIssue )
+            {
                 H5.H5Dwrite( dataset_id,
                         image_memory_type,
                         HDF5Constants.H5S_ALL,
@@ -156,8 +160,7 @@ public class Hdf5DataCubeWriter {
             }
             else
             {
-                // write plane wise (hopefully avoiding java int indexing issues)
-                System.out.println( "Saving 8-bit hdf5 plane-wise." );
+                System.out.println( "Very large data set => saving 8-bit hdf5 plane-wise to circumvent java indexing issues." );
 
                 for ( int i = 0; i < imp.getNSlices(); ++i )
                 {
