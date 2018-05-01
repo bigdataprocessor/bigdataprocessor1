@@ -830,9 +830,9 @@ public class DataStreamingTools {
             String hdf5DataSet)
     {
 
-        IHDF5Reader reader = HDF5Factory.openForReading(directory + "/" + fileName);
+        IHDF5Reader reader = HDF5Factory.openForReading( directory + "/" + fileName );
 
-        if (!hdf5DataSetExists(reader, hdf5DataSet)) return;
+        if ( ! hdf5DataSetExists(reader, hdf5DataSet) ) return;
 
         HDF5DataSetInformation dsInfo = reader.object().getDataSetInformation("/" + hdf5DataSet);
 
