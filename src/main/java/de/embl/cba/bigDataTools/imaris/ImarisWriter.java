@@ -125,17 +125,14 @@ public abstract class ImarisWriter {
         for ( int d = 0; d < 3; ++d )
         {
             // physical interval
-            Hdf5Utils.writeStringAttribute( group_id, "ExtMax" + d,
-                    String.valueOf( interval.realMax( d ) ) );
-            Hdf5Utils.writeStringAttribute( group_id, "ExtMin" + d,
-                    String.valueOf( interval.realMin( d ) ) );
+            Hdf5Utils.writeStringAttribute( group_id, "ExtMax" + d, String.valueOf( interval.realMax( d ) ) );
+            Hdf5Utils.writeStringAttribute( group_id, "ExtMin" + d, String.valueOf( interval.realMin( d ) ) );
             // number of pixels
-            Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.XYZ[ d ], String.valueOf( dimensions.get(0)[d] ) );
+            Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.XYZ[ d ], String.valueOf( dimensions.get( 0 )[ d ] ) );
         }
 
 
         // the following attributes are not needed by Imaris but by my code
-
         Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.RESOLUTION_LEVELS_ATTRIBUTE, String.valueOf( dimensions.size() ));
 
         for ( int r = 0; r < dimensions.size(); ++r )
@@ -143,7 +140,7 @@ public abstract class ImarisWriter {
             for ( int d = 0; d < 3; ++d )
             {
                 // number of pixels at different resolutions
-                Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.XYZ[ d ] + d, String.valueOf( dimensions.get(0)[d] ) );
+                Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.XYZ[ d ] + r, String.valueOf( dimensions.get( r )[ d ] ) );
             }
         }
 

@@ -15,7 +15,8 @@ public abstract class ImarisUtils {
     public final static String TIME_POINT_ATTRIBUTE = "TimePoint";
     public final static String HISTOGRAM = "Histogram";
     public final static String IMAGE_SIZE = "ImageSize";
-    //public final static String IMAGE_BLOCK_SIZE = "ImageBlockSize";
+    public final static String IMAGE_BLOCK_SIZE = "ImageBlockSize";
+
 
 
     public final static String RESOLUTION_LEVEL = "ResolutionLevel ";

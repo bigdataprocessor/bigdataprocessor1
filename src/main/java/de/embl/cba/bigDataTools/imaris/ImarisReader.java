@@ -95,14 +95,14 @@ public class ImarisReader {
 
         for ( int r = 0; r < nr; ++r )
         {
-            long[] dimension = new long[3];
+            long[] dimension = new long[ 3 ];
             for ( int d = 0; d < 3; ++d )
             {
                 // number of pixels at different resolutions
-                dimension[d] = Integer.parseInt(
+                dimension[ d ] = Integer.parseInt(
                     readStringAttribute( file_id,
                         ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
-                        ImarisUtils.XYZ[d] + d ) );
+                        ImarisUtils.XYZ[ d ] + r ) );
             }
             dimensions.add( dimension );
         }

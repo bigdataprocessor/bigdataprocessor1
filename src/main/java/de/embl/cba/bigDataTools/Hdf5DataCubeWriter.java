@@ -128,7 +128,8 @@ public class Hdf5DataCubeWriter {
         writeImagePlusData( chunkXYZ, dataspace_id, dataset_id, imp );
 
         // Attributes
-        writeSizeAttribute( group_id, dimensionXYZ );
+        writeSizeAttributes( group_id, dimensionXYZ );
+        writeChunkAttributes( group_id, chunkXYZ  );
         writeCalibrationAttribute( dataset_id, imp.getCalibration() );
 
         H5.H5Sclose( dataspace_id );
@@ -268,7 +269,7 @@ public class Hdf5DataCubeWriter {
     }
 
 
-    private void writeSizeAttribute( int group_id, long[] dimension )
+    private void writeSizeAttributes( int group_id, long[] dimension )
     {
         for ( int d = 0; d < 3; ++d )
         {
@@ -278,6 +279,16 @@ public class Hdf5DataCubeWriter {
         }
     }
 
+
+    private void writeChunkAttributes( int group_id, long[] chunks )
+    {
+        for ( int d = 0; d < 3; ++d )
+        {
+            writeStringAttribute( group_id,
+                    IMAGE_BLOCK_SIZE + XYZ[d],
+                    String.valueOf( chunks[d]) );
+        }
+    }
 
     private void writeCalibrationAttribute( int object_id, Calibration calibration )
     {
