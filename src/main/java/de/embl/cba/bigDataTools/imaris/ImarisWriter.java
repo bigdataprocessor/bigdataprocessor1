@@ -134,7 +134,10 @@ public abstract class ImarisWriter {
         }
 
 
-        /*
+        // the following attributes are not needed by Imaris but by my code
+
+        Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.RESOLUTION_LEVELS_ATTRIBUTE, String.valueOf( dimensions.size() ));
+
         for ( int r = 0; r < dimensions.size(); ++r )
         {
             for ( int d = 0; d < 3; ++d )
@@ -142,9 +145,7 @@ public abstract class ImarisWriter {
                 // number of pixels at different resolutions
                 Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.XYZ[ d ] + d, String.valueOf( dimensions.get(0)[d] ) );
             }
-        }*/
-
-        // Hdf5Utils.writeStringAttribute( group_id, ImarisUtils.RESOLUTION_LEVELS_ATTRIBUTE, String.valueOf( dimensions.size() ));
+        }
 
 
         H5.H5Gclose( group_id );
