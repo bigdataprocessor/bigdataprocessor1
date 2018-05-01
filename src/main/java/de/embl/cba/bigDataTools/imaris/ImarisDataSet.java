@@ -169,7 +169,11 @@ public class ImarisDataSet {
             if ( iResolution == 0 )
             {
                 currentDimensions = getImageSize( imp, primaryBinning );
+
                 currentChunks = initialChunks;
+
+                ensureChunkSizesNotExceedingCurrentImageDimensions( currentDimensions, currentChunks );
+
                 currentRelativeBinning = initialBinning;
             }
             else
@@ -178,7 +182,8 @@ public class ImarisDataSet {
                 long[] lastDimensions = dimensions.get( iResolution - 1 );
                 long lastVolume = lastDimensions[ 0 ] * lastDimensions[ 1 ] * lastDimensions[ 2 ];
 
-                setDimensionsForThisResolutionLayer( currentDimensions, currentRelativeBinning, lastDimensions, lastVolume );
+                setDimensionsAndBinningsForThisResolutionLayer( currentDimensions, currentRelativeBinning, lastDimensions, lastVolume );
+
                 currentChunks = getChunksForThisResolutionLayer( currentDimensions );
 
             }
@@ -188,7 +193,9 @@ public class ImarisDataSet {
             adaptZChunkingToAccomodateJavaIndexingLimitations( currentVolume, currentChunks );
 
             dimensions.add( currentDimensions );
+
             chunks.add( currentChunks );
+
             relativeBinnings.add( currentRelativeBinning );
 
             if ( currentVolume < ImarisUtils.MIN_VOXELS )
@@ -202,7 +209,7 @@ public class ImarisDataSet {
 
     }
 
-    private void setDimensionsForThisResolutionLayer( long[] currentDimensions, int[] currentRelativeBinning, long[] lastDimensions, long lastVolume )
+    private void setDimensionsAndBinningsForThisResolutionLayer( long[] currentDimensions, int[] currentRelativeBinning, long[] lastDimensions, long lastVolume )
     {
         for ( int d = 0; d < 3; d++ )
         {
@@ -228,6 +235,13 @@ public class ImarisDataSet {
         long[] currentChunks;
         currentChunks = new long[]{ CHUNKING_XYZ, CHUNKING_XYZ, CHUNKING_XYZ };
 
+        ensureChunkSizesNotExceedingCurrentImageDimensions( currentDimensions, currentChunks );
+
+        return currentChunks;
+    }
+
+    private void ensureChunkSizesNotExceedingCurrentImageDimensions( long[] currentDimensions, long[] currentChunks )
+    {
         for ( int d = 0; d < 3; d++ )
         {
             if ( currentChunks[ d ] > currentDimensions[ d ] )
@@ -235,8 +249,6 @@ public class ImarisDataSet {
                 currentChunks[ d ] = currentDimensions[ d ];
             }
         }
-
-        return currentChunks;
     }
 
     private void adaptZChunkingToAccomodateJavaIndexingLimitations( long currentVolume, long[] currentChunks )

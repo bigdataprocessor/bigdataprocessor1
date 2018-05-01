@@ -67,7 +67,7 @@ public class Hdf5DataCubeWriter {
                 impResolutionLevel = Utils.bin( impResolutionLevel, idp.getRelativeBinnings().get( r ), "binned", "AVERAGE" );
             }
 
-            System.out.println( "Writing resolution level " + r + "..." );
+            // System.out.println( "Writing resolution level " + r + "..." );
 
             writeDataCubeAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r, idp.getDimensions().get( r ), idp.getChunks().get( r ) );
 
