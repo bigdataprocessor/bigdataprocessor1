@@ -52,10 +52,12 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
-            ".*", ".*--C.*", ".*Left.*",".*Right.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+            ".*", ".*--C.*", ".*Left.*",".*Right.*",".*short.*",".*long.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
             DataStreamingTools.LOAD_CHANNELS_FROM_FOLDERS,
+            DataStreamingTools.EM_TIFF_SLICES,
             "<Z0000-0009>.tif",
             ".*--C<c>--T<t>.tif",
             ".*--C<c>--T<t>.h5",
@@ -65,6 +67,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
             "classified--C<C01-01>--T<T00001-00001>--Z<Z00001-01162>.tif",
             "classified--C<C00-00>--T<T00000-00000>--Z<Z00001-01162>.tif"
     });
+
     JComboBox hdf5DataSetComboBox = new JComboBox(new String[] {"None",
             "Data","Data111",
             ImarisUtils.RESOLUTION_LEVEL +"0/Data",
@@ -410,7 +413,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         final String filterPattern = (String)filterPatternComboBox.getSelectedItem();
         final String channelPattern = (String) namingSchemeComboBox.getSelectedItem();
 
-        if (e.getActionCommand().equals(STREAMfromFolder)) {
+        if (e.getActionCommand().equals( STREAMfromFolder ) )  {
 
             // Open from folder
             final String directory = IJ.getDirectory("Select a Directory");

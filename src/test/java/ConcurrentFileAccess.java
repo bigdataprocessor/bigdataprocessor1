@@ -1,9 +1,6 @@
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
-import de.embl.cba.bigDataTools.utils.MonitorThreadPoolStatus;
 import de.embl.cba.bigDataTools.utils.Utils;
 import net.imglib2.FinalInterval;
-
-import java.io.IOException;
 
 public class ConcurrentFileAccess
 {

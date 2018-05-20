@@ -102,6 +102,8 @@ import java.util.regex.Pattern;
 public class DataStreamingTools {
 
     public static String LOAD_CHANNELS_FROM_FOLDERS = "channels from sub-folders";
+    public static String EM_TIFF_SLICES = "EM Tiff Slices";
+
     private static Logger logger = new IJLazySwingLogger();
     public boolean interruptSavingThreads = false;
 
@@ -120,6 +122,12 @@ public class DataStreamingTools {
             boolean partialDataSet)
     {
 
+        if ( imageDataInfo == null )
+        {
+            imageDataInfo = new ImageDataInfo();
+        }
+
+
         if ( namingScheme.contains("<Z") )
         {
             // TODO: change below logic somehow (maybe via GUI?)
@@ -128,7 +136,7 @@ public class DataStreamingTools {
             if ( ! setMissingInfos(
                     imageDataInfo,
                     directory,
-                    namingScheme))
+                    namingScheme ) )
             {
                 return null;
             }
@@ -245,12 +253,9 @@ public class DataStreamingTools {
         boolean hasT = false;
         boolean hasZ = false;
 
-
         Matcher matcher;
 
-        logger.info(
-                "Importing/creating file information from pre-defined naming scheme."
-        );
+        logger.info( "Importing/creating file information from pre-defined naming scheme." );
 
         // channels
         matcher = Pattern.compile(".*<C(\\d+)-(\\d+)>.*").matcher( namingPattern );
@@ -258,7 +263,7 @@ public class DataStreamingTools {
         {
             hasC = true;
             ctzMin[0] = Integer.parseInt( matcher.group(1) );
-            ctzMax[0] = Integer.parseInt(matcher.group(2));
+            ctzMax[0] = Integer.parseInt( matcher.group(2) );
             ctzPad[0] = matcher.group(1).length();
         }
         else
@@ -266,8 +271,8 @@ public class DataStreamingTools {
             ctzMin[0] = ctzMax[0] = ctzPad[0] = 0;
         }
 
-        imageDataInfo.channelFolders = new String[ctzMax[0] - ctzMin[0] +1];
-        Arrays.fill(imageDataInfo.channelFolders, "");
+        imageDataInfo.channelFolders = new String[ ctzMax[ 0 ] - ctzMin[ 0 ] + 1 ];
+        Arrays.fill( imageDataInfo.channelFolders, "" );
 
         // frames
         matcher = Pattern.compile(".*<T(\\d+)-(\\d+)>.*").matcher( namingPattern );
@@ -391,16 +396,15 @@ public class DataStreamingTools {
     }
 
 
-
     public boolean setAllInfosByParsingFilesAndFolders(
             ImageDataInfo imageDataInfo,
             String directory,
-            String channelTimePattern,
+            String namingScheme,
             String filterPattern
     )
     {
 
-        String[][] fileLists; // files in sub-folders
+        String[][] fileLists;
         int t = 0, z = 0, c = 0;
         String fileType = "not determined";
         FileInfoSer[] info;
@@ -409,26 +413,27 @@ public class DataStreamingTools {
 
         int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
 
-        if (channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
+        if ( namingScheme.equals( LOAD_CHANNELS_FROM_FOLDERS) )
         {
             //
             // Check for sub-folders
             //
             logger.info("checking for sub-folders...");
             imageDataInfo.channelFolders = getFoldersInFolder(directory);
+
             if (imageDataInfo.channelFolders != null)
             {
                 fileLists = new String[imageDataInfo.channelFolders.length][];
                 for (int i = 0; i < imageDataInfo.channelFolders.length; i++)
                 {
                     fileLists[i] = getFilesInFolder(directory + imageDataInfo.channelFolders[i], filterPattern);
-                    if (fileLists[i] == null)
+                    if ( fileLists[i] == null )
                     {
                         logger.info("no files found in folder: " + directory + imageDataInfo.channelFolders[i]);
                         return false;
                     }
                 }
-                logger.info("found sub-folders => interpreting as channel folders.");
+                logger.info( "found sub-folders => interpreting as channel folders." );
             }
             else
             {
@@ -451,28 +456,7 @@ public class DataStreamingTools {
             fileLists[0] = getFilesInFolder( directory, filterPattern );
             logger.info("Number of files in main folder matching the filter pattern: " + fileLists[0].length );
 
-            if ( fileLists[0] != null )
-            {
-
-                //
-                // check if those are Leica single tiff SPIM files
-                //
-
-                Pattern leicaPattern01 = Pattern.compile( "LightSheet .*" );
-                Pattern leicaPattern02 = Pattern.compile( "DLS .*" );
-
-                for ( String fileName : fileLists[0] )
-                {
-                    if ( leicaPattern01.matcher( fileName ).matches() || leicaPattern02.matcher( fileName ).matches() )
-                    {
-                        fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
-                        logger.info("detected fileType: " + fileType);
-                        break;
-                    }
-                }
-            }
-
-            if (fileLists[0] == null || fileLists[0].length == 0)
+            if ( fileLists[0] == null || fileLists[0].length == 0 )
             {
                 IJ.showMessage("No files matching this pattern were found: " + filterPattern);
                 return false;
@@ -480,199 +464,43 @@ public class DataStreamingTools {
 
         }
 
-        //
-        // generate a nC,nT,nZ fileList
-        //
 
-        if ( fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
+        if (  isLeicaSinglePlaneTiffFileType( fileLists[ 0 ] ) )
         {
+
             imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
 
+            // generate Leica nC,nT,nZ fileList
             //
-            // Do special stuff related to Leica files
-            //
-            Matcher matcherZ, matcherC, matcherT, matcherID;
-            Pattern patternC = Pattern.compile(".*--C(.*).tif");
-            Pattern patternZnoC = Pattern.compile(".*--Z(.*).tif");
-            Pattern patternZwithC = Pattern.compile(".*--Z(.*)--C.*");
-            Pattern patternT = Pattern.compile(".*--t(.*)--Z.*");
-            Pattern patternID = Pattern.compile(".*?_(\\d+).*"); // is this correct?
 
-            if ( fileLists[0].length == 0 )
+            boolean success = initLeicaSinglePlaneTiffData( imageDataInfo, directory + imageDataInfo.channelFolders[ 0 ], filterPattern, fileLists[ 0 ], t, z, nC, nZ );
+
+            if ( ! success )
             {
-                IJ.showMessage("No files matching this pattern were found: " + filterPattern);
                 return false;
             }
 
-            // check which different fileIDs there are
-            // those are three numbers after the first _
-            // this happens due to restarting the imaging
-            Set<String> fileIDset = new HashSet();
-            for (String fileName : fileLists[0])
-            {
-                matcherID = patternID.matcher(fileName);
-                if (matcherID.matches())
-                {
-                    fileIDset.add( matcherID.group(1) );
-                }
-            }
-            String[] fileIDs = fileIDset.toArray(new String[fileIDset.size()]);
-
-            // check which different C, T and Z there are for each FileID
-
-            ArrayList<HashSet<String>> channelsHS = new ArrayList();
-            ArrayList<HashSet<String>> timepointsHS = new ArrayList();
-            ArrayList<HashSet<String>> slicesHS = new ArrayList();
-
-            //
-            // Deal with different file-names (fileIDs) due to
-            // series being restarted during the imaging
-            //
-
-            for (String fileID : fileIDs)
-            {
-                channelsHS.add(new HashSet());
-                timepointsHS.add(new HashSet());
-                slicesHS.add(new HashSet());
-            }
-
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
-            {
-
-                Pattern patternFileID = Pattern.compile(".*?_" + fileIDs[iFileID] + ".*");
-
-                for (String fileName : fileLists[0])
-                {
-
-                    if (patternFileID.matcher(fileName).matches())
-                    {
-
-                        matcherC = patternC.matcher(fileName);
-                        if (matcherC.matches())
-                        {
-                            // has multi-channels
-                            channelsHS.get(iFileID).add(matcherC.group(1));
-                            matcherZ = patternZwithC.matcher(fileName);
-                            if (matcherZ.matches())
-                            {
-                                slicesHS.get(iFileID).add(matcherZ.group(1));
-                            }
-                        }
-                        else
-                        {
-                            // has only one channel
-                            matcherZ = patternZnoC.matcher(fileName);
-                            if (matcherZ.matches())
-                            {
-                                slicesHS.get(iFileID).add(matcherZ.group(1));
-                            }
-                        }
-
-                        matcherT = patternT.matcher(fileName);
-                        if (matcherT.matches())
-                        {
-                            timepointsHS.get(iFileID).add(matcherT.group(1));
-                        }
-                    }
-                }
-
-            }
-
-            nT = 0;
-            int[] tOffsets = new int[fileIDs.length + 1]; // last offset is not used, but added anyway
-            tOffsets[0] = 0;
-
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
-            {
-
-                nC = Math.max(1, channelsHS.get(iFileID).size());
-                nZ = slicesHS.get(iFileID).size(); // must be the same for all fileIDs
-
-                logger.info("FileID: " + fileIDs[iFileID]);
-                logger.info("  Channels: " + nC);
-                logger.info("  TimePoints: " + timepointsHS.get(iFileID).size());
-                logger.info("  Slices: " + nZ);
-
-                nT += timepointsHS.get(iFileID).size();
-                tOffsets[iFileID + 1] = nT;
-            }
-
-
-            //
-            // Create dummy channel folders, because no real ones exist
-            //
-
-            imageDataInfo.channelFolders = new String[nC];
-            for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
-
-            //
-            // sort into the final file list
-            //
-
-            imageDataInfo.ctzFileList = new String[nC][nT][nZ];
-
-            for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
-            {
-
-                Pattern patternFileID = Pattern.compile(".*" + fileIDs[iFileID] + ".*");
-
-                for (String fileName : fileLists[0])
-                {
-
-                    if (patternFileID.matcher(fileName).matches())
-                    {
-
-                        // figure out which C,Z,T the file is
-                        matcherC = patternC.matcher(fileName);
-                        matcherT = patternT.matcher(fileName);
-                        if (nC > 1) matcherZ = patternZwithC.matcher(fileName);
-                        else matcherZ = patternZnoC.matcher(fileName);
-
-                        if (matcherZ.matches())
-                        {
-                            z = Integer.parseInt(matcherZ.group(1).toString());
-                        }
-                        if (matcherT.matches())
-                        {
-                            t = Integer.parseInt(matcherT.group(1).toString());
-                            t += tOffsets[iFileID];
-                        }
-                        if (matcherC.matches())
-                        {
-                            c = Integer.parseInt(matcherC.group(1).toString());
-                        }
-                        else
-                        {
-                            c = 0;
-                        }
-
-                        imageDataInfo.ctzFileList[c][t][z] = fileName;
-
-                    }
-                }
-            }
-
-            setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], imageDataInfo.ctzFileList[0][0][0]);
-            imageDataInfo.nZ = nZ;
-            imageDataInfo.nC = nC;
-            imageDataInfo.nT = nT;
         }
-        else // tif stacks or h5 stacks
+        else // tiff stacks or h5 stacks
         {
             boolean hasCTPattern = false;
 
-            if ( channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS) )
+            if ( namingScheme.equals( LOAD_CHANNELS_FROM_FOLDERS) )
             {
-
                 nC = imageDataInfo.channelFolders.length;
                 nT = fileLists[0].length;
-
             }
-            else if ( channelTimePattern.equals("None") )
+            else if ( namingScheme.equals( "None" ) )
             {
-
                 nC = 1;
                 nT = fileLists[0].length;
+            }
+            else if ( namingScheme.equals( EM_TIFF_SLICES ) )
+            {
+                nC = 1;
+                nT = 1;
+                nZ = fileLists[0].length;
+                imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
 
             }
             else
@@ -680,7 +508,7 @@ public class DataStreamingTools {
 
                 hasCTPattern = true;
 
-                if (!(channelTimePattern.contains("<c>") && channelTimePattern.contains("<t>")))
+                if (!(namingScheme.contains("<c>") && namingScheme.contains("<t>")))
                 {
                     IJ.showMessage("The pattern for multi-channel loading must" +
                             "contain <c> and <t> to match channels and time in the filenames.");
@@ -688,15 +516,15 @@ public class DataStreamingTools {
                 }
 
                 // replace shortcuts by actual regexp
-                channelTimePattern = channelTimePattern.replace("<c>", "(?<C>.*)");
-                channelTimePattern = channelTimePattern.replace("<t>", "(?<T>.*)");
+                namingScheme = namingScheme.replace("<c>", "(?<C>.*)");
+                namingScheme = namingScheme.replace("<t>", "(?<T>.*)");
 
                 imageDataInfo.channelFolders = new String[]{""};
 
                 HashSet<String> channelsHS = new HashSet();
                 HashSet<String> timepointsHS = new HashSet();
 
-                Pattern patternCT = Pattern.compile( channelTimePattern );
+                Pattern patternCT = Pattern.compile( namingScheme );
 
                 for (String fileName : fileLists[0])
                 {
@@ -725,20 +553,29 @@ public class DataStreamingTools {
             //
             // Create dummy channel folders, if no real ones exist
             //
-            if (!channelTimePattern.equals( LOAD_CHANNELS_FROM_FOLDERS))
+            if ( ! namingScheme.equals( LOAD_CHANNELS_FROM_FOLDERS) )
             {
                 imageDataInfo.channelFolders = new String[nC];
                 for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
             }
 
 
-            // read nX,nY,nZ and bitdepth from first stack
+            // read nX,nY,nZ and bitdepth from first image
             //
 
-            if (fileLists[0][0].endsWith(".tif"))
+            if ( fileLists[0][0].endsWith(".tif") )
             {
-                setImageDataInfoFromTiff(imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0]);
-                imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
+                setImageDataInfoFromTiff( imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0] );
+
+                if ( namingScheme.equals( EM_TIFF_SLICES ) )
+                {
+                    imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
+                    imageDataInfo.nZ = fileLists[ 0 ].length;
+                }
+                else
+                {
+                    imageDataInfo.fileType = Utils.FileType.TIFF_STACKS.toString();
+                }
             }
             else if (fileLists[0][0].endsWith(".h5"))
             {
@@ -769,7 +606,7 @@ public class DataStreamingTools {
                 // no sub-folders
                 // channel and t determined by pattern matching
 
-                Pattern patternCT = Pattern.compile( channelTimePattern );
+                Pattern patternCT = Pattern.compile( namingScheme );
 
                 for ( String fileName : fileLists[0] )
                 {
@@ -803,13 +640,23 @@ public class DataStreamingTools {
             else
             {
 
-                for (c = 0; c < imageDataInfo.nC; c++)
+                if ( namingScheme.equals( EM_TIFF_SLICES ) )
                 {
-                    for (t = 0; t < imageDataInfo.nT; t++)
+                    for ( z = 0; z < imageDataInfo.nZ; z++ )
                     {
-                        for (z = 0; z < imageDataInfo.nZ; z++)
+                        imageDataInfo.ctzFileList[ 0 ][ 0 ][ z ] = fileLists[ 0 ][ z ];
+                    }
+                }
+                else
+                {
+                    for ( c = 0; c < imageDataInfo.nC; c++ )
+                    {
+                        for ( t = 0; t < imageDataInfo.nT; t++ )
                         {
-                            imageDataInfo.ctzFileList[c][t][z] = fileLists[c][t]; // all z with same file-name, because it is stacks
+                            for ( z = 0; z < imageDataInfo.nZ; z++ )
+                            {
+                                imageDataInfo.ctzFileList[ c ][ t ][ z ] = fileLists[ c ][ t ]; // all z with same file-name, because it is stacks
+                            }
                         }
                     }
                 }
@@ -820,6 +667,201 @@ public class DataStreamingTools {
 
         return true;
 
+    }
+
+    private boolean isLeicaSinglePlaneTiffFileType( String[] fileList )
+    {
+        Pattern leicaPattern01 = Pattern.compile( "LightSheet .*" );
+        Pattern leicaPattern02 = Pattern.compile( "DLS .*" );
+
+        for ( String fileName : fileList )
+        {
+            if ( leicaPattern01.matcher( fileName ).matches() || leicaPattern02.matcher( fileName ).matches() )
+            {
+                logger.info( "Detected Leica single plane SPIM fileType." );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean initLeicaSinglePlaneTiffData( ImageDataInfo imageDataInfo, String directory, String filterPattern, String[] fileList, int t, int z, int nC, int nZ )
+    {
+        int nT;
+        int c;
+        imageDataInfo.fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
+
+        //
+        // Do special stuff related to Leica files
+        //
+        Matcher matcherZ, matcherC, matcherT, matcherID;
+        Pattern patternC = Pattern.compile(".*--C(.*).tif");
+        Pattern patternZnoC = Pattern.compile(".*--Z(.*).tif");
+        Pattern patternZwithC = Pattern.compile(".*--Z(.*)--C.*");
+        Pattern patternT = Pattern.compile(".*--t(.*)--Z.*");
+        Pattern patternID = Pattern.compile(".*?_(\\d+).*"); // is this correct?
+
+        if ( fileList.length == 0 )
+        {
+            IJ.showMessage("No files matching this pattern were found: " + filterPattern);
+            return false;
+        }
+
+        // check which different fileIDs there are
+        // those are three numbers after the first _
+        // this happens due to restarting the imaging
+        Set<String> fileIDset = new HashSet();
+        for (String fileName : fileList )
+        {
+            matcherID = patternID.matcher(fileName);
+            if (matcherID.matches())
+            {
+                fileIDset.add( matcherID.group(1) );
+            }
+        }
+        String[] fileIDs = fileIDset.toArray(new String[fileIDset.size()]);
+
+        // check which different C, T and Z there are for each FileID
+
+        ArrayList<HashSet<String>> channelsHS = new ArrayList();
+        ArrayList<HashSet<String>> timepointsHS = new ArrayList();
+        ArrayList<HashSet<String>> slicesHS = new ArrayList();
+
+        //
+        // Deal with different file-names (fileIDs) due to
+        // series being restarted during the imaging
+        //
+
+        for (String fileID : fileIDs)
+        {
+            channelsHS.add(new HashSet());
+            timepointsHS.add(new HashSet());
+            slicesHS.add(new HashSet());
+        }
+
+        for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+        {
+
+            Pattern patternFileID = Pattern.compile(".*?_" + fileIDs[iFileID] + ".*");
+
+            for (String fileName : fileList )
+            {
+
+                if (patternFileID.matcher(fileName).matches())
+                {
+
+                    matcherC = patternC.matcher(fileName);
+                    if (matcherC.matches())
+                    {
+                        // has multi-channels
+                        channelsHS.get(iFileID).add(matcherC.group(1));
+                        matcherZ = patternZwithC.matcher(fileName);
+                        if (matcherZ.matches())
+                        {
+                            slicesHS.get(iFileID).add(matcherZ.group(1));
+                        }
+                    }
+                    else
+                    {
+                        // has only one channel
+                        matcherZ = patternZnoC.matcher(fileName);
+                        if (matcherZ.matches())
+                        {
+                            slicesHS.get(iFileID).add(matcherZ.group(1));
+                        }
+                    }
+
+                    matcherT = patternT.matcher(fileName);
+                    if (matcherT.matches())
+                    {
+                        timepointsHS.get(iFileID).add(matcherT.group(1));
+                    }
+                }
+            }
+
+        }
+
+        nT = 0;
+        int[] tOffsets = new int[fileIDs.length + 1]; // last offset is not used, but added anyway
+        tOffsets[0] = 0;
+
+        for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+        {
+
+            nC = Math.max(1, channelsHS.get(iFileID).size());
+            nZ = slicesHS.get(iFileID).size(); // must be the same for all fileIDs
+
+            logger.info("FileID: " + fileIDs[iFileID]);
+            logger.info("  Channels: " + nC);
+            logger.info("  TimePoints: " + timepointsHS.get(iFileID).size());
+            logger.info("  Slices: " + nZ);
+
+            nT += timepointsHS.get(iFileID).size();
+            tOffsets[iFileID + 1] = nT;
+        }
+
+
+        //
+        // Create dummy channel folders, because no real ones exist
+        //
+
+        imageDataInfo.channelFolders = new String[nC];
+        for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
+
+        //
+        // sort into the final file list
+        //
+
+        imageDataInfo.ctzFileList = new String[nC][nT][nZ];
+
+        for (int iFileID = 0; iFileID < fileIDs.length; iFileID++)
+        {
+
+            Pattern patternFileID = Pattern.compile(".*" + fileIDs[iFileID] + ".*");
+
+            for (String fileName : fileList )
+            {
+
+                if (patternFileID.matcher(fileName).matches())
+                {
+
+                    // figure out which C,Z,T the file is
+                    matcherC = patternC.matcher(fileName);
+                    matcherT = patternT.matcher(fileName);
+                    if (nC > 1) matcherZ = patternZwithC.matcher(fileName);
+                    else matcherZ = patternZnoC.matcher(fileName);
+
+                    if (matcherZ.matches())
+                    {
+                        z = Integer.parseInt(matcherZ.group(1).toString());
+                    }
+                    if (matcherT.matches())
+                    {
+                        t = Integer.parseInt(matcherT.group(1).toString());
+                        t += tOffsets[iFileID];
+                    }
+                    if (matcherC.matches())
+                    {
+                        c = Integer.parseInt(matcherC.group(1).toString());
+                    }
+                    else
+                    {
+                        c = 0;
+                    }
+
+                    imageDataInfo.ctzFileList[c][t][z] = fileName;
+
+                }
+            }
+        }
+
+        setImageDataInfoFromTiff(imageDataInfo, directory, imageDataInfo.ctzFileList[0][0][0]);
+        imageDataInfo.nZ = nZ;
+        imageDataInfo.nC = nC;
+        imageDataInfo.nT = nT;
+
+        return true;
     }
 
 
@@ -872,7 +914,7 @@ public class DataStreamingTools {
             IJ.showMessage("Error: " + e.toString());
         }
 
-        if (info[0].nImages > 1)
+        if ( info[0].nImages > 1 )
         {
             imageDataInfo.nZ = info[0].nImages;
             info[0].nImages = 1;
