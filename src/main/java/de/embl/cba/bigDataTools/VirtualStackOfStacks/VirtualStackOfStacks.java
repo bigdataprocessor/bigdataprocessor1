@@ -243,7 +243,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
     /** Adds an image stack from file infos */
-    public void setInfoFromFile( int c, int t, int z, boolean throwError )
+    public void setInfoFromFile( final int c, final int t, final int z, boolean throwError )
     {
         FileInfoSer[] info = null;
         FileInfoSer[] infoCT = null;
@@ -255,7 +255,7 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         if ( f.exists() )
         {
-            if (fileType.equals(Utils.FileType.TIFF_STACKS.toString()))
+            if ( fileType.equals(Utils.FileType.TIFF_STACKS.toString() ) )
             {
                 ftd = new FastTiffDecoder(directory + channelFolders[c], ctzFileList[c][t][0]);
                 try
@@ -279,20 +279,20 @@ public class VirtualStackOfStacks extends VirtualStack {
                 info[0].fileTypeString = fileType;
 
                 infoCT = new FileInfoSer[nZ];
-                for (z = 0; z < nZ; z++)
+                for ( int z2 = 0; z2 < nZ; z2++ )
                 {
-                    infoCT[z] = new FileInfoSer( info[0] ); // copy first IFD for general info
+                    infoCT[z2] = new FileInfoSer( info[0] ); // copy first IFD for general info
                     // adapt information related to where the data is stored in this plane
-                    infoCT[z].offset = info[z].offset;
-                    infoCT[z].stripLengths = info[z].stripLengths;
-                    infoCT[z].stripOffsets = info[z].stripOffsets;
+                    infoCT[z2].offset = info[z2].offset;
+                    infoCT[z2].stripLengths = info[z2].stripLengths;
+                    infoCT[z2].stripOffsets = info[z2].stripOffsets;
                     //infoCT[z].rowsPerStrip = info[z].rowsPerStrip; // only read for first IFD!
                 }
 
                 infos[c][t] = infoCT;
 
             }
-            else if (fileType.equals(Utils.FileType.HDF5.toString()))
+            else if ( fileType.equals(Utils.FileType.HDF5.toString() ) )
             {
                 //
                 // construct a FileInfoSer
@@ -319,16 +319,16 @@ public class VirtualStackOfStacks extends VirtualStack {
                 }
 
                 infoCT = new FileInfoSer[nZ];
-                for (z = 0; z < nZ; z++)
+                for ( int z2 = 0; z2 < nZ; z2++)
                 {
-                    infoCT[z] = new FileInfoSer();
-                    infoCT[z].fileName = ctzFileList[c][t][z];
-                    infoCT[z].directory = channelFolders[c] + "/";
-                    infoCT[z].width = nX;
-                    infoCT[z].height = nY;
-                    infoCT[z].bytesPerPixel = bytesPerPixel; // todo: how to get the bit-depth from the info?
-                    infoCT[z].h5DataSet = h5DataSet;
-                    infoCT[z].fileTypeString = fileType;
+                    infoCT[z2] = new FileInfoSer();
+                    infoCT[z2].fileName = ctzFileList[c][t][z2];
+                    infoCT[z2].directory = channelFolders[c] + "/";
+                    infoCT[z2].width = nX;
+                    infoCT[z2].height = nY;
+                    infoCT[z2].bytesPerPixel = bytesPerPixel; // todo: how to get the bit-depth from the info?
+                    infoCT[z2].h5DataSet = h5DataSet;
+                    infoCT[z2].fileTypeString = fileType;
                 }
 
                 infos[c][t] = infoCT;
@@ -350,7 +350,6 @@ public class VirtualStackOfStacks extends VirtualStack {
                 infos[c][t][z].fileName = ctzFileList[c][t][z];
                 infos[c][t][z].fileTypeString = fileType;
             }
-
         }
         else
         {

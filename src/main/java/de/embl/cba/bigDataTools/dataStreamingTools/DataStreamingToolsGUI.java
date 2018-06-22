@@ -52,10 +52,11 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
 
     JComboBox filterPatternComboBox = new JComboBox(new String[] {
-            ".*", ".*--C.*", ".*Left.*",".*Right.*",".*short.*",".*long.*",".*_Target--.*",".*--LSEA00--.*",".*--LSEA01--.*"});
+            ".*", ".*--C.*", ".*Left.*",".*Right.*",".*short.*",".*long.*",".*Target.*",".*LSEA00.*",".*LSEA01.*"});
 
     JComboBox namingSchemeComboBox = new JComboBox(new String[] {
             "None",
+            DataStreamingTools.LEICA_SINGLE_TIFF,
             DataStreamingTools.LOAD_CHANNELS_FROM_FOLDERS,
             DataStreamingTools.EM_TIFF_SLICES,
             "<Z0000-0009>.tif",
@@ -226,7 +227,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         // Saving
         //
-
         mainPanels.add(new JPanel());
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
@@ -285,11 +285,8 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
         jtp.add("Saving", mainPanels.get(k++));
 
-
-
         // Chromatic Shifts
         //
-
         mainPanels.add( new JPanel() );
         mainPanels.get(k).setLayout(new BoxLayout(mainPanels.get(k), BoxLayout.PAGE_AXIS));
 
@@ -411,7 +408,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         final int nIOthreads = new Integer(tfIOThreads.getText());
         final int rowsPerStrip = new Integer(tfRowsPerStrip.getText());
         final String filterPattern = (String)filterPatternComboBox.getSelectedItem();
-        final String channelPattern = (String) namingSchemeComboBox.getSelectedItem();
+        final String namingScheme = (String) namingSchemeComboBox.getSelectedItem();
 
         if (e.getActionCommand().equals( STREAMfromFolder ) )  {
 
@@ -424,7 +421,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                 public void run() {
                     dataStreamingTools.openFromDirectory(
                             directory,
-                            channelPattern,
+                            namingScheme,
                             filterPattern,
                             h5DataSet,
                             new ImageDataInfo(),
