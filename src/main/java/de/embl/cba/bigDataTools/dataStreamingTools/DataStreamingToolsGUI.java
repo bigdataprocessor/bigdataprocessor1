@@ -3,6 +3,7 @@ package de.embl.cba.bigDataTools.dataStreamingTools;
 import de.embl.cba.bigDataTools.imaris.ImarisUtils;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
+import de.embl.cba.bigDataTools.saving.SavingSettings;
 import de.embl.cba.bigDataTools.utils.ImageDataInfo;
 import de.embl.cba.bigDataTools.utils.Utils;
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
@@ -108,8 +109,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
 
     final String APPLY_SHIFTS = "Apply shifts";
     JButton applyShifts =  new JButton( APPLY_SHIFTS );
-
-
 
     final String REPORT_ISSUE = "Report an issue";
     JButton reportIssue =  new JButton(REPORT_ISSUE);
@@ -470,61 +469,63 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
         else if ( e.getActionCommand().equals( SAVE ) )
         {
 
+            //if ( ! Utils.hasVirtualStackOfStacks(imp) ) return;
+
             ImagePlus imp = IJ.getImage();
-            if ( ! Utils.hasVirtualStackOfStacks(imp) ) return;
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
 
-            //if ( ! checkImageProperties() ) return;
-
-            // Check that all image files have been parsed
-            //
-            if (vss.numberOfUnparsedFiles() > 0)
+            if ( imp.getStack() instanceof VirtualStackOfStacks )
             {
-                logger.error("There are still " + vss.numberOfUnparsedFiles() +
-                        " files in the folder that have not been parsed yet.\n" +
-                        "Please try again later (check ImageJ's status bar).");
-                return;
+                VirtualStackOfStacks vss = ( VirtualStackOfStacks ) imp.getStack();
+
+                if ( vss.numberOfUnparsedFiles() > 0 )
+                {
+                    logger.error( "There are still " + vss.numberOfUnparsedFiles() +
+                            " files in the folder that have not been parsed yet.\n" +
+                            "Please try again later (check ImageJ's status bar)." );
+                    return;
+                }
             }
 
-            fc = new JFileChooser(vss.getDirectory());
+
+            fc = new JFileChooser( );
+
             int returnVal = fc.showSaveDialog(DataStreamingToolsGUI.this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 final File file = fc.getSelectedFile();
 
-                Utils.FileType fileType = (Utils.FileType) comboFileTypeForSaving.getSelectedItem();
+                Utils.FileType fileType = ( Utils.FileType ) comboFileTypeForSaving.getSelectedItem();
 
-                if ( fileType.equals( Utils.FileType.SERIALIZED_HEADERS ) )
-                {
+//                if ( fileType.equals( Utils.FileType.SERIALIZED_HEADERS ) )
+//                {
+//
+//                    // Save the info file
+//                    //
+//                    Thread t1 = new Thread(new Runnable() {
+//                        public void run()
+//                        {
+//                            logger.info("Saving: " + file.getAbsolutePath());
+//                            dataStreamingTools.writeFileInfosSer(vss.getFileInfosSer(), file.getAbsolutePath());
+//                        }
+//                    }); t1.start();
+//
+//                }
 
-                    // Save the info file
-                    //
-                    Thread t1 = new Thread(new Runnable() {
-                        public void run()
-                        {
-                            logger.info("Saving: " + file.getAbsolutePath());
-                            dataStreamingTools.writeFileInfosSer(vss.getFileInfosSer(), file.getAbsolutePath());
-                        }
-                    }); t1.start();
-
-                }
-                else if ( fileType.equals( Utils.FileType.TIFF )
+               if ( fileType.equals( Utils.FileType.TIFF )
                         || fileType.equals( Utils.FileType.HDF5 )
                         || fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                 {
 
-                    final int ioThreads = new Integer(tfIOThreads.getText());
+                    final int ioThreads = new Integer( tfIOThreads.getText() );
 
                     // Check that there is enough memory to hold the data in RAM while saving
                     //
                     int safetyMargin = 3;
-                    if( ! Utils.checkMemoryRequirements( imp, safetyMargin,
-                            Math.min(ioThreads, imp.getNFrames())) ) return;
+                    if( ! Utils.checkMemoryRequirements( imp, safetyMargin, Math.min(ioThreads, imp.getNFrames())) ) return;
 
                     String compression = "";
-                    if(cbLZW.isSelected())
-                        compression="LZW";
+                    if( cbLZW.isSelected() ) compression="LZW";
 
                     SavingSettings savingSettings = new SavingSettings();
                     savingSettings.imp = imp;
@@ -550,7 +551,7 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                         public void run()
                         {
                             dataStreamingToolsSavingThreads = new DataStreamingTools();
-                            dataStreamingToolsSavingThreads.saveVSSAsStacks( savingSettings );
+                            dataStreamingToolsSavingThreads.saveAsStacks( savingSettings );
                         }
                     }).start();
 
@@ -577,13 +578,6 @@ public class DataStreamingToolsGUI extends JFrame implements ActionListener, Foc
                         " files in the folder that have not been parsed yet.\n" +
                         "Please try again later (check ImageJ's status bar).");
                 return;
-            }
-
-            if ( fileType.equals(Utils.FileType.SERIALIZED_HEADERS) ||  fileType.equals(Utils.FileType.HDF5) )
-            {
-
-                logger.error("Only saving as Tiff files is supported for single planes; " +
-                        "please change your file-type selection.");
             }
 
 

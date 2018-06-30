@@ -67,6 +67,12 @@ public class VirtualStackOfStacks extends VirtualStack {
     private int nX, nY, nZ, nC, nT;
     int bitDepth = 0;
     FileInfoSer[][][] infos;  // channel, t, z
+
+    public String getFileType()
+    {
+        return fileType;
+    }
+
     String fileType = Utils.FileType.TIFF_STACKS.toString();
     String directory = "";
     String[] channelFolders;
@@ -599,8 +605,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         region5D.offset = po;
         region5D.size = ps;
         region5D.subSampling = new Point3D(1, 1, 1);
-        int[] intensityGate = new int[]{-1,-1};
-        imp = getDataCube( region5D, intensityGate, 1 );
+
+        imp = getDataCube( region5D, 1 );
 
         return imp.getProcessor();
 
@@ -611,19 +617,19 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
     public Point3D getCropOffset() {
-        return(new Point3D(infos[0][0][0].pCropOffset[0], infos[0][0][0].pCropOffset[1], infos[0][0][0].pCropOffset[2]));
+        return(new Point3D( infos[0][0][0].pCropOffset[0], infos[0][0][0].pCropOffset[1], infos[0][0][0].pCropOffset[2]));
     }
 
     public Point3D getCropSize() {
-        return(new Point3D(infos[0][0][0].pCropSize[0], infos[0][0][0].pCropSize[1], infos[0][0][0].pCropSize[2]));
+        return(new Point3D( infos[0][0][0].pCropSize[0], infos[0][0][0].pCropSize[1], infos[0][0][0].pCropSize[2]));
     }
 
-    public ImagePlus getFullFrame(int t, int c, int nThreads)
+    public ImagePlus getFullFrame( int c, int t, int nThreads)
     {
-        return( getFullFrame(t, c, new Point3D(1,1,1), nThreads) );
+        return( getFullFrame( c, t, new Point3D(1,1,1), nThreads) );
     }
 
-    public ImagePlus getFullFrame( int t, int c, Point3D pSubSample, int nThreads ) {
+    public ImagePlus getFullFrame( int c, int t, Point3D pSubSample, int nThreads ) {
 
         Point3D po, ps;
 
@@ -643,9 +649,8 @@ public class VirtualStackOfStacks extends VirtualStack {
         region5D.offset = po;
         region5D.size = ps;
         region5D.subSampling = pSubSample;
-        int[] intensityGate = new int[]{-1,-1};
 
-        ImagePlus imp = getDataCube( region5D, intensityGate, nThreads );
+        ImagePlus imp = getDataCube( region5D, nThreads );
 
         if( (int)pSubSample.getX()>1 || (int)pSubSample.getY()>1)
         {
@@ -659,7 +664,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
 
-    public ImagePlus getDataCube( Region5D region5D, int[] intensityGate, int nThreads )   {
+    public ImagePlus getDataCube( Region5D region5D, int nThreads )   {
 
         if ( logger.isShowDebug() )
         {
@@ -678,7 +683,6 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         adjustRegionOffsetForChromaticShifts( region5D );
 
-
         int dz = (int) region5D.subSampling.getZ();
 
         // compute ranges to be loaded
@@ -696,14 +700,14 @@ public class VirtualStackOfStacks extends VirtualStack {
         //
 
         // set negative offsets to zero
-        int ox2 = ( ox < 0 ) ? 0 : ox;
-        int oy2 = ( oy < 0 ) ? 0 : oy;
-        int oz2 = ( oz < 0 ) ? 0 : oz;
+        int oxLoaded = ( ox < 0 ) ? 0 : ox;
+        int oyLoaded = ( oy < 0 ) ? 0 : oy;
+        int ozLoaded = ( oz < 0 ) ? 0 : oz;
 
         // adjust the loaded sizes accordingly
-        int sx2 = sx - ( ox2 - ox );
-        int sy2 = sy - ( oy2 - oy );
-        int sz2 = sz - ( oz2 - oz );
+        int sxLoaded = sx - ( oxLoaded - ox );
+        int syLoaded = sy - ( oyLoaded - oy );
+        int szLoaded = sz - ( ozLoaded - oz );
 
         // adjust for too large loading ranges due to high offsets
         // - note: ox2=ox and sx2=sx if ox was positive
@@ -711,110 +715,109 @@ public class VirtualStackOfStacks extends VirtualStack {
         int nY = fi.height;
         int nZ = infos[ region5D.c ][ region5D.t ].length;
 
-        sx2 = (ox2+sx2 > nX) ? nX-ox2 : sx2;
-        sy2 = (oy2+sy2 > nY) ? nY-oy2 : sy2;
-        sz2 = (oz2+sz2 > nZ) ? nZ-oz2 : sz2;
+        sxLoaded = (oxLoaded + sxLoaded > nX) ? nX - oxLoaded : sxLoaded;
+        syLoaded = (oyLoaded + syLoaded > nY) ? nY - oyLoaded : syLoaded;
+        szLoaded = (ozLoaded + szLoaded > nZ) ? nZ - ozLoaded : szLoaded;
 
         // check memory requirements
         //
-        long numPixels = (long) sx2 * sy2 * sz2;
+        long numPixels = (long) sxLoaded * syLoaded * szLoaded;
         int numStacks = 1;
         int bitDepth = this.getBitDepth();
 
-        if( ! Utils.checkMemoryRequirements( numPixels, bitDepth, numStacks) ) return(null);
+        if( ! Utils.checkMemoryRequirements( numPixels, bitDepth, numStacks) ) return( null );
 
-        // load requested data into RAM
-        //
-        ImagePlus impLoaded = getRawLoaded( region5D, nThreads, dz, ox2, oy2, oz2, sx2, sy2, sz2 );
+        ImagePlus loaded = loadDataCube( region5D.c, region5D.t, oxLoaded, oyLoaded, ozLoaded, sxLoaded, syLoaded, szLoaded, dz, nThreads );
 
-        if (impLoaded == null)
-        {
-            logger.info("Error: loading failed!");
-            return null;
-        }
+        ImagePlus requested = createStackOfRequestedSize( loaded, fi, dz, ox, oy, oz, sx, sy, sz  );
 
-        ImagePlus finalImp = getProcessedOfRightSize( intensityGate, fi, dz, ox, oy, oz, sx, sy, sz, ox2, oy2, oz2, sx2, sy2, sz2, impLoaded );
+        ImagePlus binned = createXYBinnedStack( requested, region5D );
 
-        ImagePlus subSampled = getSubSampled( region5D, finalImp );
-
-        return subSampled;
+        return binned;
 
     }
 
-    private ImagePlus getSubSampled( Region5D region5D, ImagePlus finalImp )
+    private ImagePlus createXYBinnedStack( ImagePlus imp, Region5D region5D )
     {
-        // subsample in x and y
-        ImagePlus subSampled;
 
-        if ((int) region5D.subSampling.getX() > 1 || (int) region5D.subSampling.getY() > 1) {
-            subSampled = resizeWidthAndHeight(finalImp, (int) region5D.subSampling.getX(), (int) region5D.subSampling.getY());
-        } else {
-            subSampled = finalImp;
+        if ( ( (int) region5D.subSampling.getX() == 1 ) && ( (int) region5D.subSampling.getY() == 1 ) )
+        {
+            return imp;
         }
-        return subSampled;
+        else
+        {
+           return resizeWidthAndHeight( imp, (int) region5D.subSampling.getX(), (int) region5D.subSampling.getY());
+        }
+
     }
 
-    private ImagePlus getProcessedOfRightSize( int[] intensityGate, FileInfoSer fi, int dz, int ox, int oy, int oz, int sx, int sy, int sz, int ox2, int oy2, int oz2, int sx2, int sy2, int sz2, ImagePlus impLoaded )
+
+    private ImagePlus createStackOfRequestedSize( ImagePlus impLoaded, FileInfoSer fi, int dz, int oxRequested, int oyRequested, int ozRequested, int sxRequested, int syRequested, int szRequested )
     {
-        // put the potentially smaller loaded stack into the full stack
 
-        int finalStackOffsetX = (ox2 - ox);
-        int finalStackOffsetY = (oy2 - oy);
-        int finalStackOffsetZ = (oz2 - oz);
-
-        if (dz > 1) { // adapt for sub-sampling in z
-            sz = (int) (1.0 * sz / dz + 0.5); // final stack size
-            finalStackOffsetZ = (int) (1.0 * finalStackOffsetZ / dz); // final stack offset
+        if ( dz > 1 )
+        {
+            // adapt stack size in z for sub-sampling
+            szRequested = (int) ( 1.0 * szRequested / dz + 0.5 ); // final stack size
         }
 
-        ImageStack finalStack = ImageStack.create(sx, sy, sz, fi.bytesPerPixel*8);
-
-        if( sx2>0 && sy2>0 && sz2>0 ) // something was actually loaded
+        if ( impLoaded == null )
         {
-            //
-            // apply intensityGate
-            // - this helps both the center of mass and the correlation
-            if( (intensityGate[0] != -1) || (intensityGate[1] != -1) )
+            // nothing was loaded => return empty stack of requested size
+            ImageStack finalStack = ImageStack.create( sxRequested, syRequested, szRequested, fi.bytesPerPixel * 8 );
+            return new ImagePlus("", finalStack);
+        }
+        else
+        {
+
+            int sxLoaded = impLoaded.getWidth();
+            int syLoaded = impLoaded.getHeight();
+            int szLoaded = impLoaded.getNSlices();
+
+            if ( sxRequested == sxLoaded && syRequested == syLoaded && szRequested == szLoaded )
             {
-                Utils.applyIntensityGate( impLoaded, intensityGate );
+                return impLoaded;
             }
-
-            //
-            // put the loaded stack into larger requested stack
-            // - this can be necessary when requested stack was at image boundary
-            ImageStack loadedStack = impLoaded.getStack();
-            for ( int z = 1; z <= loadedStack.size(); z++ ) // getProcessor is one-based
+            else
             {
-                ImageProcessor ip = loadedStack.getProcessor(z);
-                ImageProcessor ip2 = ip.createProcessor(sx, sy);
-                ip2.insert(ip, finalStackOffsetX, finalStackOffsetY);
-                if( z + finalStackOffsetZ > finalStack.size() )
+                // the loaded stack is smaller than the requested ( because oob pixels where requested )
+
+                final int finalStackOffsetX = oxRequested < 0 ? oxRequested : 0;
+                final int finalStackOffsetY = oyRequested < 0 ? oyRequested : 0;
+                final int finalStackOffsetZ = ( ozRequested < 0 ? ozRequested : 0 ) / dz;
+
+                ImageStack requestedStack = ImageStack.create( sxRequested, syRequested, szRequested, fi.bytesPerPixel * 8 );
+
+                ImageStack loadedStack = impLoaded.getStack();
+
+                for ( int z = 1; z <= loadedStack.size(); z++ )
                 {
-                     logger.error("Error due to z-subsampling");
+                    ImageProcessor ipLoaded = loadedStack.getProcessor( z );
+
+                    ImageProcessor ipRequested = ipLoaded.createProcessor( sxRequested, syRequested );
+
+                    ipRequested.insert( ipLoaded, finalStackOffsetX, finalStackOffsetY );
+
+                    requestedStack.setProcessor( ipRequested, z + finalStackOffsetZ );
                 }
-                finalStack.setProcessor(ip2, z + finalStackOffsetZ);
+
+                return new ImagePlus( "", requestedStack );
+
             }
         }
-
-        // todo: if this is called from "getProcessor" I need different logic because
-        // it should only return one plane
-
-        return new ImagePlus("", finalStack);
     }
 
-    private ImagePlus getRawLoaded( Region5D region5D, int nThreads, int dz, int ox2, int oy2, int oz2, int sx2, int sy2, int sz2 )
+
+    private ImagePlus loadDataCube( int c, int t, int ox, int oy, int oz, int sx, int sy, int sz, int dz, int nThreads )
     {
-        ImagePlus impLoaded = null;
 
-        if( sx2>0 && sy2>0 && sz2>0 )
-        {
-            Point3D po2 = new Point3D(ox2, oy2, oz2);
-            Point3D ps2 = new Point3D(sx2, sy2, sz2);
-            long duration = System.currentTimeMillis();
+        if( sx == 0 || sy == 0 || sz == 0 ) return null;
 
-            impLoaded = new OpenerExtension().readDataCube(directory, infos[region5D.c][region5D.t], dz, po2, ps2, nThreads);
-            duration = System.currentTimeMillis() - duration;
-        }
+        Point3D po = new Point3D(ox, oy, oz);
+        Point3D ps = new Point3D(sx, sy, sz);
+
+        ImagePlus impLoaded = new OpenerExtension().readDataCube(directory, infos[c][t], dz, po, ps, nThreads);
+
         return impLoaded;
     }
 
@@ -907,6 +910,7 @@ public class VirtualStackOfStacks extends VirtualStack {
     }
 
     public ImagePlus resizeWidthAndHeight(ImagePlus imp, int dx, int dy) {
+
         int nSlices = imp.getStackSize();
         int nx = imp.getWidth(), ny = imp.getHeight();
         ImagePlus imp2 = imp.createImagePlus();

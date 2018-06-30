@@ -1,9 +1,9 @@
-package de.embl.cba.bigDataTools.VirtualStackOfStacks;
+package de.embl.cba.bigDataTools.saving;
 
-import de.embl.cba.bigDataTools.Hdf5DataCubeWriter;
+import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
+import de.embl.cba.bigDataTools.hdf5.H5DataCubeWriter;
 import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
-import de.embl.cba.bigDataTools.dataStreamingTools.SavingSettings;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
 import de.embl.cba.bigDataTools.ProjectionXYZ;
@@ -96,19 +96,7 @@ public class SaveVSSFrame implements Runnable {
             // Load
             //
 
-            ImagePlus impChannelTime = null;
-            VirtualStackOfStacks vss = (VirtualStackOfStacks) savingSettings.imp.getStack();
-            if ( vss.fileType.equals( Utils.FileType.SINGLE_PLANE_TIFF.toString()) )
-            {
-                // load all frames individually, the Duplicator
-                // will also handle missing frames by returning black images
-                Duplicator duplicator = new Duplicator();
-                impChannelTime = duplicator.run( savingSettings.imp, c+1, c+1, 1, savingSettings.imp.getNSlices(), t+1, t+1 );
-            }
-            else
-            {
-                impChannelTime = vss.getFullFrame( t, c, savingSettings.nThreads );
-            }
+            ImagePlus impChannelTime = getDataCube( c );
 
             // Gate
             //
@@ -177,7 +165,7 @@ public class SaveVSSFrame implements Runnable {
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV ) )
                     {
-                        Hdf5DataCubeWriter writer = new Hdf5DataCubeWriter();
+                        H5DataCubeWriter writer = new H5DataCubeWriter();
 
                         writer.writeImarisCompatibleResolutionPyramid(
                                 impBinned,
@@ -203,6 +191,38 @@ public class SaveVSSFrame implements Runnable {
 
     }
 
+    private ImagePlus getDataCube( int c )
+    {
+        ImagePlus impChannelTime = null;
+
+        if ( savingSettings.imp.getStack() instanceof VirtualStackOfStacks )
+        {
+
+            VirtualStackOfStacks vss = ( VirtualStackOfStacks ) savingSettings.imp.getStack();
+
+            if ( vss.getFileType().equals( Utils.FileType.SINGLE_PLANE_TIFF.toString() ) )
+            {
+                // load all frames individually, the Duplicator
+                // will also handle missing frames by returning black images
+                Duplicator duplicator = new Duplicator();
+                impChannelTime = duplicator.run( savingSettings.imp, c + 1, c + 1, 1, savingSettings.imp.getNSlices(), t + 1, t + 1 );
+            }
+            else
+            {
+                impChannelTime = vss.getFullFrame( c, t, savingSettings.nThreads );
+            }
+        }
+        else
+        {
+            // TODO: one could make this be just a imglib2 View, but it anyway needs to load it to RAM for saving...
+            Duplicator duplicator = new Duplicator();
+            impChannelTime = duplicator.run( savingSettings.imp, c + 1, c + 1, 1, savingSettings.imp.getNSlices(), t + 1, t + 1 );
+        }
+
+
+		return impChannelTime;
+    }
+
     private void documentProgress( int total )
     {
         counter.incrementAndGet();
@@ -222,9 +242,9 @@ public class SaveVSSFrame implements Runnable {
     {
         ProjectionXYZ projectionXYZ = new ProjectionXYZ( imp );
         projectionXYZ.setDoscale( false );
-        ImagePlus impProjection = projectionXYZ.getXYZProject();
+        ImagePlus projection = projectionXYZ.createProjection();
 
-        FileSaver fileSaver = new FileSaver( impProjection );
+        FileSaver fileSaver = new FileSaver( projection );
         String sC = String.format("%1$02d", c);
         String sT = String.format("%1$05d", t);
         String pathCT = path + "--xyz-max-projection" + "--C" + sC + "--T" + sT + ".tif";
@@ -316,7 +336,7 @@ public class SaveVSSFrame implements Runnable {
                 // compute start level in image processor
                 int srcLevel = (int)saveBlockOffset[0];
                 //IJ.info( "source level = " +srcLevel);
-                // writeHeader Stack according to data type
+                // writeHeaderFile Stack according to data type
                 //
                 int imgColorType = imp.getType();
 
@@ -344,10 +364,10 @@ public class SaveVSSFrame implements Runnable {
 
                     // save it
                     //
-                    writer.uint16().writeMDArray( dsetName, arr, HDF5IntStorageFeatures.createDeflationDelete(compressionLevel));
+                    writer.uint16().writeMDArray( dsetName, arr, HDF5IntStorageFeatures.createDeflationDelete( compressionLevel ) );
 
                 }
-                else if (imgColorType == ImagePlus.GRAY8 )
+                else if ( imgColorType == ImagePlus.GRAY8 )
                 {
 
                     // Save as Byte Array

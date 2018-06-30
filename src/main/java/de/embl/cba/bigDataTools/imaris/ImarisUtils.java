@@ -68,7 +68,7 @@ public abstract class ImarisUtils {
         ArrayList < File > imarisFiles = ImarisUtils.getImarisFiles( directory );
         if ( imarisFiles.size() > 1 )
         {
-            ImarisWriter.writeCombinedHeader( imarisFiles, "meta.ims" );
+            ImarisWriter.writeCombinedHeaderFile( imarisFiles, "meta.ims" );
         }
     }
 

@@ -212,7 +212,7 @@ public class BigDataTracker {
                 region5D.size = ps;
                 region5D.subSampling = new Point3D(1,1,1);
 
-                ImagePlus imp2 = Utils.getDataCubeFromImagePlus(imp, region5D);
+                ImagePlus imp2 = Utils.getDataCube(imp, region5D);
                 ImageStack stack2 = imp2.getStack();
 
                 int n = stack2.getSize();

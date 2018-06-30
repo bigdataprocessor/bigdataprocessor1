@@ -1,4 +1,4 @@
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.hdf5;
 
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
@@ -8,7 +8,8 @@ import ncsa.hdf.hdf5lib.exceptions.HDF5LibraryException;
 import java.io.File;
 import java.util.ArrayList;
 
-public abstract class Hdf5Utils {
+public abstract class H5Utils
+{
 
 
     public static void writeIntegerAttribute( int dataset_id, String attrName, int[] attrValue ) throws HDF5Exception
@@ -221,19 +222,18 @@ public abstract class Hdf5Utils {
 
     public static int openFile( String directory, String filename )
     {
-        String filePathMaster = directory + File.separator + filename;
-        File fileMaster = new File( filePathMaster );
+        String path = directory + File.separator + filename;
+        File file = new File( path );
 
         int file_id = -1;
 
-        if ( fileMaster.exists() )
+        if ( file.exists() )
         {
             try
             {
-                file_id = H5.H5Fopen( filePathMaster,
-                        HDF5Constants.H5F_ACC_RDONLY, HDF5Constants.H5P_DEFAULT);
-
-            } catch ( Exception e )
+                file_id = H5.H5Fopen( path, HDF5Constants.H5F_ACC_RDONLY, HDF5Constants.H5P_DEFAULT);
+            }
+            catch ( Exception e )
             {
                 file_id = -1;
             }
@@ -246,11 +246,16 @@ public abstract class Hdf5Utils {
 
     public static int createFile( String directory, String filename )
     {
-        String filePathMaster = directory + File.separator + filename;
-        File fileMaster = new File( filePathMaster );
-        if (fileMaster.exists()) fileMaster.delete();
+        String path = directory + File.separator + filename;
 
-        int file_id = H5.H5Fcreate(filePathMaster,
+        File file = new File( path );
+
+        if ( file.exists() )
+        {
+            file.delete();
+        }
+
+        int file_id = H5.H5Fcreate(path,
                 HDF5Constants.H5F_ACC_TRUNC, HDF5Constants.H5P_DEFAULT,
                 HDF5Constants.H5P_DEFAULT);
 

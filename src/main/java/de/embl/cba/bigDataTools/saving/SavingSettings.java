@@ -1,4 +1,4 @@
-package de.embl.cba.bigDataTools.dataStreamingTools;
+package de.embl.cba.bigDataTools.saving;
 
 import de.embl.cba.bigDataTools.utils.Utils;
 import ij.ImagePlus;

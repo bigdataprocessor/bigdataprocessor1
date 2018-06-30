@@ -1,11 +1,10 @@
 package de.embl.cba.bigDataTools.imaris;
 
+import de.embl.cba.bigDataTools.hdf5.H5Utils;
 import ncsa.hdf.hdf5lib.H5;
 import net.imglib2.FinalRealInterval;
 
 import java.util.ArrayList;
-
-import static de.embl.cba.bigDataTools.Hdf5Utils.*;
 
 public class ImarisReader {
 
@@ -13,7 +12,7 @@ public class ImarisReader {
 
     public ImarisReader( String directory, String filename )
     {
-        file_id = openFile( directory, filename );
+        file_id = H5Utils.openFile( directory, filename );
     }
 
     public void closeFile()
@@ -21,14 +20,14 @@ public class ImarisReader {
         H5.H5Fclose( file_id );
     }
 
-    public ArrayList< String > readChannelColors( )
+    public ArrayList< String > getChannelColors( )
     {
         ArrayList < String > channelColors = new ArrayList<>();
 
         for ( int c = 0; ; ++c )
         {
 
-            String color = readStringAttribute( file_id,
+            String color = H5Utils.readStringAttribute( file_id,
                     ImarisUtils.DATA_SET_INFO
                             + "/" + ImarisUtils.CHANNEL + c,
                             ImarisUtils.CHANNEL_COLOR );
@@ -42,14 +41,14 @@ public class ImarisReader {
         return ( channelColors ) ;
     }
 
-    public ArrayList< String > readChannelNames( )
+    public ArrayList< String > getChannelNames( )
     {
         ArrayList < String > channelNames = new ArrayList<>();
 
         for ( int c = 0; ; ++c )
         {
 
-            String color = readStringAttribute( file_id,
+            String color = H5Utils.readStringAttribute( file_id,
                     ImarisUtils.DATA_SET_INFO
                             + "/" + ImarisUtils.CHANNEL + c,
                             ImarisUtils.CHANNEL_NAME );
@@ -63,15 +62,14 @@ public class ImarisReader {
         return ( channelNames ) ;
     }
 
-
-    public ArrayList< String > readTimePoints( )
+    public ArrayList< String > getTimePoints( )
     {
         ArrayList < String > timePoints = new ArrayList<>();
 
         for ( int t = 0; ; ++t )
         {
 
-            String timePoint = readStringAttribute( file_id,
+            String timePoint = H5Utils.readStringAttribute( file_id,
                     ImarisUtils.DATA_SET_INFO
                     + "/" + ImarisUtils.TIME_INFO ,
                     ImarisUtils.TIME_POINT_ATTRIBUTE + (t+1) );
@@ -85,24 +83,24 @@ public class ImarisReader {
         return ( timePoints ) ;
     }
 
-    public ArrayList< long[] > readDimensions( )
+    public ArrayList< long[] > getDimensions( )
     {
         ArrayList < long[] > dimensions = new ArrayList<>();
 
-        int nr = Integer.parseInt( readStringAttribute( file_id,
+        int numResolutions = Integer.parseInt( H5Utils.readStringAttribute( file_id,
                 ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
                 ImarisUtils.RESOLUTION_LEVELS_ATTRIBUTE ).trim() );
 
-        for ( int r = 0; r < nr; ++r )
+        for ( int resolution = 0; resolution < numResolutions; ++resolution )
         {
             long[] dimension = new long[ 3 ];
             for ( int d = 0; d < 3; ++d )
             {
                 // number of pixels at different resolutions
                 dimension[ d ] = Integer.parseInt(
-                    readStringAttribute( file_id,
+                    H5Utils.readStringAttribute( file_id,
                         ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
-                        ImarisUtils.XYZ[ d ] + r ) );
+                        ImarisUtils.XYZ[ d ] + resolution ) );
             }
             dimensions.add( dimension );
         }
@@ -130,21 +128,21 @@ public class ImarisReader {
         return ( dimensions ) ;
     }
 
-    public FinalRealInterval readInterval()
+    public FinalRealInterval getCalibratedInterval()
     {
 
-        double[] min = new double[3];
-        double[] max = new double[3];
+        double[] min = new double[ 3 ];
+        double[] max = new double[ 3 ];
 
         String s;
 
         for ( int d = 0; d < 3; ++d )
         {
             // physical interval
-            min[d] = Double.parseDouble( readStringAttribute( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
+            min[d] = Double.parseDouble( H5Utils.readStringAttribute( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
                     "ExtMin" + d ).trim() );
 
-            max[d] = Double.parseDouble( readStringAttribute( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
+            max[d] = Double.parseDouble( H5Utils.readStringAttribute( file_id, ImarisUtils.DATA_SET_INFO + "/" + ImarisUtils.IMAGE,
                     "ExtMax" + d ).trim() );
         }
 

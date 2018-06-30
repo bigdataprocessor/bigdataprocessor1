@@ -1,17 +1,27 @@
 package de.embl.cba.bigDataTools.lazyratioviewer;
 
 
+import ij.IJ;
 import ij.ImagePlus;
-import org.scijava.command.Command;
+import org.scijava.ItemVisibility;
+import org.scijava.command.InteractiveCommand;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.widget.Button;
 
-@Plugin( type = Command.class, menuPath = "Plugins>BigDataTools>Lazy Ratio Viewer" )
-public class LazyRatioViewerCommand implements Command
+@Plugin( type = InteractiveCommand.class, menuPath = "Plugins>BigDataTools>Lazy Ratio Viewer" )
+public class LazyRatioViewerCommand extends InteractiveCommand
 {
 	@Parameter
 	public LogService logService;
+
+
+	@Parameter( visibility = ItemVisibility.MESSAGE, persist = false )
+	private String information1 = "Ratio = ( ChannelA - BackgroundA ) / ( ChannelB - BackgroundB )";
+
+	@Parameter( visibility = ItemVisibility.MESSAGE, persist = false )
+	private String information2 = "Pixels below threshold in either channel are set to zero.";
 
 	@Parameter
 	public ImagePlus imagePlus;
@@ -19,38 +29,53 @@ public class LazyRatioViewerCommand implements Command
 	LazyRatioViewerSettings settings = new LazyRatioViewerSettings();
 
 	@Parameter
-	public int channel0 = settings.channel0;
+	public int channelA = settings.channelA;
 
 	@Parameter
-	public int channel1 = settings.channel1;
+	public int channelB = settings.channelB;
 
 	@Parameter
-	public double background0 = settings.background0;
+	public double backgroundA = settings.backgroundA;
 
 	@Parameter
-	public double background1 = settings.background1;
+	public double backgroundB = settings.backgroundB;
 
 	@Parameter
-	public double nanThreshold0 = settings.nanThreshold0;
+	public double thresholdA = settings.thresholdA;
 
 	@Parameter
-	public double nanThreshold1 = settings.nanThreshold1;
+	public double thresholdB = settings.thresholdB;
 
+	@Parameter( label = "Create ratio view", callback = "createView" )
+	private Button viewButton;
 
-	public void run()
+	public void createView()
 	{
+		if ( ! isInputValid() ) return;
+
 		settings.imagePlus = imagePlus;
-		settings.channel0 = channel0;
-		settings.channel1 = channel1;
-		settings.background0 = background0;
-		settings.background1 = background1;
-		settings.nanThreshold0 = nanThreshold0;
-		settings.nanThreshold1 = nanThreshold1;
+		settings.channelA = channelA - 1;
+		settings.channelB = channelB - 1;
+		settings.backgroundA = backgroundA;
+		settings.backgroundB = backgroundB;
+		settings.thresholdA = thresholdA;
+		settings.thresholdB = thresholdB;
 
 		LazyRatioViewer lazyRatioViewer = new LazyRatioViewer( settings );
 
 		lazyRatioViewer.showRatioImageUsingImageJ1();
+	}
 
+	private boolean isInputValid()
+	{
+		if ( imagePlus.getNChannels() < Math.max( channelA, channelB ) )
+		{
+			IJ.showMessage( "The input image only has " + imagePlus.getNChannels() + " channels.\n" +
+					"You however asked for channel number " + Math.max( channelA, channelB ) + "." );
+			return false;
+		}
+
+		return true;
 	}
 
 }

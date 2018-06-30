@@ -1,4 +1,4 @@
-package de.embl.cba.bigDataTools;
+package de.embl.cba.bigDataTools.hdf5;
 
 import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
 import de.embl.cba.bigDataTools.utils.Utils;
@@ -13,34 +13,59 @@ import ncsa.hdf.hdf5lib.HDF5Constants;
 import ncsa.hdf.hdf5lib.exceptions.HDF5Exception;
 import ncsa.hdf.hdf5lib.exceptions.HDF5LibraryException;
 
-import static de.embl.cba.bigDataTools.Hdf5Utils.writeDoubleAttribute;
-import static de.embl.cba.bigDataTools.Hdf5Utils.writeStringAttribute;
+import static de.embl.cba.bigDataTools.hdf5.H5Utils.writeDoubleAttribute;
+import static de.embl.cba.bigDataTools.hdf5.H5Utils.writeStringAttribute;
 import static de.embl.cba.bigDataTools.imaris.ImarisUtils.*;
 
-public class Hdf5DataCubeWriter {
+public class H5DataCubeWriter
+{
 
     int file_id;
-    int image_memory_type;
-    int image_file_type;
+    int memory_type;
+    int file_type;
 
+    public void writeImarisCompatibleResolutionPyramid( ImagePlus imp, ImarisDataSet idp, int c, int t ) throws HDF5LibraryException
+    {
 
-    private void setImageMemoryAndFileType( ImagePlus imp )
+        file_id = createFile( idp.getDataSetDirectory( c, t, 0 ), idp.getDataSetFilename( c, t, 0 ) );
+
+        setMemoryTypeAndFileType( imp );
+
+        ImagePlus impResolutionLevel = imp;
+
+        for ( int resolution = 0; resolution < idp.getDimensions().size(); resolution++ )
+        {
+            if ( resolution > 0 )
+            {
+                // bin further
+                impResolutionLevel = Utils.bin( impResolutionLevel, idp.getRelativeBinnings().get( resolution ), "binned", "AVERAGE" );
+            }
+
+            writeDataCubeAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + resolution, idp.getDimensions().get( resolution ), idp.getChunks().get( resolution ) );
+
+            writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + resolution );
+        }
+
+        H5.H5Fclose( file_id );
+    }
+
+    private void setMemoryTypeAndFileType( ImagePlus imp )
     {
 
         if ( imp.getBitDepth() == 8 )
         {
-            image_memory_type = HDF5Constants.H5T_NATIVE_UCHAR;
-            image_file_type = HDF5Constants.H5T_STD_U8BE;
+            memory_type = HDF5Constants.H5T_NATIVE_UCHAR;
+            file_type = HDF5Constants.H5T_STD_U8BE;
         }
         else if ( imp.getBitDepth() == 16 )
         {
-            image_memory_type = HDF5Constants.H5T_NATIVE_USHORT;
-            image_file_type = HDF5Constants.H5T_STD_U16BE;
+            memory_type = HDF5Constants.H5T_NATIVE_USHORT;
+            file_type = HDF5Constants.H5T_STD_U16BE;
         }
         else if ( imp.getBitDepth() == 32 )
         {
-            image_memory_type = HDF5Constants.H5T_NATIVE_FLOAT;
-            image_file_type = HDF5Constants.H5T_IEEE_F32BE;
+            memory_type = HDF5Constants.H5T_NATIVE_FLOAT;
+            file_type = HDF5Constants.H5T_IEEE_F32BE;
         }
         else
         {
@@ -48,35 +73,6 @@ public class Hdf5DataCubeWriter {
                     "only 8-bit, 16-bit and 32-bit floating point are possible." );
         }
     }
-
-
-    public void writeImarisCompatibleResolutionPyramid( ImagePlus imp3d, ImarisDataSet idp, int c, int t ) throws HDF5LibraryException
-    {
-
-        file_id = createFile( idp.getDataSetDirectory( c, t, 0 ), idp.getDataSetFilename( c, t, 0 ) );
-
-        setImageMemoryAndFileType( imp3d );
-
-        ImagePlus impResolutionLevel = imp3d;
-
-        for ( int r = 0; r < idp.getDimensions().size(); r++ )
-        {
-            if ( r > 0 )
-            {
-                // bin further down
-                impResolutionLevel = Utils.bin( impResolutionLevel, idp.getRelativeBinnings().get( r ), "binned", "AVERAGE" );
-            }
-
-            // System.out.println( "Writing resolution level " + r + "..." );
-
-            writeDataCubeAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r, idp.getDimensions().get( r ), idp.getChunks().get( r ) );
-
-            writeHistogramAndAttributes( impResolutionLevel, RESOLUTION_LEVEL + r );
-        }
-
-        H5.H5Fclose( file_id );
-    }
-
 
     private void writeDataCubeAndAttributes( ImagePlus imp, String group, long[] dimensionXYZ, long[] chunkXYZ ) throws HDF5Exception
     {
@@ -94,7 +90,7 @@ public class Hdf5DataCubeWriter {
                 chunkXYZ[ 0 ] };
 
 
-        int group_id = Hdf5Utils.createGroup( file_id, group );
+        int group_id = H5Utils.createGroup( file_id, group );
 
         int dataspace_id = H5.H5Screate_simple( dimension.length, dimension, null );
 
@@ -114,7 +110,7 @@ public class Hdf5DataCubeWriter {
             dataset_id = H5.H5Dcreate(
                     group_id,
                     DATA,
-                    image_file_type,
+                    file_type,
                     dataspace_id,
                     HDF5Constants.H5P_DEFAULT,
                     dcpl_id,
@@ -153,7 +149,7 @@ public class Hdf5DataCubeWriter {
             if ( ! javaIndexingIssue )
             {
                 H5.H5Dwrite( dataset_id,
-                        image_memory_type,
+                        memory_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
@@ -186,7 +182,7 @@ public class Hdf5DataCubeWriter {
 
                     // write
                     H5.H5Dwrite( dataset_id,
-                            image_memory_type,
+                            memory_type,
                             memspace,
                             dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
@@ -204,7 +200,7 @@ public class Hdf5DataCubeWriter {
             {
 
                 H5.H5Dwrite( dataset_id,
-                        image_memory_type,
+                        memory_type,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5S_ALL,
                         HDF5Constants.H5P_DEFAULT,
@@ -238,7 +234,7 @@ public class Hdf5DataCubeWriter {
 
                     // write
                     H5.H5Dwrite( dataset_id,
-                            image_memory_type,
+                            memory_type,
                             memspace,
                             dataspace_id,
                             HDF5Constants.H5P_DEFAULT,
@@ -254,7 +250,7 @@ public class Hdf5DataCubeWriter {
             float[][] data = getFloatData( imp, 0, 0 );
 
             H5.H5Dwrite( dataset_id,
-                    image_memory_type,
+                    memory_type,
                     HDF5Constants.H5S_ALL,
                     HDF5Constants.H5S_ALL,
                     HDF5Constants.H5P_DEFAULT,
@@ -268,7 +264,6 @@ public class Hdf5DataCubeWriter {
 
     }
 
-
     private void writeSizeAttributes( int group_id, long[] dimension )
     {
         for ( int d = 0; d < 3; ++d )
@@ -278,7 +273,6 @@ public class Hdf5DataCubeWriter {
                     String.valueOf( dimension[d]) );
         }
     }
-
 
     private void writeChunkAttributes( int group_id, long[] chunks )
     {
@@ -306,7 +300,7 @@ public class Hdf5DataCubeWriter {
 
     private void writeHistogramAndAttributes( ImagePlus imp, String group )
     {
-        int group_id = Hdf5Utils.createGroup( file_id, group );
+        int group_id = H5Utils.createGroup( file_id, group );
 
         ImageStatistics imageStatistics = imp.getStatistics();
 
@@ -356,10 +350,8 @@ public class Hdf5DataCubeWriter {
 
     private int createFile( String directory, String filename )
     {
-        return ( Hdf5Utils.createFile( directory, filename  ) );
+        return ( H5Utils.createFile( directory, filename  ) );
     }
-
-
 
     private byte[][] getByteData( ImagePlus imp, int c, int t )
     {

@@ -118,7 +118,9 @@ class ObjectTracker implements Runnable
             region5D.size = pSize;
         }
         region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube( imp, region5D, trackingSettings.intensityGate, nThreads );
+        imp0 = Utils.getDataCube( imp, region5D, nThreads );
+        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
+
         elapsedReadingTime = System.currentTimeMillis() - startTime;
 
         //
@@ -222,7 +224,8 @@ class ObjectTracker implements Runnable
                 region5D0.offset = p0offset;
 
                 region5D0.subSampling = trackingSettings.subSamplingXYZ;
-                imp0 = Utils.getDataCube( imp, region5D0, trackingSettings.intensityGate, nThreads );
+                imp0 = Utils.getDataCube( imp, region5D0, nThreads );
+                Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
             }
 
             // now
@@ -237,7 +240,8 @@ class ObjectTracker implements Runnable
             region5D1.offset = p1offset;
 
             region5D1.subSampling = trackingSettings.subSamplingXYZ;
-            imp1 = Utils.getDataCube( imp, region5D1, trackingSettings.intensityGate, nThreads );
+            imp1 = Utils.getDataCube( imp, region5D1, nThreads );
+            Utils.applyIntensityGate( imp1, trackingSettings.intensityGate );
 
             elapsedReadingTime = System.currentTimeMillis() - startTime;
 

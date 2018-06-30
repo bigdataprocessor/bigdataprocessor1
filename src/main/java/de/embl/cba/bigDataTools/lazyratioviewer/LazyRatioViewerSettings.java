@@ -5,12 +5,11 @@ import ij.ImagePlus;
 public class LazyRatioViewerSettings
 {
 	public ImagePlus imagePlus;
-	public int channel0 = 0;
-	public int channel1 = 1;
-	double background0 = 112;
-	double background1 = 112;
-	double nanThreshold0 = 150;
-	double nanThreshold1 = 150;
-
+	public int channelA = 1;
+	public int channelB = 2;
+	double backgroundA = 112;
+	double backgroundB = 112;
+	double thresholdA = 150;
+	double thresholdB = 150;
 
 }

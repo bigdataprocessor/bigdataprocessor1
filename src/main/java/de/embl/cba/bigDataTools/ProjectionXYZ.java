@@ -61,7 +61,7 @@ public class ProjectionXYZ {
         logger.debug("Z factor set to " + Double.toString(this.zf));
     }
 
-    public ImagePlus getXYZProject(){
+    public ImagePlus createProjection(){
 
         // Get image info and setups
         //ImagePlus img = WindowManager.getCurrentImage();

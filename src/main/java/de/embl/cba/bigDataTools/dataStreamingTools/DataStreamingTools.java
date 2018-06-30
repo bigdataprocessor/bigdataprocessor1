@@ -57,6 +57,8 @@ import de.embl.cba.bigDataTools.imaris.ImarisWriter;
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.*;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
+import de.embl.cba.bigDataTools.saving.SaveVSSFrame;
+import de.embl.cba.bigDataTools.saving.SavingSettings;
 import de.embl.cba.bigDataTools.utils.ImageDataInfo;
 import de.embl.cba.bigDataTools.utils.MonitorThreadPoolStatus;
 import de.embl.cba.bigDataTools.utils.Utils;
@@ -66,14 +68,8 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Roi;
 import javafx.geometry.Point3D;
-import net.imagej.ImageJ;
-import net.imagej.patcher.LegacyInjector;
 
 import java.io.*;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -1440,16 +1436,21 @@ public class DataStreamingTools {
 
     }
 
-    public void saveVSSAsStacks( SavingSettings savingSettings )
+    public void saveAsStacks( SavingSettings savingSettings )
     {
 
         interruptSavingThreads = false;
 
         int numSavingThreads = getNumSavingThreads( savingSettings );
 
-        ImarisDataSet imarisDataSet = getImarisDataSet( savingSettings );
-
-        saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, imarisDataSet );
+        if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
+        {
+            saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, getImarisDataSet( savingSettings ) );
+        }
+        else
+        {
+            saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, null );
+        }
 
     }
 
@@ -1478,46 +1479,39 @@ public class DataStreamingTools {
 
     private ImarisDataSet getImarisDataSet( SavingSettings savingSettings )
     {
-        // TODO: clean this up...
-        ImarisDataSet imarisDataSet = new ImarisDataSet();
+
+        String[] binnings = savingSettings.bin.split(";");
+        int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
+
+        ImarisDataSet imarisDataSet = new ImarisDataSet( savingSettings.imp,
+                    binning,
+                    savingSettings.directory,
+                    savingSettings.fileBaseName );
 
         imarisDataSet.setLogger( logger );
 
-        if ( savingSettings.fileType.equals( Utils.FileType.HDF5_IMARIS_BDV) )
+        ImarisWriter.writeHeaderFile( imarisDataSet,
+                savingSettings.directory,
+                savingSettings.fileBaseName + ".ims"
+                );
+
+
+        ArrayList< File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
+
+        if ( imarisFiles.size() > 1 )
         {
-            String[] binnings = savingSettings.bin.split(";");
-            int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
-
-            imarisDataSet.setFromImagePlus( savingSettings.imp,
-                    binning,
-                    savingSettings.directory,
-                    savingSettings.fileBaseName,
-                    "/");
-
-            ImarisWriter.writeHeader( imarisDataSet,
-                    savingSettings.directory,
-                    savingSettings.fileBaseName + ".ims"
-                    );
-
-
-            ArrayList< File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
-
-            if ( imarisFiles.size() > 1 )
-            {
-                ImarisWriter.writeCombinedHeader( imarisFiles, "meta.ims" );
-            }
-
-
-            // TODO: remove below
-            ImarisWriter.writeHeader( imarisDataSet, savingSettings.directory, savingSettings.fileBaseName + ".h5" );
-
-            logger.info("Image sizes at different resolutions:");
-            Utils.logArrayList( imarisDataSet.getDimensions() );
-
-            logger.info("Image chunking:");
-            Utils.logArrayList( imarisDataSet.getChunks() );
-
+            ImarisWriter.writeCombinedHeaderFile( imarisFiles, "meta.ims" );
         }
+
+
+        // TODO: remove below
+        ImarisWriter.writeHeaderFile( imarisDataSet, savingSettings.directory, savingSettings.fileBaseName + ".h5" );
+
+        logger.info("Image sizes at different resolutions:");
+        Utils.logArrayList( imarisDataSet.getDimensions() );
+
+        logger.info("Image chunking:");
+        Utils.logArrayList( imarisDataSet.getChunks() );
 
         return imarisDataSet;
 

@@ -33,8 +33,66 @@ public class ImarisDataSet {
     private static int CHUNKING_Z_HIGHEST_RESOLUTION = 1;
     private static int CHUNKING_XYZ = 64;
 
-    public ImarisDataSet( )
-    {}
+    public ImarisDataSet( File file )
+    {
+        initFromImarisFile( file.getParent(), file.getName() );
+    }
+
+    public ImarisDataSet( String directory, String filename )
+    {
+        initFromImarisFile( directory, filename );
+    }
+
+
+    public ImarisDataSet( ImagePlus imp,
+                          int[] binning,
+                          String directory,
+                          String filenameStump )
+    {
+        setDimensionsBinningsChunks( imp, binning );
+        setTimePoints( imp );
+        setChannels( imp );
+        setInterval( imp );
+
+        ctrDataSets = new CTRDataSets();
+
+        for ( int c = 0; c < channelColors.size(); ++c )
+        {
+            for ( int t = 0; t < timePoints.size(); ++t )
+            {
+                for ( int r = 0; r < dimensions.size(); ++r )
+                {
+                    ctrDataSets.addExternal( c, t, r, directory, filenameStump );
+                }
+            }
+        }
+    }
+
+    private void initFromImarisFile( String directory, String filename )
+    {
+        ImarisReader reader = new ImarisReader( directory, filename );
+
+        channelColors = reader.getChannelColors();
+        channelNames = reader.getChannelNames();
+        timePoints = reader.getTimePoints();
+        dimensions = reader.getDimensions();
+        interval = reader.getCalibratedInterval();
+
+        ctrDataSets = new CTRDataSets();
+
+        for ( int c = 0; c < channelColors.size(); ++c )
+        {
+            for ( int t = 0; t < timePoints.size(); ++t )
+            {
+                for ( int r = 0; r < dimensions.size(); ++r )
+                {
+                    ctrDataSets.addImaris( c, c, t, r, directory, filename );
+                }
+            }
+        }
+
+        reader.closeFile();
+    }
 
     public ArrayList< String > getChannelNames()
     {
@@ -281,7 +339,7 @@ public class ImarisDataSet {
         for ( int c = 0; c < imp.getNChannels(); ++c )
         {
             channelColors.add( ImarisUtils.DEFAULT_COLOR );
-            channelNames.add( imp.getTitle() + "_channel_" + c );
+            channelNames.add( imp.getTitle() + "_C" + c );
         }
     }
 
@@ -315,63 +373,9 @@ public class ImarisDataSet {
         interval = new FinalRealInterval( min, max );
     }
 
-    public void setFromImagePlus( ImagePlus imp,
-                                  int[] primaryBinning,
-                                  String directory,
-                                  String filenameStump,
-                                  String h5Group)
-    {
 
-        setDimensionsBinningsChunks( imp, primaryBinning );
-        setTimePoints( imp );
-        setChannels( imp );
-        setInterval( imp );
 
-        ctrDataSets = new CTRDataSets();
 
-        for ( int c = 0; c < channelColors.size(); ++c )
-        {
-            for ( int t = 0; t < timePoints.size(); ++t )
-            {
-                for ( int r = 0; r < dimensions.size(); ++r )
-                {
-                    ctrDataSets.addExternal( c, t, r, directory, filenameStump );
-                }
-            }
-        }
-
-    }
-
-    public void setFromImaris( File file )
-    {
-        setFromImaris( file.getParent(), file.getName() );
-    }
-
-    public void setFromImaris( String directory, String filename )
-    {
-        ImarisReader reader = new ImarisReader( directory, filename );
-
-        channelColors = reader.readChannelColors();
-        channelNames = reader.readChannelNames();
-        timePoints = reader.readTimePoints();
-        dimensions = reader.readDimensions();
-        interval = reader.readInterval();
-
-        ctrDataSets = new CTRDataSets();
-
-        for ( int c = 0; c < channelColors.size(); ++c )
-        {
-            for ( int t = 0; t < timePoints.size(); ++t )
-            {
-                for ( int r = 0; r < dimensions.size(); ++r )
-                {
-                    ctrDataSets.addImaris( c, c, t, r, directory, filename );
-                }
-            }
-        }
-
-        reader.closeFile();
-    }
 
     public void addChannelsFromImaris( File file )
     {
@@ -382,16 +386,16 @@ public class ImarisDataSet {
     {
         ImarisReader reader = new ImarisReader( directory, filename );
 
-        int nc = reader.readChannelColors().size();
-        int nt = reader.readTimePoints().size();
-        int nr = reader.readDimensions().size();
+        int nc = reader.getChannelColors().size();
+        int nt = reader.getTimePoints().size();
+        int nr = reader.getDimensions().size();
 
         int currentNumChannelsInMetaFile = channelColors.size();
 
         for ( int c = 0; c < nc; ++c )
         {
-            channelColors.add( reader.readChannelColors().get( c ) );
-            channelNames.add( reader.readChannelNames().get( c ) );
+            channelColors.add( reader.getChannelColors().get( c ) );
+            channelNames.add( reader.getChannelNames().get( c ) );
 
             for ( int t = 0; t < nt; ++t )
             {

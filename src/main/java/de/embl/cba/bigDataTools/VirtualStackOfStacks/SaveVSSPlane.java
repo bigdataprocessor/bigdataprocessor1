@@ -1,7 +1,7 @@
 package de.embl.cba.bigDataTools.VirtualStackOfStacks;
 
 import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
-import de.embl.cba.bigDataTools.dataStreamingTools.SavingSettings;
+import de.embl.cba.bigDataTools.saving.SavingSettings;
 import de.embl.cba.bigDataTools.logging.IJLazySwingLogger;
 import de.embl.cba.bigDataTools.logging.Logger;
 import de.embl.cba.bigDataTools.utils.Utils;

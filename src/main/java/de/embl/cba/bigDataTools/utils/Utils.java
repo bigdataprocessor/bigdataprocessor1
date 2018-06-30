@@ -39,6 +39,7 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.measure.Calibration;
 import ij.plugin.Binner;
+import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
@@ -55,15 +56,40 @@ public class Utils {
 
     static Logger logger = new IJLazySwingLogger();
 
-    public enum FileType {
+	public static ImagePlus getDataCube( ImagePlus imp, int c, int t, int[] binning )
+	{
+        ImagePlus dataCube;
+
+        if( imp.getStack() instanceof VirtualStackOfStacks )
+        {
+            VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
+            dataCube = vss.getFullFrame( c, t, 1 );
+        }
+        else
+        {
+            dataCube = new Duplicator().run( imp, c + 1, c + 1, 1, imp.getNSlices(), t + 1, t + 1 );
+        }
+
+
+		if ( binning[ 0 ] > 1 || binning[ 1 ] > 1 || binning[ 2 ] > 1 )
+		{
+			Binner binner = new Binner();
+			dataCube = binner.shrink( dataCube, binning[0], binning[1], binning[2], binner.AVERAGE );
+		}
+
+		return dataCube;
+
+	}
+
+	public enum FileType {
         TIFF("Tiff"),
         HDF5("Hdf5"),
-        HDF5_IMARIS_BDV("Hdf5_Imaris_Bdv"),
+        HDF5_IMARIS_BDV("Imaris_Hdf5"),
         TIFF_STACKS("Tiff stacks"),
-        SINGLE_PLANE_TIFF("single tif"),
-        SERIALIZED_HEADERS("Serialized headers");
+        SINGLE_PLANE_TIFF("Single plane Tiff"); //SERIALIZED_HEADERS("Serialized headers");
         private final String text;
-        private FileType(String s) {
+        private FileType(String s)
+        {
             text = s;
         }
         @Override
@@ -168,9 +194,10 @@ public class Utils {
         imp.updateAndDraw();
     }
 
-    // TODO: out-of-bounds strategy?
-    public static ImagePlus getDataCubeFromImagePlus(ImagePlus imp, Region5D region5D)
+    public static ImagePlus getDataCube( ImagePlus imp, Region5D region5D)
     {
+
+        // TODO: out-of-bounds strategy?
 
         Rectangle rect = new Rectangle(
                 (int)region5D.offset.getX(),
@@ -341,18 +368,18 @@ public class Utils {
 
     }
 
-    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int[] intensityGate, int nThreads)
+    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int nThreads)
     {
         ImagePlus dataCube = null;
 
-        if(imp.getStack() instanceof VirtualStackOfStacks)
+        if( imp.getStack() instanceof VirtualStackOfStacks )
         {
             VirtualStackOfStacks vss = (VirtualStackOfStacks) imp.getStack();
-            dataCube = vss.getDataCube( region5D, intensityGate, nThreads );
+            dataCube = vss.getDataCube( region5D, nThreads );
         }
         else
         {
-            dataCube = getDataCubeFromImagePlus( imp, region5D );
+            dataCube = getDataCube( imp, region5D );
         }
 
         //dataCube.show();
@@ -362,6 +389,12 @@ public class Utils {
 
     public static void applyIntensityGate( ImagePlus imp, int[] gate )
     {
+
+        if ( ( gate[ 0 ] == -1 ) && ( gate[ 1 ] == -1 ) )
+        {
+            return;
+        }
+
         ImageStack stack = imp.getStack();
         int nx = imp.getWidth();
         int ny = imp.getHeight();
@@ -385,13 +418,13 @@ public class Utils {
 
                 for ( int i = 0; i < nPixels; i++ )
                 {
-                    if ( (pixels[i] > max) ||  pixels[i] < min )
+                    if ( pixels[ i ] > max || pixels[ i ] < min )
                     {
-                        pixels[i] = 0;
+                        pixels[ i ] = 0;
                     }
                     else
                     {
-                        pixels[i] -= min;
+                        pixels[ i ] -= min;
                     }
                 }
             }
@@ -414,7 +447,7 @@ public class Utils {
 
                 for ( int i = 0; i < nPixels; i++ )
                 {
-                    if ( (pixels[i] > max) ||  pixels[i] < min )
+                    if ( pixels[i] > max ||  pixels[i] < min )
                     {
                         pixels[i] = 0;
                     }

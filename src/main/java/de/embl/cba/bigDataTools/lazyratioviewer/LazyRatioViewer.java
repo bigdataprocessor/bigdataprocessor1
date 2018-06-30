@@ -29,10 +29,10 @@ public class LazyRatioViewer
 		this.settings = settings;
 
 		// putting them into local final variables in the hope that this makes the computations faster
-		background0 = settings.background0;
-		background1 = settings.background1;
-		nanThreshold0 = settings.nanThreshold0;
-		nanThreshold1 = settings.nanThreshold1;
+		background0 = settings.backgroundA;
+		background1 = settings.backgroundB;
+		nanThreshold0 = settings.thresholdA;
+		nanThreshold1 = settings.thresholdB;
 
 	}
 
@@ -40,8 +40,8 @@ public class LazyRatioViewer
 	{
 		final RandomAccessibleInterval< T > wrap = wrap( settings.imagePlus );
 
-		RandomAccessibleInterval< T  > channel0 = Views.hyperSlice( wrap, imagePlusChannelDimension, settings.channel0 );
-		RandomAccessibleInterval< T  > channel1 = Views.hyperSlice( wrap, imagePlusChannelDimension, settings.channel1 );
+		RandomAccessibleInterval< T > channel0 = Views.hyperSlice( wrap, imagePlusChannelDimension, settings.channelA );
+		RandomAccessibleInterval< T > channel1 = Views.hyperSlice( wrap, imagePlusChannelDimension, settings.channelB );
 
 		final RandomAccessibleInterval ratioView = createRatioView( channel0, channel1 );
 

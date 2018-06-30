@@ -1,4 +1,4 @@
-import de.embl.cba.bigDataTools.Hdf5DataCubeWriter;
+import de.embl.cba.bigDataTools.hdf5.H5DataCubeWriter;
 import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
 import de.embl.cba.bigDataTools.imaris.ImarisWriter;
 import ij.IJ;
@@ -12,28 +12,17 @@ public class SaveAsImaris
     public static void main(String[] args)
     {
 
-        ImagePlus imp = IJ.openImage("/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/1024pixels-5D-cube.zip" );
+        ImagePlus imp = IJ.openImage(SaveAsImaris.class.getResource( "1024pixels-5D-cube.zip" ).getFile() );
 
-        String outputDirectory = "/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/imaris-export";
-        String fileNameStump = "image";
-        int[] preBinning = new int[]{1,1,1};
-        ArrayList< String > channelNames = new ArrayList<>(  );
-        channelNames.add( "channel01" );
+        String outputDirectory = SaveAsImaris.class.getResource(  "/imaris-export" ).getFile() ;
 
-        ImarisDataSet imarisDataSet = new ImarisDataSet();
+        String name = "image";
 
-        imarisDataSet.setFromImagePlus(
-                imp,
-                preBinning,
-                outputDirectory,
-                fileNameStump,
-                "/");
+        ImarisDataSet imarisDataSet = new ImarisDataSet( imp, new int[]{1,1,1}, outputDirectory, name );
 
-        imarisDataSet.setChannelNames( channelNames  );
+        ImarisWriter.writeHeaderFile( imarisDataSet, outputDirectory, name + "-header" + ".ims" );
 
-        ImarisWriter.writeHeader( imarisDataSet, outputDirectory, fileNameStump + "-header" + ".ims" );
-
-        Hdf5DataCubeWriter writer = new Hdf5DataCubeWriter();
+        H5DataCubeWriter writer = new H5DataCubeWriter();
 
         for ( int t = 0; t < imp.getNFrames(); ++t )
         {
@@ -41,7 +30,7 @@ public class SaveAsImaris
             {
                 Duplicator duplicator = new Duplicator();
                 ImagePlus impCT = duplicator.run( imp, c + 1, c + 1, 1, imp.getNSlices(), t + 1, t + 1 );
-                System.out.println( "Writing " + fileNameStump + ", frame: " + ( t + 1 ) + ", channel: " + ( c + 1 ) + "..." );
+                System.out.println( "Writing " + name + ", frame: " + ( t + 1 ) + ", channel: " + ( c + 1 ) + "..." );
                 writer.writeImarisCompatibleResolutionPyramid( impCT, imarisDataSet, c, t );
             }
         }
