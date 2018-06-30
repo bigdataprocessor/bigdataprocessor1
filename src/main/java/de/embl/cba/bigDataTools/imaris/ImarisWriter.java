@@ -4,6 +4,7 @@ package de.embl.cba.bigDataTools.imaris;
 import de.embl.cba.bigDataTools.hdf5.H5DataCubeWriter;
 import de.embl.cba.bigDataTools.hdf5.H5Utils;
 import de.embl.cba.bigDataTools.utils.Utils;
+import ij.IJ;
 import ij.ImagePlus;
 import ncsa.hdf.hdf5lib.H5;
 import ncsa.hdf.hdf5lib.HDF5Constants;
@@ -32,7 +33,7 @@ public class ImarisWriter {
         this.binning = new int[]{ 1, 1, 1 };
     }
 
-    public void setPreBinning( int[] binning )
+    public void setBinning( int[] binning )
     {
         this.binning = binning;
     }
@@ -63,13 +64,13 @@ public class ImarisWriter {
 
                 final ImagePlus dataCube = Utils.getDataCube( imp, c, t, binning );
 
-                log( "Writing " + name + ", time: " + ( t + 1 ) + ", channel: " + channelName + "..." );
+                log( "Writing: " + name + ", time-point: " + ( t + 1 ) + ", channel: " + ( c + 1 ) + " ..." );
 
                 writer.writeImarisCompatibleResolutionPyramid( dataCube, imarisDataSet, c, t );
             }
         }
 
-        log( "..done!" );
+        log( "...done!" );
     }
 
     private ImarisDataSet getImarisDataSet()
@@ -80,12 +81,16 @@ public class ImarisWriter {
         {
             imarisDataSet.setChannelNames( channelNames );
         }
+
         return imarisDataSet;
     }
 
 
     private void log( String text )
     {
+
+        IJ.log( text );
+
         if ( logService != null )
         {
             logService.info( text );

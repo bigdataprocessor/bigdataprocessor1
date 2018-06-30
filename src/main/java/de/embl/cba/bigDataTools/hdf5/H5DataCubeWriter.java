@@ -121,7 +121,7 @@ public class H5DataCubeWriter
             e.printStackTrace();
         }
 
-        writeImagePlusData( chunkXYZ, dataspace_id, dataset_id, imp );
+        writeImagePlusData( dataset_id, imp );
 
         // Attributes
         writeSizeAttributes( group_id, dimensionXYZ );
@@ -135,8 +135,10 @@ public class H5DataCubeWriter
 
     }
 
-    private void writeImagePlusData( long[] chunkXYZ, int dataspace_id, int dataset_id, ImagePlus imp ) throws HDF5Exception
+    private void writeImagePlusData(  int dataset_id, ImagePlus imp ) throws HDF5Exception
     {
+
+        int dataspace_id;
 
         if( imp.getBitDepth() == 8 )
         {
@@ -144,7 +146,6 @@ public class H5DataCubeWriter
 
             long numVoxels = data.length * data[0].length;
             boolean javaIndexingIssue = ( numVoxels > Integer.MAX_VALUE - 100 );
-
 
             if ( ! javaIndexingIssue )
             {
@@ -196,9 +197,11 @@ public class H5DataCubeWriter
         {
             short[][] data = getShortData( imp, 0, 0 );
 
-            if ( chunkXYZ[ 2 ] != 1 )
-            {
+            long numVoxels = data.length * data[ 0 ].length;
+            boolean javaIndexingIssue = ( numVoxels > ( Integer.MAX_VALUE - 100 ) );
 
+            if ( ! javaIndexingIssue )
+            {
                 H5.H5Dwrite( dataset_id,
                         memory_type,
                         HDF5Constants.H5S_ALL,
@@ -208,9 +211,6 @@ public class H5DataCubeWriter
             }
             else
             {
-                System.out.println( "Saving 16-bit hdf5 plane-wise." );
-                // write plane wise (avoiding java int indexing issues)
-
                 for ( int i = 0; i < imp.getNSlices(); ++i )
                 {
                     short[] slice = data[ i ];
@@ -245,7 +245,7 @@ public class H5DataCubeWriter
             }
 
         }
-        else if(imp.getBitDepth()==32)
+        else if( imp.getBitDepth()==32 )
         {
             float[][] data = getFloatData( imp, 0, 0 );
 

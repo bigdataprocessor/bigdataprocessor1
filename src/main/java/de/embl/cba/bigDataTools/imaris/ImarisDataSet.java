@@ -339,7 +339,7 @@ public class ImarisDataSet {
         for ( int c = 0; c < imp.getNChannels(); ++c )
         {
             channelColors.add( ImarisUtils.DEFAULT_COLOR );
-            channelNames.add( imp.getTitle() + "_C" + c );
+            channelNames.add( "channel_" + c );
         }
     }
 
