@@ -1,11 +1,17 @@
+import de.embl.cba.bigDataTools.Region5D;
 import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
 import de.embl.cba.bigDataTools.utils.Utils;
+import javafx.geometry.Point3D;
 import net.imglib2.FinalInterval;
 
 public class ConcurrentFileAccess
 {
     public static void main(String[] args)
     {
+
+        final Region5D region5D = new Region5D();
+        region5D.offset.add( new Point3D( 0,0,0 ) );
+
 
         String[] channelFolders = new String[]{""};
         String[][][] fileList = new String[1][1][1];

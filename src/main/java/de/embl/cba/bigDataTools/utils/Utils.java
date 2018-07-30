@@ -194,7 +194,7 @@ public class Utils {
         imp.updateAndDraw();
     }
 
-    public static ImagePlus getDataCube( ImagePlus imp, Region5D region5D)
+    public static ImagePlus getDataCube( ImagePlus imp, Region5D region5D )
     {
 
         // TODO: out-of-bounds strategy?
@@ -368,7 +368,7 @@ public class Utils {
 
     }
 
-    public static ImagePlus getDataCube(ImagePlus imp, Region5D region5D, int nThreads)
+    public static ImagePlus getDataCube( ImagePlus imp, Region5D region5D, int nThreads )
     {
         ImagePlus dataCube = null;
 
