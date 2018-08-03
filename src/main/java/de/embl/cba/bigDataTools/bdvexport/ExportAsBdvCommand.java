@@ -48,7 +48,7 @@ import org.scijava.widget.FileWidget;
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
  */
 @Plugin(type = Command.class,
-		menuPath = "Plugins>BigDataTools>Convert image to BigDataViewer XML/HDF5")
+		menuPath = "Plugins>BigDataTools>Create BigDataViewer XML/HDF5")
 public class ExportAsBdvCommand implements Command
 {
 
@@ -119,10 +119,16 @@ public class ExportAsBdvCommand implements Command
 		// propose reasonable mipmap settings
 		final ExportMipmapInfo autoMipmapSettings = ProposeMipmaps.proposeMipmaps( new BasicViewSetup( 0, "", size, voxelSize ) );
 
-		// show dialog to get output paths, resolutions, subdivisions, min-max option
+		// get output paths, resolutions, subdivisions, min-max option
 		final Parameters params = getParametersAutomated( imp.getBitDepth(), autoMipmapSettings, xmlOutputPath.getAbsolutePath() );
 
+		final String autoSubsampling = ProposeMipmaps.getArrayString( autoMipmapSettings.getExportResolutions() );
+		final String autoChunkSizes = ProposeMipmaps.getArrayString( autoMipmapSettings.getSubdivisions() );
+
 		final ProgressWriter progressWriter = new ProgressWriterIJ();
+
+		progressWriter.out().println( "Subsampling: " + autoSubsampling );
+		progressWriter.out().println( "Chunking: " + autoChunkSizes );
 		progressWriter.out().println( "starting export..." );
 
 		// create ImgLoader wrapping the image

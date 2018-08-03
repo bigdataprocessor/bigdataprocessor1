@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
+          xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+
+    <servers>
+        <server>
+            <id>bintray-embl-cba-snapshots</id>
+            <username>tischi</username>
+            <password>b9975d2aa7af918c185cb85d41485033a7f7ccbc</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-embl-cba-snapshots</id>
+                    <name>bintray</name>
+                    <url>https://embl-cba.bintray.com/snapshots</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>bintray-embl-cba-snapshots</id>
+                    <name>bintray-plugins</name>
+                    <url>https://embl-cba.bintray.com/snapshots</url>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>bintray</id>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>bintray</activeProfile>
+    </activeProfiles>
+</settings>

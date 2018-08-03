@@ -706,11 +706,10 @@ public class DataStreamingTools {
         // Do special stuff related to Leica files
         //
         Matcher matcherZ, matcherC, matcherT, matcherID;
-        Pattern patternC = Pattern.compile(".*--C(.*).tif");
-        Pattern patternZnoC = Pattern.compile(".*--Z(.*).tif");
-        Pattern patternZwithC = Pattern.compile(".*--Z(.*)--C.*");
-        Pattern patternT = Pattern.compile(".*--t(.*)--Z.*");
-        Pattern patternID = Pattern.compile(".*?_(\\d+).*"); // is this correct?
+        Pattern patternC = Pattern.compile(".*--C(\\d+).*");
+        Pattern patternZ = Pattern.compile(".*--Z(\\d+).*");
+        Pattern patternT = Pattern.compile(".*--t(\\d+).*");
+        Pattern patternID = Pattern.compile(".*?_(\\d+).*");
 
         if ( fileList.length == 0 )
         {
@@ -777,37 +776,48 @@ public class DataStreamingTools {
                 if ( patternFileID.matcher( fileName ).matches() )
                 {
                     matcherC = patternC.matcher( fileName );
+
                     if ( matcherC.matches() )
                     {
                         // has multi-channels
                         hasMultiChannelNamingScheme = true;
                         channelsHS.get(iFileID).add( matcherC.group(1) );
-                        matcherZ = patternZwithC.matcher( fileName );
-                        if (matcherZ.matches())
+                        matcherZ = patternZ.matcher( fileName );
+                        if ( matcherZ.matches() )
                         {
-                            slicesHS.get(iFileID).add(matcherZ.group(1));
+                            slicesHS.get( iFileID ).add( matcherZ.group(1) );
+                        }
+                        else
+                        {
+                            slicesHS.get( iFileID ).add( "Z00" );
                         }
                     }
                     else
                     {
                         // has only one channel
-                        matcherZ = patternZnoC.matcher(fileName);
-                        if (matcherZ.matches())
+                        matcherZ = patternZ.matcher(fileName);
+
+                        if ( matcherZ.matches() )
                         {
-                            slicesHS.get(iFileID).add( matcherZ.group(1) );
+                            slicesHS.get( iFileID ).add( matcherZ.group(1) );
                         }
+                        else
+                        {
+                            slicesHS.get( iFileID ).add( "Z00" );
+                        }
+
                     }
 
-                    matcherT = patternT.matcher(fileName);
+                    matcherT = patternT.matcher( fileName );
 
-                    if (matcherT.matches())
+                    if ( matcherT.matches() )
                     {
-                        timepointsHS.get( iFileID ).add( matcherT.group(1) );
+                        timepointsHS.get( iFileID ).add( matcherT.group( 1 ) );
                     }
                     else
                     {
                         // has only one timepoint
-                        timepointsHS.get( iFileID ).add( "T01" );
+                        timepointsHS.get( iFileID ).add( "T00" );
                     }
                 }
             }
@@ -822,7 +832,7 @@ public class DataStreamingTools {
         {
 
             nC = Math.max( 1, channelsHS.get(iFileID).size()) ;
-            nZ = slicesHS.get(iFileID).size(); // must be the same for all fileIDs
+            nZ = slicesHS.get( iFileID ).size(); // must be the same for all fileIDs
 
             logger.info("FileID: " + fileIDs[iFileID]);
             logger.info("  Channels: " + nC);
@@ -861,25 +871,25 @@ public class DataStreamingTools {
                     // figure out which C,Z,T the file is
                     matcherC = patternC.matcher(fileName);
                     matcherT = patternT.matcher(fileName);
-
-                    if ( hasMultiChannelNamingScheme )
-                    {
-                        matcherZ = patternZwithC.matcher(fileName);
-                    }
-                    else
-                    {
-                        matcherZ = patternZnoC.matcher(fileName);
-                    }
+                    matcherZ = patternZ.matcher(fileName);
 
                     if ( matcherZ.matches() )
                     {
                         z = Integer.parseInt( matcherZ.group(1).toString() );
+                    }
+                    else
+                    {
+                        z = 0;
                     }
 
                     if ( matcherT.matches() )
                     {
                         t = Integer.parseInt( matcherT.group(1).toString() );
                         t += tOffsets[iFileID];
+                    }
+                    else
+                    {
+                        t = 0;
                     }
 
                     if ( matcherC.matches() )

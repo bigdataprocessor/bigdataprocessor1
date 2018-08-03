@@ -1,0 +1,1 @@
+/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx --headless --run "Create BigDataViewer XML/HDF5" "importModality='Virtual Stack',inputPath='/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/mri-stack-slices/mri-stack-0001.tif',xmlOutputPath='/Users/tischer/Documents/fiji-plugin-bigDataTools/src/test/resources/mri-stack.xml'"

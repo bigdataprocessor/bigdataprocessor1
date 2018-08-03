@@ -635,11 +635,13 @@ public class VirtualStackOfStacks extends VirtualStack {
 
         po = new Point3D(0, 0, 0);
 
-        if(infos[0][0][0].isCropped)
+        if( infos[0][0][0].isCropped )
         {
             // offset is added by getDataCube
             ps = infos[0][0][0].getCropSize();
-        } else {
+        }
+        else
+        {
             ps = new Point3D(nX, nY, nZ);
         }
 
