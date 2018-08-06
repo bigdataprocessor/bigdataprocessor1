@@ -19,10 +19,6 @@ Moreover, both plugins enable creation of cropped (manually selected and trackin
 
 Currently we support data Tiff and HDF5 based data.
 
-## Use cases
-
-- Computing drift correction of a 2.4 TB data set in 10-30 minutes (that is excluding resaving the corrected data).
-
 ## Installation
 
 - Install Fiji (fiji.sc)
@@ -55,6 +51,8 @@ Example use cases:
 
 ## Big Data Tracker
 
+[Fiji > Plugins > BigDataTools > Big Data Tracker]
+
 The Big Data Tracker (BDT) plugin enables efficient and fast tracking in and drift correction of terabyte-sized data sets. The key feature is that only the minimal data cube needed to track an object or to drift correct the data set is loaded at every time-point.
   
 ### Parameter settings
@@ -71,3 +69,8 @@ In general, a good way to check whether the enhancement works for your data is t
 
 For each image plane this method runs an automated tresholding algorithm, currently it is the "Default" method of ImageJ (https://imagej.net/Auto_Threshold#Default). We might add other thresholding methods in the future. Please let us know if you prefer another one. 
 
+
+##  Example use cases
+
+- Viewing, cropping and binning of TB-sized Leica light sheet, Luxendo light sheet, and electron microscopy data sets.
+- Computing drift correction of a 2.4 TB data set in 10-30 minutes (excluding resaving the corrected data).
