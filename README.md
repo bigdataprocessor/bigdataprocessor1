@@ -1,30 +1,40 @@
 # BigDataTools
 
-Analyzing and manipulating terabyte-sized image data produced by light-sheet microscopy poses several major challenges. Two examples are: 1) Loading the whole data set into RAM is very time consuming or may not even be possible; 2) Performing computations on the whole data set can take several hours using traditional approaches. We have developed two ImageJ plugins that mitigate these challenges. Our “Data
-Streaming Tools” plugin enables fast streaming of disk-resident data by employing ImageJ’s virtual stack functionality where only the currently visible plane is loaded into RAM and currently supports (compressed) Tiff and Hdf5-based data. Our “Big Data Tracker” plugin enables efficient multi-threaded object tracking, only loading the data portions required to track the selected objects. Moreover, both plugins enable creation of cropped (manually selected and tracking-based) views on the original data, without any
-data duplication.
+Analyzing and manipulating terabyte-sized image data produced by light-sheet microscopy poses several major challenges. 
+
+Two examples are: 
+
+1) Loading the whole data set into RAM is very time consuming or may not even be possible.
+2) Performing computations on the whole data set can take several hours using traditional approaches. 
+
+We have developed two ImageJ plugins that mitigate these challenges. 
+
+The “Data Streaming Tools” plugin enables fast streaming of disk-resident data by employing ImageJ’s virtual stack functionality where only the currently visible plane is loaded into RAM and currently supports (compressed) Tiff and Hdf5-based data. 
+
+The “Big Data Tracker” plugin enables efficient multi-threaded object tracking, only loading the data portions required to track the selected objects. 
+
+Moreover, both plugins enable creation of cropped (manually selected and tracking-based) views on the original data, without anydata duplication.
 
 ## Supported data formats
 
-Currently we support data saved as Tiff or HDF5 stacks, the latter is for instance produced by Luxendo light sheet microscopes.
+Currently we support data Tiff and HDF5 based data.
 
 ## Use cases
 
-- Computing the drift correction of a 2.4 TB data set in 10-30 minutes (that is excluding resaving the corrected data).
+- Computing drift correction of a 2.4 TB data set in 10-30 minutes (that is excluding resaving the corrected data).
 
 ## Installation
 
-Please place below file into Fiji's plugins folder:
-
-https://github.com/tischi/fiji-plugin-bigDataTools/raw/master/out/artifacts/fiji_pluging_bigDataTools.jar
-
-...and restart Fiji.
+- Install Fiji (fiji.sc)
+- Enable update site: EMBL-CBA
 
 ## Data Streaming Tools
 
 [Fiji > Plugins > BigDataTools > Data Streaming Tools]
 
-You will be in the "Streaming" tab. 
+### "Streaming" tab
+
+Example use cases:
 
 [Load files matching]:
 - [.*] you do not filter, all files will be loaded
