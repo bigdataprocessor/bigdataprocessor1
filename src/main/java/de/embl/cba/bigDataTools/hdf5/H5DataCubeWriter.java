@@ -55,17 +55,17 @@ public class H5DataCubeWriter
         if ( imp.getBitDepth() == 8 )
         {
             memory_type = HDF5Constants.H5T_NATIVE_UCHAR;
-            file_type = HDF5Constants.H5T_STD_U8BE;
+            file_type = HDF5Constants.H5T_STD_U8LE;
         }
         else if ( imp.getBitDepth() == 16 )
         {
             memory_type = HDF5Constants.H5T_NATIVE_USHORT;
-            file_type = HDF5Constants.H5T_STD_U16BE;
+            file_type = HDF5Constants.H5T_STD_U16LE;
         }
         else if ( imp.getBitDepth() == 32 )
         {
             memory_type = HDF5Constants.H5T_NATIVE_FLOAT;
-            file_type = HDF5Constants.H5T_IEEE_F32BE;
+            file_type = HDF5Constants.H5T_IEEE_F32LE;
         }
         else
         {
