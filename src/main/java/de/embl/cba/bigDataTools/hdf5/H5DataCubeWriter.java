@@ -35,6 +35,8 @@ public class H5DataCubeWriter
 
         for ( int resolution = 0; resolution < idp.getDimensions().size(); resolution++ )
         {
+            IJ.log( "Writing resolution level " + resolution + "..." );
+
             if ( resolution > 0 )
             {
                 // bin further
@@ -144,11 +146,13 @@ public class H5DataCubeWriter
         {
             byte[][] data = getByteData( imp, 0, 0 );
 
-            long numVoxels = data.length * data[0].length;
-            boolean javaIndexingIssue = ( numVoxels > Integer.MAX_VALUE - 100 );
+            long numVoxels = (long) ( data.length ) * (long) ( data[0].length );
+
+            boolean javaIndexingIssue = ( numVoxels > ( Integer.MAX_VALUE - 100 ) );
 
             if ( ! javaIndexingIssue )
             {
+
                 H5.H5Dwrite( dataset_id,
                         memory_type,
                         HDF5Constants.H5S_ALL,

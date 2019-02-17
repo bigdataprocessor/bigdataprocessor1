@@ -23,7 +23,6 @@ public class LazyRatioViewer
 	final double nanThreshold1;
 
 
-
 	public LazyRatioViewer( LazyRatioViewerSettings settings )
 	{
 		this.settings = settings;
@@ -45,7 +44,7 @@ public class LazyRatioViewer
 
 		final RandomAccessibleInterval ratioView = createRatioView( channel0, channel1 );
 
-		 ImageJFunctions.show( ratioView ).setTitle( "ratio" );
+		ImageJFunctions.show( ratioView ).setTitle( "ratio" );
 
 	}
 

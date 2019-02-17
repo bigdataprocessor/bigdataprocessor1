@@ -47,8 +47,7 @@ import org.scijava.widget.FileWidget;
  *
  * @author Tobias Pietzsch &lt;tobias.pietzsch@gmail.com&gt;
  */
-@Plugin(type = Command.class,
-		menuPath = "Plugins>BigDataTools>Create BigDataViewer XML/HDF5")
+@Plugin(type = Command.class, menuPath = "Plugins>BigDataTools>Create BigDataViewer XML/HDF5")
 public class ExportAsBdvCommand implements Command
 {
 

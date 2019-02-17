@@ -243,7 +243,6 @@ public class ImarisDataSet {
                 setDimensionsAndBinningsForThisResolutionLayer( currentDimensions, currentRelativeBinning, lastDimensions, lastVolume );
 
                 currentChunks = getChunksForThisResolutionLayer( currentDimensions );
-
             }
 
             currentVolume = currentDimensions[ 0 ] * currentDimensions[ 1 ] * currentDimensions[ 2 ];
@@ -314,7 +313,7 @@ public class ImarisDataSet {
         if ( currentVolume > Integer.MAX_VALUE - 100 )
         {
             currentChunks[ 2 ] = 1;
-            IJ.log( "Data set is larger than " + Integer.MAX_VALUE );
+            IJ.log( "Data set is larger than " + Integer.MAX_VALUE + "; adapting chucking." );
             // this forces plane wise writing and thus
             // avoids java indexing issues when saving the data to HDF5
         }

@@ -322,19 +322,6 @@ public class Utils {
     public static boolean checkMemoryRequirements(long numPixels, int bitDepth, int nThreads)
     {
         //
-        // check that the data cube is not too large for the java indexing
-        //
-        long maxSize = (1L<<31) - 1;
-        if( numPixels > maxSize )
-        {
-              logger.info("Warning: " + "The size of one requested data cube is " + numPixels + " (larger than 2^31)\n");
-            //logger.error("The size of one requested data cube is "+numPixels +" (larger than 2^31)\n" +
-            //        "and can thus not be loaded as one java array into RAM.\n" +
-            //        "Please crop a smaller region.");
-            //return(false);
-        }
-
-        //
         // check that the data cube(s) fits into the RAM
         //
         double GIGA = 1000000000.0;
