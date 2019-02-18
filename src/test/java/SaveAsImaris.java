@@ -1,6 +1,6 @@
-import de.embl.cba.bigDataTools.hdf5.H5DataCubeWriter;
-import de.embl.cba.bigDataTools.imaris.ImarisDataSet;
-import de.embl.cba.bigDataTools.imaris.ImarisWriter;
+import de.embl.cba.bigdataconverter.hdf5.H5DataCubeWriter;
+import de.embl.cba.bigdataconverter.imaris.ImarisDataSet;
+import de.embl.cba.bigdataconverter.imaris.ImarisWriter;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.Duplicator;

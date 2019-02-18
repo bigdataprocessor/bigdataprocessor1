@@ -1,6 +1,6 @@
-import de.embl.cba.bigDataTools.Region5D;
-import de.embl.cba.bigDataTools.VirtualStackOfStacks.VirtualStackOfStacks;
-import de.embl.cba.bigDataTools.utils.Utils;
+import de.embl.cba.bigdataconverter.utils.Region5D;
+import de.embl.cba.bigdataconverter.virtualstack2.VirtualStack2;
+import de.embl.cba.bigdataconverter.utils.Utils;
 import javafx.geometry.Point3D;
 import net.imglib2.FinalInterval;
 
@@ -12,13 +12,12 @@ public class ConcurrentFileAccess
         final Region5D region5D = new Region5D();
         region5D.offset.add( new Point3D( 0,0,0 ) );
 
-
         String[] channelFolders = new String[]{""};
         String[][][] fileList = new String[1][1][1];
-        String fileType = Utils.FileType.SINGLE_PLANE_TIFF.toString();
+        String fileType = Utils.FileType.TIFF_PLANES.toString();
 
         fileList[0][0][0] = "image";
-        VirtualStackOfStacks vss = new VirtualStackOfStacks(
+        VirtualStack2 vs2 = new VirtualStack2(
                 "/Users/tischer/Documents/tmp/stack",
                 channelFolders,
                 fileList, 1, 1, 500, 500, 1, 8, fileType, "");
@@ -30,7 +29,7 @@ public class ConcurrentFileAccess
         Thread thread = new Thread(new Runnable() {
             public void run()
             {
-                vss.saveByteCube(  dataCube, new FinalInterval( new long[]{0,0,0,0,0}, new long[]{50,50,0,0,0} ) );
+                vs2.saveByteCube(  dataCube, new FinalInterval( new long[]{0,0,0,0,0}, new long[]{50,50,0,0,0} ) );
             }
         });
         thread.start();
@@ -39,7 +38,7 @@ public class ConcurrentFileAccess
         Thread thread2 = new Thread(new Runnable() {
             public void run()
             {
-                vss.saveByteCube(  dataCube, new FinalInterval( new long[]{10,10,0,0,0}, new long[]{50,50,0,0,0} ) );
+                vs2.saveByteCube(  dataCube, new FinalInterval( new long[]{10,10,0,0,0}, new long[]{50,50,0,0,0} ) );
             }
         });
         thread2.start();
