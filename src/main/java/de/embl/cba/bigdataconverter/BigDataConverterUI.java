@@ -17,7 +17,6 @@ import ij.gui.NonBlockingGenericDialog;
 import javafx.geometry.Point3D;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URI;
@@ -122,7 +121,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     JButton duplicateToRAM =  new JButton(LOAD_FULLY_INTO_RAM);
 
     final String CROP = "Crop";
-    JButton cropAsNewStream =  new JButton( CROP );
+    JButton cropButton =  new JButton( CROP );
 
     final String APPLY_SHIFTS = "Apply shifts";
     JButton applyShifts =  new JButton( APPLY_SHIFTS );
@@ -147,9 +146,9 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         configureToolTips();
         initPanels();
         configureLoadingPanel();
-        configureCropPanel();
-        configureAdaptiveCropPanel();
         configureChromaticShiftCorrectionPanel();
+        configureCroppingPanel();
+        configureAdaptiveCropPanel();
         configureSavingPanel();
         configureMiscellaneousPanel();
 
@@ -163,16 +162,16 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     {
         final AdaptiveCropUI adaptiveCropUI = new AdaptiveCropUI();
         final JPanel adaptiveCropUIPanel = adaptiveCropUI.getPanel();
-        adaptiveCropUIPanel.setLayout(
-                new BoxLayout( adaptiveCropUIPanel, BoxLayout.PAGE_AXIS ) );
+        adaptiveCropUIPanel.setLayout( new BoxLayout( adaptiveCropUIPanel, BoxLayout.PAGE_AXIS ) );
 
-        tabbedPane.add( adaptiveCropUIPanel, "Adaptive Crop" );
+        tabbedPane.add( adaptiveCropUIPanel, "Motion Correction" );
     }
 
     private void configureMiscellaneousPanel()
     {
-        mainPanels.add( new JPanel() );
-        setMainPanelLayout( mainPanelIdx );
+        final JPanel miscPanel = new JPanel();
+        mainPanels.add( miscPanel );
+        setMainPanelLayout( miscPanel );
         addPanel( new JLabel("I/O threads"), tfIOThreads, mainPanelIdx );
 
         panels.add(new JPanel());
@@ -192,8 +191,9 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
 
     private void configureChromaticShiftCorrectionPanel()
     {
-        mainPanels.add( new JPanel() );
-        setMainPanelLayout( mainPanelIdx );
+        final JPanel colorShiftPanel = new JPanel();
+        mainPanels.add( colorShiftPanel );
+        setMainPanelLayout( colorShiftPanel );
 
         addPanel( new JLabel("Chromatic shifts in pixels for each channel [x,y,z; x,y,z; ...]:"), tfChromaticShifts, mainPanelIdx );
 
@@ -203,13 +203,14 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         panels.get( panelIdx ).add( applyShifts );
         mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
 
-        tabbedPane.add("Correct Chromatic Shifts", mainPanels.get( mainPanelIdx++));
+        tabbedPane.add("Channel Shift Correction", mainPanels.get( mainPanelIdx++));
     }
 
     private void configureSavingPanel()
     {
-        mainPanels.add(new JPanel());
-        setMainPanelLayout( mainPanelIdx );
+        final JPanel savingPanel = new JPanel();
+        mainPanels.add( savingPanel );
+        setMainPanelLayout( savingPanel );
 
         panels.add(new JPanel());
         panels.get( panelIdx ).add(new JLabel("Save as:"));
@@ -260,7 +261,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         cbSaveVolume.setSelected(true);
         cbSaveProjection.setSelected(false);
 
-        tabbedPane.add("Save", mainPanels.get( mainPanelIdx++));
+        tabbedPane.add("Saving", mainPanels.get( mainPanelIdx++));
     }
 
     private void addPanel( JLabel jLabel, JTextField tfRowsPerStrip, int mainPanelIdx )
@@ -271,6 +272,12 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++ ));
     }
 
+    private void addComponents( JPanel panel, JComponent jComponent01, JComponent jComponent02 )
+    {
+        panel.add( jComponent01 );
+        panel.add( jComponent02 );
+    }
+
     private void addPanel( JComponent cbSaveVolume, int mainPanelIdx )
     {
         panels.add(new JPanel());
@@ -278,73 +285,62 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         mainPanels.get(mainPanelIdx).add(panels.get(panelIdx++));
     }
 
-    private void configureCropPanel()
+    private void configureCroppingPanel()
     {
-        mainPanels.add( new JPanel() );
-        setMainPanelLayout( mainPanelIdx );
+        final JPanel croppingPanel = new JPanel();
+        setMainPanelLayout( croppingPanel );
 
-        panels.add(new JPanel());
-        panels.get( panelIdx ).add(new JLabel("x/y extend taken from rectangle ROI"));
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
+        addComponents( croppingPanel, new JLabel("x/y extend: "), new JLabel("from rectangle ROI") );
+        addComponents( croppingPanel, new JLabel("z-min, z-max [slices]:"), tfCropZMinMax );
+        addComponents( croppingPanel, new JLabel("t-min, t-max [frames]:"), tfCropTMinMax );
+        addComponents( croppingPanel, new JLabel(""), cropButton);
 
-        addPanel( new JLabel("z-min, z-max [slices]:"), tfCropZMinMax, mainPanelIdx );
+        cropButton.setActionCommand( CROP );
+        cropButton.addActionListener(this);
 
-        addPanel( new JLabel("t-min, t-max [frames]:"), tfCropTMinMax, mainPanelIdx );
+        SpringUtilities.makeCompactGrid(
+                croppingPanel,
+                4, 2, //rows, cols
+                6, 6, //initX, initY
+                6, 6); //xPad, yPad
 
-        panels.add(new JPanel());
-        cropAsNewStream.setActionCommand( CROP );
-        cropAsNewStream.addActionListener(this);
-        panels.get( panelIdx ).add(cropAsNewStream);
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
-
-        tabbedPane.add("Crop", mainPanels.get( mainPanelIdx++));
+        tabbedPane.add("Cropping", croppingPanel );
     }
 
-    private void setMainPanelLayout( int mainPanelIdx )
+    private void setMainPanelLayout( JPanel panel )
     {
-        final JPanel panel = mainPanels.get( mainPanelIdx );
         panel.setLayout( new SpringLayout() );
     }
 
     private void configureLoadingPanel()
     {
         final JPanel loadingPanel = new JPanel();
-        mainPanels.add( loadingPanel );
-        setMainPanelLayout( mainPanelIdx );
+        setMainPanelLayout( loadingPanel );
 
-        final JPanel loadingSettingsPanel = new JPanel();
-        loadingSettingsPanel.setLayout( new SpringLayout() );
-
-        loadingSettingsPanel.add( new JLabel("File naming scheme:") );
-        loadingSettingsPanel.add( namingSchemeComboBox );
+        loadingPanel.add( new JLabel("File naming scheme:") );
+        loadingPanel.add( namingSchemeComboBox );
         namingSchemeComboBox.setEditable(true);
 
-        loadingSettingsPanel.add( new JLabel("Only load files matching:") );
-        loadingSettingsPanel.add( filterPatternComboBox );
+        loadingPanel.add( new JLabel("Only load files matching:") );
+        loadingPanel.add( filterPatternComboBox );
         filterPatternComboBox.setEditable(true);
 
-        loadingSettingsPanel.add( new JLabel("Hdf5 data set name:") );
-        loadingSettingsPanel.add( hdf5DataSetComboBox );
+        loadingPanel.add( new JLabel("Hdf5 data set name:") );
+        loadingPanel.add( hdf5DataSetComboBox );
         hdf5DataSetComboBox.setEditable(true);
 
-        SpringUtilities.makeCompactGrid(
-                loadingSettingsPanel,
-                3, 2, //rows, cols
-                6, 6,        //initX, initY
-                6, 6);       //xPad, yPad
-
-        loadingPanel.add( loadingSettingsPanel );
-
-        panels.add(new JPanel());
-        loadingButton.setActionCommand( LOAD );
+        loadingPanel.add( new JLabel( "" ) );
+        loadingPanel.add( loadingButton );
+        loadingButton.setActionCommand(LOAD);
         loadingButton.addActionListener(this);
-        panels.get(panelIdx).add( loadingButton );
-        loadingPanel.add( panels.get( panelIdx++));
 
         SpringUtilities.makeCompactGrid(
-                loadingPanel, 2,1,6,6,6,6);
+                loadingPanel,
+                4, 2, //rows, cols
+                6, 6, //initX, initY
+                6, 6); //xPad, yPad
 
-        tabbedPane.add("Loading", mainPanels.get( mainPanelIdx++));
+        tabbedPane.add("Loading", loadingPanel );
     }
 
     private void initPanels()

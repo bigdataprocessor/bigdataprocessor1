@@ -97,13 +97,13 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     private void configureDefaultTrackingSettings()
     {
         trackingSettings.trackingMethod = CORRELATION;
-        trackingSettings.objectSize = new Point3D( 200, 200, 30);
-        trackingSettings.maxDisplacement = new Point3D( 150, 150, 150);
-        trackingSettings.subSamplingXYZ = new Point3D( 3, 3, 1);
+        trackingSettings.objectSize = new Point3D( 30, 30, 10);
+        trackingSettings.maxDisplacement = new Point3D( 20, 20, 20);
+        trackingSettings.subSamplingXYZ = new Point3D( 1, 1, 1);
         trackingSettings.subSamplingT = 1;
-        trackingSettings.nt = 10;
+        trackingSettings.nt = 3;
         trackingSettings.intensityGate = new int[]{-1,-1};
-        trackingSettings.viewFirstNProcessedRegions = 0;
+        trackingSettings.viewFirstNProcessedRegions = 3;
         trackingSettings.imageFeatureEnhancement = Utils.ImageFilterTypes.NONE.toString();
     }
 

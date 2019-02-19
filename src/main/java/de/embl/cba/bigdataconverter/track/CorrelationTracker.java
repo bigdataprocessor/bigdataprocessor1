@@ -134,12 +134,12 @@ public class CorrelationTracker implements Runnable
 
             startTime = System.currentTimeMillis();
 
-            p0offset = Utils.computeOffsetFromCenterSize( p0center.add( pShift ), region5D0.size );
+            p0offset = Utils.computeOffsetFromCenterSize( p0center.add( pShift ), regionSize );
             p1offset = p0offset;
             p1center = p0center.add( pShift );
 
-            imp0 = reloadPreviousTimePoint( p0offset, regionSize, region5D0, imp, tPrevious );
-            imp1 = loadCurrentTimePoint( p1offset, regionSize, region5D1, imp, tCurrent );
+            imp0 = loadAndProcessDataCube( p0offset, regionSize, imp, tPrevious );
+            imp1 = loadAndProcessDataCube( p1offset, regionSize, imp, tCurrent );
 
             pShift = computeShift( imp0, imp1 );
 
@@ -196,7 +196,7 @@ public class CorrelationTracker implements Runnable
     private Point3D computeShift( ImagePlus imp0, ImagePlus imp1 )
     {
         Point3D pShift;
-        logger.debug("measuring drift using correlation...");
+        logger.debug("Measuring drift using correlation...");
         startTime = System.currentTimeMillis();
         pShift = computeShiftUsingPhaseCorrelation(imp1, imp0);
         stopTime = System.currentTimeMillis();
@@ -204,38 +204,27 @@ public class CorrelationTracker implements Runnable
         return pShift;
     }
 
-    private ImagePlus loadCurrentTimePoint( Point3D p1offset, Point3D regionSize, Region5D region5D1, ImagePlus imp, int tNow )
+    private ImagePlus loadAndProcessDataCube( Point3D offset, Point3D size, ImagePlus imp, int t )
     {
-        ImagePlus imp1;
-        region5D1.t = tNow;
-        region5D1.c = channel;
-        region5D1.size = regionSize;
-        region5D1.offset = p1offset;
-        region5D1.subSampling = trackingSettings.subSamplingXYZ;
-        imp1 = Utils.getDataCube( imp, region5D1, numIOThreads );
-        Utils.applyIntensityGate( imp1, trackingSettings.intensityGate );
+        final Region5D region5D = new Region5D();
+        region5D.t = t;
+        region5D.c = channel;
+        region5D.size = size;
+        region5D.offset = offset;
+        region5D.subSampling = trackingSettings.subSamplingXYZ;
+
+        ImagePlus dataCube = Utils.getDataCube( imp, region5D, numIOThreads );
+        Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
         elapsedReadingTime = System.currentTimeMillis() - startTime;
-        imp1 = imageFilter.filter( imp1 );
+        dataCube = imageFilter.filter( dataCube );
+
         if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
 		{
-			imp1.setTitle( "t" + tNow + "-processed" );
-			imp1.show();
+			dataCube.setTitle( "t" + t + "-processed" );
+			dataCube.show();
 		}
-        return imp1;
-    }
 
-    private ImagePlus reloadPreviousTimePoint( Point3D p0offset, Point3D regionSize, Region5D region5D0, ImagePlus imp, int tPrevious )
-    {
-        ImagePlus imp0;
-        region5D0.t = tPrevious;
-        region5D0.c = channel;
-        region5D0.size = regionSize;
-        region5D0.offset = p0offset;
-        region5D0.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube( imp, region5D0, numIOThreads );
-        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
-        imp0 = imageFilter.filter( imp0 );
-        return imp0;
+		return dataCube;
     }
 
     private int adaptCurrentTimePoint( int tMax, int tNow )
