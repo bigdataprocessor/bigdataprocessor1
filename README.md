@@ -19,7 +19,6 @@ Currently, for both reading and writing we support Tiff and hdf5 based image dat
 ### Reading 
 
 For reading, the BDC supports pattern matching based file parsing to accommodate different naming schemes, specifying z-slice, channels, and time-points.
-<<<<<<< HEAD
 
 Example use-cases include:
 
