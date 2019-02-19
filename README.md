@@ -35,9 +35,12 @@ The BDC supports writing to Tiff and Hdf5 files. For Tiff writing one can choose
 
 The Big Data Converter runs as a PlugIn within Fiji.
 
-- Please install Fiji (fiji.sc)
-- Within Fiji, please enable the update site: EMBL-CBA; and restart Fiji.
+- Please install [Fiji](fiji.sc)
+- Within Fiji, please enable the [Update Site](https://imagej.net/Update_Sites): 
+    - [X] EMBL-CBA
 
-## Start Big Data Converter
+## Running Big Data Converter
 
-[Fiji > Plugins > BigDataTools > Big Data Converter]
+The Big Data Converter can be found in Fiji's menu:
+
+- [Fiji > Plugins > BigDataTools > Big Data Converter]
