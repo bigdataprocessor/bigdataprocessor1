@@ -1,5 +1,5 @@
-import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
-import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingToolsGUI;
+import de.embl.cba.bigdataconverter.BigDataConverter;
+import de.embl.cba.bigdataconverter.BigDataConverterUI;
 import ij.IJ;
 
 public class OpenSabineNilsH5WithUI
@@ -11,12 +11,12 @@ public class OpenSabineNilsH5WithUI
         final net.imagej.ImageJ ij = new net.imagej.ImageJ();
         ij.ui().showUI();
 
-        final DataStreamingTools dataStreamingTools = new DataStreamingTools();
+        final BigDataConverter bigDataConverter = new BigDataConverter();
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
                 final String directory ="/Volumes/almfspim/Sabine/stream-fish2";
-                dataStreamingTools.openFromDirectory(
+                bigDataConverter.openFromDirectory(
                         directory,
                         "None",
                         ".*--C.*",
@@ -30,8 +30,8 @@ public class OpenSabineNilsH5WithUI
 
         IJ.wait(1000);
 
-        DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
-        dataStreamingToolsGUI.showDialog();
+        BigDataConverterUI bigDataConverterUI = new BigDataConverterUI();
+        bigDataConverterUI.showDialog();
 
     }
 }

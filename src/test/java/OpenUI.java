@@ -1,6 +1,4 @@
-import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
-import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingToolsGUI;
-import ij.IJ;
+import de.embl.cba.bigdataconverter.BigDataConverterUI;
 
 public class OpenUI
 {
@@ -10,7 +8,7 @@ public class OpenUI
         final net.imagej.ImageJ ij = new net.imagej.ImageJ();
         ij.ui().showUI();
 
-        DataStreamingToolsGUI dataStreamingToolsGUI = new DataStreamingToolsGUI();
-        dataStreamingToolsGUI.showDialog();
+        BigDataConverterUI bigDataConverterUI = new BigDataConverterUI();
+        bigDataConverterUI.showDialog();
     }
 }

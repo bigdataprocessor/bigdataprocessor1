@@ -19,6 +19,7 @@ Currently, for both reading and writing we support Tiff and hdf5 based image dat
 ### Reading 
 
 For reading, the BDC supports pattern matching based file parsing to accommodate different naming schemes, specifying z-slice, channels, and time-points.
+<<<<<<< HEAD
 
 Example use-cases include:
 
@@ -33,15 +34,11 @@ The BDC supports writing to Tiff and Hdf5 files. For Tiff writing one can choose
 
 ## Installation
 
-The BDC runs within Fiji.
+The Big Data Converter runs as a PlugIn within Fiji.
 
 - Please install Fiji (fiji.sc)
-- Within Fiji, enable the update site: EMBL-CBA
+- Within Fiji, please enable the update site: EMBL-CBA; and restart Fiji.
 
 ## Start Big Data Converter
 
 [Fiji > Plugins > BigDataTools > Big Data Converter]
-
-## Menu items
-
-

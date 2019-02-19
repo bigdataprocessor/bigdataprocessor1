@@ -15,3 +15,4 @@ target/
 
 # General #
 .DS_Store
+lib/

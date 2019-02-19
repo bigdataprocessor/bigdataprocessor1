@@ -1,9 +1,8 @@
-import de.embl.cba.bigDataTools.dataStreamingTools.DataStreamingTools;
-import de.embl.cba.bigDataTools.imaris.ImarisWriter;
-import de.embl.cba.bigDataTools.imaris.ImarisWriterCommand;
-import ij.IJ;
+import de.embl.cba.bigdataconverter.BigDataConverter;
+import de.embl.cba.bigdataconverter.BigDataConverterUI;
+import de.embl.cba.bigdataconverter.imaris.ImarisWriter;
+import de.embl.cba.bigdataconverter.imaris.ImarisWriterCommand;
 import ij.ImagePlus;
-import net.imagej.patcher.LegacyInjector;
 
 public class ImarisWriterCommandTest
 {
@@ -14,11 +13,11 @@ public class ImarisWriterCommandTest
 		final net.imagej.ImageJ ij = new net.imagej.ImageJ();
 		ij.ui().showUI();
 
-		final DataStreamingTools dataStreamingTools = new DataStreamingTools();
+		final BigDataConverter bigDataConverter = new BigDataConverter();
 
-		ImagePlus imp = dataStreamingTools.openFromDirectory(
+		ImagePlus imp = bigDataConverter.openFromDirectory(
 				ImarisWriter.class.getResource( "/tiff-nc2-nt2/" ).getFile(),
-				DataStreamingTools.LOAD_CHANNELS_FROM_FOLDERS,
+				BigDataConverterUI.LOAD_CHANNELS_FROM_FOLDERS,
 				".*",
 			 	"",
 			 	null,
