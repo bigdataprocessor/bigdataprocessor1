@@ -15,7 +15,7 @@
 
     <groupId>de.embl.cba</groupId>
     <artifactId>fiji_plugin_bigDataConverter</artifactId>
-    <version>0.5.55</version>
+    <version>0.5.56</version>
 
     <name>Fiji plugin for big image data</name>
     <description>A plugin for big image data.</description>
@@ -31,7 +31,7 @@
         </license>
     </licenses>
 
-    <url>https://github.com/tischi/fiji-plugin-bigDataTools</url>
+    <url>https://github.com/tischi/fiji-plugin-bigDataConverter</url>
 
     <build>
         <plugins>
@@ -70,10 +70,10 @@
     </contributors>
 
     <scm>
-        <connection>scm:git:git://github.com/tischi/fiji-plugin-bigDataTools</connection>
-        <developerConnection>scm:git:git@github.com/tischi/fiji-plugin-bigDataTools</developerConnection>
+        <connection>scm:git:git://github.com/embl-cba/fiji-plugin-bigDataConverter</connection>
+        <developerConnection>scm:git:git@github.com/embl-cba/fiji-plugin-bigDataConverter</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/tischi/fiji-plugin-bigDataTools</url>
+        <url>https://github.com/embl-cba/fiji-plugin-bigDataConverter</url>
     </scm>
 
     <mailingLists>
@@ -85,7 +85,7 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/tischi/fiji-plugin-bigDataTools/issues</url>
+        <url>https://github.com/embl-cba/fiji-plugin-bigDataConverter/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>

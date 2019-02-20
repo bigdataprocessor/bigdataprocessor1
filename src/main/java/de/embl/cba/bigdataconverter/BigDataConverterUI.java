@@ -126,10 +126,10 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     final String CROP = "Crop";
     JButton cropButton =  new JButton( CROP );
 
-    final String APPLY_SHIFTS = "Apply shifts";
+    final String APPLY_SHIFTS = "Apply Shifts";
     JButton applyShifts =  new JButton( APPLY_SHIFTS );
 
-    final String REPORT_ISSUE = "Report an issue";
+    final String REPORT_ISSUE = "Report an Issue";
     JButton reportIssue =  new JButton(REPORT_ISSUE);
 
     Logger logger = new IJLazySwingLogger();
@@ -177,21 +177,27 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         final JPanel miscPanel = new JPanel();
         mainPanels.add( miscPanel );
         setMainPanelLayout( miscPanel );
-        addPanel( new JLabel("I/O threads"), tfIOThreads, mainPanelIdx );
 
-        panels.add(new JPanel());
-        panels.get( panelIdx ).add( cbVerboseLogging );
+        miscPanel.add( new JLabel("I/O threads") );
+		miscPanel.add( tfIOThreads );
+
+		miscPanel.add( new JLabel(" ") );
+		miscPanel.add( cbVerboseLogging );
         cbVerboseLogging.setSelected(false);
         cbVerboseLogging.addItemListener(this);
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
 
-        panels.add(new JPanel());
+		miscPanel.add( new JLabel(" ") );
         reportIssue.setActionCommand(REPORT_ISSUE);
         reportIssue.addActionListener(this);
-        panels.get( panelIdx ).add(reportIssue);
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
+		miscPanel.add(reportIssue);
 
-        tabbedPane.add("Misc", mainPanels.get( mainPanelIdx++));
+		SpringUtilities.makeCompactGrid(
+				miscPanel,
+				3, 2,
+				6, 6,
+				6, 6);
+
+        tabbedPane.add("Misc", miscPanel );
     }
 
     private void configureChromaticShiftCorrectionPanel()
@@ -223,7 +229,6 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         savingPanel.add(new JLabel("Binning [pixels]: x1,y1,z1"));
         savingPanel.add(tfBinning);
 
-
         savingPanel.add(cbLZW);
         savingPanel.add(new JLabel( " " ));
         cbLZW.setSelected(false);
@@ -254,13 +259,11 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         stopSaving.setActionCommand(STOP_SAVING);
         stopSaving.addActionListener(this);
 
-
         SpringUtilities.makeCompactGrid(
                 savingPanel,
                 11, 2, //rows, cols
                 6, 6, //initX, initY
                 6, 6); //xPad, yPad
-
 
         tabbedPane.add("Saving", mainPanels.get(mainPanelIdx++));
     }
@@ -589,11 +592,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
 
         }  else if (e.getActionCommand().equals(REPORT_ISSUE)) {
 
-            //
-            // Report issue
-            //
-
-            String url = "https://github.com/tischi/imagej-open-stacks-as-virtualstack/issues";
+            String url = "https://github.com/embl-cba/fiji-plugin-bigDataConverter/issues";
             if (isDesktopSupported()) {
                 try {
                     final URI uri = new URI(url);
@@ -604,8 +603,8 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
                     logger.error(ioEx.toString());
                 }
             } else {
-                logger.error("Could not open browser, please report issue here: \n" +
-                        "https://github.com/tischi/imagej-open-stacks-as-virtualstack/issues");
+                logger.error("Could not open browser, please report issues here: \n" +
+                        "https://github.com/embl-cba/fiji-plugin-bigDataConverter/issues");
 
             }
 
