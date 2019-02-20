@@ -1,6 +1,6 @@
 package de.embl.cba.bigdataconverter.hdf5;
 
-import de.embl.cba.bigdataconverter.imaris.ImarisDataSet;
+import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.bigdataconverter.utils.Utils;
 
 import ij.IJ;
@@ -15,7 +15,7 @@ import ncsa.hdf.hdf5lib.exceptions.HDF5LibraryException;
 
 import static de.embl.cba.bigdataconverter.hdf5.H5Utils.writeDoubleAttribute;
 import static de.embl.cba.bigdataconverter.hdf5.H5Utils.writeStringAttribute;
-import static de.embl.cba.bigdataconverter.imaris.ImarisUtils.*;
+import static de.embl.cba.imaris.ImarisUtils.*;
 
 public class H5DataCubeWriter
 {

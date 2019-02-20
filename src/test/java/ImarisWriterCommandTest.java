@@ -1,7 +1,7 @@
 import de.embl.cba.bigdataconverter.BigDataConverter;
 import de.embl.cba.bigdataconverter.BigDataConverterUI;
-import de.embl.cba.bigdataconverter.imaris.ImarisWriter;
-import de.embl.cba.bigdataconverter.imaris.ImarisWriterCommand;
+import de.embl.cba.imaris.ImarisWriter;
+import de.embl.cba.imaris.ImarisWriterCommand;
 import ij.ImagePlus;
 
 public class ImarisWriterCommandTest

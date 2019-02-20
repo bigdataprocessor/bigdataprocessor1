@@ -1,7 +1,7 @@
 package de.embl.cba.bigdataconverter;
 
 import de.embl.cba.bigdataconverter.track.AdaptiveCropUI;
-import de.embl.cba.bigdataconverter.imaris.ImarisUtils;
+import de.embl.cba.imaris.ImarisUtils;
 import de.embl.cba.bigdataconverter.logging.IJLazySwingLogger;
 import de.embl.cba.bigdataconverter.logging.Logger;
 import de.embl.cba.bigdataconverter.saving.SavingSettings;

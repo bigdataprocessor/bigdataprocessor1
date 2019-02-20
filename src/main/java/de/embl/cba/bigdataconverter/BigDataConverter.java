@@ -17,9 +17,9 @@
 
 package de.embl.cba.bigdataconverter;
 
-import de.embl.cba.bigdataconverter.imaris.ImarisDataSet;
-import de.embl.cba.bigdataconverter.imaris.ImarisUtils;
-import de.embl.cba.bigdataconverter.imaris.ImarisWriter;
+import de.embl.cba.imaris.ImarisDataSet;
+import de.embl.cba.imaris.ImarisUtils;
+import de.embl.cba.imaris.ImarisWriter;
 import de.embl.cba.bigdataconverter.saving.SaveVS2TiffPlane;
 import de.embl.cba.bigdataconverter.virtualstack2.*;
 import de.embl.cba.bigdataconverter.logging.IJLazySwingLogger;
@@ -50,6 +50,7 @@ public class BigDataConverter
 {
 
     private static Logger logger = new IJLazySwingLogger();
+
     public boolean interruptSavingThreads = false;
 
     public BigDataConverter()
@@ -1426,7 +1427,6 @@ public class BigDataConverter
 
     private ImarisDataSet getImarisDataSet( SavingSettings savingSettings )
     {
-
         String[] binnings = savingSettings.bin.split(";");
         int[] binning = Utils.delimitedStringToIntegerArray( binnings[0], ",");
 
@@ -1435,13 +1435,12 @@ public class BigDataConverter
                     savingSettings.directory,
                     savingSettings.fileBaseName );
 
-        imarisDataSet.setLogger( logger );
+        imarisDataSet.setLogger( new de.embl.cba.logging.IJLazySwingLogger() );
 
         ImarisWriter.writeHeaderFile( imarisDataSet,
                 savingSettings.directory,
                 savingSettings.fileBaseName + ".ims"
                 );
-
 
         ArrayList< File > imarisFiles = ImarisUtils.getImarisFiles( savingSettings.directory );
 
@@ -1449,10 +1448,6 @@ public class BigDataConverter
         {
             ImarisWriter.writeCombinedHeaderFile( imarisFiles, "meta.ims" );
         }
-
-
-        // TODO: remove below
-        ImarisWriter.writeHeaderFile( imarisDataSet, savingSettings.directory, savingSettings.fileBaseName + ".h5" );
 
         logger.info("Image sizes at different resolutions:");
         Utils.logArrayList( imarisDataSet.getDimensions() );

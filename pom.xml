@@ -121,7 +121,6 @@
 
     <dependencies>
 
-
         <dependency>
             <groupId>sc.fiji</groupId>
             <artifactId>bigdataviewer-core</artifactId>
@@ -178,6 +177,12 @@
             <groupId>net.java.openjfx.backport</groupId>
             <artifactId>openjfx-78-backport</artifactId>
             <version>1.8.0-ea-b96.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.embl.cba</groupId>
+            <artifactId>imaris-writer</artifactId>
+            <version>0.1.0</version>
         </dependency>
 
     </dependencies>

@@ -2,7 +2,7 @@ package de.embl.cba.bigdataconverter.saving;
 
 import de.embl.cba.bigdataconverter.virtualstack2.VirtualStack2;
 import de.embl.cba.bigdataconverter.hdf5.H5DataCubeWriter;
-import de.embl.cba.bigdataconverter.imaris.ImarisDataSet;
+import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.bigdataconverter.BigDataConverter;
 import de.embl.cba.bigdataconverter.logging.IJLazySwingLogger;
 import de.embl.cba.bigdataconverter.logging.Logger;
