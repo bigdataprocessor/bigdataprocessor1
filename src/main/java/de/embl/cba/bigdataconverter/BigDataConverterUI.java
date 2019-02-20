@@ -39,7 +39,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     public static String LOAD_CHANNELS_FROM_FOLDERS = "Channels from Folders";
 
     JCheckBox cbVerboseLogging = new JCheckBox("Verbose Logging");
-    JCheckBox cbLZW = new JCheckBox("Tiff LZW Compression");
+    JCheckBox cbLZW = new JCheckBox("LZW Compression (Tiff)");
     JCheckBox cbSaveVolume = new JCheckBox("Save Volume Data");
     JCheckBox cbSaveProjection = new JCheckBox("Save Projections");
     JCheckBox cbConvertTo8Bit = new JCheckBox("8-bit Conversion   ");
@@ -217,56 +217,52 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         mainPanels.add( savingPanel );
         setMainPanelLayout( savingPanel );
 
-        panels.add(new JPanel());
-        panels.get( panelIdx ).add(new JLabel("Save as:"));
-        panels.get( panelIdx ).add(comboFileTypeForSaving);
-        mainPanels.get( mainPanelIdx ).add(panels.get(panelIdx++));
+        savingPanel.add(new JLabel("Save as:"));
+        savingPanel.add(comboFileTypeForSaving);
 
-        addPanel( new JLabel("Binnings [pixels]: x1,y1,z1; x2,y2,z2; ... "), tfBinning, mainPanelIdx );
+        savingPanel.add(new JLabel("Binning [pixels]: x1,y1,z1"));
+        savingPanel.add(tfBinning);
 
-        addPanel( cbSaveVolume, mainPanelIdx );
-        addPanel( cbSaveProjection, mainPanelIdx );
 
-        addPanel( new JLabel( "Tiff chunking [ny]" ), tfRowsPerStrip, mainPanelIdx );
-
-        addPanel( cbLZW, mainPanelIdx );
-
-        panels.add(new JPanel());
-        panels.get( panelIdx ).add(cbConvertTo8Bit);
-        panels.get( panelIdx ).add(new JLabel("255 ="));
-        panels.get( panelIdx ).add(tfMapTo255);
-        panels.get( panelIdx ).add(new JLabel("0 ="));
-        panels.get( panelIdx ).add(tfMapTo0);
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
-
-//        panels.add(new JPanel());
-//        panels.get( panelIdx ).add(cbConvertTo16Bit);
-//        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
-
-//        panels.add(new JPanel());
-//        panels.get( panelIdx ).add(new JLabel("Min ="));
-//        panels.get( panelIdx ).add(tfGateMin);
-//        panels.get( panelIdx ).add(new JLabel("Max ="));
-//        panels.get( panelIdx ).add(tfGateMax);
-//        panels.get( panelIdx ).add(cbGating);
-//        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
-
-        panels.add(new JPanel());
-
-        save.setActionCommand(SAVE);
-        save.addActionListener(this);
-        panels.get( panelIdx ).add(save);
-
-        stopSaving.setActionCommand(STOP_SAVING);
-        stopSaving.addActionListener(this);
-        panels.get( panelIdx ).add(stopSaving);
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
-
+        savingPanel.add(cbLZW);
+        savingPanel.add(new JLabel( " " ));
         cbLZW.setSelected(false);
+        savingPanel.add(new JLabel( "LZW rows per strip [#]" ));
+        savingPanel.add(tfRowsPerStrip);
+
+        savingPanel.add(cbConvertTo8Bit);
+        savingPanel.add(new JLabel( " " ));
+        savingPanel.add(new JLabel("255 ="));
+        savingPanel.add(tfMapTo255);
+        savingPanel.add(new JLabel("0 ="));
+        savingPanel.add(tfMapTo0);
+
+        savingPanel.add(new JLabel( " " ));
+        savingPanel.add(cbSaveVolume);
         cbSaveVolume.setSelected(true);
+        savingPanel.add(new JLabel( " " ));
+        savingPanel.add(cbSaveProjection);
         cbSaveProjection.setSelected(false);
 
-        tabbedPane.add("Saving", mainPanels.get( mainPanelIdx++));
+        savingPanel.add(new JLabel( " " ));
+        savingPanel.add(save);
+        save.setActionCommand(SAVE);
+        save.addActionListener(this);
+
+        savingPanel.add(new JLabel( " " ));
+        savingPanel.add(stopSaving);
+        stopSaving.setActionCommand(STOP_SAVING);
+        stopSaving.addActionListener(this);
+
+
+        SpringUtilities.makeCompactGrid(
+                savingPanel,
+                11, 2, //rows, cols
+                6, 6, //initX, initY
+                6, 6); //xPad, yPad
+
+
+        tabbedPane.add("Saving", mainPanels.get(mainPanelIdx++));
     }
 
     private void addPanel( JLabel jLabel, JTextField tfRowsPerStrip, int mainPanelIdx )
