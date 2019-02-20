@@ -82,7 +82,7 @@ public class CorrelationTracker implements Runnable
         Point3D p1offset;
         Point3D p0center;
         Point3D p1center;
-        Point3D pShift;
+        Point3D shift;
         Point3D regionSize;
         Region5D region5D0 = new Region5D();
         Region5D region5D1 = new Region5D();
@@ -126,7 +126,7 @@ public class CorrelationTracker implements Runnable
         //  - p0offset has to be the position where the previous images was loaded
         //  - p1offset has to be the position where the current image was loaded
 
-        pShift = new Point3D(0.0, 0.0, 0.0);
+        shift = new Point3D(0.0, 0.0, 0.0);
 
         for ( int tCurrent = tStart + dt; tCurrent < tStart + nt + dt; tCurrent = tCurrent + dt ) {
 
@@ -134,22 +134,23 @@ public class CorrelationTracker implements Runnable
 
             startTime = System.currentTimeMillis();
 
-            p0offset = Utils.computeOffsetFromCenterSize( p0center.add( pShift ), regionSize );
+            p0offset = Utils.computeOffsetFromCenterSize( p0center.add( shift ), regionSize );
             p1offset = p0offset;
-            p1center = p0center.add( pShift );
+            p1center = p0center.add( shift );
 
             imp0 = loadAndProcessDataCube( p0offset, regionSize, imp, tPrevious );
             imp1 = loadAndProcessDataCube( p1offset, regionSize, imp, tCurrent );
 
-            pShift = computeShift( imp0, imp1 );
+            shift = computeShift( imp0, imp1 );
 
-            pShift = correctForSubSampling( pShift );
+            shift = correctForSubSampling( shift );
 
-            pShift = correctFor2D( pShift, imp, 0 );
+            shift = correctFor2D( shift, imp, 0 );
 
-            if( logger.isShowDebug() )  logger.info("actual final shift is " + pShift.toString());
+            if( logger.isShowDebug() )
+                logger.info("actual final shift " + shift.toString());
 
-            computeIntermediateTimePoints( pShift, trackTable, imp, tPrevious, tCurrent );
+            computeIntermediateTimePoints( shift, trackTable, imp, tPrevious, tCurrent );
 
             tPrevious = tCurrent;
             p0center = p1center;

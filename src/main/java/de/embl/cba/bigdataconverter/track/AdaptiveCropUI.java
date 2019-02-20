@@ -37,7 +37,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             "Down-sample: dx, dy, dz, dt [pixels, frames]",
             "Track Length [frames]",
             "Process Region: Intensity Gating [min, max]",
-            "Process Region: Show Processed Regions [#]",
+            "Process Region: Show Regions [#]",
             "Resize Tracked Regions [factor]"
     };
 
@@ -54,7 +54,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     };
     
     String[] comboNames = {
-            "Process Region",
+            "Process Region Filter",
             "Tracking Method"
     };
 
@@ -230,12 +230,9 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         panels.get( iPanel ).add( comboLabels[ iComboBox ]);
         panels.get( iPanel ).add( comboBoxes[ iComboBox++]);
         mainPanel.add( panels.get( iPanel++));
-        // ObjectTracker button
+        // Tracking Buttons
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
         panels.get( iPanel ).add( buttons[ iButton++]);
-        mainPanel.add( panels.get( iPanel++));
-        // ObjectTracker cancel button
-        panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
         panels.get( iPanel ).add( buttons[ iButton++]);
         mainPanel.add( panels.get( iPanel++));
     }

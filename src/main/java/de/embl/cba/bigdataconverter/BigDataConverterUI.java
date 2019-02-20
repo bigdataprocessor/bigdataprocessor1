@@ -111,8 +111,11 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     final String STOP_SAVING = "Interrupt Saving";
     JButton stopSaving =  new JButton(STOP_SAVING);
 
-    final String LOAD = "Lazy Load";
-    JButton loadingButton =  new JButton( LOAD );
+    final String LOAD = "Open Virtual";
+    JButton load =  new JButton( LOAD );
+
+    final String BROWSE_FOLDER = "Image Data Folder";
+    JButton browseFolder =  new JButton( BROWSE_FOLDER );
 
     final String STREAMfromInfoFile = "Stream from info file";
     JButton streamFromInfoFile =  new JButton(STREAMfromInfoFile);
@@ -139,6 +142,8 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     private ArrayList< JPanel > mainPanels;
     private ArrayList< JPanel > panels;
     private JTabbedPane tabbedPane;
+    private JTextField inputFolderTF;
+    private String inputFolder;
 
     public void showDialog()
     {
@@ -317,6 +322,13 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         final JPanel loadingPanel = new JPanel();
         setMainPanelLayout( loadingPanel );
 
+        loadingPanel.add( browseFolder );
+        browseFolder.setActionCommand( BROWSE_FOLDER );
+        browseFolder.addActionListener( this );
+        inputFolderTF = new JTextField( "" );
+        loadingPanel.add( inputFolderTF );
+        namingSchemeComboBox.setEditable(true);
+
         loadingPanel.add( new JLabel("File naming scheme:") );
         loadingPanel.add( namingSchemeComboBox );
         namingSchemeComboBox.setEditable(true);
@@ -330,13 +342,13 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         hdf5DataSetComboBox.setEditable(true);
 
         loadingPanel.add( new JLabel( "" ) );
-        loadingPanel.add( loadingButton );
-        loadingButton.setActionCommand(LOAD);
-        loadingButton.addActionListener(this);
+        loadingPanel.add( load );
+        load.setActionCommand( LOAD );
+        load.addActionListener(this);
 
         SpringUtilities.makeCompactGrid(
                 loadingPanel,
-                4, 2, //rows, cols
+                5, 2, //rows, cols
                 6, 6, //initX, initY
                 6, 6); //xPad, yPad
 
@@ -418,27 +430,27 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         final String filterPattern = (String)filterPatternComboBox.getSelectedItem();
         final String namingScheme = (String) namingSchemeComboBox.getSelectedItem();
 
-        if (e.getActionCommand().equals( LOAD ) )  {
 
-            // Open from folder
-            final String directory = IJ.getDirectory("Select a Directory");
-            if (directory == null)
-                return;
+        if (e.getActionCommand().equals(BROWSE_FOLDER))
+        {
+            inputFolder = IJ.getDirectory("Select Directory");
 
-            Thread t1 = new Thread(new Runnable() {
-                public void run() {
-                    bigDataConverter.openFromDirectory(
-                            directory,
-                            namingScheme,
-                            filterPattern,
-                            h5DataSet,
-                            new ImageDataInfo(),
-                            nIOthreads,
-                            true,
-                            false);
-                }
-            });
-            t1.start();
+            if ( inputFolder == null ) return;
+
+            inputFolderTF.setText( inputFolder );
+
+        } else if (e.getActionCommand().equals( LOAD ) )  {
+
+            Thread thread = new Thread( () -> bigDataConverter.openFromDirectory(
+                    inputFolder,
+					namingScheme,
+					filterPattern,
+					h5DataSet,
+					new ImageDataInfo(),
+					nIOthreads,
+					true,
+					false) );
+            thread.start();
         }
         else if (e.getActionCommand().equals(STREAMfromInfoFile))
         {
