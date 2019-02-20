@@ -17,7 +17,7 @@ import mpicbg.imglib.image.ImagePlusAdapter;
 
 import java.util.ArrayList;
 
-import static de.embl.cba.bigdataconverter.track.ObjectTracker.CENTER_OF_MASS;
+import static de.embl.cba.bigdataconverter.track.AdaptiveCropUI.CENTER_OF_MASS;
 
 
 public class CorrelationTracker implements Runnable
@@ -84,8 +84,6 @@ public class CorrelationTracker implements Runnable
         Point3D p1center;
         Point3D shift;
         Point3D regionSize;
-        Region5D region5D0 = new Region5D();
-        Region5D region5D1 = new Region5D();
 
         track = adaptiveCrop.addNewTrack(trackingSettings);
         tStart = trackingSettings.trackStartROI.getImage().getT() - 1;
@@ -297,34 +295,6 @@ public class CorrelationTracker implements Runnable
                         "; Processing [ms] = " + elapsedProcessingTime );
 
     }
-
-
-
-    private Point3D compute16bitShiftUsingIterativeCenterOfMass(ImageStack stack,
-                                                                double trackingFactor,
-                                                                int iterations) {
-        Point3D pMin, pMax;
-
-        // compute stack center and tracking radii
-        // at each iteration, the center of mass is only computed for a subset of the data cube
-        // this subset iteratively shifts every iteration according to the results of the center of mass computation
-        Point3D pStackSize = new Point3D(stack.getWidth(), stack.getHeight(), stack.getSize() );
-        Point3D pStackCenter = Utils.computeCenterFromOffsetSize(new Point3D(0,0,0), pStackSize);
-        Point3D pCenter = pStackCenter;
-        double trackingFraction;
-        for(int i=0; i<iterations; i++) {
-            // trackingFraction = 1/trackingFactor is the user selected object size, because we are loading
-            // a portion of the data, which is trackingFactor times larger than the object size
-            // below formula makes the region in which the center of mass is compute go from 1 to 1/trackingfactor
-            trackingFraction = 1.0 - Math.pow(1.0*(i+1)/iterations,1.0/4.0)*(1.0-1.0/trackingFactor);
-            pMin = pCenter.subtract(pStackSize.multiply(trackingFraction / 2)); // div 2 because it is radius
-            pMax = pCenter.add(pStackSize.multiply(trackingFraction / 2));
-            pCenter = computeCenterOfMass(stack, pMin, pMax);
-            //info("i "+i+" trackingFraction "+trackingFraction+" pCenter "+pCenter.toString());
-        }
-        return(pCenter.subtract(pStackCenter));
-    }
-
 
     private Point3D computeShiftUsingPhaseCorrelation(ImagePlus imp1, ImagePlus imp0)
     {

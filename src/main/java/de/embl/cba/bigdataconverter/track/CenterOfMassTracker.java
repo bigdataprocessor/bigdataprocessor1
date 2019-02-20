@@ -17,36 +17,49 @@ import mpicbg.imglib.image.ImagePlusAdapter;
 
 import java.util.ArrayList;
 
+import static de.embl.cba.bigdataconverter.track.AdaptiveCropUI.CENTER_OF_MASS;
 
-class CenterOfMassTracker implements Runnable
+
+public class CenterOfMassTracker implements Runnable
 {
-    public static final String CORRELATION = "Correlation";
-    public static final String CENTER_OF_MASS = "Center of Mass";
     AdaptiveCrop adaptiveCrop;
     Logger logger;
     TrackingSettings trackingSettings;
     ImageFilter imageFilter;
-    int nThreads;
+    int numIOThreads;
+    private int tStart;
+    private int channel;
+    private int nt;
+    private int dt;
+    private Track track;
+    private long elapsedReadingTime;
+    private long startTime;
+    private long elapsedProcessingTime;
+    private boolean finish;
+    private int iProcessed;
+    private long stopTime;
 
     public CenterOfMassTracker( AdaptiveCrop adaptiveCrop,
 								TrackingSettings trackingSettings,
 								Logger logger,
-                                int nThreads)
+								int numIOThreads )
     {
         this.adaptiveCrop = adaptiveCrop;
         this.trackingSettings = trackingSettings;
         this.logger = logger;
-        this.nThreads = nThreads;
+        this.numIOThreads = numIOThreads;
+        setImageFilter( trackingSettings, logger );
+    }
 
-        // filter image (hopefully good for improving the correlation)
-        //
-
-        if ( trackingSettings.imageFeatureEnhancement.equals( Utils.ImageFilterTypes.NONE.toString() ) )
+    private void setImageFilter( TrackingSettings trackingSettings, Logger logger )
+    {
+        if ( trackingSettings.imageFeatureEnhancement
+                .equals( Utils.ImageFilterTypes.NONE.toString() ) )
         {
             imageFilter = new NoFilter();
         }
-        else if ( trackingSettings.imageFeatureEnhancement.
-                equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
+        else if ( trackingSettings.imageFeatureEnhancement
+                .equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
         {
             imageFilter = new VarianceFilter( 2.0F );
             logger.info("Image will be variance filtered.");
@@ -58,31 +71,21 @@ class CenterOfMassTracker implements Runnable
             imageFilter = new ThresholdFilter( ThresholdFilter.DEFAULT );
             logger.info( "Images will be tresholded using method : " + ThresholdFilter.DEFAULT );
         }
-
     }
 
     public void run() {
 
-        long startTime, stopTime, elapsedReadingTime, elapsedProcessingTime;
-        ImagePlus imp0, imp1;
-        Point3D p0offset;
-        Point3D p1offset;
-        Point3D p0center;
-        Point3D p1center;
+        Point3D pOffset;
+        Point3D pCenter;
         Point3D pShift;
-        Point3D pLocalShift;
-        Point3D pSize;
-        Region5D region5D0 = new Region5D();
-        Region5D region5D1 = new Region5D();
+        Point3D regionSize;
 
-        //boolean subtractMean = true;
+        track = adaptiveCrop.addNewTrack(trackingSettings);
+        tStart = trackingSettings.trackStartROI.getImage().getT() - 1;
+        channel = trackingSettings.channel;
+        nt = trackingSettings.nt;
+        dt = trackingSettings.subSamplingT;
 
-        // obtain all the info about the track
-        Track track = adaptiveCrop.addNewTrack(trackingSettings);
-        int tStart = trackingSettings.trackStartROI.getImage().getT() - 1;
-        int channel = trackingSettings.channel;
-        int nt = trackingSettings.nt;
-        int dt = trackingSettings.subSamplingT;
         Point3D pStart = new Point3D(
                 trackingSettings.trackStartROI.getXBase(),
                 trackingSettings.trackStartROI.getYBase(),
@@ -91,251 +94,64 @@ class CenterOfMassTracker implements Runnable
         TrackTable trackTable = adaptiveCrop.getTrackTable();
         ImagePlus imp = trackingSettings.imp;
 
-        pSize = track.getObjectSize();
-        // only one slice
-        if ( imp.getNSlices() == 1 ) pSize = new Point3D( pSize.getX(), pSize.getY(), 1);
+        regionSize = getRegionSize( track, imp );
 
-        p0offset = Utils.computeOffsetFromCenterSize( pStart, pSize );
-        p0center = pStart;
+        // we need to load the bigger region, because this is what will also be
+        // loaded for the subsequent time-points; and - without aggressive
+        // background subtraction - the center-of-mass
+        // algorithm is sensitive to the size of the region.
+        regionSize = regionSize.add( trackingSettings.maxDisplacement.multiply( 2.0 ) );
 
-        // read data
-        //
-        startTime = System.currentTimeMillis();
-        Region5D region5D = new Region5D();
-        region5D.t = tStart;
-        region5D.c = channel;
-        region5D.offset = p0offset;
-        if ( trackingSettings.trackingMethod.equals( CENTER_OF_MASS ) )
-        {
-            // we need to load the bigger region, because this is what will also be
-            // loaded for the subsequent time-points; and - without aggressive
-            // background subtraction - the center-of-mass
-            // algorithm is sensitive to the size of the region.
-            region5D.size = pSize.add( trackingSettings.maxDisplacement.multiply( 2.0 ) );
-        }
-        else if ( trackingSettings.trackingMethod.equals( CORRELATION ) )
-        {
-            region5D.size = pSize;
-        }
-        region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube( imp, region5D, nThreads );
-        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
+        pOffset = Utils.computeOffsetFromCenterSize( pStart, regionSize );
+        pCenter = pStart;
+        imp = readDataCube( pOffset, regionSize, imp );
+        imp = filterDataCube( imp );
 
-        elapsedReadingTime = System.currentTimeMillis() - startTime;
+        pShift = compute16bitShiftUsingIterativeCenterOfMass( imp.getStack(),
+                trackingSettings.trackingFactor,
+                trackingSettings.iterationsCenterOfMass);
 
-        //
-        // filter image to ease tracking
-        //
-        imp0 = imageFilter.filter( imp0 );
+        publishResult( imp, track, trackTable, logger,
+                pCenter.add( pShift ), tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime );
 
-        //
-        // Correct selected point (only for center of mass tracking)
-        //
-        if ( trackingSettings.trackingMethod.equals(CENTER_OF_MASS) )
-        {
-            startTime = System.currentTimeMillis();
-            // iteratively compute the shift of the center of mass relative to the center of the image stack
-            // using only half the image size for iteration
-            pShift = compute16bitShiftUsingIterativeCenterOfMass( imp0.getStack(),
-                    trackingSettings.trackingFactor,
-                    trackingSettings.iterationsCenterOfMass);
-            elapsedProcessingTime = System.currentTimeMillis() - startTime;
-
-            // correct for sub-sampling
-            //
-            pShift = Utils.multiplyPoint3dComponents(pShift, trackingSettings.subSamplingXYZ);
-            // no z-shift if only one slice
-            if (imp.getNSlices() == 1) pShift = new Point3D(pShift.getX(), pShift.getY(), 0);
-        }
-        else
-        {
-            elapsedProcessingTime = 0;
-            pShift = new Point3D(0.0, 0.0, 0.0);
-        }
-
-
-        //
-        // store track location of first image
-        //
-        Point3D pUpdate = Utils.computeCenterFromOffsetSize( p0offset.add( pShift ), pSize );
-
-
-        //
-        // store results
-        //
-        publishResult(imp, track, trackTable, logger, pUpdate, tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime);
-
-
-        //
-        // compute shifts for following time-points
-        //
-        boolean finish = false;
+        finish = false;
         int tMax = tStart + nt - 1;
         int tPrevious = tStart;
-        int iProcessed = 0;
+        iProcessed = 0;
 
         if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
         {
-            imp0.setTitle( "t" + tStart + "-processed" );
-            imp0.show();
+            imp.setTitle( "t" + tStart + "-processed" );
+            imp.show();
         }
 
+        for ( int tCurrent = tStart + dt; tCurrent < tStart + nt + dt; tCurrent = tCurrent + dt ) {
 
-        //  Important notes for the logic:
-        //  - p0offset has to be the position where the previous images was loaded
-        //  - p1offset has to be the position where the current image was loaded
+            tCurrent = adaptCurrentTimePoint( tMax, tCurrent );
 
-        for (int tNow = tStart + dt; tNow < tStart + nt + dt; tNow = tNow + dt) {
-
-            if( tNow >= tMax ) {
-                // due to the sub-sampling in t the addition of dt
-                // can cause the frame to be outside of
-                // the tracking range => load the last frame
-                tNow = tMax;
-                finish = true;
-            }
-
-            // load next image at the same position where the previous image has been loaded (p0offset)
-            // plus the computed shift (pShift)
-            // info("Position where previous image was loaded: " + p0offset);
-            // info("Position where previous image was loaded plus shift: " + p0offset.add(pShift));
-            p1center = p0center.add( pShift );
-
-            // load next image(s)
             startTime = System.currentTimeMillis();
 
-            if ( trackingSettings.trackingMethod.equals( CORRELATION ) )
-            {
-                // reload the previous time-point, but now at the
-                // drift corrected position and only with the actual
-                // user-selected size
-                // the idea is that this should help the algorithm to
-                // stay focused on one object, rather than jump to another one,
-                // which might pass by during the sequence.
+            pCenter = pCenter.add( pShift );
+            pOffset = Utils.computeOffsetFromCenterSize( pCenter, regionSize );
 
-                // previous
-                region5D0.t = tPrevious;
-                region5D0.c = channel;
+            imp = loadAndProcessDataCube( pOffset, regionSize, imp, tCurrent );
 
-                // only load small size, because we already know the
-                // drift corrected position
-                region5D0.size = pSize;
-                p0offset = Utils.computeOffsetFromCenterSize( p1center, region5D0.size );
-                region5D0.offset = p0offset;
+            pShift = compute16bitShiftUsingIterativeCenterOfMass( imp.getStack(),
+                    trackingSettings.trackingFactor, trackingSettings.iterationsCenterOfMass );
 
-                region5D0.subSampling = trackingSettings.subSamplingXYZ;
-                imp0 = Utils.getDataCube( imp, region5D0, nThreads );
-                Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
-            }
+            pShift = correctForSubSampling( pShift );
 
-            // now
-            region5D1.t = tNow;
-            region5D1.c = channel;
+            pShift = correctFor2D( pShift, imp, 0 );
 
-            // size including maximal displacement
-            // this needs to be multiplied by 2 because we do not know
-            // in which direction (positive or negative) the shift will be
-            region5D1.size = pSize.add( trackingSettings.maxDisplacement.multiply( 2.0 ) );
-            p1offset = Utils.computeOffsetFromCenterSize( p1center, region5D1.size );
-            region5D1.offset = p1offset;
+            if( logger.isShowDebug() )
+                logger.info("actual final shift " + pShift.toString());
 
-            region5D1.subSampling = trackingSettings.subSamplingXYZ;
-            imp1 = Utils.getDataCube( imp, region5D1, nThreads );
-            Utils.applyIntensityGate( imp1, trackingSettings.intensityGate );
+            computeIntermediateTimePoints( pShift, trackTable, imp, tPrevious, tCurrent );
 
-            elapsedReadingTime = System.currentTimeMillis() - startTime;
-
-            // filter image
-            //
-            imp1 = imageFilter.filter( imp1 );
-
-            if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
-            {
-                imp1.setTitle( "t" + tNow + "-processed" );
-                imp1.show();
-            }
-
-            if ( trackingSettings.trackingMethod.equals( CORRELATION ) ) {
-
-                // filter image
-                // - only necessary for correlation tracking
-                //
-                imp0 = imageFilter.filter( imp0 );
-
-                logger.debug("measuring drift using correlation...");
-
-                // compute shift relative to previous time-point
-                startTime = System.currentTimeMillis();
-                pShift = computeShiftUsingPhaseCorrelation(imp1, imp0);
-                stopTime = System.currentTimeMillis();
-                elapsedProcessingTime = stopTime - startTime;
-
-                // correct for sub-sampling
-                pShift = Utils.multiplyPoint3dComponents( pShift, trackingSettings.subSamplingXYZ );
-                // take into account the different loading positions of this and the previous image
-                pShift = pShift.add( p1offset.subtract( p0offset ) );
-
-                // no z-shift if there is only one slice
-                if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
-
-                if( logger.isShowDebug() )  logger.info("actual final shift is " + pShift.toString());
-
-            }
-            else if ( trackingSettings.trackingMethod.equals( CENTER_OF_MASS ) )
-            {
-
-                if( logger.isShowDebug() )  logger.info("measuring drift using center of mass...");
-
-                // compute the different of the center of mass
-                // and the geometric center of imp1
-                startTime = System.currentTimeMillis();
-                //info("timepoint: "+t);
-                pLocalShift = compute16bitShiftUsingIterativeCenterOfMass( imp1.getStack(), trackingSettings.trackingFactor, trackingSettings.iterationsCenterOfMass );
-                stopTime = System.currentTimeMillis();
-                elapsedProcessingTime = stopTime - startTime;
-
-                // correct for sub-sampling
-                pLocalShift = Utils.multiplyPoint3dComponents( pLocalShift, trackingSettings.subSamplingXYZ );
-                //info("Center of Mass Local Shift: "+pLocalShift);
-
-                if( logger.isShowDebug() )
-                {
-                    logger.info("local shift after correction for sub-sampling is " + pLocalShift.toString());
-                }
-
-                // the drift corrected position in the global coordinate system is: p1offset.add(pLocalShift)
-                // in center coordinates this is: computeCenterFromOffsetSize(p1offset.add(pShift),pSize)
-                // relative to previous tracking position:
-                // info(""+track.getXYZ(tPrevious).toString());
-                // info(""+computeCenterFromOffsetSize(p1offset.add(pLocalShift),pSize).toString());
-                // info(""+p1offset.add(pLocalShift).toString());
-                pShift = Utils.computeCenterFromOffsetSize( p1offset.add( pLocalShift ), pSize ).subtract( track.getPosition( tPrevious ) );
-
-                // no z-shift if there is only one slice
-                if ( imp.getNSlices() == 1 ) pShift = new Point3D( pShift.getX(), pShift.getY(), 0);
-
-                if( logger.isShowDebug() )  logger.info("actual shift is "+pShift.toString());
-
-            }
-
-            // compute time-points between this and the previous one (inclusive)
-            // using linear interpolation
-            for ( int tUpdate = tPrevious + 1; tUpdate <= tNow; ++tUpdate )
-            {
-
-                Point3D pPrevious = track.getPosition( tPrevious );
-                double interpolation = (double) (tUpdate - tPrevious) / (double) (tNow - tPrevious);
-                pUpdate = pPrevious.add( pShift.multiply( interpolation ) );
-
-                publishResult( imp, track, trackTable, logger, pUpdate, tUpdate, nt, dt, elapsedReadingTime, elapsedProcessingTime);
-
-            }
-
-            tPrevious = tNow;
-            p0center = p1center;
-
+            tPrevious = tCurrent;
 
             if( finish ) return;
+
             if( adaptiveCrop.interruptTrackingThreads )
             {
                 logger.info("Tracking of track " + track.getID() + " interrupted.");
@@ -345,6 +161,109 @@ class CenterOfMassTracker implements Runnable
         }
 
 
+    }
+
+    private void computeIntermediateTimePoints( Point3D pShift, TrackTable trackTable,
+                                                ImagePlus imp, int tPrevious, int tCurrent )
+    {
+        for ( int tUpdate = tPrevious + 1; tUpdate <= tCurrent; ++tUpdate )
+		{
+			Point3D pPrevious = track.getPosition( tPrevious );
+			double interpolation = (double) (tUpdate - tPrevious) / (double) (tCurrent - tPrevious);
+			Point3D pUpdate = pPrevious.add( pShift.multiply( interpolation ) );
+			publishResult( imp, track, trackTable, logger,
+                    pUpdate, tUpdate, nt, dt, elapsedReadingTime, elapsedProcessingTime );
+		}
+    }
+
+    private Point3D correctFor2D( Point3D pShift, ImagePlus imp, int z )
+    {
+        if ( imp.getNSlices() == 1 )
+        {
+            pShift = new Point3D( pShift.getX(), pShift.getY(), z );
+        }
+        return pShift;
+    }
+
+    private Point3D correctForSubSampling( Point3D pShift )
+    {
+        pShift = Utils.multiplyPoint3dComponents( pShift, trackingSettings.subSamplingXYZ );
+        return pShift;
+    }
+
+    private Point3D computeShift( ImagePlus imp0, ImagePlus imp1 )
+    {
+        Point3D pShift;
+        logger.debug("Measuring drift using correlation...");
+        startTime = System.currentTimeMillis();
+        pShift = computeShiftUsingPhaseCorrelation(imp1, imp0);
+        stopTime = System.currentTimeMillis();
+        elapsedProcessingTime = stopTime - startTime;
+        return pShift;
+    }
+
+    private ImagePlus loadAndProcessDataCube( Point3D offset, Point3D size, ImagePlus imp, int t )
+    {
+        final Region5D region5D = new Region5D();
+        region5D.t = t;
+        region5D.c = channel;
+        region5D.size = size;
+        region5D.offset = offset;
+        region5D.subSampling = trackingSettings.subSamplingXYZ;
+
+        ImagePlus dataCube = Utils.getDataCube( imp, region5D, numIOThreads );
+        Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
+        elapsedReadingTime = System.currentTimeMillis() - startTime;
+        dataCube = imageFilter.filter( dataCube );
+
+        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+		{
+			dataCube.setTitle( "t" + t + "-processed" );
+			dataCube.show();
+		}
+
+		return dataCube;
+    }
+
+    private int adaptCurrentTimePoint( int tMax, int tNow )
+    {
+        if( tNow >= tMax ) {
+			// due to the sub-sampling in t the addition of dt
+			// can cause the frame to be outside of
+			// the tracking range => load the last frame
+			tNow = tMax;
+			finish = true;
+		}
+        return tNow;
+    }
+
+    private ImagePlus filterDataCube( ImagePlus imp0 )
+    {
+        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
+        imp0 = imageFilter.filter( imp0 );
+        return imp0;
+    }
+
+    private ImagePlus readDataCube( Point3D p0offset, Point3D regionSize, ImagePlus imp )
+    {
+        ImagePlus imp0;
+        startTime = System.currentTimeMillis();
+        Region5D region5D = new Region5D();
+        region5D.t = tStart;
+        region5D.c = channel;
+        region5D.offset = p0offset;
+        region5D.size = regionSize;
+        region5D.subSampling = trackingSettings.subSamplingXYZ;
+        imp0 = Utils.getDataCube( imp, region5D, numIOThreads );
+        elapsedReadingTime = System.currentTimeMillis() - startTime;
+        return imp0;
+    }
+
+    private Point3D getRegionSize( Track track, ImagePlus imp )
+    {
+        Point3D regionSize = track.getObjectSize();
+        regionSize = correctFor2D( regionSize, imp, 1 );
+        return regionSize;
     }
 
     private void publishResult(ImagePlus imp, Track track, TrackTable trackTable, Logger logger, Point3D location,
@@ -376,9 +295,11 @@ class CenterOfMassTracker implements Runnable
 
 
 
-    private Point3D compute16bitShiftUsingIterativeCenterOfMass(ImageStack stack,
-                                                                double trackingFactor,
-                                                                int iterations) {
+    private Point3D compute16bitShiftUsingIterativeCenterOfMass(
+            ImageStack stack,
+            double trackingFactor,
+            int iterations) {
+
         Point3D pMin, pMax;
 
         // compute stack center and tracking radii

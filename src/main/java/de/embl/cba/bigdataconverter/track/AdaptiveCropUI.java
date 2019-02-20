@@ -16,13 +16,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static de.embl.cba.bigdataconverter.track.ObjectTracker.CENTER_OF_MASS;
-import static de.embl.cba.bigdataconverter.track.ObjectTracker.CORRELATION;
-
 public class AdaptiveCropUI implements ActionListener, FocusListener
 {
 
-    Point3D maxDisplacement = new Point3D(20,20,20);
+	public static final String CORRELATION = "Correlation";
+	public static final String CENTER_OF_MASS = "Center of Mass";
+
+	Point3D maxDisplacement = new Point3D(20,20,20);
     private String resizeFactor = "1.0";
     AdaptiveCrop adaptiveCrop;
     TrackTablePanel trackTablePanel;

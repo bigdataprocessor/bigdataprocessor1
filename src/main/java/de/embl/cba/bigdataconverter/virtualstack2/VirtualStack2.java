@@ -689,7 +689,8 @@ public class VirtualStack2 extends VirtualStack {
 
         if( ! Utils.checkMemoryRequirements( numPixels, bitDepth, numStacks) ) return( null );
 
-        ImagePlus loaded = loadDataCube( region5D.c, region5D.t, oxLoaded, oyLoaded, ozLoaded, sxLoaded, syLoaded, szLoaded, dz, nThreads );
+        ImagePlus loaded = loadDataCube( region5D.c, region5D.t,
+                oxLoaded, oyLoaded, ozLoaded, sxLoaded, syLoaded, szLoaded, dz, nThreads );
 
         ImagePlus requested = createStackOfRequestedSize( loaded, fi, dz, ox, oy, oz, sx, sy, sz  );
 
@@ -741,11 +742,12 @@ public class VirtualStack2 extends VirtualStack {
             else
             {
                 // the loaded stack is smaller than the requested ( because oob pixels where requested )
-                final int finalStackOffsetX = oxRequested < 0 ? oxRequested : 0;
-                final int finalStackOffsetY = oyRequested < 0 ? oyRequested : 0;
-                final int finalStackOffsetZ = ( ozRequested < 0 ? ozRequested : 0 ) / dz;
+                final int finalStackOffsetX = oxRequested < 0 ? -oxRequested : 0;
+                final int finalStackOffsetY = oyRequested < 0 ? -oyRequested : 0;
+                final int finalStackOffsetZ = ( ozRequested < 0 ? -ozRequested : 0 ) / dz;
 
-                ImageStack requestedStack = ImageStack.create( sxRequested, syRequested, szRequested, fi.bytesPerPixel * 8 );
+                ImageStack requestedStack = ImageStack.create(
+                        sxRequested, syRequested, szRequested, fi.bytesPerPixel * 8 );
 
                 ImageStack loadedStack = impLoaded.getStack();
 

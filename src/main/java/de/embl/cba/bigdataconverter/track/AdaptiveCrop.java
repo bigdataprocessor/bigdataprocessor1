@@ -50,7 +50,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static de.embl.cba.bigdataconverter.track.ObjectTracker.CORRELATION;
+import static de.embl.cba.bigdataconverter.track.AdaptiveCropUI.CENTER_OF_MASS;
+import static de.embl.cba.bigdataconverter.track.AdaptiveCropUI.CORRELATION;
 
 
 public class AdaptiveCrop
@@ -271,8 +272,16 @@ public class AdaptiveCrop
 
         if ( trackingSettings.trackingMethod.equals( CORRELATION ) )
         {
-            CorrelationTracker objectTracker = new CorrelationTracker(this, trackingSettings, logger, 1);
-            es.execute( objectTracker );
+            CorrelationTracker correlationTracker =
+                    new CorrelationTracker(
+                    this, trackingSettings, logger, 1 );
+            es.execute( correlationTracker );
+        }
+        else if ( trackingSettings.trackingMethod.equals( CENTER_OF_MASS ) )
+        {
+            final CenterOfMassTracker centerOfMassTracker =
+                    new CenterOfMassTracker( this, trackingSettings, logger, 1 );
+            es.execute( centerOfMassTracker );
         }
 
     }
