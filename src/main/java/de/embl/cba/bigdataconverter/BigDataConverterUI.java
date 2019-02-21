@@ -144,6 +144,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     private JTabbedPane tabbedPane;
     private JTextField inputFolderTF;
     private String inputFolder;
+    private JLabel rowsPerStripLabel;
 
     public void showDialog()
     {
@@ -226,28 +227,61 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         savingPanel.add(new JLabel("Save as:"));
         savingPanel.add(comboFileTypeForSaving);
 
-        savingPanel.add(new JLabel("Binning [pixels]: x1,y1,z1"));
+        savingPanel.add(new JLabel( " " ));
+        final JCheckBox binning = new JCheckBox( "Binning" );
+        savingPanel.add( binning );
+        final JLabel labelBinning = new JLabel( "Binning [pixels]: x1,y1,z1" );
+        savingPanel.add( labelBinning );
         savingPanel.add(tfBinning);
+        labelBinning.setVisible( false );
+        tfBinning.setVisible( false );
+        binning.addItemListener( e -> {
+            labelBinning.setVisible( binning.isSelected() );
+            tfBinning.setVisible( binning.isSelected() );
+        } );
 
         savingPanel.add(cbLZW);
+        cbLZW.addItemListener( e -> {
+			tfRowsPerStrip.setVisible( cbLZW.isSelected() );
+            rowsPerStripLabel.setVisible( cbLZW.isSelected()  );
+			savingPanel.invalidate();
+			savingPanel.validate();
+		} );
         savingPanel.add(new JLabel( " " ));
         cbLZW.setSelected(false);
-        savingPanel.add(new JLabel( "LZW rows per strip [#]" ));
+        rowsPerStripLabel = new JLabel( "LZW rows per strip [#]" );
+        savingPanel.add( rowsPerStripLabel );
         savingPanel.add(tfRowsPerStrip);
+        tfRowsPerStrip.setVisible( false );
+        rowsPerStripLabel.setVisible( false );
 
         savingPanel.add(cbConvertTo8Bit);
         savingPanel.add(new JLabel( " " ));
-        savingPanel.add(new JLabel("255 ="));
+        final JLabel label255 = new JLabel( "255 =" );
+        savingPanel.add(label255);
         savingPanel.add(tfMapTo255);
-        savingPanel.add(new JLabel("0 ="));
+        final JLabel label0 = new JLabel( "0 =" );
+        savingPanel.add(label0);
         savingPanel.add(tfMapTo0);
+        label0.setVisible( false );
+        label255.setVisible( false );
+        tfMapTo255.setVisible( false );
+        tfMapTo0.setVisible( false );
+        cbConvertTo8Bit.addItemListener( e -> {
+            label0.setVisible( cbConvertTo8Bit.isSelected() );
+            label255.setVisible( cbConvertTo8Bit.isSelected() );
+            tfMapTo255.setVisible( cbConvertTo8Bit.isSelected() );
+            tfMapTo0.setVisible( cbConvertTo8Bit.isSelected() );
+        } );
 
-        savingPanel.add(new JLabel( " " ));
+
+
         savingPanel.add(cbSaveVolume);
-        cbSaveVolume.setSelected(true);
         savingPanel.add(new JLabel( " " ));
         savingPanel.add(cbSaveProjection);
+        savingPanel.add(new JLabel( " " ));
         cbSaveProjection.setSelected(false);
+        cbSaveVolume.setSelected(true);
 
         savingPanel.add(new JLabel( " " ));
         savingPanel.add(save);
@@ -261,7 +295,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
 
         SpringUtilities.makeCompactGrid(
                 savingPanel,
-                11, 2, //rows, cols
+                12, 2, //rows, cols
                 6, 6, //initX, initY
                 6, 6); //xPad, yPad
 
