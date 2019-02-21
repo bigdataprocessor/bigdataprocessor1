@@ -22,10 +22,11 @@ public class TrackingSettings {
     public int channel;
     public double trackingFactor; // not used
 
+
+    public boolean processImage;
     public int[] intensityGate;
     public int showProcessedRegions;
-    public String imageFeatureEnhancement;
-
+    public String imageFilterChoice;
 
 
 }

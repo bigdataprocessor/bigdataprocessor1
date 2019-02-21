@@ -55,18 +55,18 @@ public class CorrelationTracker implements Runnable
     {
         // filter image (for improving the correlation)
         //
-        if ( trackingSettings.imageFeatureEnhancement
+        if ( trackingSettings.imageFilterChoice
                 .equals( Utils.ImageFilterTypes.NONE.toString() ) )
         {
             imageFilter = new NoFilter();
         }
-        else if ( trackingSettings.imageFeatureEnhancement
+        else if ( trackingSettings.imageFilterChoice
                 .equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
         {
             imageFilter = new VarianceFilter( 2.0F );
             logger.info("Image will be variance filtered.");
         }
-        else if ( trackingSettings.imageFeatureEnhancement.
+        else if ( trackingSettings.imageFilterChoice.
                 equals(Utils.ImageFilterTypes.THRESHOLD.toString()) )
         {
             // TODO: probably some auto-local threshold works better?
@@ -90,6 +90,7 @@ public class CorrelationTracker implements Runnable
         channel = trackingSettings.channel;
         nt = trackingSettings.nt;
         dt = trackingSettings.subSamplingT;
+        iProcessed = 0;
 
         Point3D pStart = new Point3D(
                 trackingSettings.trackStartROI.getXBase(),
@@ -97,28 +98,15 @@ public class CorrelationTracker implements Runnable
                 trackingSettings.trackStartROI.getImage().getZ() - 1);
 
         TrackTable trackTable = adaptiveCrop.getTrackTable();
-        ImagePlus imp = trackingSettings.imp;
+        ImagePlus inputImage = trackingSettings.imp;
 
-        regionSize = getRegionSize( track, imp );
-        p0offset = Utils.computeOffsetFromCenterSize( pStart, regionSize );
+        regionSize = getRegionSize( track, inputImage );
         p0center = pStart;
-        imp0 = readDataCube( p0offset, regionSize, imp );
-        imp0 = filterDataCube( imp0 );
-
-        elapsedProcessingTime = 0;
-        publishResult(imp, track, trackTable, logger, p0center, tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime );
+        publishResult(inputImage, track, trackTable, logger, p0center, tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime );
 
         finish = false;
         int tMax = tStart + nt - 1;
         int tPrevious = tStart;
-        iProcessed = 0;
-
-        if( iProcessed++ < trackingSettings.showProcessedRegions )
-        {
-            imp0.setTitle( "t" + tStart + "-processed" );
-            imp0.show();
-        }
-
 
         //  Important notes for the logic:
         //  - p0offset has to be the position where the previous images was loaded
@@ -136,19 +124,19 @@ public class CorrelationTracker implements Runnable
             p1offset = p0offset;
             p1center = p0center.add( shift );
 
-            imp0 = loadAndProcessDataCube( p0offset, regionSize, imp, tPrevious );
-            imp1 = loadAndProcessDataCube( p1offset, regionSize, imp, tCurrent );
+            imp0 = loadAndProcessDataCube( p0offset, regionSize, inputImage, tPrevious );
+            imp1 = loadAndProcessDataCube( p1offset, regionSize, inputImage, tCurrent );
 
             shift = computeShift( imp0, imp1 );
 
             shift = correctForSubSampling( shift );
 
-            shift = correctFor2D( shift, imp, 0 );
+            shift = correctFor2D( shift, inputImage, 0 );
 
             if( logger.isShowDebug() )
                 logger.info("actual final shift " + shift.toString());
 
-            computeIntermediateTimePoints( shift, trackTable, imp, tPrevious, tCurrent );
+            computeIntermediateTimePoints( shift, trackTable, inputImage, tPrevious, tCurrent );
 
             tPrevious = tCurrent;
             p0center = p1center;
@@ -213,17 +201,27 @@ public class CorrelationTracker implements Runnable
         region5D.subSampling = trackingSettings.subSamplingXYZ;
 
         ImagePlus dataCube = Utils.getDataCube( imp, region5D, numIOThreads );
-        Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
         elapsedReadingTime = System.currentTimeMillis() - startTime;
-        dataCube = imageFilter.filter( dataCube );
 
-        if( iProcessed++ < trackingSettings.showProcessedRegions )
-		{
-			dataCube.setTitle( "t" + t + "-processed" );
-			dataCube.show();
-		}
+        dataCube = processDataCube( t, dataCube );
 
-		return dataCube;
+        return dataCube;
+    }
+
+    private ImagePlus processDataCube( int t, ImagePlus dataCube )
+    {
+        if ( trackingSettings.processImage )
+        {
+            Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
+            dataCube = imageFilter.filter( dataCube );
+
+            if ( iProcessed++ < trackingSettings.showProcessedRegions )
+            {
+                dataCube.setTitle( "t" + t + "-processed" );
+                dataCube.show();
+            }
+        }
+        return dataCube;
     }
 
     private int adaptCurrentTimePoint( int tMax, int tNow )
@@ -238,27 +236,6 @@ public class CorrelationTracker implements Runnable
         return tNow;
     }
 
-    private ImagePlus filterDataCube( ImagePlus imp0 )
-    {
-        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
-        imp0 = imageFilter.filter( imp0 );
-        return imp0;
-    }
-
-    private ImagePlus readDataCube( Point3D p0offset, Point3D regionSize, ImagePlus imp )
-    {
-        ImagePlus imp0;
-        startTime = System.currentTimeMillis();
-        Region5D region5D = new Region5D();
-        region5D.t = tStart;
-        region5D.c = channel;
-        region5D.offset = p0offset;
-        region5D.size = regionSize;
-        region5D.subSampling = trackingSettings.subSamplingXYZ;
-        imp0 = Utils.getDataCube( imp, region5D, numIOThreads );
-        elapsedReadingTime = System.currentTimeMillis() - startTime;
-        return imp0;
-    }
 
     private Point3D getRegionSize( Track track, ImagePlus imp )
     {

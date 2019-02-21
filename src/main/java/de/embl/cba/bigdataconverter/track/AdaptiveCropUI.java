@@ -35,7 +35,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     String[] texts = {
             "Region Size: x,y,z [pixels]",
             "Maximal Displacement between Frames: x,y,z [pixels]",
-            "Down-sample: dx, dy, dz, dt [pixels, frames]",
+            "Subsample: dx, dy, dz, dt [pixels, frames]",
             "Track Length [frames]",
             "Resize Tracked Regions [factor]"
     };
@@ -52,12 +52,9 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
 
     };
     
-    String[] comboNames = {
+    String[] comboNames = { "Tracking Method" };
 
-            "Tracking Method"
-    };
-
-    String[][] comboChoices = new String[2][];
+    String[][] comboChoices = new String[1][];
 
     JTextField[] textFields = new JTextField[texts.length];
 
@@ -77,6 +74,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     private JTextField intensityGatingTF;
     private JTextField showProcessedRegionsTF;
     private JComboBox imageFilterChoice;
+    private JCheckBox processTrackedRegion;
 
     public AdaptiveCropUI()
     {
@@ -85,6 +83,8 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         trackTablePanel = new TrackTablePanel(
                 adaptiveCrop.getTrackTable(),
                 adaptiveCrop.getTracks());
+
+        comboChoices[0] = new String[]{ CENTER_OF_MASS, CORRELATION };
     }
 
     private void configureDefaultTrackingSettings()
@@ -97,7 +97,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         trackingSettings.nt = 3;
         trackingSettings.intensityGate = new int[]{-1,-1};
         trackingSettings.showProcessedRegions = 3;
-        trackingSettings.imageFeatureEnhancement = Utils.ImageFilterTypes.NONE.toString();
+        trackingSettings.imageFilterChoice = Utils.ImageFilterTypes.NONE.toString();
     }
 
     public void setTextFieldDefaults()
@@ -130,22 +130,20 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         configureDefaultTrackingSettings();
 
 //        configureToolTips();
-//        configureTextFields();
-//        configureButtons();
-//        configureComboBoxes();
+        configureTextFields();
+        configureButtons();
+        configureComboBoxes();
 
-        addProcessingUI();
-
-        panels = new ArrayList<JPanel>();
-//        configureTrackingPanel();
-//        configureTrackingTablePanel();
-//        configureViewingPanel();
+        panels = new ArrayList<>();
+        addTrackingPanel();
+        addTrackingTablePanel();
+        addViewingPanel();
 
         return mainPanel;
 
     }
 
-    private void addProcessingUI()
+    private void addProcessingPanel()
     {
         final JPanel panel = new JPanel( new SpringLayout() );
 
@@ -167,7 +165,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         final JLabel showProcessedRegionsLabel = new JLabel( "Show Processed Regions [#]" );
         showProcessedRegionsLabel.setVisible( false );
 
-        final JCheckBox processTrackedRegion = new JCheckBox( "Process Tracked Region" );
+        processTrackedRegion = new JCheckBox( "Process Tracked Region" );
         processTrackedRegion.addItemListener( e -> {
             final boolean selected = processTrackedRegion.isSelected();
             intensityGatingLabel.setVisible( selected );
@@ -207,7 +205,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     }
 
 
-    private void configureViewingPanel()
+    private void addViewingPanel()
     {
         mainPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
@@ -217,11 +215,11 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
         panels.get( iPanel ).add(labels[ iTextField ]);
         panels.get( iPanel ).add(textFields[ iTextField++]);
-        panels.get( iPanel ).add( buttons[ iButton++]);
-        mainPanel.add( panels.get( iPanel++));
+        panels.get( iPanel ).add(buttons[ iButton++]);
+        mainPanel.add( panels.get(iPanel++));
     }
 
-    private void configureTrackingTablePanel()
+    private void addTrackingTablePanel()
     {
         mainPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
@@ -235,7 +233,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         mainPanel.add( panels.get( iPanel++));
     }
 
-    private void configureTrackingPanel()
+    private void addTrackingPanel()
     {
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
         panels.get( iPanel ).add(new JLabel("TRACKING"));
@@ -262,26 +260,14 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         panels.get( iPanel ).add(labels[ iTextField ]);
         panels.get( iPanel ).add(textFields[ iTextField++]);
         mainPanel.add( panels.get( iPanel++));
-        // Intensity gating
-        panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
-        panels.get( iPanel ).add(labels[ iTextField ]);
-        panels.get( iPanel ).add(textFields[ iTextField++]);
-        mainPanel.add( panels.get( iPanel++));
-        // Enhance features
-        panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
-        panels.get( iPanel ).add( comboLabels[ iComboBox ]);
-        panels.get( iPanel ).add( comboBoxes[ iComboBox++]);
-        mainPanel.add( panels.get( iPanel++));
-        // View processed tracked region
-        panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
-        panels.get( iPanel ).add(labels[ iTextField ]);
-        panels.get( iPanel ).add(textFields[ iTextField++]);
-        mainPanel.add( panels.get( iPanel++));
         // Tracking Method
         panels.add(new JPanel(new FlowLayout(FlowLayout.RIGHT)));
         panels.get( iPanel ).add( comboLabels[ iComboBox ]);
         panels.get( iPanel ).add( comboBoxes[ iComboBox++]);
         mainPanel.add( panels.get( iPanel++));
+
+        addProcessingPanel();
+
         // Tracking Buttons
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
         panels.get( iPanel ).add( buttons[ iButton++]);
@@ -422,8 +408,10 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             // configure tracking
             //
 
+            trackingSettings.processImage = processTrackedRegion.isSelected();
             trackingSettings.intensityGate = Utils.delimitedStringToIntegerArray( intensityGatingTF.getText(), ",");
             trackingSettings.showProcessedRegions = new Integer( showProcessedRegionsTF.getText() );
+            trackingSettings.imageFilterChoice = (String) imageFilterChoice.getSelectedItem();
 
             trackingSettings.imp = imp;
 
@@ -532,22 +520,6 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             JTextField source = (JTextField) e.getSource();
             trackingSettings.nt = new Integer(source.getText());
         }
-        else if ( e.getActionCommand().equals(texts[k++]) )
-        {
-            //
-            // Image intensityGate value
-            //
-            JTextField source = (JTextField) e.getSource();
-            trackingSettings.intensityGate = Utils.delimitedStringToIntegerArray( source.getText(), ",");
-        }
-        else if ( e.getActionCommand().equals(texts[k++]) )
-        {
-            //
-            // Show processed image regions
-            //
-            JTextField source = (JTextField) e.getSource();
-            trackingSettings.showProcessedRegions = new Integer(source.getText());;
-        }
         else if (e.getActionCommand().equals(texts[k++]))
         {
             //
@@ -556,16 +528,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             JTextField source = (JTextField) e.getSource();
             resizeFactor = source.getText();
         }
-        else if ( e.getActionCommand().equals( comboNames[0]) )
-        {
-            //
-            // Image feature enhancement method
-            //
-            JComboBox cb = (JComboBox)e.getSource();
-            trackingSettings.imageFeatureEnhancement = (String) cb.getSelectedItem();
-            int a = 1;
-        }
-        else if ( e.getActionCommand().equals( comboNames[1]) )
+        else if ( e.getActionCommand().equals( comboNames[ 0 ]) )
         {
             //
             // ObjectTracker method

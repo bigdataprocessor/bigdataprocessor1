@@ -53,18 +53,18 @@ public class CenterOfMassTracker implements Runnable
 
     private void setImageFilter( TrackingSettings trackingSettings, Logger logger )
     {
-        if ( trackingSettings.imageFeatureEnhancement
+        if ( trackingSettings.imageFilterChoice
                 .equals( Utils.ImageFilterTypes.NONE.toString() ) )
         {
             imageFilter = new NoFilter();
         }
-        else if ( trackingSettings.imageFeatureEnhancement
+        else if ( trackingSettings.imageFilterChoice
                 .equals(Utils.ImageFilterTypes.VARIANCE.toString()) )
         {
             imageFilter = new VarianceFilter( 2.0F );
             logger.info("Image will be variance filtered.");
         }
-        else if ( trackingSettings.imageFeatureEnhancement.
+        else if ( trackingSettings.imageFilterChoice.
                 equals(Utils.ImageFilterTypes.THRESHOLD.toString()) )
         {
             // TODO: probably some auto-local threshold works better?
@@ -85,6 +85,8 @@ public class CenterOfMassTracker implements Runnable
         channel = trackingSettings.channel;
         nt = trackingSettings.nt;
         dt = trackingSettings.subSamplingT;
+        iProcessed = 0;
+
 
         Point3D pStart = new Point3D(
                 trackingSettings.trackStartROI.getXBase(),
@@ -92,9 +94,9 @@ public class CenterOfMassTracker implements Runnable
                 trackingSettings.trackStartROI.getImage().getZ() - 1);
 
         TrackTable trackTable = adaptiveCrop.getTrackTable();
-        ImagePlus imp = trackingSettings.imp;
+        ImagePlus currentDataCube = trackingSettings.imp;
 
-        regionSize = getRegionSize( track, imp );
+        regionSize = getRegionSize( track, currentDataCube );
 
         // we need to load the bigger region, because this is what will also be
         // loaded for the subsequent time-points; and - without aggressive
@@ -104,26 +106,19 @@ public class CenterOfMassTracker implements Runnable
 
         pOffset = Utils.computeOffsetFromCenterSize( pStart, regionSize );
         pCenter = pStart;
-        imp = readDataCube( pOffset, regionSize, imp );
-        imp = filterDataCube( imp );
 
-        pShift = compute16bitShiftUsingIterativeCenterOfMass( imp.getStack(),
+        currentDataCube = loadAndProcessDataCube( pOffset, regionSize, trackingSettings.imp, tStart );
+
+        pShift = compute16bitShiftUsingIterativeCenterOfMass( currentDataCube.getStack(),
                 trackingSettings.trackingFactor,
                 trackingSettings.iterationsCenterOfMass);
 
-        publishResult( imp, track, trackTable, logger,
+        publishResult( trackingSettings.imp, track, trackTable, logger,
                 pCenter.add( pShift ), tStart, nt, dt, elapsedReadingTime, elapsedProcessingTime );
 
         finish = false;
         int tMax = tStart + nt - 1;
         int tPrevious = tStart;
-        iProcessed = 0;
-
-        if( iProcessed++ < trackingSettings.showProcessedRegions )
-        {
-            imp.setTitle( "t" + tStart + "-processed" );
-            imp.show();
-        }
 
         for ( int tCurrent = tStart + dt; tCurrent < tStart + nt + dt; tCurrent = tCurrent + dt ) {
 
@@ -134,19 +129,19 @@ public class CenterOfMassTracker implements Runnable
             pCenter = pCenter.add( pShift );
             pOffset = Utils.computeOffsetFromCenterSize( pCenter, regionSize );
 
-            imp = loadAndProcessDataCube( pOffset, regionSize, imp, tCurrent );
+            currentDataCube = loadAndProcessDataCube( pOffset, regionSize, trackingSettings.imp, tCurrent );
 
-            pShift = compute16bitShiftUsingIterativeCenterOfMass( imp.getStack(),
+            pShift = compute16bitShiftUsingIterativeCenterOfMass( currentDataCube.getStack(),
                     trackingSettings.trackingFactor, trackingSettings.iterationsCenterOfMass );
 
             pShift = correctForSubSampling( pShift );
 
-            pShift = correctFor2D( pShift, imp, 0 );
+            pShift = correctFor2D( pShift, currentDataCube, 0 );
 
             if( logger.isShowDebug() )
                 logger.info("actual final shift " + pShift.toString());
 
-            computeIntermediateTimePoints( pShift, trackTable, imp, tPrevious, tCurrent );
+            computeIntermediateTimePoints( pShift, trackTable, trackingSettings.imp, tPrevious, tCurrent );
 
             tPrevious = tCurrent;
 
@@ -212,15 +207,20 @@ public class CenterOfMassTracker implements Runnable
         region5D.subSampling = trackingSettings.subSamplingXYZ;
 
         ImagePlus dataCube = Utils.getDataCube( imp, region5D, numIOThreads );
-        Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
         elapsedReadingTime = System.currentTimeMillis() - startTime;
-        dataCube = imageFilter.filter( dataCube );
 
-        if( iProcessed++ < trackingSettings.showProcessedRegions )
-		{
-			dataCube.setTitle( "t" + t + "-processed" );
-			dataCube.show();
-		}
+        if ( trackingSettings.processImage )
+        {
+
+            Utils.applyIntensityGate( dataCube, trackingSettings.intensityGate );
+            dataCube = imageFilter.filter( dataCube );
+
+            if ( iProcessed++ < trackingSettings.showProcessedRegions )
+            {
+                dataCube.setTitle( "t" + t + "-processed" );
+                dataCube.show();
+            }
+        }
 
 		return dataCube;
     }
@@ -239,8 +239,13 @@ public class CenterOfMassTracker implements Runnable
 
     private ImagePlus filterDataCube( ImagePlus imp0 )
     {
-        Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
-        imp0 = imageFilter.filter( imp0 );
+
+        if ( trackingSettings.processImage )
+        {
+            Utils.applyIntensityGate( imp0, trackingSettings.intensityGate );
+            imp0 = imageFilter.filter( imp0 );
+        }
+
         return imp0;
     }
 
