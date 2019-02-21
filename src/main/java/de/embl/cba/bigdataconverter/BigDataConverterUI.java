@@ -152,7 +152,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         configureToolTips();
         initPanels();
         configureLoadingPanel();
-        configureChromaticShiftCorrectionPanel();
+        configureChannelShiftCorrectionPanel();
         configureCroppingPanel();
         configureAdaptiveCropPanel();
         configureSavingPanel();
@@ -201,7 +201,7 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         tabbedPane.add("Misc", miscPanel );
     }
 
-    private void configureChromaticShiftCorrectionPanel()
+    private void configureChannelShiftCorrectionPanel()
     {
         final JPanel colorShiftPanel = new JPanel();
         mainPanels.add( colorShiftPanel );

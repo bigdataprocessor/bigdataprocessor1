@@ -2,6 +2,7 @@ package de.embl.cba.bigdataconverter.track;
 
 import de.embl.cba.bigdataconverter.logging.IJLazySwingLogger;
 import de.embl.cba.bigdataconverter.logging.Logger;
+import de.embl.cba.bigdataconverter.utils.SpringUtilities;
 import de.embl.cba.bigdataconverter.utils.Utils;
 import ij.IJ;
 import ij.ImagePlus;
@@ -36,8 +37,6 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             "Maximal Displacement between Frames: x,y,z [pixels]",
             "Down-sample: dx, dy, dz, dt [pixels, frames]",
             "Track Length [frames]",
-            "Process Region: Intensity Gating [min, max]",
-            "Process Region: Show Regions [#]",
             "Resize Tracked Regions [factor]"
     };
 
@@ -54,7 +53,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     };
     
     String[] comboNames = {
-            "Process Region Filter",
+
             "Tracking Method"
     };
 
@@ -75,6 +74,9 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     private int iTextField;
     private int iComboBox;
     private ArrayList< JPanel > panels;
+    private JTextField intensityGatingTF;
+    private JTextField showProcessedRegionsTF;
+    private JComboBox imageFilterChoice;
 
     public AdaptiveCropUI()
     {
@@ -83,15 +85,6 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         trackTablePanel = new TrackTablePanel(
                 adaptiveCrop.getTrackTable(),
                 adaptiveCrop.getTracks());
-
-        String[] imageFilters = new String[ Utils.ImageFilterTypes.values().length];
-        for ( int i = 0; i < imageFilters.length; i++ )
-        {
-            imageFilters[i] = Utils.ImageFilterTypes.values()[i].toString();
-        }
-        comboChoices[0] = imageFilters;
-        comboChoices[1] = new String[]{ CORRELATION, CENTER_OF_MASS };
-
     }
 
     private void configureDefaultTrackingSettings()
@@ -103,7 +96,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         trackingSettings.subSamplingT = 1;
         trackingSettings.nt = 3;
         trackingSettings.intensityGate = new int[]{-1,-1};
-        trackingSettings.viewFirstNProcessedRegions = 3;
+        trackingSettings.showProcessedRegions = 3;
         trackingSettings.imageFeatureEnhancement = Utils.ImageFilterTypes.NONE.toString();
     }
 
@@ -123,7 +116,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
                 "" + trackingSettings.nt,
                 "" + trackingSettings.intensityGate[0] + "," +
                         trackingSettings.intensityGate[1],
-                "" + trackingSettings.viewFirstNProcessedRegions,
+                "" + trackingSettings.showProcessedRegions,
                 String.valueOf( resizeFactor )
         };
 
@@ -135,23 +128,82 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         mainPanel = new JPanel();
 
         configureDefaultTrackingSettings();
-        configureToolTips();
-        configureTextFields();
-        configureButtons();
-        configureComboBoxes();
 
-        iPanel = 0;
-        iButton = 0;
-        iTextField = 0;
-        iComboBox = 0;
+//        configureToolTips();
+//        configureTextFields();
+//        configureButtons();
+//        configureComboBoxes();
+
+        addProcessingUI();
 
         panels = new ArrayList<JPanel>();
-        configureTrackingPanel();
-        configureTrackingTablePanel();
-        configureViewingPanel();
+//        configureTrackingPanel();
+//        configureTrackingTablePanel();
+//        configureViewingPanel();
 
         return mainPanel;
 
+    }
+
+    private void addProcessingUI()
+    {
+        final JPanel panel = new JPanel( new SpringLayout() );
+
+        intensityGatingTF = new JTextField( 12 );
+        intensityGatingTF.setText("" + trackingSettings.intensityGate[0] + "," + trackingSettings.intensityGate[1]);
+        intensityGatingTF.setVisible( false );
+
+        final JLabel intensityGatingLabel = new JLabel( "Intensity Gating [min, max]" );
+        intensityGatingLabel.setVisible( false );
+
+        final JLabel imageFilterLabel = new JLabel( "Process Region Filter" );
+        imageFilterLabel.setVisible( false );
+        imageFilterChoice = new JComboBox( getImageFilters() );
+        imageFilterChoice.setVisible( false );
+
+        showProcessedRegionsTF = new JTextField( 12 );
+        showProcessedRegionsTF.setText( "3" );
+        showProcessedRegionsTF.setVisible( false );
+        final JLabel showProcessedRegionsLabel = new JLabel( "Show Processed Regions [#]" );
+        showProcessedRegionsLabel.setVisible( false );
+
+        final JCheckBox processTrackedRegion = new JCheckBox( "Process Tracked Region" );
+        processTrackedRegion.addItemListener( e -> {
+            final boolean selected = processTrackedRegion.isSelected();
+            intensityGatingLabel.setVisible( selected );
+			intensityGatingTF.setVisible( selected );
+			imageFilterChoice.setVisible( selected );
+            imageFilterLabel.setVisible( selected );
+			showProcessedRegionsLabel.setVisible( selected );
+            showProcessedRegionsTF.setVisible( selected );
+		} );
+
+        panel.add( processTrackedRegion );
+        panel.add( new JLabel("") );
+        panel.add( intensityGatingLabel );
+        panel.add( intensityGatingTF );
+        panel.add( imageFilterLabel );
+        panel.add( imageFilterChoice );
+        panel.add( showProcessedRegionsLabel );
+        panel.add( showProcessedRegionsTF );
+
+        SpringUtilities.makeCompactGrid(
+                panel,
+                4, 2,
+                6, 6,
+                6, 6);
+
+        mainPanel.add( panel );
+    }
+
+    private String[] getImageFilters()
+    {
+        String[] imageFilters = new String[ Utils.ImageFilterTypes.values().length];
+        for ( int i = 0; i < imageFilters.length; i++ )
+        {
+            imageFilters[i] = Utils.ImageFilterTypes.values()[i].toString();
+        }
+        return imageFilters;
     }
 
 
@@ -356,10 +408,6 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         else if (e.getActionCommand().equals(buttonActions[i++]))
         {
 
-            //
-            // track selected object
-            //
-
             // check roi
             //
             Roi roi = imp.getRoi();
@@ -373,6 +421,9 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             //
             // configure tracking
             //
+
+            trackingSettings.intensityGate = Utils.delimitedStringToIntegerArray( intensityGatingTF.getText(), ",");
+            trackingSettings.showProcessedRegions = new Integer( showProcessedRegionsTF.getText() );
 
             trackingSettings.imp = imp;
 
@@ -495,7 +546,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
             // Show processed image regions
             //
             JTextField source = (JTextField) e.getSource();
-            trackingSettings.viewFirstNProcessedRegions = new Integer(source.getText());;
+            trackingSettings.showProcessedRegions = new Integer(source.getText());;
         }
         else if (e.getActionCommand().equals(texts[k++]))
         {

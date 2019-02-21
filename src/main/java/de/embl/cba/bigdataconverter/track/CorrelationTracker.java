@@ -113,7 +113,7 @@ public class CorrelationTracker implements Runnable
         int tPrevious = tStart;
         iProcessed = 0;
 
-        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+        if( iProcessed++ < trackingSettings.showProcessedRegions )
         {
             imp0.setTitle( "t" + tStart + "-processed" );
             imp0.show();
@@ -217,7 +217,7 @@ public class CorrelationTracker implements Runnable
         elapsedReadingTime = System.currentTimeMillis() - startTime;
         dataCube = imageFilter.filter( dataCube );
 
-        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+        if( iProcessed++ < trackingSettings.showProcessedRegions )
 		{
 			dataCube.setTitle( "t" + t + "-processed" );
 			dataCube.show();

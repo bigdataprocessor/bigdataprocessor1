@@ -119,7 +119,7 @@ public class CenterOfMassTracker implements Runnable
         int tPrevious = tStart;
         iProcessed = 0;
 
-        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+        if( iProcessed++ < trackingSettings.showProcessedRegions )
         {
             imp.setTitle( "t" + tStart + "-processed" );
             imp.show();
@@ -216,7 +216,7 @@ public class CenterOfMassTracker implements Runnable
         elapsedReadingTime = System.currentTimeMillis() - startTime;
         dataCube = imageFilter.filter( dataCube );
 
-        if( iProcessed++ < trackingSettings.viewFirstNProcessedRegions )
+        if( iProcessed++ < trackingSettings.showProcessedRegions )
 		{
 			dataCube.setTitle( "t" + t + "-processed" );
 			dataCube.show();

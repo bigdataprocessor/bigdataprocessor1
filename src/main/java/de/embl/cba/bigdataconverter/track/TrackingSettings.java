@@ -23,7 +23,7 @@ public class TrackingSettings {
     public double trackingFactor; // not used
 
     public int[] intensityGate;
-    public int viewFirstNProcessedRegions;
+    public int showProcessedRegions;
     public String imageFeatureEnhancement;
 
 
