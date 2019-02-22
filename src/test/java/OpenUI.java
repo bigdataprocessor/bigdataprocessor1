@@ -1,4 +1,4 @@
-import de.embl.cba.bigdataconverter.BigDataConverterUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
 
 public class OpenUI
 {
@@ -8,7 +8,7 @@ public class OpenUI
         final net.imagej.ImageJ ij = new net.imagej.ImageJ();
         ij.ui().showUI();
 
-        BigDataConverterUI bigDataConverterUI = new BigDataConverterUI();
-        bigDataConverterUI.showDialog();
+        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
+        bigDataProcessorUI.showDialog();
     }
 }

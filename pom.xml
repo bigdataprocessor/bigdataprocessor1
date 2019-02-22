@@ -14,11 +14,11 @@
     </parent>
 
     <groupId>de.embl.cba</groupId>
-    <artifactId>fiji_plugin_bigDataConverter</artifactId>
+    <artifactId>fiji_plugin_bigDataProcessor</artifactId>
     <version>0.5.56</version>
 
-    <name>Fiji plugin for big image data</name>
-    <description>A plugin for big image data.</description>
+    <name>Fiji plugin for big image data inspection, processing and saving.</name>
+    <description>A plugin for big image data inspection, processing and saving..</description>
     <inceptionYear>2017</inceptionYear>
     <organization>
         <name>EMBL</name>
@@ -31,7 +31,7 @@
         </license>
     </licenses>
 
-    <url>https://github.com/tischi/fiji-plugin-bigDataConverter</url>
+    <url>https://github.com/tischi/fiji-plugin-bigDataProcessor</url>
 
     <build>
         <plugins>
@@ -70,10 +70,10 @@
     </contributors>
 
     <scm>
-        <connection>scm:git:git://github.com/embl-cba/fiji-plugin-bigDataConverter</connection>
-        <developerConnection>scm:git:git@github.com/embl-cba/fiji-plugin-bigDataConverter</developerConnection>
+        <connection>scm:git:git://github.com/embl-cba/fiji-plugin-bigDataProcessor</connection>
+        <developerConnection>scm:git:git@github.com/embl-cba/fiji-plugin-bigDataProcessor</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/embl-cba/fiji-plugin-bigDataConverter</url>
+        <url>https://github.com/embl-cba/fiji-plugin-bigDataProcessor</url>
     </scm>
 
     <mailingLists>
@@ -85,14 +85,14 @@
 
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/embl-cba/fiji-plugin-bigDataConverter/issues</url>
+        <url>https://github.com/embl-cba/fiji-plugin-bigDataProcessor/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>
     </ciManagement>
 
     <properties>
-        <package-name>de.embl.cba.bigdataconverter</package-name>
+        <package-name>de.embl.cba.bigdataprocessor</package-name>
         <license.licenseName>bsd_2</license.licenseName>
         <license.copyrightOwners>EMBL</license.copyrightOwners>
         <imagej.app.directory>/Applications/Fiji.app/</imagej.app.directory>
@@ -186,7 +186,6 @@
         </dependency>
 
     </dependencies>
-
 
     <distributionManagement>
         <repository>

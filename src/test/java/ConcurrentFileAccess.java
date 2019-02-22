@@ -1,6 +1,6 @@
-import de.embl.cba.bigdataconverter.utils.Region5D;
-import de.embl.cba.bigdataconverter.virtualstack2.VirtualStack2;
-import de.embl.cba.bigdataconverter.utils.Utils;
+import de.embl.cba.bigdataprocessor.utils.Region5D;
+import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
+import de.embl.cba.bigdataprocessor.utils.Utils;
 import javafx.geometry.Point3D;
 import net.imglib2.FinalInterval;
 

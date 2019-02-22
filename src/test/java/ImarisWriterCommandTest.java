@@ -1,5 +1,5 @@
-import de.embl.cba.bigdataconverter.BigDataConverter;
-import de.embl.cba.bigdataconverter.BigDataConverterUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessor;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
 import de.embl.cba.imaris.ImarisWriter;
 import de.embl.cba.imaris.ImarisWriterCommand;
 import ij.ImagePlus;
@@ -13,11 +13,11 @@ public class ImarisWriterCommandTest
 		final net.imagej.ImageJ ij = new net.imagej.ImageJ();
 		ij.ui().showUI();
 
-		final BigDataConverter bigDataConverter = new BigDataConverter();
+		final BigDataProcessor bigDataProcessor = new BigDataProcessor();
 
-		ImagePlus imp = bigDataConverter.openFromDirectory(
+		ImagePlus imp = bigDataProcessor.openFromDirectory(
 				ImarisWriter.class.getResource( "/tiff-nc2-nt2/" ).getFile(),
-				BigDataConverterUI.LOAD_CHANNELS_FROM_FOLDERS,
+				BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS,
 				".*",
 			 	"",
 			 	null,

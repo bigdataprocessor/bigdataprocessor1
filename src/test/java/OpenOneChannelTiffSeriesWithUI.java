@@ -1,6 +1,6 @@
-import de.embl.cba.bigdataconverter.track.AdaptiveCropUI;
-import de.embl.cba.bigdataconverter.BigDataConverter;
-import de.embl.cba.bigdataconverter.BigDataConverterUI;
+import de.embl.cba.bigdataprocessor.track.AdaptiveCropUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessor;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
 import ij.IJ;
 
 public class OpenOneChannelTiffSeriesWithUI
@@ -11,12 +11,12 @@ public class OpenOneChannelTiffSeriesWithUI
         final net.imagej.ImageJ ij = new net.imagej.ImageJ();
         ij.ui().showUI();
 
-        final BigDataConverter bigDataConverter = new BigDataConverter();
+        final BigDataProcessor bigDataProcessor = new BigDataProcessor();
         Thread t1 = new Thread(new Runnable() {
             public void run()
             {
-                final String directory = "/Users/tischer/Documents/fiji-plugin-bigdataconverter/src/test/resources/tiff-nc1-nt2-16bit";
-                bigDataConverter.openFromDirectory(
+                final String directory = "/Users/tischer/Documents/fiji-plugin-bigdataprocessor/src/test/resources/tiff-nc1-nt2-16bit";
+                bigDataProcessor.openFromDirectory(
                         directory,
                         "None",
                         ".*",
@@ -30,8 +30,8 @@ public class OpenOneChannelTiffSeriesWithUI
 
         IJ.wait(1000);
 
-        BigDataConverterUI bigDataConverterUI = new BigDataConverterUI();
-        bigDataConverterUI.showDialog();
+        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
+        bigDataProcessorUI.showDialog();
 
         AdaptiveCropUI adaptiveCropUI = new AdaptiveCropUI();
         adaptiveCropUI.getPanel();
