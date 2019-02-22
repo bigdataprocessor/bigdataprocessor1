@@ -176,7 +176,6 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
     private void configureMiscellaneousPanel()
     {
         final JPanel miscPanel = new JPanel();
-        mainPanels.add( miscPanel );
         setMainPanelLayout( miscPanel );
 
         miscPanel.add( new JLabel("I/O threads") );
@@ -203,19 +202,25 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
 
     private void configureChannelShiftCorrectionPanel()
     {
-        final JPanel colorShiftPanel = new JPanel();
-        mainPanels.add( colorShiftPanel );
-        setMainPanelLayout( colorShiftPanel );
+        final JPanel channelShiftPanel = new JPanel();
+        setMainPanelLayout( channelShiftPanel );
 
-        addPanel( new JLabel("Chromatic shifts in pixels for each channel [x,y,z; x,y,z; ...]:"), tfChromaticShifts, mainPanelIdx );
+        channelShiftPanel.add( new JLabel("Channel Shifts [pixels]:" ) );
+        channelShiftPanel.add( tfChromaticShifts );
 
-        panels.add(new JPanel());
+        channelShiftPanel.add( new JLabel( "" ) );
+        channelShiftPanel.add( applyShifts );
+
         applyShifts.setActionCommand( APPLY_SHIFTS );
         applyShifts.addActionListener(this);
-        panels.get( panelIdx ).add( applyShifts );
-        mainPanels.get( mainPanelIdx ).add( panels.get( panelIdx++));
 
-        tabbedPane.add("Channel Shift Correction", mainPanels.get( mainPanelIdx++));
+        SpringUtilities.makeCompactGrid(
+                channelShiftPanel,
+                2, 2,
+                6, 6,
+                6, 6);
+
+        tabbedPane.add("Channel Shift Correction", channelShiftPanel );
     }
 
     private void configureSavingPanel()
@@ -328,9 +333,9 @@ public class BigDataConverterUI extends JFrame implements ActionListener, FocusL
         final JPanel croppingPanel = new JPanel();
         setMainPanelLayout( croppingPanel );
 
-        addComponents( croppingPanel, new JLabel("x/y extend: "), new JLabel("from rectangle ROI") );
-        addComponents( croppingPanel, new JLabel("z-min, z-max [slices]:"), tfCropZMinMax );
-        addComponents( croppingPanel, new JLabel("t-min, t-max [frames]:"), tfCropTMinMax );
+        addComponents( croppingPanel, new JLabel("xMin, xMax, yMin, yMax: "), new JLabel("From rectangle ROI") );
+        addComponents( croppingPanel, new JLabel("zMin, zMax [slices]:"), tfCropZMinMax );
+        addComponents( croppingPanel, new JLabel("tMin, tMax [frames]:"), tfCropTMinMax );
         addComponents( croppingPanel, new JLabel(""), cropButton);
 
         cropButton.setActionCommand( CROP );

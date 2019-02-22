@@ -114,8 +114,6 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
                         (int) trackingSettings.subSamplingXYZ.getZ() + "," +
                         trackingSettings.subSamplingT,
                 "" + trackingSettings.nt,
-                "" + trackingSettings.intensityGate[0] + "," +
-                        trackingSettings.intensityGate[1],
                 "" + trackingSettings.showProcessedRegions,
                 String.valueOf( resizeFactor )
         };
@@ -204,12 +202,11 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
         return imageFilters;
     }
 
-
     private void addViewingPanel()
     {
         mainPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
-        panels.get( iPanel ).add(new JLabel("VIEW TRACKED OBJECTS"));
+        panels.get( iPanel ).add(new JLabel("VIEWING"));
         mainPanel.add( panels.get( iPanel++));
 
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
@@ -223,7 +220,7 @@ public class AdaptiveCropUI implements ActionListener, FocusListener
     {
         mainPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         panels.add(new JPanel(new FlowLayout(FlowLayout.LEFT)));
-        panels.get( iPanel ).add(new JLabel("TRACKING TABLE"));
+        panels.get( iPanel ).add(new JLabel("TRACKING REVIEW"));
         mainPanel.add( panels.get( iPanel++));
         // Table buttons
         panels.add(new JPanel(new FlowLayout(FlowLayout.CENTER)));
