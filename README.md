@@ -2,6 +2,7 @@
 
 ## Citation
 
+This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
 - Tischer, C. (2019) Big Data Processor, a Fiji plugin for big image data processing. http://doi.org/10.5281/zenodo.2574702
 
 ## Overview
