@@ -1,5 +1,9 @@
 # Big Data Processor
 
+## Citation
+
+- Tischer, C. (2019) Big Data Processor, a Fiji plugin for big image data processing. http://doi.org/10.5281/zenodo.2574702
+
 ## Overview
 
 The inspection and manipulation of TB sized image data as produced by light-sheet and electron microscopy poses a challenge, because loading the whole data set from disc into RAM is very time consuming or may not even be possible. Is is thus necessary to employ lazy-loading strategies that, e.g., only load the currently visible fraction of the data set into RAM (see e.g., Ref BigDataViewer).  
