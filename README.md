@@ -3,7 +3,7 @@
 ## Citation
 
 This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
-- Tischer, C., and Pepperkok, R. (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
+- Tischer, C., Norlin, N., and R. Pepperkok (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
 
 ## Overview
 
