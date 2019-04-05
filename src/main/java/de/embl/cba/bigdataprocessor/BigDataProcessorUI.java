@@ -644,7 +644,6 @@ public class BigDataProcessorUI extends JFrame implements ActionListener, FocusL
             } else {
                 logger.error("Could not open browser, please report issues here: \n" +
                         "https://github.com/embl-cba/fiji-plugin-bigDataProcessor/issues");
-
             }
 
         }

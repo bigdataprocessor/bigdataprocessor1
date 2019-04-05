@@ -87,7 +87,6 @@ public class CenterOfMassTracker implements Runnable
         dt = trackingSettings.subSamplingT;
         iProcessed = 0;
 
-
         Point3D pStart = new Point3D(
                 trackingSettings.trackStartROI.getXBase(),
                 trackingSettings.trackStartROI.getYBase(),

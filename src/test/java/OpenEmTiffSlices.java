@@ -10,21 +10,17 @@ public class OpenEmTiffSlices
         ij.ui().showUI();
 
         final BigDataProcessor bigDataProcessor = new BigDataProcessor();
-        Thread t1 = new Thread( new Runnable()
-        {
-            public void run()
-            {
-                final String directory = "/Users/tischer/Documents/fiji-plugin-bigdataprocessor/src/test/resources/em-tiff-slices";
-                bigDataProcessor.openFromDirectory(
-                        directory,
-                        BigDataProcessorUI.EM_TIFF_SLICES,
-                        ".*.tif",
-                        "",
-                        null,
-                        10,
-                        true,
-                        false );
-            }
+        Thread t1 = new Thread( () -> {
+            final String directory = "/Volumes/cba/exchange/paolo/compressed tif from fibsem";
+            bigDataProcessor.openFromDirectory(
+                    directory,
+                    BigDataProcessorUI.EM_TIFF_SLICES,
+                    ".*.tif",
+                    "",
+                    null,
+                    10,
+                    true,
+                    false );
         } );
         t1.start();
 
