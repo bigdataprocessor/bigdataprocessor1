@@ -1392,13 +1392,9 @@ public class BigDataProcessor
         int numSavingThreads = getNumSavingThreads( savingSettings );
 
         if ( savingSettings.fileType.equals( Utils.FileType.IMARIS ) )
-        {
             saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, getImarisDataSet( savingSettings ) );
-        }
         else
-        {
             saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, null );
-        }
 
     }
 

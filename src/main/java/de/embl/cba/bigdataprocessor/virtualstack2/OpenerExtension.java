@@ -35,6 +35,8 @@ import java.util.concurrent.Future;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
+
+// TODO: make extra classes for hdf5 reading
 class OpenerExtension extends Opener {
 
     // TODO: make it NOT an extension

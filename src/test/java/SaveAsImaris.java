@@ -5,8 +5,6 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.Duplicator;
 
-import java.util.ArrayList;
-
 public class SaveAsImaris
 {
     public static void main(String[] args)
