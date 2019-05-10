@@ -1398,7 +1398,10 @@ public class BigDataProcessor
 
     }
 
-    private void saveFilesForEachChannelAndTimePoint( SavingSettings savingSettings, int numSavingThreads, ImarisDataSet imarisDataSet )
+    private void saveFilesForEachChannelAndTimePoint(
+            SavingSettings savingSettings,
+            int numSavingThreads,
+            ImarisDataSet imarisDataSet )
     {
         // Save individual files for each channel and time-point
         //

@@ -1,7 +1,7 @@
 package de.embl.cba.bigdataprocessor.saving;
 
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
-import de.embl.cba.bigdataprocessor.hdf5.H5DataCubeWriter;
+import de.embl.cba.imaris.H5DataCubeWriter;
 import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
 import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
@@ -139,8 +139,19 @@ public class SaveVS2Frame implements Runnable {
                 if ( binningA[0] > 1 || binningA[1] > 1 || binningA[2] > 1 )
                 {
                     Binner binner = new Binner();
-                    impBinned = binner.shrink( impChannelTime, binningA[0], binningA[1], binningA[2], binner.AVERAGE );
-                    newPath = savingSettings.filePath + "--bin-" + binningA[0] + "-" + binningA[1] + "-" + binningA[2];
+                    impBinned = binner.shrink(
+                            impChannelTime,
+                            binningA[0],
+                            binningA[1],
+                            binningA[2],
+                            binner.AVERAGE );
+                    newPath = savingSettings.filePath
+                            + "--bin-"
+                            + binningA[0]
+                            + "-"
+                            + binningA[1]
+                            + "-"
+                            + binningA[2];
                 }
 
 
@@ -152,7 +163,10 @@ public class SaveVS2Frame implements Runnable {
                     //
                     if ( savingSettings.fileType.equals( Utils.FileType.TIFF_STACKS ) )
                     {
-                        saveAsTiff(impBinned, c, t, savingSettings.compression, savingSettings.rowsPerStrip, newPath);
+                        saveAsTiff( impBinned, c, t,
+                                savingSettings.compression,
+                                savingSettings.rowsPerStrip,
+                                newPath);
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.HDF5 ) )
                     {
@@ -161,12 +175,14 @@ public class SaveVS2Frame implements Runnable {
                     }
                     else if ( savingSettings.fileType.equals( Utils.FileType.IMARIS ) )
                     {
+
                         H5DataCubeWriter writer = new H5DataCubeWriter();
 
                         writer.writeImarisCompatibleResolutionPyramid(
                                 impBinned,
                                 imarisDataSetProperties,
-                                c, t );
+                                c,
+                                t );
 
                     }
 

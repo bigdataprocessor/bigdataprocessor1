@@ -1,4 +1,5 @@
-import de.embl.cba.bigdataprocessor.hdf5.H5DataCubeWriter;
+
+import de.embl.cba.imaris.H5DataCubeWriter;
 import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.imaris.ImarisWriter;
 import ij.IJ;
