@@ -239,15 +239,33 @@ public class SaveVS2Frame implements Runnable {
     {
         counter.incrementAndGet();
 
-        double minutesSpent = (int) (1.0 * System.currentTimeMillis() - startTime ) / (1000 * 60);
+        double minutesSpent =
+                ( 1.0 * System.currentTimeMillis() - startTime ) / ( 1000 * 60 );
         double minutesPerStack = minutesSpent / counter.get();
         double minutesLeft = (total - counter.get()) * minutesPerStack;
 
-        logger.progress("Saved file",
-                "" + counter.get() + "/" + total
-                        + "; time (spent, left) [min]: " + (int) minutesSpent + ", " + (int) minutesLeft
-                        + "; memory: "
-                        + IJ.freeMemory());
+        if ( minutesSpent > 3)
+        {
+            logger.progress( "Saved file",
+                    "" + counter.get() + "/" + total
+                            + "; time (spent, left, task) [min]: "
+                            + ( int ) minutesSpent
+                            + ", " + ( int ) minutesLeft
+                            + ", " + ( int ) ( minutesSpent / counter.get() )
+                            + "; memory: "
+                            + IJ.freeMemory() );
+        }
+        else
+        {
+            logger.progress( "Saved file",
+                    "" + counter.get() + "/" + total
+                            + "; time (spent, left, task) [sec]: "
+                            + ( int ) ( minutesSpent * 60 )
+                            + ", " + ( int ) ( minutesLeft * 60 )
+                            + ", " + ( int ) ( minutesSpent * 60 / counter.get() )
+                            + "; memory: "
+                            + IJ.freeMemory() );
+        }
     }
 
     public void saveAsTiffXYZMaxProjection(ImagePlus imp, int c, int t, String path)

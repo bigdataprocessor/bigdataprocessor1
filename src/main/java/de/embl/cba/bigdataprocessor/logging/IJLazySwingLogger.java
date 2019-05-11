@@ -143,14 +143,20 @@ public class IJLazySwingLogger implements Logger {
                 // Time
                 long milliseconds = ( System.currentTimeMillis() - startTime );
                 double minutes = 1.0 * milliseconds / ( 1000 * 60 );
-                double millisecondsPerTask = 1.0 * milliseconds / counter;
                 double minutesPerTask = 1.0 * minutes / counter;
                 long tasksLeft = counterMax - counter;
                 double minutesLeft = 1.0 * tasksLeft * minutesPerTask;
 
-                String timeInfo = String.format(
+                String timeInfo;
+                if ( minutes > 3 )
+                    timeInfo = String.format(
                         "Time (spent, to-go, per task) [min]: " +
                         "%.1f, %.1f, %.1f", minutes, minutesLeft, minutesPerTask);
+                else
+                    timeInfo = String.format(
+                        "Time (spent, to-go, per task) [seconds]: " +
+                                "%.1f, %.1f, %.1f", minutes * 60, minutesLeft * 60, minutesPerTask * 60);
+
 
                 // Memory
                 long megaBytes = IJ.currentMemory() / 1000000L;
@@ -168,12 +174,8 @@ public class IJLazySwingLogger implements Logger {
                 texts.add( memoryInfo );
 
                 if ( messages != null )
-                {
                     for ( String message : messages )
-                    {
                         texts.add( message );
-                    }
-                }
 
                 logProgress( header, texts );
 
@@ -189,9 +191,7 @@ public class IJLazySwingLogger implements Logger {
         String jointText = "";
 
         for ( String text : texts )
-        {
             jointText += text + "; ";
-        }
 
         int k = 1; //texts.size()
 

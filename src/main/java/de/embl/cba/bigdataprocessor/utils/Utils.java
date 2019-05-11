@@ -43,6 +43,10 @@ import ij.process.ImageProcessor;
 import javafx.geometry.Point3D;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -96,6 +100,17 @@ public class Utils {
         }
     }
 
+    public static void createFilePathParentDirectories( String filePath )
+    {
+        try
+        {
+            Files.createDirectories(
+                    Paths.get( new File( filePath ).getParent() ) );
+        } catch ( IOException e )
+        {
+            System.err.println( e );
+        }
+    }
 
     public enum ImageFilterTypes {
         NONE("No Filter"),

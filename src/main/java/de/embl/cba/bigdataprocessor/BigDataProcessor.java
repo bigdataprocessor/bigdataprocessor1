@@ -1348,7 +1348,7 @@ public class BigDataProcessor
 
     }
 
-    public void saveVS2AsTiffPlanes( SavingSettings savingSettings )
+    public void saveAsTiffPlanes( SavingSettings savingSettings )
     {
 
         interruptSavingThreads = false;
@@ -1386,15 +1386,22 @@ public class BigDataProcessor
 
     public void saveAsStacks( SavingSettings savingSettings )
     {
+        Utils.createFilePathParentDirectories( savingSettings.filePath );
 
         interruptSavingThreads = false;
 
         int numSavingThreads = getNumSavingThreads( savingSettings );
 
         if ( savingSettings.fileType.equals( Utils.FileType.IMARIS ) )
-            saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, getImarisDataSet( savingSettings ) );
+            saveFilesForEachChannelAndTimePoint(
+                    savingSettings,
+                    numSavingThreads,
+                    getImarisDataSet( savingSettings ) );
         else
-            saveFilesForEachChannelAndTimePoint( savingSettings, numSavingThreads, null );
+            saveFilesForEachChannelAndTimePoint(
+                    savingSettings,
+                    numSavingThreads,
+                    null );
 
     }
 

@@ -666,15 +666,22 @@ public class BigDataProcessorUI extends JFrame implements ActionListener, FocusL
         savingSettings.nThreads = new Integer(tfIOThreads.getText());
 
         bdc = new BigDataProcessor();
-        bdc.saveVS2AsTiffPlanes(savingSettings);
+        bdc.saveAsTiffPlanes(savingSettings);
     }
 
-    private void saveAsStacks( Utils.FileType fileType, File file, ImagePlus imp, int rowsPerStrip )
+    private void saveAsStacks(
+            Utils.FileType fileType,
+            File file,
+            ImagePlus imp,
+            int rowsPerStrip )
     {
         final int ioThreads = new Integer( tfIOThreads.getText() );
 
-        int safetyMargin = 3;
-        if( ! Utils.checkMemoryRequirements( imp, safetyMargin, Math.min(ioThreads, imp.getNFrames())) ) return;
+        int memorySafetyMargin = 3;
+        if( ! Utils.checkMemoryRequirements(
+                imp,
+                memorySafetyMargin,
+                Math.min(ioThreads, imp.getNFrames())) ) return;
 
         String compression = "";
         if( cbLZW.isSelected() ) compression="LZW";
