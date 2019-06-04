@@ -42,7 +42,7 @@ import ij.ImageStack;
 import ij.gui.Overlay;
 import ij.gui.Roi;
 import ij.process.ImageProcessor;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import java.util.ArrayList;
 import java.util.List;

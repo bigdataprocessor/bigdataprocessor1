@@ -33,8 +33,8 @@ public class SaveSingleChanneHdf5SeriesAsImaris
         SavingSettings savingSettings = new SavingSettings();
         savingSettings.imp = imagePlus;
         savingSettings.bin = "0,0,0";
-        savingSettings.saveVolume = true;
-        savingSettings.saveProjection = false;
+        savingSettings.saveVolumes = true;
+        savingSettings.saveProjections = false;
         savingSettings.convertTo8Bit = false;
         savingSettings.convertTo16Bit = false;
         savingSettings.gate = false;

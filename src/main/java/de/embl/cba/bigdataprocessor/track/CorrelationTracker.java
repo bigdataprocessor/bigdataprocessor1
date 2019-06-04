@@ -10,7 +10,7 @@ import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelationPeak;
 import mpicbg.imglib.image.ImagePlusAdapter;
@@ -136,7 +136,7 @@ public class CorrelationTracker implements Runnable
             if( logger.isShowDebug() )
                 logger.info("actual final shift " + shift.toString());
 
-            computeIntermediateTimePoints( shift, trackTable, inputImage, tPrevious, tCurrent );
+            interpolateSkippedTimePoints( shift, trackTable, inputImage, tPrevious, tCurrent );
 
             tPrevious = tCurrent;
             p0center = p1center;
@@ -154,7 +154,7 @@ public class CorrelationTracker implements Runnable
 
     }
 
-    private void computeIntermediateTimePoints( Point3D pShift, TrackTable trackTable, ImagePlus imp, int tPrevious, int tCurrent )
+    private void interpolateSkippedTimePoints( Point3D pShift, TrackTable trackTable, ImagePlus imp, int tPrevious, int tCurrent )
     {
         for ( int tUpdate = tPrevious + 1; tUpdate <= tCurrent; ++tUpdate )
 		{
@@ -168,9 +168,8 @@ public class CorrelationTracker implements Runnable
     private Point3D correctFor2D( Point3D pShift, ImagePlus imp, int z )
     {
         if ( imp.getNSlices() == 1 )
-        {
             pShift = new Point3D( pShift.getX(), pShift.getY(), z );
-        }
+
         return pShift;
     }
 

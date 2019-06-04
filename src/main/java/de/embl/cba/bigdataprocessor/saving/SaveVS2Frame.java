@@ -157,7 +157,7 @@ public class SaveVS2Frame implements Runnable {
 
                 // Save volume
                 //
-                if ( savingSettings.saveVolume )
+                if ( savingSettings.saveVolumes )
                 {
                     // Save
                     //
@@ -190,7 +190,7 @@ public class SaveVS2Frame implements Runnable {
 
                 // Save projections
                 // TODO: save into one single file
-                if ( savingSettings.saveProjection )
+                if ( savingSettings.saveProjections )
                 {
                     saveAsTiffXYZMaxProjection( impBinned, c, t, newPath );
                 }

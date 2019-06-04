@@ -34,7 +34,7 @@ import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
 import de.embl.cba.bigdataprocessor.logging.Logger;
 import ij.ImagePlus;
 import ij.gui.Roi;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import java.util.*;
 

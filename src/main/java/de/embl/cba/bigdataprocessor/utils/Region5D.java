@@ -1,6 +1,6 @@
 package de.embl.cba.bigdataprocessor.utils;
 
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 public class Region5D {
 

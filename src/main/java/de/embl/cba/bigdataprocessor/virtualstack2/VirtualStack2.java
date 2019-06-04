@@ -13,7 +13,7 @@ import ij.VirtualStack;
 import ij.gui.NewImage;
 import ij.io.FileSaver;
 import ij.process.ImageProcessor;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 import net.imglib2.FinalInterval;
 
 import java.io.File;

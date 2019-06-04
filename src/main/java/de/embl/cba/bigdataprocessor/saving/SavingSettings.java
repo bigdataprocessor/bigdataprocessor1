@@ -10,8 +10,8 @@ public class SavingSettings {
 
     public ImagePlus imp;
     public String bin;
-    public boolean saveVolume;
-    public boolean saveProjection;
+    public boolean saveVolumes;
+    public boolean saveProjections;
     public boolean convertTo8Bit;
     public int mapTo0, mapTo255;
     public boolean convertTo16Bit;

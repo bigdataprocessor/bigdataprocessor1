@@ -14,7 +14,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.gui.NonBlockingGenericDialog;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -654,8 +654,8 @@ public class BigDataProcessorUI extends JFrame implements ActionListener, FocusL
         SavingSettings savingSettings = new SavingSettings();
         savingSettings.imp = imp;
         savingSettings.bin = tfBinning.getText();
-        savingSettings.saveVolume = cbSaveVolume.isSelected();
-        savingSettings.saveProjection = cbSaveProjection.isSelected();
+        savingSettings.saveVolumes = cbSaveVolume.isSelected();
+        savingSettings.saveProjections = cbSaveProjection.isSelected();
         savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
         savingSettings.mapTo0 = Integer.parseInt(tfMapTo0.getText());
         savingSettings.mapTo255 = Integer.parseInt(tfMapTo255.getText());
@@ -689,8 +689,8 @@ public class BigDataProcessorUI extends JFrame implements ActionListener, FocusL
         SavingSettings savingSettings = new SavingSettings();
         savingSettings.imp = imp;
         savingSettings.bin = tfBinning.getText();
-        savingSettings.saveVolume = cbSaveVolume.isSelected();
-        savingSettings.saveProjection = cbSaveProjection.isSelected();
+        savingSettings.saveVolumes = cbSaveVolume.isSelected();
+        savingSettings.saveProjections = cbSaveProjection.isSelected();
         savingSettings.convertTo8Bit = cbConvertTo8Bit.isSelected();
         savingSettings.convertTo16Bit = cbConvertTo16Bit.isSelected();
         savingSettings.gate = cbGating.isSelected();

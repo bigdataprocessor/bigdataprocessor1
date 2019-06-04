@@ -10,7 +10,7 @@ import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelationPeak;
 import mpicbg.imglib.image.ImagePlusAdapter;
@@ -80,7 +80,7 @@ public class CenterOfMassTracker implements Runnable
         Point3D pShift;
         Point3D regionSize;
 
-        track = adaptiveCrop.addNewTrack(trackingSettings);
+        track = adaptiveCrop.addNewTrack( trackingSettings );
         tStart = trackingSettings.trackStartROI.getImage().getT() - 1;
         channel = trackingSettings.channel;
         nt = trackingSettings.nt;

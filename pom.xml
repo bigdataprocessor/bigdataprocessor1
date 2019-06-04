@@ -7,15 +7,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.scijava</groupId>
-        <artifactId>pom-scijava</artifactId>
-        <version>25.0.0</version>
-        <relativePath />
+        <groupId>de.embl.cba</groupId>
+        <artifactId>pom-embl-cba</artifactId>
+        <version>0.3.01</version>
+        <relativePath>../pom-embl-cba</relativePath>
     </parent>
 
     <groupId>de.embl.cba</groupId>
     <artifactId>fiji_plugin_bigDataProcessor</artifactId>
-    <version>0.5.59</version>
+    <version>0.6.00</version>
 
     <name>Fiji plugin for big image data inspection, processing and saving.</name>
     <description>A plugin for big image data inspection, processing and saving..</description>
@@ -96,7 +96,7 @@
         <license.licenseName>bsd_2</license.licenseName>
         <license.copyrightOwners>EMBL</license.copyrightOwners>
         <imagej.app.directory>/Applications/Fiji.app/</imagej.app.directory>
-        <enforcer.skip>true</enforcer.skip>
+        <enforcer.skip>false</enforcer.skip>
     </properties>
 
 
@@ -157,32 +157,8 @@
         </dependency>
 
         <dependency>
-            <groupId>ome</groupId>
-            <artifactId>formats-gpl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mpicbg</groupId>
-            <artifactId>imglib-algorithms</artifactId>
-            <version>2.0.0-beta6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>mpicbg</groupId>
-            <artifactId>imglib-ij</artifactId>
-            <version>2.0.0-beta6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.java.openjfx.backport</groupId>
-            <artifactId>openjfx-78-backport</artifactId>
-            <version>1.8.0-ea-b96.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>de.embl.cba</groupId>
             <artifactId>imaris-writer</artifactId>
-            <version>0.1.02</version>
         </dependency>
 
     </dependencies>

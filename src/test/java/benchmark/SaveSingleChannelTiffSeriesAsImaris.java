@@ -1,7 +1,6 @@
 package benchmark;
 
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
 import de.embl.cba.bigdataprocessor.saving.SavingSettings;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
@@ -34,8 +33,8 @@ public class SaveSingleChannelTiffSeriesAsImaris
         SavingSettings savingSettings = new SavingSettings();
         savingSettings.imp = imagePlus;
         savingSettings.bin = "0,0,0";
-        savingSettings.saveVolume = true;
-        savingSettings.saveProjection = false;
+        savingSettings.saveVolumes = true;
+        savingSettings.saveProjections = false;
         savingSettings.convertTo8Bit = false;
         savingSettings.convertTo16Bit = false;
         savingSettings.gate = false;

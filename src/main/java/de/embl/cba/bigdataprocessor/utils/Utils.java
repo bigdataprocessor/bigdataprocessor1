@@ -40,7 +40,7 @@ import ij.measure.Calibration;
 import ij.plugin.Binner;
 import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
-import javafx.geometry.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import java.awt.*;
 import java.io.File;
