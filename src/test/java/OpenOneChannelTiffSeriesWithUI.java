@@ -1,6 +1,6 @@
 import de.embl.cba.bigdataprocessor.track.AdaptiveCropUI;
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
 import ij.IJ;
 
 public class OpenOneChannelTiffSeriesWithUI
@@ -30,8 +30,8 @@ public class OpenOneChannelTiffSeriesWithUI
 
         IJ.wait(1000);
 
-        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
-        bigDataProcessorUI.showDialog();
+        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
+        bigDataProcessorUserInterface.showDialog();
 
         AdaptiveCropUI adaptiveCropUI = new AdaptiveCropUI();
         adaptiveCropUI.getPanel();

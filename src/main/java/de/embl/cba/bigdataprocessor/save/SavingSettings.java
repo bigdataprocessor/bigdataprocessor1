@@ -1,4 +1,4 @@
-package de.embl.cba.bigdataprocessor.saving;
+package de.embl.cba.bigdataprocessor.save;
 
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;

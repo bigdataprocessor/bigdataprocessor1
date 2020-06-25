@@ -1,8 +1,8 @@
 package de.embl.cba.bigdataprocessor.virtualstack2;
 
 import de.embl.cba.bigdataprocessor.utils.Region5D;
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ch.systemsx.cisd.hdf5.HDF5DataSetInformation;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
@@ -569,7 +569,6 @@ public class VirtualStack2 extends VirtualStack {
         imp = getDataCube( region5D, 1 );
 
         return imp.getProcessor();
-
     }
 
     public boolean isCropped() {

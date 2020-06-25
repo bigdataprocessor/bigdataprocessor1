@@ -31,8 +31,8 @@
 package de.embl.cba.bigdataprocessor.utils;
 
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
@@ -40,7 +40,6 @@ import ij.measure.Calibration;
 import ij.plugin.Binner;
 import ij.plugin.Duplicator;
 import ij.process.ImageProcessor;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import java.awt.*;
 import java.io.File;

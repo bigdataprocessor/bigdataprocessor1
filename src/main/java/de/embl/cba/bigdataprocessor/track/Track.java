@@ -30,8 +30,8 @@
 
 package de.embl.cba.bigdataprocessor.track;
 
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import ij.ImagePlus;
 import ij.gui.Roi;
 import de.embl.cba.bigdataprocessor.utils.Point3D;

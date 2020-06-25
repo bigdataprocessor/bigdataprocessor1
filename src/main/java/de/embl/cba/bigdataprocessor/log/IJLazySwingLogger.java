@@ -1,4 +1,4 @@
-package de.embl.cba.bigdataprocessor.logging;
+package de.embl.cba.bigdataprocessor.log;
 
 
 import javax.swing.*;

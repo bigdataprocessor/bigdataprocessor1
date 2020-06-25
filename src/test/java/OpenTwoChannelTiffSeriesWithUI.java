@@ -1,5 +1,5 @@
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
 import ij.IJ;
 
 public class OpenTwoChannelTiffSeriesWithUI
@@ -17,7 +17,7 @@ public class OpenTwoChannelTiffSeriesWithUI
                 final String directory = "/Users/tischer/Documents/fiji-plugin-bigdataprocessor/src/test/resources/tiff-nc2-nt2/";
                 bigDataProcessor.openFromDirectory(
                         directory,
-                        BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS,
+                        BigDataProcessorUserInterface.LOAD_CHANNELS_FROM_FOLDERS,
                         ".*",
                         "",
                         null,
@@ -29,8 +29,8 @@ public class OpenTwoChannelTiffSeriesWithUI
 
         IJ.wait(1000);
 
-        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
-        bigDataProcessorUI.showDialog();
+        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
+        bigDataProcessorUserInterface.showDialog();
 
     }
 

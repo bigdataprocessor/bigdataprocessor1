@@ -1,7 +1,7 @@
 package de.embl.cba.bigdataprocessor.track;
 
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

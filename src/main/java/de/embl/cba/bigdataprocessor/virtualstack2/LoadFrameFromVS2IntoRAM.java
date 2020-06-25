@@ -1,7 +1,7 @@
 package de.embl.cba.bigdataprocessor.virtualstack2;
 
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;

@@ -1,7 +1,7 @@
 package de.embl.cba.bigdataprocessor.utils;
 
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 
 import java.util.List;
 import java.util.concurrent.Future;

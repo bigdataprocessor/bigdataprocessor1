@@ -1,10 +1,10 @@
 package de.embl.cba.bigdataprocessor.track;
 
-import de.embl.cba.bigdataprocessor.imagefilter.ImageFilter;
-import de.embl.cba.bigdataprocessor.imagefilter.NoFilter;
-import de.embl.cba.bigdataprocessor.imagefilter.ThresholdFilter;
-import de.embl.cba.bigdataprocessor.imagefilter.VarianceFilter;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.filter.ImageFilter;
+import de.embl.cba.bigdataprocessor.filter.NoFilter;
+import de.embl.cba.bigdataprocessor.filter.ThresholdFilter;
+import de.embl.cba.bigdataprocessor.filter.VarianceFilter;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import de.embl.cba.bigdataprocessor.utils.Region5D;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;

@@ -1,6 +1,5 @@
-package de.embl.cba.bigdataprocessor.logging;
+package de.embl.cba.bigdataprocessor.log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public interface Logger {

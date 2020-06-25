@@ -27,8 +27,8 @@ public class BigDataProcessorPlugIn implements PlugIn {
     @Override
     public void run(String s)
     {
-        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
+        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
 
-        SwingUtilities.invokeLater( () -> bigDataProcessorUI.showDialog() );
+        SwingUtilities.invokeLater( () -> bigDataProcessorUserInterface.showDialog() );
     }
 }

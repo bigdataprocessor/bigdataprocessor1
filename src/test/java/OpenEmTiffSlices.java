@@ -1,5 +1,5 @@
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
 import ij.IJ;
 
 public class OpenEmTiffSlices
@@ -14,7 +14,7 @@ public class OpenEmTiffSlices
             final String directory = "/Volumes/cba/exchange/paolo/compressed tif from fibsem";
             bigDataProcessor.openFromDirectory(
                     directory,
-                    BigDataProcessorUI.EM_TIFF_SLICES,
+                    BigDataProcessorUserInterface.EM_TIFF_SLICES,
                     ".*.tif",
                     "",
                     null,
@@ -26,7 +26,7 @@ public class OpenEmTiffSlices
 
         IJ.wait( 1000 );
 
-        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
-        bigDataProcessorUI.showDialog();
+        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
+        bigDataProcessorUserInterface.showDialog();
     }
 }

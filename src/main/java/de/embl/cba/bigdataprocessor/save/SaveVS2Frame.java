@@ -1,11 +1,11 @@
-package de.embl.cba.bigdataprocessor.saving;
+package de.embl.cba.bigdataprocessor.save;
 
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
 import de.embl.cba.imaris.H5DataCubeWriter;
 import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ch.systemsx.cisd.base.mdarray.MDByteArray;
 import ch.systemsx.cisd.base.mdarray.MDShortArray;

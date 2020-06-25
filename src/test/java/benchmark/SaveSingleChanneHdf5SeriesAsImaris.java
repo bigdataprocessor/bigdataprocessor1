@@ -1,7 +1,7 @@
 package benchmark;
 
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.saving.SavingSettings;
+import de.embl.cba.bigdataprocessor.save.SavingSettings;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
 

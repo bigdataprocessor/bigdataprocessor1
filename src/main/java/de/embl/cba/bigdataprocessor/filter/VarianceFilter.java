@@ -1,4 +1,4 @@
-package de.embl.cba.bigdataprocessor.imagefilter;
+package de.embl.cba.bigdataprocessor.filter;
 
 
 import ij.ImagePlus;

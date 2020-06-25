@@ -2,9 +2,9 @@ package de.embl.cba.bigdataprocessor;
 
 import de.embl.cba.bigdataprocessor.track.AdaptiveCropUI;
 import de.embl.cba.imaris.ImarisUtils;
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
-import de.embl.cba.bigdataprocessor.saving.SavingSettings;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
+import de.embl.cba.bigdataprocessor.save.SavingSettings;
 import de.embl.cba.bigdataprocessor.utils.ImageDataInfo;
 import de.embl.cba.bigdataprocessor.utils.SpringUtilities;
 import de.embl.cba.bigdataprocessor.utils.Utils;
@@ -31,7 +31,7 @@ import static java.awt.Desktop.isDesktopSupported;
  * Created by tischi on 11/04/17.
  */
 
-public class BigDataProcessorUI extends JFrame implements ActionListener, FocusListener, ItemListener
+public class BigDataProcessorUserInterface extends JFrame implements ActionListener, FocusListener, ItemListener
 {
 
     public static String LEICA_SINGLE_TIFF = "Leica Light-Sheet Tiff";
@@ -522,7 +522,7 @@ public class BigDataProcessorUI extends JFrame implements ActionListener, FocusL
             }
 
             fc = new JFileChooser( );
-            int returnVal = fc.showSaveDialog(BigDataProcessorUI.this);
+            int returnVal = fc.showSaveDialog( BigDataProcessorUserInterface.this);
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 final File file = fc.getSelectedFile();

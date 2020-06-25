@@ -1,5 +1,5 @@
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUI;
+import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
 import ij.IJ;
 
 public class OpenAshnaWithUI
@@ -30,8 +30,8 @@ public class OpenAshnaWithUI
 
         IJ.wait(1000);
 
-        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
-        bigDataProcessorUI.showDialog();
+        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
+        bigDataProcessorUserInterface.showDialog();
 
     }
 }

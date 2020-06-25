@@ -20,12 +20,12 @@ package de.embl.cba.bigdataprocessor;
 import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.imaris.ImarisUtils;
 import de.embl.cba.imaris.ImarisWriter;
-import de.embl.cba.bigdataprocessor.saving.SaveVS2TiffPlane;
+import de.embl.cba.bigdataprocessor.save.SaveVS2TiffPlane;
 import de.embl.cba.bigdataprocessor.virtualstack2.*;
-import de.embl.cba.bigdataprocessor.logging.IJLazySwingLogger;
-import de.embl.cba.bigdataprocessor.logging.Logger;
-import de.embl.cba.bigdataprocessor.saving.SaveVS2Frame;
-import de.embl.cba.bigdataprocessor.saving.SavingSettings;
+import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
+import de.embl.cba.bigdataprocessor.log.Logger;
+import de.embl.cba.bigdataprocessor.save.SaveVS2Frame;
+import de.embl.cba.bigdataprocessor.save.SavingSettings;
 import de.embl.cba.bigdataprocessor.utils.ImageDataInfo;
 import de.embl.cba.bigdataprocessor.utils.MonitorThreadPoolStatus;
 import de.embl.cba.bigdataprocessor.utils.Utils;
@@ -359,7 +359,7 @@ public class BigDataProcessor
 
         int nC = 0, nT = 0, nZ = 0, nX = 0, nY = 0, bitDepth = 16;
 
-        if ( namingScheme.equals( BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS) )
+        if ( namingScheme.equals( BigDataProcessorUserInterface.LOAD_CHANNELS_FROM_FOLDERS) )
         {
             //
             // Check for sub-folders
@@ -411,7 +411,7 @@ public class BigDataProcessor
         }
 
 
-        if ( namingScheme.equals( BigDataProcessorUI.LEICA_SINGLE_TIFF ) ) // isLeicaSinglePlaneTiffFileType( fileLists[ 0 ] ) )
+        if ( namingScheme.equals( BigDataProcessorUserInterface.LEICA_SINGLE_TIFF ) ) // isLeicaSinglePlaneTiffFileType( fileLists[ 0 ] ) )
         {
 
             imageDataInfo.fileType = Utils.FileType.TIFF_PLANES.toString();
@@ -440,7 +440,7 @@ public class BigDataProcessor
         {
             boolean hasCTPattern = false;
 
-            if ( namingScheme.equals( BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS) )
+            if ( namingScheme.equals( BigDataProcessorUserInterface.LOAD_CHANNELS_FROM_FOLDERS) )
             {
                 nC = imageDataInfo.channelFolders.length;
                 nT = fileLists[0].length;
@@ -450,7 +450,7 @@ public class BigDataProcessor
                 nC = 1;
                 nT = fileLists[0].length;
             }
-            else if ( namingScheme.equals( BigDataProcessorUI.EM_TIFF_SLICES ) )
+            else if ( namingScheme.equals( BigDataProcessorUserInterface.EM_TIFF_SLICES ) )
             {
                 nC = 1;
                 nT = 1;
@@ -506,7 +506,7 @@ public class BigDataProcessor
             //
             // Create dummy channel folders, if no real ones exist
             //
-            if ( ! namingScheme.equals( BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS) )
+            if ( ! namingScheme.equals( BigDataProcessorUserInterface.LOAD_CHANNELS_FROM_FOLDERS) )
             {
                 imageDataInfo.channelFolders = new String[nC];
                 for (int ic = 0; ic < nC; ic++) imageDataInfo.channelFolders[ic] = "";
@@ -520,7 +520,7 @@ public class BigDataProcessor
             {
                 setImageDataInfoFromTiff( imageDataInfo, directory + imageDataInfo.channelFolders[0], fileLists[0][0] );
 
-                if ( namingScheme.equals( BigDataProcessorUI.EM_TIFF_SLICES ) )
+                if ( namingScheme.equals( BigDataProcessorUserInterface.EM_TIFF_SLICES ) )
                 {
                     imageDataInfo.fileType = Utils.FileType.TIFF_PLANES.toString();
                     imageDataInfo.nZ = fileLists[ 0 ].length;
@@ -593,7 +593,7 @@ public class BigDataProcessor
             else
             {
 
-                if ( namingScheme.equals( BigDataProcessorUI.EM_TIFF_SLICES ) )
+                if ( namingScheme.equals( BigDataProcessorUserInterface.EM_TIFF_SLICES ) )
                 {
                     for ( z = 0; z < imageDataInfo.nZ; z++ )
                     {
