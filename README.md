@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
 
-# Big Data Processor
+# BigDataProcessor1
 
 ## Citation
 
