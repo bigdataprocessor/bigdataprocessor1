@@ -44,10 +44,11 @@ The Big Data Processor runs as a PlugIn within Fiji.
 
 - Please install [Fiji](fiji.sc)
 - Within Fiji, please enable the [Update Site](https://imagej.net/Update_Sites): 
-    - [X] EMBL-CBA
+    - [X] BigDataProcessor
+      - This installs both BigDataProcessor1 and its successor BigDataProcessor2
 
-## Running Big Data Processor
+## Running BigDataProcessor1
 
-The Big Data Processor can be found in Fiji's menu:
+The BigDataProcessor1 can be found in Fiji's menu:
 
-- [Fiji > Plugins > BigDataTools > Big Data Processor]
+- [Fiji > Plugins > BigDataProcessor > BigDataProcessor1]
