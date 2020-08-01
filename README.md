@@ -1,5 +1,3 @@
-[![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
-
 <img src="https://user-images.githubusercontent.com/2157566/89096139-7b193b00-d3d4-11ea-9277-08ee9913e2c5.png" width="300">
 
 # BigDataProcessor1
@@ -7,11 +5,6 @@
 Fiji plugin for efficient inspection and processing of big (larger than RAM) image data.
 
 Please note that BigDataProcessor1 is no longer developed actively, consider using [BigDataProcessor2](https://github.com/bigdataprocessor/bigDataProcessor2#bigdataprocessor2) instead.
-
-## Citation
-
-This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
-- Tischer, C., Norlin, N., and R. Pepperkok (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
 
 ## Overview
 
@@ -58,3 +51,10 @@ The Big Data Processor runs as a PlugIn within Fiji.
 BigDataProcessor1 can be found in Fiji's menu:
 
 - [Fiji > Plugins > BigDataProcessor > BigDataProcessor1]
+
+## Citation
+
+[![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
+
+This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
+- Tischer, C., Norlin, N., and R. Pepperkok (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
