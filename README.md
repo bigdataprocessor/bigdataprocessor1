@@ -5,7 +5,8 @@
 # BigDataProcessor1
 
 Fiji plugin for efficient inspection and processing of big (larger than RAM) image data.
-Please note that BigDataProcessor1 is not longer developed actively, as our efforts are now being focussed on the successor plugin [BigDataProcessor2](https://github.com/bigdataprocessor/bigDataProcessor2#bigdataprocessor2).
+
+Please note that BigDataProcessor1 is no longer developed actively, consider using [BigDataProcessor2](https://github.com/bigdataprocessor/bigDataProcessor2#bigdataprocessor2) instead.
 
 ## Citation
 
