@@ -1,5 +1,7 @@
 [![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
 
+<img align="center" src="https://user-images.githubusercontent.com/2157566/89096040-6c7e5400-d3d3-11ea-8c82-68e56c9297c8.png" width="300">
+
 # BigDataProcessor1
 
 Fiji plugin for efficient inspection and processing of big (larger than RAM) image data.
