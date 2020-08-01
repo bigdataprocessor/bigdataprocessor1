@@ -28,7 +28,7 @@ Finally, chromatic shifts can be interactively corrected by specifying x and y p
 
 Currently, for both reading and writing we support Tiff and hdf5 based image data. To our best knowledge those are currently the most popular (open-source) file formats.
 
-### Reading 
+### Loading 
 
 For reading, the BDC supports pattern matching based file parsing to accommodate different naming schemes, specifying z-slice, channels, and time-points.
 
@@ -39,7 +39,7 @@ Example use-cases include:
 - Electron microscopy Tiff based data.
 - Custom-built light-sheet microscope Tiff based data.
 
-### Writing
+### Saving
 
 The BDC supports writing to Tiff and Hdf5 files. For Tiff writing one can choose between one file per plane or one file per channel and time-point. For Hdf5 writing, an Imaris compatible multi-resolution file format is supported with channels and time-points in separate files, linked together by one "header" hdf5 file. 
 
@@ -52,8 +52,8 @@ The Big Data Processor runs as a PlugIn within Fiji.
     - [X] BigDataProcessor
       - This installs both BigDataProcessor1 and its successor BigDataProcessor2
 
-## Running BigDataProcessor1
+## Starting 
 
-The BigDataProcessor1 can be found in Fiji's menu:
+BigDataProcessor1 can be found in Fiji's menu:
 
 - [Fiji > Plugins > BigDataProcessor > BigDataProcessor1]
