@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
 
-<img align="center" src="https://user-images.githubusercontent.com/2157566/89096040-6c7e5400-d3d3-11ea-8c82-68e56c9297c8.png" width="300">
+<img src="https://user-images.githubusercontent.com/2157566/89096139-7b193b00-d3d4-11ea-9277-08ee9913e2c5.png" width="300">
 
 # BigDataProcessor1
 
