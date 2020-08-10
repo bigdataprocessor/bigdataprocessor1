@@ -1,17 +1,14 @@
-[![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
+<img src="https://user-images.githubusercontent.com/2157566/89096139-7b193b00-d3d4-11ea-9277-08ee9913e2c5.png" width="300">
 
-# BigDataProcessor1
+BigDataProcessor1 (BDP1) is a Fiji plugin for efficient inspection and processing of big (larger than RAM) image data.
 
-## Citation
-
-This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
-- Tischer, C., Norlin, N., and R. Pepperkok (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
+Please note that BigDataProcessor1 is no longer developed actively, consider using [BigDataProcessor2](https://github.com/bigdataprocessor/bigDataProcessor2#bigdataprocessor2) instead.
 
 ## Overview
 
 The inspection and manipulation of TB sized image data as produced by light-sheet and electron microscopy poses a challenge, because loading the whole data set from disc into RAM is very time consuming or may not even be possible. Is is thus necessary to employ lazy-loading strategies that, e.g., only load the currently visible fraction of the data set into RAM (see e.g., Ref BigDataViewer).  
 
-The Big Data Processor (BDC) enables fast lazy-loading of Tiff and Hdf5 based image data employing ImageJ’s VirtualStack class (LINK), where only the currently displayed image plane is loaded into RAM. Using this technology, TB sized data sets can be readily opened and interactively browsed. The data is presented in ImageJ's Hyperstack Viewer, which is well known to many life scientists. All ImageJ measurement tools, such as line profile or regions of interest based measurements are available. In fact, essentially all of ImageJ's functionality is available, however one has to pay attention, because some operations will attempt to copy the data into RAM, which, of course, will fail is the data are too big.
+BigDataProcessor1 enables fast lazy-loading of Tiff and Hdf5 based image data employing ImageJ’s VirtualStack class (LINK), where only the currently displayed image plane is loaded into RAM. Using this technology, TB sized data sets can be readily opened and interactively browsed. The data is presented in ImageJ's Hyperstack Viewer, which is well known to many life scientists. All ImageJ measurement tools, such as line profile or regions of interest based measurements are available. In fact, essentially all of ImageJ's functionality is available, however one has to pay attention, because some operations will attempt to copy the data into RAM, which, of course, will fail is the data are too big.
 
 In addition to viewing big image data, the BDC supports cropping and saving of big image data including binning and bit-depth conversion. This functionality is useful, because raw microscopy data is often not in an ideal state for image analysis. For example, only part of the acquired data may be of actual interest, either because larger fields of view have been acquired to compensate for unpredictable sample motion, or scientifically interesting phenomena have only occurred in specific parts of the imaged sample. Moreover, pixel density and bit-depth can be unnecessarily high, e.g., because camera based microscope systems with fixed pixel size and bit-depth have been used. Or the raw data file-format might simply not be compatible with the analysis software.
 
@@ -21,9 +18,9 @@ Finally, chromatic shifts can be interactively corrected by specifying x and y p
 
 ## Supported file formats
 
-Currently, for both reading and writing we support Tiff and hdf5 based image data. To our knowledge those are currently the most popular (open-source) file formats.
+Currently, for both reading and writing we support Tiff and hdf5 based image data. To our best knowledge those are currently the most popular (open-source) file formats.
 
-### Reading 
+### Loading 
 
 For reading, the BDC supports pattern matching based file parsing to accommodate different naming schemes, specifying z-slice, channels, and time-points.
 
@@ -34,7 +31,7 @@ Example use-cases include:
 - Electron microscopy Tiff based data.
 - Custom-built light-sheet microscope Tiff based data.
 
-### Writing
+### Saving
 
 The BDC supports writing to Tiff and Hdf5 files. For Tiff writing one can choose between one file per plane or one file per channel and time-point. For Hdf5 writing, an Imaris compatible multi-resolution file format is supported with channels and time-points in separate files, linked together by one "header" hdf5 file. 
 
@@ -44,10 +41,18 @@ The Big Data Processor runs as a PlugIn within Fiji.
 
 - Please install [Fiji](fiji.sc)
 - Within Fiji, please enable the [Update Site](https://imagej.net/Update_Sites): 
-    - [X] EMBL-CBA
+    - [X] BigDataProcessor
+      - This installs both BigDataProcessor1 and its successor BigDataProcessor2
 
-## Running Big Data Processor
+## Starting 
 
-The Big Data Processor can be found in Fiji's menu:
+BigDataProcessor1 can be found in Fiji's menu:
 
-- [Fiji > Plugins > BigDataTools > Big Data Processor]
+- [Fiji > Plugins > BigDataProcessor > BigDataProcessor1]
+
+## Citation
+
+[![DOI](https://zenodo.org/badge/87635770.svg)](https://zenodo.org/badge/latestdoi/87635770)
+
+This github repository can be cited (registered at [ZENODO](https://zenodo.org/)):
+- Tischer, C., Norlin, N., and R. Pepperkok (2019) BigDataProcessor: Fiji plugin for visual inspection and processing of big image data. http://doi.org/10.5281/zenodo.2574702
