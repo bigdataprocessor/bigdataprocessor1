@@ -79,12 +79,12 @@
 		<package-name>de.embl.cba.bigdataprocessor</package-name>
 		<license.licenseName>bsd_2</license.licenseName>
 		<license.copyrightOwners>EMBL</license.copyrightOwners>
-		<imagej.app.directory>/Applications/Fiji.app/</imagej.app.directory>
+		<imagej.app.directory>/Users/tischer/Desktop/Fiji-bdp2.app</imagej.app.directory>
 		<enforcer.skip>true</enforcer.skip>
 
 		<bioformats.version>6.1.0-m2</bioformats.version>
 		<ome.version>6.0.1</ome.version>
-		<imaris-writer.version>0.2.1</imaris-writer.version>
+		<imaris-writer.version>0.2.2</imaris-writer.version>
 		<imagej-utils.version>0.5.3</imagej-utils.version>
 	</properties>
 	<distributionManagement>
