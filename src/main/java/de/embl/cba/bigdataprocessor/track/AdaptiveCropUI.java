@@ -7,7 +7,7 @@ import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.Roi;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;

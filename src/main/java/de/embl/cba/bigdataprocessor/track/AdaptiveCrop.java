@@ -31,7 +31,7 @@
 
 package de.embl.cba.bigdataprocessor.track;
 
-import de.embl.cba.bigdataprocessor.utils.Region5D;
+import de.embl.cba.util.Region5D;
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
 import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
@@ -42,7 +42,7 @@ import ij.ImageStack;
 import ij.gui.Overlay;
 import ij.gui.Roi;
 import ij.process.ImageProcessor;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import java.util.ArrayList;
 import java.util.List;

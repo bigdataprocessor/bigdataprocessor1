@@ -1,5 +1,6 @@
-package de.embl.cba.bigdataprocessor;
+package de.embl.cba.bigdataprocessor.ui;
 
+import de.embl.cba.bigdataprocessor.BigDataProcessor;
 import de.embl.cba.bigdataprocessor.track.AdaptiveCropUI;
 import de.embl.cba.imaris.ImarisUtils;
 import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
@@ -14,7 +15,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.gui.NonBlockingGenericDialog;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -31,7 +32,7 @@ import static java.awt.Desktop.isDesktopSupported;
  * Created by tischi on 11/04/17.
  */
 
-public class BigDataProcessorUserInterface extends JFrame implements ActionListener, FocusListener, ItemListener
+public class BigDataProcessorUI extends JFrame implements ActionListener, FocusListener, ItemListener
 {
 
     public static String LEICA_SINGLE_TIFF = "Leica Light-Sheet Tiff";
@@ -522,7 +523,7 @@ public class BigDataProcessorUserInterface extends JFrame implements ActionListe
             }
 
             fc = new JFileChooser( );
-            int returnVal = fc.showSaveDialog( BigDataProcessorUserInterface.this);
+            int returnVal = fc.showSaveDialog( BigDataProcessorUI.this);
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 final File file = fc.getSelectedFile();

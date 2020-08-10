@@ -22,7 +22,7 @@ import ij.ImagePlus;
 import ij.ImageStack;
 import ij.io.BitBuffer;
 import ij.io.Opener;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

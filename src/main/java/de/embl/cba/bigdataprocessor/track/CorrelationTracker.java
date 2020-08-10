@@ -5,12 +5,12 @@ import de.embl.cba.bigdataprocessor.filter.NoFilter;
 import de.embl.cba.bigdataprocessor.filter.ThresholdFilter;
 import de.embl.cba.bigdataprocessor.filter.VarianceFilter;
 import de.embl.cba.bigdataprocessor.log.Logger;
-import de.embl.cba.bigdataprocessor.utils.Region5D;
+import de.embl.cba.util.Region5D;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelationPeak;
 import mpicbg.imglib.image.ImagePlusAdapter;
@@ -148,10 +148,7 @@ public class CorrelationTracker implements Runnable
                 logger.info("Tracking of track " + track.getID() + " interrupted.");
                 return;
             }
-
         }
-
-
     }
 
     private void interpolateSkippedTimePoints( Point3D pShift, TrackTable trackTable, ImagePlus imp, int tPrevious, int tCurrent )

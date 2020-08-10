@@ -1,6 +1,6 @@
 package de.embl.cba.bigdataprocessor.virtualstack2;
 
-import de.embl.cba.bigdataprocessor.utils.Region5D;
+import de.embl.cba.util.Region5D;
 import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
 import de.embl.cba.bigdataprocessor.log.Logger;
 import de.embl.cba.bigdataprocessor.utils.Utils;
@@ -13,7 +13,7 @@ import ij.VirtualStack;
 import ij.gui.NewImage;
 import ij.io.FileSaver;
 import ij.process.ImageProcessor;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 import net.imglib2.FinalInterval;
 
 import java.io.File;
@@ -623,7 +623,6 @@ public class VirtualStack2 extends VirtualStack {
         }
 
     }
-
 
     public ImagePlus getDataCube( Region5D region5D, int nThreads )   {
 

@@ -5,7 +5,7 @@ import de.embl.cba.bigdataprocessor.log.Logger;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 
 public class LoadFrameFromVS2IntoRAM implements Runnable

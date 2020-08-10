@@ -1,5 +1,5 @@
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
+import de.embl.cba.bigdataprocessor.ui.BigDataProcessorUI;
 import de.embl.cba.imaris.ImarisWriter;
 import de.embl.cba.imaris.ImarisWriterCommand;
 import ij.ImagePlus;
@@ -17,7 +17,7 @@ public class ImarisWriterCommandTest
 
 		ImagePlus imp = bigDataProcessor.openFromDirectory(
 				ImarisWriter.class.getResource( "/tiff-nc2-nt2/" ).getFile(),
-				BigDataProcessorUserInterface.LOAD_CHANNELS_FROM_FOLDERS,
+				BigDataProcessorUI.LOAD_CHANNELS_FROM_FOLDERS,
 				".*",
 			 	"",
 			 	null,

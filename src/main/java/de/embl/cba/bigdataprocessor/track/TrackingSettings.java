@@ -2,7 +2,7 @@ package de.embl.cba.bigdataprocessor.track;
 
 import ij.ImagePlus;
 import ij.gui.Roi;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 /**
  * Created by tischi on 14/04/17.

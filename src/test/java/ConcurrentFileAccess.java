@@ -1,14 +1,13 @@
-import de.embl.cba.bigdataprocessor.utils.Region5D;
+import de.embl.cba.util.Region5D;
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
 import de.embl.cba.bigdataprocessor.utils.Utils;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 import net.imglib2.FinalInterval;
 
 public class ConcurrentFileAccess
 {
     public static void main(String[] args)
     {
-
         final Region5D region5D = new Region5D();
         region5D.offset.add( new Point3D( 0,0,0 ) );
 

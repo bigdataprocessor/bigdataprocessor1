@@ -1,5 +1,5 @@
 import de.embl.cba.bigdataprocessor.BigDataProcessor;
-import de.embl.cba.bigdataprocessor.BigDataProcessorUserInterface;
+import de.embl.cba.bigdataprocessor.ui.BigDataProcessorUI;
 import ij.IJ;
 
 public class OpenLeicaDLS
@@ -28,8 +28,8 @@ public class OpenLeicaDLS
 
         IJ.wait(1000);
 
-        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
-        bigDataProcessorUserInterface.showDialog();
+        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
+        bigDataProcessorUI.showDialog();
 
     }
 }

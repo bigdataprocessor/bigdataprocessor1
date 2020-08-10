@@ -18,6 +18,7 @@
 
 package de.embl.cba.bigdataprocessor;
 
+import de.embl.cba.bigdataprocessor.ui.BigDataProcessorUI;
 import ij.plugin.PlugIn;
 
 import javax.swing.*;
@@ -27,8 +28,8 @@ public class BigDataProcessorPlugIn implements PlugIn {
     @Override
     public void run(String s)
     {
-        BigDataProcessorUserInterface bigDataProcessorUserInterface = new BigDataProcessorUserInterface();
+        BigDataProcessorUI bigDataProcessorUI = new BigDataProcessorUI();
 
-        SwingUtilities.invokeLater( () -> bigDataProcessorUserInterface.showDialog() );
+        SwingUtilities.invokeLater( () -> bigDataProcessorUI.showDialog() );
     }
 }

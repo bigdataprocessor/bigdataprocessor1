@@ -34,7 +34,7 @@ import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
 import de.embl.cba.bigdataprocessor.log.Logger;
 import ij.ImagePlus;
 import ij.gui.Roi;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import java.util.*;
 

@@ -33,6 +33,9 @@ package de.embl.cba.bigdataprocessor.utils;
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
 import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
 import de.embl.cba.bigdataprocessor.log.Logger;
+import de.embl.cba.util.Point3D;
+import de.embl.cba.util.Region5D;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
@@ -177,7 +180,7 @@ public class Utils {
 
     }
 
-    public static Point3D computeOffsetFromCenterSize(Point3D pCenter, Point3D pSize) {
+    public static Point3D computeOffsetFromCenterSize( Point3D pCenter, Point3D pSize) {
         return(pCenter.subtract(pSize.subtract(1, 1, 1).multiply(0.5)));
     }
 
@@ -358,7 +361,6 @@ public class Utils {
 
     public static void applyIntensityGate( ImagePlus imp, int[] gate )
     {
-
         if ( ( gate[ 0 ] == -1 ) && ( gate[ 1 ] == -1 ) )
         {
             return;

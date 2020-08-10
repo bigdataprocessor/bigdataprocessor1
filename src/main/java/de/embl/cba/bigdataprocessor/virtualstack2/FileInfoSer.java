@@ -31,7 +31,7 @@
 package de.embl.cba.bigdataprocessor.virtualstack2;
 
 import ij.io.FileInfo;
-import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.util.Point3D;
 
 import java.io.Serializable;
 
