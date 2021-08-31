@@ -1442,8 +1442,6 @@ public class BigDataProcessor
                     savingSettings.directory,
                     savingSettings.fileBaseName );
 
-        imarisDataSet.setLogger( new de.embl.cba.logging.IJLazySwingLogger() );
-
         ImarisWriter.writeHeaderFile( imarisDataSet,
                 savingSettings.directory,
                 savingSettings.fileBaseName + ".ims"
