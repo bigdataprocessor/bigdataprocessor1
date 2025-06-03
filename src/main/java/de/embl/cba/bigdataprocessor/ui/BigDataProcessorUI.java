@@ -15,7 +15,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.gui.NonBlockingGenericDialog;
-import de.embl.cba.util.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 
 import javax.swing.*;
 import java.awt.event.*;

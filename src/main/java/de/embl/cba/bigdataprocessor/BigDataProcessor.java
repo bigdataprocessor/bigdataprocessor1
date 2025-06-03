@@ -18,6 +18,7 @@
 package de.embl.cba.bigdataprocessor;
 
 import de.embl.cba.bigdataprocessor.ui.BigDataProcessorUI;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
 import de.embl.cba.imaris.ImarisDataSet;
 import de.embl.cba.imaris.ImarisUtils;
 import de.embl.cba.imaris.ImarisWriter;
@@ -35,7 +36,6 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.gui.Roi;
-import de.embl.cba.util.Point3D;
 
 import java.io.*;
 import java.util.*;

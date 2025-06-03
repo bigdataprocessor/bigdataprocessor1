@@ -33,8 +33,8 @@ package de.embl.cba.bigdataprocessor.utils;
 import de.embl.cba.bigdataprocessor.virtualstack2.VirtualStack2;
 import de.embl.cba.bigdataprocessor.log.IJLazySwingLogger;
 import de.embl.cba.bigdataprocessor.log.Logger;
-import de.embl.cba.util.Point3D;
-import de.embl.cba.util.Region5D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Region5D;
 
 import ij.IJ;
 import ij.ImagePlus;

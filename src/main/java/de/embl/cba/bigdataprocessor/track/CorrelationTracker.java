@@ -5,12 +5,13 @@ import de.embl.cba.bigdataprocessor.filter.NoFilter;
 import de.embl.cba.bigdataprocessor.filter.ThresholdFilter;
 import de.embl.cba.bigdataprocessor.filter.VarianceFilter;
 import de.embl.cba.bigdataprocessor.log.Logger;
-import de.embl.cba.util.Region5D;
+import de.embl.cba.bigdataprocessor.utils.Point3D;
+import de.embl.cba.bigdataprocessor.utils.Region5D;
 import de.embl.cba.bigdataprocessor.utils.Utils;
 import ij.ImagePlus;
 import ij.ImageStack;
 import ij.process.ImageProcessor;
-import de.embl.cba.util.Point3D;
+
 import mpicbg.imglib.algorithm.fft.PhaseCorrelation;
 import mpicbg.imglib.algorithm.fft.PhaseCorrelationPeak;
 import mpicbg.imglib.image.ImagePlusAdapter;
@@ -455,7 +456,7 @@ public class CorrelationTracker implements Runnable
         return(new Point3D(xCenter,yCenter,zCenter));
     }
 
-    private Point3D compute8bitCenterOfMass(ImageStack stack, Point3D pMin, Point3D pMax)
+    private Point3D compute8bitCenterOfMass( ImageStack stack, Point3D pMin, Point3D pMax)
     {
 
         final String centeringMethod = CENTER_OF_MASS;
