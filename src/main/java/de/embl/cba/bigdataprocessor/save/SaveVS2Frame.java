@@ -12,6 +12,7 @@ import ch.systemsx.cisd.base.mdarray.MDShortArray;
 import ch.systemsx.cisd.hdf5.HDF5Factory;
 import ch.systemsx.cisd.hdf5.HDF5IntStorageFeatures;
 import ch.systemsx.cisd.hdf5.IHDF5Writer;
+import hdf.hdf5lib.exceptions.HDF5Exception;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
@@ -23,7 +24,6 @@ import loci.formats.meta.IMetadata;
 import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
 import loci.formats.tiff.IFD;
-import ncsa.hdf.hdf5lib.exceptions.HDF5Exception;
 import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
@@ -432,7 +432,7 @@ public class SaveVS2Frame implements Runnable {
             }
             writer.close();
         }
-        catch (HDF5Exception err)
+        catch ( HDF5Exception err)
         {
             IJ.error("Error while saving '" + path + "':\n"
                     + err);
